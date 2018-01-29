@@ -1,0 +1,3561 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Mcln-Project project-name="Simple Controller" saved-on="Nov 23, 2017 02:48:12">
+  <Mcln-Model name="Mcln-Model">
+    <Mcln-Model-Rectangle>
+      <XY-Location>-0012.000000 : 00015.000000</XY-Location>
+      <XY-Location>00024.000000 : 00030.000000</XY-Location>
+    </Mcln-Model-Rectangle>
+    <Mcln-Statement mcln-states-palette-name="Basic Colors Palette">
+      <Statement-UID>S-0000002</Statement-UID>
+      <X-Location>-0007.023810</X-Location>
+      <Y-Location>00006.011905</Y-Location>
+      <Available-Statement-States>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Dark Gray, 20, 0x707070</Mcln-State>
+          <Interpretation>Dark Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Red, 22, 0xFF0000</Mcln-State>
+          <Interpretation>Red</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Green, 23, 0x00FF00</Mcln-State>
+          <Interpretation>Green</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Blue, 24, 0x0000FF</Mcln-State>
+          <Interpretation>Blue</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Cyan, 25, 0x00FFFF</Mcln-State>
+          <Interpretation>Cyan</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Magenta, 26, 0xFF00FF</Mcln-State>
+          <Interpretation>Magenta</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Yellow, 27, 0xFFFF00</Mcln-State>
+          <Interpretation>Yellow</Interpretation>
+        </Mcln-Statement-State>
+      </Available-Statement-States>
+      <Initial-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+      </Initial-State>
+      <Subject>Property Node</Subject>
+      <Property-Name/>
+      <Simulation-Log>false</Simulation-Log>
+    </Mcln-Statement>
+    <Mcln-Statement mcln-states-palette-name="Basic Colors Palette">
+      <Statement-UID>S-0000003</Statement-UID>
+      <X-Location>00000.952381</X-Location>
+      <Y-Location>00006.011905</Y-Location>
+      <Available-Statement-States>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Dark Gray, 20, 0x707070</Mcln-State>
+          <Interpretation>Dark Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Red, 22, 0xFF0000</Mcln-State>
+          <Interpretation>Red</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Green, 23, 0x00FF00</Mcln-State>
+          <Interpretation>Green</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Blue, 24, 0x0000FF</Mcln-State>
+          <Interpretation>Blue</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Cyan, 25, 0x00FFFF</Mcln-State>
+          <Interpretation>Cyan</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Magenta, 26, 0xFF00FF</Mcln-State>
+          <Interpretation>Magenta</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Yellow, 27, 0xFFFF00</Mcln-State>
+          <Interpretation>Yellow</Interpretation>
+        </Mcln-Statement-State>
+      </Available-Statement-States>
+      <Initial-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+      </Initial-State>
+      <Subject>Property Node</Subject>
+      <Property-Name/>
+      <Simulation-Log>false</Simulation-Log>
+    </Mcln-Statement>
+    <Mcln-Statement mcln-states-palette-name="Basic Colors Palette">
+      <Statement-UID>S-0000004</Statement-UID>
+      <X-Location>-0006.964286</X-Location>
+      <Y-Location>-0001.011905</Y-Location>
+      <Available-Statement-States>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Dark Gray, 20, 0x707070</Mcln-State>
+          <Interpretation>Dark Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Red, 22, 0xFF0000</Mcln-State>
+          <Interpretation>Red</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Green, 23, 0x00FF00</Mcln-State>
+          <Interpretation>Green</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Blue, 24, 0x0000FF</Mcln-State>
+          <Interpretation>Blue</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Cyan, 25, 0x00FFFF</Mcln-State>
+          <Interpretation>Cyan</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Magenta, 26, 0xFF00FF</Mcln-State>
+          <Interpretation>Magenta</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Yellow, 27, 0xFFFF00</Mcln-State>
+          <Interpretation>Yellow</Interpretation>
+        </Mcln-Statement-State>
+      </Available-Statement-States>
+      <Initial-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+      </Initial-State>
+      <Subject>Property Node</Subject>
+      <Property-Name/>
+      <Simulation-Log>false</Simulation-Log>
+    </Mcln-Statement>
+    <Mcln-Statement mcln-states-palette-name="Basic Colors Palette">
+      <Statement-UID>S-0000005</Statement-UID>
+      <X-Location>00001.011905</X-Location>
+      <Y-Location>-0001.011905</Y-Location>
+      <Available-Statement-States>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Dark Gray, 20, 0x707070</Mcln-State>
+          <Interpretation>Dark Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Red, 22, 0xFF0000</Mcln-State>
+          <Interpretation>Red</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Green, 23, 0x00FF00</Mcln-State>
+          <Interpretation>Green</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Blue, 24, 0x0000FF</Mcln-State>
+          <Interpretation>Blue</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Cyan, 25, 0x00FFFF</Mcln-State>
+          <Interpretation>Cyan</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Magenta, 26, 0xFF00FF</Mcln-State>
+          <Interpretation>Magenta</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Yellow, 27, 0xFFFF00</Mcln-State>
+          <Interpretation>Yellow</Interpretation>
+        </Mcln-Statement-State>
+      </Available-Statement-States>
+      <Initial-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+      </Initial-State>
+      <Subject>Property Node</Subject>
+      <Property-Name/>
+      <Simulation-Log>false</Simulation-Log>
+    </Mcln-Statement>
+    <Mcln-Statement mcln-states-palette-name="Basic Colors Palette">
+      <Statement-UID>S-0000006</Statement-UID>
+      <X-Location>-0006.964286</X-Location>
+      <Y-Location>-0008.035714</Y-Location>
+      <Available-Statement-States>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Dark Gray, 20, 0x707070</Mcln-State>
+          <Interpretation>Dark Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Red, 22, 0xFF0000</Mcln-State>
+          <Interpretation>Red</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Green, 23, 0x00D000</Mcln-State>
+          <Interpretation>Green</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Blue, 24, 0x0000FF</Mcln-State>
+          <Interpretation>Blue</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Cyan, 25, 0x00FFFF</Mcln-State>
+          <Interpretation>Cyan</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Magenta, 26, 0xFF00FF</Mcln-State>
+          <Interpretation>Magenta</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Yellow, 27, 0xFFFF00</Mcln-State>
+          <Interpretation>Yellow</Interpretation>
+        </Mcln-Statement-State>
+      </Available-Statement-States>
+      <Initial-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+      </Initial-State>
+      <Subject>Property Node</Subject>
+      <Property-Name/>
+      <Simulation-Log>false</Simulation-Log>
+    </Mcln-Statement>
+    <Mcln-Statement mcln-states-palette-name="Basic Colors Palette">
+      <Statement-UID>S-0000007</Statement-UID>
+      <X-Location>00001.011905</X-Location>
+      <Y-Location>-0008.035714</Y-Location>
+      <Available-Statement-States>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Dark Gray, 20, 0x707070</Mcln-State>
+          <Interpretation>Dark Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Red, 22, 0xFF0000</Mcln-State>
+          <Interpretation>Red</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Green, 23, 0x00D000</Mcln-State>
+          <Interpretation>Green</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Blue, 24, 0x0000FF</Mcln-State>
+          <Interpretation>Blue</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Cyan, 25, 0x00FFFF</Mcln-State>
+          <Interpretation>Cyan</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Magenta, 26, 0xFF00FF</Mcln-State>
+          <Interpretation>Magenta</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Yellow, 27, 0xFFFF00</Mcln-State>
+          <Interpretation>Yellow</Interpretation>
+        </Mcln-Statement-State>
+      </Available-Statement-States>
+      <Initial-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+      </Initial-State>
+      <Subject>Property Node</Subject>
+      <Property-Name/>
+      <Simulation-Log>false</Simulation-Log>
+    </Mcln-Statement>
+    <Mcln-Statement mcln-states-palette-name="Basic Colors Palette">
+      <Statement-UID>S-0000008</Statement-UID>
+      <X-Location>-0006.964286</X-Location>
+      <Y-Location>00012.023810</Y-Location>
+      <Available-Statement-States>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Dark Gray, 20, 0x707070</Mcln-State>
+          <Interpretation>Dark Gray</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Red, 22, 0xFF0000</Mcln-State>
+          <Interpretation>Red</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Green, 23, 0x00FF00</Mcln-State>
+          <Interpretation>Green</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Blue, 24, 0x0000FF</Mcln-State>
+          <Interpretation>Blue</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Cyan, 25, 0x00FFFF</Mcln-State>
+          <Interpretation>Cyan</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Magenta, 26, 0xFF00FF</Mcln-State>
+          <Interpretation>Magenta</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Yellow, 27, 0xFFFF00</Mcln-State>
+          <Interpretation>Yellow</Interpretation>
+        </Mcln-Statement-State>
+      </Available-Statement-States>
+      <Initial-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+      </Initial-State>
+      <Subject>Property Node</Subject>
+      <Property-Name/>
+      <Simulation-Log>false</Simulation-Log>
+    </Mcln-Statement>
+    <Mcln-Statement mcln-states-palette-name="Basic Colors Palette">
+      <Statement-UID>S-0000009</Statement-UID>
+      <X-Location>00009.047619</X-Location>
+      <Y-Location>00006.011905</Y-Location>
+      <Available-Statement-States>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>No Action</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Red, 22, 0xFF0000</Mcln-State>
+          <Interpretation>Start</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Cyan, 25, 0x00FFFF</Mcln-State>
+          <Interpretation>Done</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Yellow, 27, 0xFFFF00</Mcln-State>
+          <Interpretation>Ack</Interpretation>
+        </Mcln-Statement-State>
+      </Available-Statement-States>
+      <Initial-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+      </Initial-State>
+      <Subject>Affector</Subject>
+      <Property-Name>Move Backward</Property-Name>
+      <Simulation-Log>false</Simulation-Log>
+    </Mcln-Statement>
+    <Mcln-Statement mcln-states-palette-name="Basic Colors Palette">
+      <Statement-UID>S-0000010</Statement-UID>
+      <X-Location>00009.047619</X-Location>
+      <Y-Location>-0001.011905</Y-Location>
+      <Available-Statement-States>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>No Action</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Blue, 24, 0x0000FF</Mcln-State>
+          <Interpretation>Start</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Cyan, 25, 0x00FFFF</Mcln-State>
+          <Interpretation>Done</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Yellow, 27, 0xFFFF00</Mcln-State>
+          <Interpretation>Ack</Interpretation>
+        </Mcln-Statement-State>
+      </Available-Statement-States>
+      <Initial-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+      </Initial-State>
+      <Subject>Affector</Subject>
+      <Property-Name>Rotation</Property-Name>
+      <Simulation-Log>false</Simulation-Log>
+    </Mcln-Statement>
+    <Mcln-Statement mcln-states-palette-name="Basic Colors Palette">
+      <Statement-UID>S-0000011</Statement-UID>
+      <X-Location>00009.047619</X-Location>
+      <Y-Location>-0007.976190</Y-Location>
+      <Available-Statement-States>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>No Action</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Green, 23, 0x00D000</Mcln-State>
+          <Interpretation>Start</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Cyan, 25, 0x00FFFF</Mcln-State>
+          <Interpretation>Done</Interpretation>
+        </Mcln-Statement-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Yellow, 27, 0xFFFF00</Mcln-State>
+          <Interpretation>Ack</Interpretation>
+        </Mcln-Statement-State>
+      </Available-Statement-States>
+      <Initial-State>
+        <Mcln-Statement-State>
+          <Mcln-State>Gray, 19, 0x909090</Mcln-State>
+          <Interpretation>Gray</Interpretation>
+        </Mcln-Statement-State>
+      </Initial-State>
+      <Subject>Affector</Subject>
+      <Property-Name>Move Forward</Property-Name>
+      <Simulation-Log>false</Simulation-Log>
+    </Mcln-Statement>
+    <Mcln-Condition>
+      <Condition-UID>C-0000002</Condition-UID>
+      <X-Location>-0002.976190</X-Location>
+      <Y-Location>00007.976190</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000003</Condition-UID>
+      <X-Location>-0003.095238</X-Location>
+      <Y-Location>00004.047619</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000004</Condition-UID>
+      <X-Location>-0002.916667</X-Location>
+      <Y-Location>00001.130952</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000005</Condition-UID>
+      <X-Location>-0003.035714</X-Location>
+      <Y-Location>-0002.976190</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000006</Condition-UID>
+      <X-Location>-0003.035714</X-Location>
+      <Y-Location>-0005.952381</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000010</Condition-UID>
+      <X-Location>-0003.095238</X-Location>
+      <Y-Location>-0009.940476</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000011</Condition-UID>
+      <X-Location>-0006.964286</X-Location>
+      <Y-Location>00002.976190</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000013</Condition-UID>
+      <X-Location>-0006.964286</X-Location>
+      <Y-Location>00008.988095</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000018</Condition-UID>
+      <X-Location>-0002.976190</X-Location>
+      <Y-Location>00006.011905</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000019</Condition-UID>
+      <X-Location>00005.059524</X-Location>
+      <Y-Location>00006.011905</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000020</Condition-UID>
+      <X-Location>00005.059524</X-Location>
+      <Y-Location>00007.976190</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000021</Condition-UID>
+      <X-Location>00005.059524</X-Location>
+      <Y-Location>00003.988095</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000022</Condition-UID>
+      <X-Location>-0006.964286</X-Location>
+      <Y-Location>-0003.988095</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000023</Condition-UID>
+      <X-Location>-0006.964286</X-Location>
+      <Y-Location>-0011.011905</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000024</Condition-UID>
+      <X-Location>00005.000000</X-Location>
+      <Y-Location>-0001.011905</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000025</Condition-UID>
+      <X-Location>00005.000000</X-Location>
+      <Y-Location>00001.011905</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000026</Condition-UID>
+      <X-Location>00005.000000</X-Location>
+      <Y-Location>-0003.035714</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000027</Condition-UID>
+      <X-Location>00005.000000</X-Location>
+      <Y-Location>-0006.011905</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000028</Condition-UID>
+      <X-Location>00005.000000</X-Location>
+      <Y-Location>-0007.976190</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000029</Condition-UID>
+      <X-Location>00005.000000</X-Location>
+      <Y-Location>-0010.000000</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000030</Condition-UID>
+      <X-Location>-0002.916667</X-Location>
+      <Y-Location>-0001.011905</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Condition>
+      <Condition-UID>C-0000031</Condition-UID>
+      <X-Location>-0002.916667</X-Location>
+      <Y-Location>-0007.976190</Y-Location>
+    </Mcln-Condition>
+    <Mcln-Arc>
+      <Arc-UID>A-0000003</Arc-UID>
+      <View-Points>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+        <XY-Location>-0007.010618 : 00006.018307</XY-Location>
+        <XY-Location>-0006.972240 : 00006.036931</XY-Location>
+        <XY-Location>-0006.910477 : 00006.066905</XY-Location>
+        <XY-Location>-0006.827126 : 00006.107355</XY-Location>
+        <XY-Location>-0006.723986 : 00006.157408</XY-Location>
+        <XY-Location>-0006.602858 : 00006.216191</XY-Location>
+        <XY-Location>-0006.465538 : 00006.282831</XY-Location>
+        <XY-Location>-0006.313828 : 00006.356455</XY-Location>
+        <XY-Location>-0006.149524 : 00006.436191</XY-Location>
+        <XY-Location>-0005.974427 : 00006.521164</XY-Location>
+        <XY-Location>-0005.790335 : 00006.610503</XY-Location>
+        <XY-Location>-0005.599048 : 00006.703334</XY-Location>
+        <XY-Location>-0005.402363 : 00006.798783</XY-Location>
+        <XY-Location>-0005.202081 : 00006.895979</XY-Location>
+        <XY-Location>-0005.000000 : 00006.994048</XY-Location>
+        <XY-Location>-0004.797919 : 00007.092117</XY-Location>
+        <XY-Location>-0004.597637 : 00007.189312</XY-Location>
+        <XY-Location>-0004.400952 : 00007.284762</XY-Location>
+        <XY-Location>-0004.209665 : 00007.377593</XY-Location>
+        <XY-Location>-0004.025573 : 00007.466931</XY-Location>
+        <XY-Location>-0003.850476 : 00007.551905</XY-Location>
+        <XY-Location>-0003.686173 : 00007.631640</XY-Location>
+        <XY-Location>-0003.534462 : 00007.705264</XY-Location>
+        <XY-Location>-0003.397143 : 00007.771905</XY-Location>
+        <XY-Location>-0003.276014 : 00007.830688</XY-Location>
+        <XY-Location>-0003.172874 : 00007.880740</XY-Location>
+        <XY-Location>-0003.089523 : 00007.921190</XY-Location>
+        <XY-Location>-0003.027760 : 00007.951164</XY-Location>
+        <XY-Location>-0002.989382 : 00007.969788</XY-Location>
+        <XY-Location>-0002.976190 : 00007.976190</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+        <XY-Location>-0005.000000 : 00006.994048</XY-Location>
+        <XY-Location>-0002.976190 : 00007.976190</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0004.025573 : 00007.466931</XY-Location>
+        <XY-Location>-0004.645347 : 00006.835345</XY-Location>
+        <XY-Location>-0004.905227 : 00007.370855</XY-Location>
+        <XY-Location>-0004.025573 : 00007.466931</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Red, 22, 0xFF0000</Arc-State>
+      <Arc-Node-UIDs>S-0000002 : C-0000002</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000004</Arc-UID>
+      <View-Points>
+        <XY-Location>-0002.976190 : 00007.976190</XY-Location>
+        <XY-Location>-0002.963386 : 00007.969788</XY-Location>
+        <XY-Location>-0002.926137 : 00007.951164</XY-Location>
+        <XY-Location>-0002.866190 : 00007.921190</XY-Location>
+        <XY-Location>-0002.785291 : 00007.880740</XY-Location>
+        <XY-Location>-0002.685185 : 00007.830688</XY-Location>
+        <XY-Location>-0002.567619 : 00007.771904</XY-Location>
+        <XY-Location>-0002.434338 : 00007.705264</XY-Location>
+        <XY-Location>-0002.287090 : 00007.631640</XY-Location>
+        <XY-Location>-0002.127619 : 00007.551905</XY-Location>
+        <XY-Location>-0001.957672 : 00007.466931</XY-Location>
+        <XY-Location>-0001.778995 : 00007.377593</XY-Location>
+        <XY-Location>-0001.593333 : 00007.284762</XY-Location>
+        <XY-Location>-0001.402434 : 00007.189312</XY-Location>
+        <XY-Location>-0001.208042 : 00007.092117</XY-Location>
+        <XY-Location>-0001.011905 : 00006.994048</XY-Location>
+        <XY-Location>-0000.815767 : 00006.895979</XY-Location>
+        <XY-Location>-0000.621376 : 00006.798783</XY-Location>
+        <XY-Location>-0000.430476 : 00006.703334</XY-Location>
+        <XY-Location>-0000.244815 : 00006.610503</XY-Location>
+        <XY-Location>-0000.066138 : 00006.521164</XY-Location>
+        <XY-Location>00000.103809 : 00006.436191</XY-Location>
+        <XY-Location>00000.263280 : 00006.356455</XY-Location>
+        <XY-Location>00000.410529 : 00006.282831</XY-Location>
+        <XY-Location>00000.543810 : 00006.216191</XY-Location>
+        <XY-Location>00000.661376 : 00006.157408</XY-Location>
+        <XY-Location>00000.761482 : 00006.107355</XY-Location>
+        <XY-Location>00000.842381 : 00006.066905</XY-Location>
+        <XY-Location>00000.902328 : 00006.036931</XY-Location>
+        <XY-Location>00000.939577 : 00006.018307</XY-Location>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0002.976190 : 00007.976190</XY-Location>
+        <XY-Location>-0001.011905 : 00006.994048</XY-Location>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0000.066138 : 00006.521164</XY-Location>
+        <XY-Location>-0000.944593 : 00006.627644</XY-Location>
+        <XY-Location>-0000.678394 : 00007.160041</XY-Location>
+        <XY-Location>-0000.066138 : 00006.521164</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Red, 22, 0xFF0000</Arc-State>
+      <Arc-Node-UIDs>C-0000002 : S-0000003</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000005</Arc-UID>
+      <View-Points>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+        <XY-Location>00000.939189 : 00006.005503</XY-Location>
+        <XY-Location>00000.900811 : 00005.986879</XY-Location>
+        <XY-Location>00000.839048 : 00005.956905</XY-Location>
+        <XY-Location>00000.755697 : 00005.916455</XY-Location>
+        <XY-Location>00000.652557 : 00005.866402</XY-Location>
+        <XY-Location>00000.531429 : 00005.807619</XY-Location>
+        <XY-Location>00000.394109 : 00005.740979</XY-Location>
+        <XY-Location>00000.242398 : 00005.667355</XY-Location>
+        <XY-Location>00000.078095 : 00005.587619</XY-Location>
+        <XY-Location>-0000.097002 : 00005.502646</XY-Location>
+        <XY-Location>-0000.281094 : 00005.413307</XY-Location>
+        <XY-Location>-0000.472381 : 00005.320476</XY-Location>
+        <XY-Location>-0000.669066 : 00005.225027</XY-Location>
+        <XY-Location>-0000.869348 : 00005.127831</XY-Location>
+        <XY-Location>-0001.071429 : 00005.029762</XY-Location>
+        <XY-Location>-0001.273510 : 00004.931693</XY-Location>
+        <XY-Location>-0001.473792 : 00004.834497</XY-Location>
+        <XY-Location>-0001.670476 : 00004.739048</XY-Location>
+        <XY-Location>-0001.861764 : 00004.646217</XY-Location>
+        <XY-Location>-0002.045856 : 00004.556878</XY-Location>
+        <XY-Location>-0002.220953 : 00004.471905</XY-Location>
+        <XY-Location>-0002.385256 : 00004.392169</XY-Location>
+        <XY-Location>-0002.536967 : 00004.318545</XY-Location>
+        <XY-Location>-0002.674286 : 00004.251905</XY-Location>
+        <XY-Location>-0002.795414 : 00004.193122</XY-Location>
+        <XY-Location>-0002.898554 : 00004.143069</XY-Location>
+        <XY-Location>-0002.981905 : 00004.102619</XY-Location>
+        <XY-Location>-0003.043668 : 00004.072645</XY-Location>
+        <XY-Location>-0003.082046 : 00004.054021</XY-Location>
+        <XY-Location>-0003.095238 : 00004.047619</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+        <XY-Location>-0001.071429 : 00005.029762</XY-Location>
+        <XY-Location>-0003.095238 : 00004.047619</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0002.045856 : 00004.556878</XY-Location>
+        <XY-Location>-0001.426082 : 00005.188465</XY-Location>
+        <XY-Location>-0001.166202 : 00004.652955</XY-Location>
+        <XY-Location>-0002.045856 : 00004.556878</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>S-0000003 : C-0000003</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000006</Arc-UID>
+      <View-Points>
+        <XY-Location>-0003.095238 : 00004.047619</XY-Location>
+        <XY-Location>-0003.108042 : 00004.054021</XY-Location>
+        <XY-Location>-0003.145291 : 00004.072645</XY-Location>
+        <XY-Location>-0003.205238 : 00004.102619</XY-Location>
+        <XY-Location>-0003.286137 : 00004.143069</XY-Location>
+        <XY-Location>-0003.386243 : 00004.193122</XY-Location>
+        <XY-Location>-0003.503809 : 00004.251905</XY-Location>
+        <XY-Location>-0003.637090 : 00004.318545</XY-Location>
+        <XY-Location>-0003.784339 : 00004.392169</XY-Location>
+        <XY-Location>-0003.943810 : 00004.471905</XY-Location>
+        <XY-Location>-0004.113757 : 00004.556878</XY-Location>
+        <XY-Location>-0004.292434 : 00004.646217</XY-Location>
+        <XY-Location>-0004.478095 : 00004.739048</XY-Location>
+        <XY-Location>-0004.668995 : 00004.834497</XY-Location>
+        <XY-Location>-0004.863386 : 00004.931693</XY-Location>
+        <XY-Location>-0005.059524 : 00005.029762</XY-Location>
+        <XY-Location>-0005.255662 : 00005.127831</XY-Location>
+        <XY-Location>-0005.450053 : 00005.225027</XY-Location>
+        <XY-Location>-0005.640953 : 00005.320476</XY-Location>
+        <XY-Location>-0005.826614 : 00005.413307</XY-Location>
+        <XY-Location>-0006.005291 : 00005.502646</XY-Location>
+        <XY-Location>-0006.175238 : 00005.587619</XY-Location>
+        <XY-Location>-0006.334709 : 00005.667355</XY-Location>
+        <XY-Location>-0006.481958 : 00005.740979</XY-Location>
+        <XY-Location>-0006.615239 : 00005.807619</XY-Location>
+        <XY-Location>-0006.732805 : 00005.866402</XY-Location>
+        <XY-Location>-0006.832911 : 00005.916455</XY-Location>
+        <XY-Location>-0006.913810 : 00005.956905</XY-Location>
+        <XY-Location>-0006.973757 : 00005.986879</XY-Location>
+        <XY-Location>-0007.011006 : 00006.005503</XY-Location>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0003.095238 : 00004.047619</XY-Location>
+        <XY-Location>-0005.059524 : 00005.029762</XY-Location>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0006.005291 : 00005.502646</XY-Location>
+        <XY-Location>-0005.126836 : 00005.396166</XY-Location>
+        <XY-Location>-0005.393035 : 00004.863769</XY-Location>
+        <XY-Location>-0006.005291 : 00005.502646</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>C-0000003 : S-0000002</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000007</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+        <XY-Location>-0006.951094 : -0001.004921</XY-Location>
+        <XY-Location>-0006.912716 : -0000.984603</XY-Location>
+        <XY-Location>-0006.850953 : -0000.951905</XY-Location>
+        <XY-Location>-0006.767602 : -0000.907778</XY-Location>
+        <XY-Location>-0006.664462 : -0000.853175</XY-Location>
+        <XY-Location>-0006.543334 : -0000.789048</XY-Location>
+        <XY-Location>-0006.406014 : -0000.716349</XY-Location>
+        <XY-Location>-0006.254303 : -0000.636032</XY-Location>
+        <XY-Location>-0006.090000 : -0000.549048</XY-Location>
+        <XY-Location>-0005.914903 : -0000.456349</XY-Location>
+        <XY-Location>-0005.730811 : -0000.358889</XY-Location>
+        <XY-Location>-0005.539524 : -0000.257619</XY-Location>
+        <XY-Location>-0005.342839 : -0000.153492</XY-Location>
+        <XY-Location>-0005.142557 : -0000.047460</XY-Location>
+        <XY-Location>-0004.940476 : 00000.059524</XY-Location>
+        <XY-Location>-0004.738395 : 00000.166508</XY-Location>
+        <XY-Location>-0004.538113 : 00000.272540</XY-Location>
+        <XY-Location>-0004.341429 : 00000.376667</XY-Location>
+        <XY-Location>-0004.150141 : 00000.477937</XY-Location>
+        <XY-Location>-0003.966049 : 00000.575397</XY-Location>
+        <XY-Location>-0003.790953 : 00000.668095</XY-Location>
+        <XY-Location>-0003.626649 : 00000.755079</XY-Location>
+        <XY-Location>-0003.474938 : 00000.835397</XY-Location>
+        <XY-Location>-0003.337619 : 00000.908095</XY-Location>
+        <XY-Location>-0003.216491 : 00000.972222</XY-Location>
+        <XY-Location>-0003.113351 : 00001.026825</XY-Location>
+        <XY-Location>-0003.030000 : 00001.070952</XY-Location>
+        <XY-Location>-0002.968237 : 00001.103650</XY-Location>
+        <XY-Location>-0002.929859 : 00001.123968</XY-Location>
+        <XY-Location>-0002.916667 : 00001.130952</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+        <XY-Location>-0004.940476 : 00000.059524</XY-Location>
+        <XY-Location>-0002.916667 : 00001.130952</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0003.966049 : 00000.575397</XY-Location>
+        <XY-Location>-0004.563287 : -0000.077542</XY-Location>
+        <XY-Location>-0004.841792 : 00000.448523</XY-Location>
+        <XY-Location>-0003.966049 : 00000.575397</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Blue, 24, 0x0000FF</Arc-State>
+      <Arc-Node-UIDs>S-0000004 : C-0000004</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000008</Arc-UID>
+      <View-Points>
+        <XY-Location>-0002.916667 : 00001.130952</XY-Location>
+        <XY-Location>-0002.903863 : 00001.123968</XY-Location>
+        <XY-Location>-0002.866614 : 00001.103650</XY-Location>
+        <XY-Location>-0002.806667 : 00001.070952</XY-Location>
+        <XY-Location>-0002.725767 : 00001.026825</XY-Location>
+        <XY-Location>-0002.625662 : 00000.972222</XY-Location>
+        <XY-Location>-0002.508095 : 00000.908095</XY-Location>
+        <XY-Location>-0002.374815 : 00000.835397</XY-Location>
+        <XY-Location>-0002.227566 : 00000.755079</XY-Location>
+        <XY-Location>-0002.068095 : 00000.668095</XY-Location>
+        <XY-Location>-0001.898148 : 00000.575397</XY-Location>
+        <XY-Location>-0001.719471 : 00000.477937</XY-Location>
+        <XY-Location>-0001.533810 : 00000.376667</XY-Location>
+        <XY-Location>-0001.342910 : 00000.272540</XY-Location>
+        <XY-Location>-0001.148519 : 00000.166508</XY-Location>
+        <XY-Location>-0000.952381 : 00000.059524</XY-Location>
+        <XY-Location>-0000.756243 : -0000.047460</XY-Location>
+        <XY-Location>-0000.561852 : -0000.153492</XY-Location>
+        <XY-Location>-0000.370952 : -0000.257619</XY-Location>
+        <XY-Location>-0000.185291 : -0000.358889</XY-Location>
+        <XY-Location>-0000.006614 : -0000.456349</XY-Location>
+        <XY-Location>00000.163333 : -0000.549048</XY-Location>
+        <XY-Location>00000.322804 : -0000.636032</XY-Location>
+        <XY-Location>00000.470053 : -0000.716349</XY-Location>
+        <XY-Location>00000.603334 : -0000.789048</XY-Location>
+        <XY-Location>00000.720900 : -0000.853175</XY-Location>
+        <XY-Location>00000.821006 : -0000.907778</XY-Location>
+        <XY-Location>00000.901905 : -0000.951905</XY-Location>
+        <XY-Location>00000.961852 : -0000.984603</XY-Location>
+        <XY-Location>00000.999101 : -0001.004921</XY-Location>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0002.916667 : 00001.130952</XY-Location>
+        <XY-Location>-0000.952381 : 00000.059524</XY-Location>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0000.006614 : -0000.456349</XY-Location>
+        <XY-Location>-0000.880709 : -0000.318584</XY-Location>
+        <XY-Location>-0000.595678 : 00000.203973</XY-Location>
+        <XY-Location>-0000.006614 : -0000.456349</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Blue, 24, 0x0000FF</Arc-State>
+      <Arc-Node-UIDs>C-0000004 : S-0000005</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000009</Arc-UID>
+      <View-Points>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+        <XY-Location>00000.998713 : -0001.018307</XY-Location>
+        <XY-Location>00000.960335 : -0001.036931</XY-Location>
+        <XY-Location>00000.898572 : -0001.066905</XY-Location>
+        <XY-Location>00000.815221 : -0001.107355</XY-Location>
+        <XY-Location>00000.712081 : -0001.157408</XY-Location>
+        <XY-Location>00000.590953 : -0001.216191</XY-Location>
+        <XY-Location>00000.453633 : -0001.282831</XY-Location>
+        <XY-Location>00000.301922 : -0001.356455</XY-Location>
+        <XY-Location>00000.137619 : -0001.436191</XY-Location>
+        <XY-Location>-0000.037478 : -0001.521164</XY-Location>
+        <XY-Location>-0000.221570 : -0001.610503</XY-Location>
+        <XY-Location>-0000.412857 : -0001.703334</XY-Location>
+        <XY-Location>-0000.609542 : -0001.798783</XY-Location>
+        <XY-Location>-0000.809824 : -0001.895979</XY-Location>
+        <XY-Location>-0001.011905 : -0001.994048</XY-Location>
+        <XY-Location>-0001.213986 : -0002.092117</XY-Location>
+        <XY-Location>-0001.414268 : -0002.189312</XY-Location>
+        <XY-Location>-0001.610952 : -0002.284762</XY-Location>
+        <XY-Location>-0001.802240 : -0002.377593</XY-Location>
+        <XY-Location>-0001.986332 : -0002.466931</XY-Location>
+        <XY-Location>-0002.161428 : -0002.551905</XY-Location>
+        <XY-Location>-0002.325732 : -0002.631640</XY-Location>
+        <XY-Location>-0002.477443 : -0002.705264</XY-Location>
+        <XY-Location>-0002.614762 : -0002.771904</XY-Location>
+        <XY-Location>-0002.735890 : -0002.830688</XY-Location>
+        <XY-Location>-0002.839030 : -0002.880740</XY-Location>
+        <XY-Location>-0002.922381 : -0002.921190</XY-Location>
+        <XY-Location>-0002.984144 : -0002.951164</XY-Location>
+        <XY-Location>-0003.022522 : -0002.969788</XY-Location>
+        <XY-Location>-0003.035714 : -0002.976190</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+        <XY-Location>-0001.011905 : -0001.994048</XY-Location>
+        <XY-Location>-0003.035714 : -0002.976190</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0001.986332 : -0002.466931</XY-Location>
+        <XY-Location>-0001.366557 : -0001.835345</XY-Location>
+        <XY-Location>-0001.106678 : -0002.370855</XY-Location>
+        <XY-Location>-0001.986332 : -0002.466931</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>S-0000005 : C-0000005</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000010</Arc-UID>
+      <View-Points>
+        <XY-Location>-0003.035714 : -0002.976190</XY-Location>
+        <XY-Location>-0003.048518 : -0002.969788</XY-Location>
+        <XY-Location>-0003.085767 : -0002.951164</XY-Location>
+        <XY-Location>-0003.145714 : -0002.921190</XY-Location>
+        <XY-Location>-0003.226614 : -0002.880740</XY-Location>
+        <XY-Location>-0003.326719 : -0002.830688</XY-Location>
+        <XY-Location>-0003.444286 : -0002.771905</XY-Location>
+        <XY-Location>-0003.577566 : -0002.705264</XY-Location>
+        <XY-Location>-0003.724815 : -0002.631640</XY-Location>
+        <XY-Location>-0003.884286 : -0002.551905</XY-Location>
+        <XY-Location>-0004.054233 : -0002.466931</XY-Location>
+        <XY-Location>-0004.232910 : -0002.377593</XY-Location>
+        <XY-Location>-0004.418571 : -0002.284762</XY-Location>
+        <XY-Location>-0004.609471 : -0002.189312</XY-Location>
+        <XY-Location>-0004.803862 : -0002.092117</XY-Location>
+        <XY-Location>-0005.000000 : -0001.994048</XY-Location>
+        <XY-Location>-0005.196138 : -0001.895979</XY-Location>
+        <XY-Location>-0005.390529 : -0001.798783</XY-Location>
+        <XY-Location>-0005.581429 : -0001.703334</XY-Location>
+        <XY-Location>-0005.767090 : -0001.610503</XY-Location>
+        <XY-Location>-0005.945767 : -0001.521164</XY-Location>
+        <XY-Location>-0006.115714 : -0001.436191</XY-Location>
+        <XY-Location>-0006.275185 : -0001.356455</XY-Location>
+        <XY-Location>-0006.422434 : -0001.282831</XY-Location>
+        <XY-Location>-0006.555715 : -0001.216191</XY-Location>
+        <XY-Location>-0006.673281 : -0001.157408</XY-Location>
+        <XY-Location>-0006.773387 : -0001.107355</XY-Location>
+        <XY-Location>-0006.854286 : -0001.066905</XY-Location>
+        <XY-Location>-0006.914233 : -0001.036931</XY-Location>
+        <XY-Location>-0006.951482 : -0001.018307</XY-Location>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0003.035714 : -0002.976190</XY-Location>
+        <XY-Location>-0005.000000 : -0001.994048</XY-Location>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0005.945767 : -0001.521164</XY-Location>
+        <XY-Location>-0005.067312 : -0001.627644</XY-Location>
+        <XY-Location>-0005.333511 : -0002.160041</XY-Location>
+        <XY-Location>-0005.945767 : -0001.521164</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>C-0000005 : S-0000004</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000011</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+        <XY-Location>-0006.951482 : -0008.028924</XY-Location>
+        <XY-Location>-0006.914233 : -0008.009171</XY-Location>
+        <XY-Location>-0006.854286 : -0007.977381</XY-Location>
+        <XY-Location>-0006.773386 : -0007.934480</XY-Location>
+        <XY-Location>-0006.673281 : -0007.881393</XY-Location>
+        <XY-Location>-0006.555714 : -0007.819048</XY-Location>
+        <XY-Location>-0006.422434 : -0007.748369</XY-Location>
+        <XY-Location>-0006.275185 : -0007.670282</XY-Location>
+        <XY-Location>-0006.115714 : -0007.585714</XY-Location>
+        <XY-Location>-0005.945767 : -0007.495591</XY-Location>
+        <XY-Location>-0005.767090 : -0007.400838</XY-Location>
+        <XY-Location>-0005.581429 : -0007.302381</XY-Location>
+        <XY-Location>-0005.390529 : -0007.201147</XY-Location>
+        <XY-Location>-0005.196138 : -0007.098060</XY-Location>
+        <XY-Location>-0005.000000 : -0006.994048</XY-Location>
+        <XY-Location>-0004.803862 : -0006.890036</XY-Location>
+        <XY-Location>-0004.609471 : -0006.786949</XY-Location>
+        <XY-Location>-0004.418571 : -0006.685715</XY-Location>
+        <XY-Location>-0004.232910 : -0006.587258</XY-Location>
+        <XY-Location>-0004.054233 : -0006.492505</XY-Location>
+        <XY-Location>-0003.884286 : -0006.402381</XY-Location>
+        <XY-Location>-0003.724815 : -0006.317813</XY-Location>
+        <XY-Location>-0003.577566 : -0006.239727</XY-Location>
+        <XY-Location>-0003.444285 : -0006.169048</XY-Location>
+        <XY-Location>-0003.326719 : -0006.106702</XY-Location>
+        <XY-Location>-0003.226613 : -0006.053616</XY-Location>
+        <XY-Location>-0003.145714 : -0006.010714</XY-Location>
+        <XY-Location>-0003.085767 : -0005.978924</XY-Location>
+        <XY-Location>-0003.048518 : -0005.959171</XY-Location>
+        <XY-Location>-0003.035714 : -0005.952381</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+        <XY-Location>-0005.000000 : -0006.994048</XY-Location>
+        <XY-Location>-0003.035714 : -0005.952381</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0004.054233 : -0006.492505</XY-Location>
+        <XY-Location>-0004.651016 : -0007.145859</XY-Location>
+        <XY-Location>-0004.929886 : -0006.619988</XY-Location>
+        <XY-Location>-0004.054233 : -0006.492505</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Green, 23, 0x00D000</Arc-State>
+      <Arc-Node-UIDs>S-0000006 : C-0000006</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000012</Arc-UID>
+      <View-Points>
+        <XY-Location>-0003.035714 : -0005.952381</XY-Location>
+        <XY-Location>-0003.022522 : -0005.959171</XY-Location>
+        <XY-Location>-0002.984144 : -0005.978924</XY-Location>
+        <XY-Location>-0002.922381 : -0006.010714</XY-Location>
+        <XY-Location>-0002.839030 : -0006.053616</XY-Location>
+        <XY-Location>-0002.735890 : -0006.106702</XY-Location>
+        <XY-Location>-0002.614762 : -0006.169048</XY-Location>
+        <XY-Location>-0002.477443 : -0006.239727</XY-Location>
+        <XY-Location>-0002.325732 : -0006.317813</XY-Location>
+        <XY-Location>-0002.161429 : -0006.402381</XY-Location>
+        <XY-Location>-0001.986332 : -0006.492505</XY-Location>
+        <XY-Location>-0001.802240 : -0006.587258</XY-Location>
+        <XY-Location>-0001.610953 : -0006.685715</XY-Location>
+        <XY-Location>-0001.414268 : -0006.786949</XY-Location>
+        <XY-Location>-0001.213986 : -0006.890036</XY-Location>
+        <XY-Location>-0001.011905 : -0006.994048</XY-Location>
+        <XY-Location>-0000.809824 : -0007.098060</XY-Location>
+        <XY-Location>-0000.609542 : -0007.201147</XY-Location>
+        <XY-Location>-0000.412857 : -0007.302381</XY-Location>
+        <XY-Location>-0000.221570 : -0007.400838</XY-Location>
+        <XY-Location>-0000.037478 : -0007.495591</XY-Location>
+        <XY-Location>00000.137619 : -0007.585714</XY-Location>
+        <XY-Location>00000.301922 : -0007.670282</XY-Location>
+        <XY-Location>00000.453633 : -0007.748369</XY-Location>
+        <XY-Location>00000.590952 : -0007.819048</XY-Location>
+        <XY-Location>00000.712081 : -0007.881393</XY-Location>
+        <XY-Location>00000.815221 : -0007.934480</XY-Location>
+        <XY-Location>00000.898572 : -0007.977381</XY-Location>
+        <XY-Location>00000.960335 : -0008.009171</XY-Location>
+        <XY-Location>00000.998713 : -0008.028924</XY-Location>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0003.035714 : -0005.952381</XY-Location>
+        <XY-Location>-0001.011905 : -0006.994048</XY-Location>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0000.037478 : -0007.495591</XY-Location>
+        <XY-Location>-0000.914628 : -0007.378846</XY-Location>
+        <XY-Location>-0000.642221 : -0006.849598</XY-Location>
+        <XY-Location>-0000.037478 : -0007.495591</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Green, 23, 0x00D000</Arc-State>
+      <Arc-Node-UIDs>C-0000006 : S-0000007</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000019</Arc-UID>
+      <View-Points>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+        <XY-Location>00000.998519 : -0008.041922</XY-Location>
+        <XY-Location>00000.959577 : -0008.059982</XY-Location>
+        <XY-Location>00000.896905 : -0008.089047</XY-Location>
+        <XY-Location>00000.812328 : -0008.128271</XY-Location>
+        <XY-Location>00000.707672 : -0008.176808</XY-Location>
+        <XY-Location>00000.584762 : -0008.233810</XY-Location>
+        <XY-Location>00000.445423 : -0008.298430</XY-Location>
+        <XY-Location>00000.291482 : -0008.369824</XY-Location>
+        <XY-Location>00000.124762 : -0008.447143</XY-Location>
+        <XY-Location>-0000.052910 : -0008.529542</XY-Location>
+        <XY-Location>-0000.239709 : -0008.616173</XY-Location>
+        <XY-Location>-0000.433810 : -0008.706191</XY-Location>
+        <XY-Location>-0000.633386 : -0008.798748</XY-Location>
+        <XY-Location>-0000.836614 : -0008.892999</XY-Location>
+        <XY-Location>-0001.041667 : -0008.988096</XY-Location>
+        <XY-Location>-0001.246720 : -0009.083193</XY-Location>
+        <XY-Location>-0001.449947 : -0009.177443</XY-Location>
+        <XY-Location>-0001.649524 : -0009.270001</XY-Location>
+        <XY-Location>-0001.843624 : -0009.360018</XY-Location>
+        <XY-Location>-0002.030423 : -0009.446649</XY-Location>
+        <XY-Location>-0002.208095 : -0009.529048</XY-Location>
+        <XY-Location>-0002.374815 : -0009.606367</XY-Location>
+        <XY-Location>-0002.528757 : -0009.677760</XY-Location>
+        <XY-Location>-0002.668095 : -0009.742381</XY-Location>
+        <XY-Location>-0002.791005 : -0009.799383</XY-Location>
+        <XY-Location>-0002.895661 : -0009.847919</XY-Location>
+        <XY-Location>-0002.980238 : -0009.887143</XY-Location>
+        <XY-Location>-0003.042910 : -0009.916208</XY-Location>
+        <XY-Location>-0003.081852 : -0009.934268</XY-Location>
+        <XY-Location>-0003.095238 : -0009.940476</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+        <XY-Location>-0001.041667 : -0008.988096</XY-Location>
+        <XY-Location>-0003.095238 : -0009.940476</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0002.030423 : -0009.446649</XY-Location>
+        <XY-Location>-0001.399649 : -0008.826049</XY-Location>
+        <XY-Location>-0001.149217 : -0009.366042</XY-Location>
+        <XY-Location>-0002.030423 : -0009.446649</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>S-0000007 : C-0000010</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000020</Arc-UID>
+      <View-Points>
+        <XY-Location>-0003.095238 : -0009.940476</XY-Location>
+        <XY-Location>-0003.107848 : -0009.934268</XY-Location>
+        <XY-Location>-0003.144533 : -0009.916208</XY-Location>
+        <XY-Location>-0003.203571 : -0009.887143</XY-Location>
+        <XY-Location>-0003.283245 : -0009.847919</XY-Location>
+        <XY-Location>-0003.381834 : -0009.799383</XY-Location>
+        <XY-Location>-0003.497619 : -0009.742381</XY-Location>
+        <XY-Location>-0003.628880 : -0009.677760</XY-Location>
+        <XY-Location>-0003.773898 : -0009.606367</XY-Location>
+        <XY-Location>-0003.930952 : -0009.529048</XY-Location>
+        <XY-Location>-0004.098325 : -0009.446650</XY-Location>
+        <XY-Location>-0004.274295 : -0009.360018</XY-Location>
+        <XY-Location>-0004.457143 : -0009.270001</XY-Location>
+        <XY-Location>-0004.645150 : -0009.177443</XY-Location>
+        <XY-Location>-0004.836596 : -0009.083193</XY-Location>
+        <XY-Location>-0005.029762 : -0008.988096</XY-Location>
+        <XY-Location>-0005.222928 : -0008.892999</XY-Location>
+        <XY-Location>-0005.414374 : -0008.798748</XY-Location>
+        <XY-Location>-0005.602381 : -0008.706191</XY-Location>
+        <XY-Location>-0005.785230 : -0008.616173</XY-Location>
+        <XY-Location>-0005.961200 : -0008.529542</XY-Location>
+        <XY-Location>-0006.128572 : -0008.447143</XY-Location>
+        <XY-Location>-0006.285626 : -0008.369824</XY-Location>
+        <XY-Location>-0006.430644 : -0008.298430</XY-Location>
+        <XY-Location>-0006.561905 : -0008.233810</XY-Location>
+        <XY-Location>-0006.677690 : -0008.176808</XY-Location>
+        <XY-Location>-0006.776279 : -0008.128271</XY-Location>
+        <XY-Location>-0006.855953 : -0008.089047</XY-Location>
+        <XY-Location>-0006.914991 : -0008.059982</XY-Location>
+        <XY-Location>-0006.951676 : -0008.041922</XY-Location>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>0</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>1</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0003.095238 : -0009.940476</XY-Location>
+        <XY-Location>-0005.029762 : -0008.988096</XY-Location>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0005.961200 : -0008.529542</XY-Location>
+        <XY-Location>-0005.082104 : -0008.630597</XY-Location>
+        <XY-Location>-0005.345011 : -0009.164627</XY-Location>
+        <XY-Location>-0005.961200 : -0008.529542</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>C-0000010 : S-0000006</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000021</Arc-UID>
+      <View-Points>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+        <XY-Location>-0007.023639 : 00006.003176</XY-Location>
+        <XY-Location>-0007.023141 : 00005.977781</XY-Location>
+        <XY-Location>-0007.022339 : 00005.936911</XY-Location>
+        <XY-Location>-0007.021258 : 00005.881757</XY-Location>
+        <XY-Location>-0007.019920 : 00005.813509</XY-Location>
+        <XY-Location>-0007.018348 : 00005.733357</XY-Location>
+        <XY-Location>-0007.016566 : 00005.642491</XY-Location>
+        <XY-Location>-0007.014598 : 00005.542103</XY-Location>
+        <XY-Location>-0007.012466 : 00005.433382</XY-Location>
+        <XY-Location>-0007.010194 : 00005.317518</XY-Location>
+        <XY-Location>-0007.007806 : 00005.195703</XY-Location>
+        <XY-Location>-0007.005324 : 00005.069127</XY-Location>
+        <XY-Location>-0007.002772 : 00004.938979</XY-Location>
+        <XY-Location>-0007.000173 : 00004.806450</XY-Location>
+        <XY-Location>-0006.997551 : 00004.672731</XY-Location>
+        <XY-Location>-0006.994229 : 00004.503328</XY-Location>
+        <XY-Location>-0006.990937 : 00004.335434</XY-Location>
+        <XY-Location>-0006.987704 : 00004.170555</XY-Location>
+        <XY-Location>-0006.984560 : 00004.010200</XY-Location>
+        <XY-Location>-0006.981534 : 00003.855878</XY-Location>
+        <XY-Location>-0006.978656 : 00003.709096</XY-Location>
+        <XY-Location>-0006.975956 : 00003.571362</XY-Location>
+        <XY-Location>-0006.973462 : 00003.444184</XY-Location>
+        <XY-Location>-0006.971205 : 00003.329071</XY-Location>
+        <XY-Location>-0006.969214 : 00003.227529</XY-Location>
+        <XY-Location>-0006.967519 : 00003.141069</XY-Location>
+        <XY-Location>-0006.966149 : 00003.071196</XY-Location>
+        <XY-Location>-0006.965134 : 00003.019420</XY-Location>
+        <XY-Location>-0006.964503 : 00002.987249</XY-Location>
+        <XY-Location>-0006.964286 : 00002.976190</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+        <XY-Location>-0006.997551 : 00004.672731</XY-Location>
+        <XY-Location>-0006.964286 : 00002.976190</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0006.978656 : 00003.709096</XY-Location>
+        <XY-Location>-0007.292555 : 00004.536434</XY-Location>
+        <XY-Location>-0006.697431 : 00004.548103</XY-Location>
+        <XY-Location>-0006.978656 : 00003.709096</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>S-0000002 : C-0000011</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000025</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : 00012.023810</XY-Location>
+        <XY-Location>-0006.964286 : 00012.015080</XY-Location>
+        <XY-Location>-0006.964286 : 00011.989683</XY-Location>
+        <XY-Location>-0006.964286 : 00011.948810</XY-Location>
+        <XY-Location>-0006.964286 : 00011.893651</XY-Location>
+        <XY-Location>-0006.964286 : 00011.825397</XY-Location>
+        <XY-Location>-0006.964286 : 00011.745239</XY-Location>
+        <XY-Location>-0006.964286 : 00011.654365</XY-Location>
+        <XY-Location>-0006.964286 : 00011.553969</XY-Location>
+        <XY-Location>-0006.964286 : 00011.445238</XY-Location>
+        <XY-Location>-0006.964286 : 00011.329365</XY-Location>
+        <XY-Location>-0006.964286 : 00011.207540</XY-Location>
+        <XY-Location>-0006.964286 : 00011.080953</XY-Location>
+        <XY-Location>-0006.964286 : 00010.950794</XY-Location>
+        <XY-Location>-0006.964286 : 00010.818254</XY-Location>
+        <XY-Location>-0006.964286 : 00010.684524</XY-Location>
+        <XY-Location>-0006.964286 : 00010.515132</XY-Location>
+        <XY-Location>-0006.964286 : 00010.347249</XY-Location>
+        <XY-Location>-0006.964286 : 00010.182381</XY-Location>
+        <XY-Location>-0006.964286 : 00010.022037</XY-Location>
+        <XY-Location>-0006.964286 : 00009.867725</XY-Location>
+        <XY-Location>-0006.964286 : 00009.720952</XY-Location>
+        <XY-Location>-0006.964286 : 00009.583227</XY-Location>
+        <XY-Location>-0006.964286 : 00009.456058</XY-Location>
+        <XY-Location>-0006.964286 : 00009.340952</XY-Location>
+        <XY-Location>-0006.964286 : 00009.239418</XY-Location>
+        <XY-Location>-0006.964286 : 00009.152963</XY-Location>
+        <XY-Location>-0006.964286 : 00009.083095</XY-Location>
+        <XY-Location>-0006.964286 : 00009.031323</XY-Location>
+        <XY-Location>-0006.964286 : 00008.999153</XY-Location>
+        <XY-Location>-0006.964286 : 00008.988095</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>20</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : 00012.023810</XY-Location>
+        <XY-Location>-0006.964286 : 00010.684524</XY-Location>
+        <XY-Location>-0006.964286 : 00008.988095</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0006.964286 : 00009.867725</XY-Location>
+        <XY-Location>-0007.261905 : 00010.701058</XY-Location>
+        <XY-Location>-0006.666667 : 00010.701058</XY-Location>
+        <XY-Location>-0006.964286 : 00009.867725</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Red, 22, 0xFF0000</Arc-State>
+      <Arc-Node-UIDs>S-0000008 : C-0000013</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000026</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : 00008.988095</XY-Location>
+        <XY-Location>-0006.964459 : 00008.979463</XY-Location>
+        <XY-Location>-0006.964961 : 00008.954350</XY-Location>
+        <XY-Location>-0006.965769 : 00008.913935</XY-Location>
+        <XY-Location>-0006.966860 : 00008.859394</XY-Location>
+        <XY-Location>-0006.968210 : 00008.791904</XY-Location>
+        <XY-Location>-0006.969795 : 00008.712643</XY-Location>
+        <XY-Location>-0006.971592 : 00008.622788</XY-Location>
+        <XY-Location>-0006.973578 : 00008.523515</XY-Location>
+        <XY-Location>-0006.975728 : 00008.416003</XY-Location>
+        <XY-Location>-0006.978020 : 00008.301427</XY-Location>
+        <XY-Location>-0006.980429 : 00008.180966</XY-Location>
+        <XY-Location>-0006.982932 : 00008.055796</XY-Location>
+        <XY-Location>-0006.985506 : 00007.927095</XY-Location>
+        <XY-Location>-0006.988127 : 00007.796040</XY-Location>
+        <XY-Location>-0006.990772 : 00007.663807</XY-Location>
+        <XY-Location>-0006.994071 : 00007.498862</XY-Location>
+        <XY-Location>-0006.997340 : 00007.335384</XY-Location>
+        <XY-Location>-0007.000551 : 00007.174844</XY-Location>
+        <XY-Location>-0007.003674 : 00007.018709</XY-Location>
+        <XY-Location>-0007.006679 : 00006.868447</XY-Location>
+        <XY-Location>-0007.009538 : 00006.725527</XY-Location>
+        <XY-Location>-0007.012220 : 00006.591417</XY-Location>
+        <XY-Location>-0007.014696 : 00006.467585</XY-Location>
+        <XY-Location>-0007.016938 : 00006.355501</XY-Location>
+        <XY-Location>-0007.018916 : 00006.256631</XY-Location>
+        <XY-Location>-0007.020599 : 00006.172445</XY-Location>
+        <XY-Location>-0007.021960 : 00006.104412</XY-Location>
+        <XY-Location>-0007.022968 : 00006.053998</XY-Location>
+        <XY-Location>-0007.023595 : 00006.022673</XY-Location>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>17</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : 00008.988095</XY-Location>
+        <XY-Location>-0006.990772 : 00007.663807</XY-Location>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0006.997340 : 00007.335384</XY-Location>
+        <XY-Location>-0007.278237 : 00008.174502</XY-Location>
+        <XY-Location>-0006.683118 : 00008.162600</XY-Location>
+        <XY-Location>-0006.997340 : 00007.335384</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Red, 22, 0xFF0000</Arc-State>
+      <Arc-Node-UIDs>C-0000013 : S-0000002</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000029</Arc-UID>
+      <View-Points>
+        <XY-Location>-0002.976190 : 00007.976190</XY-Location>
+        <XY-Location>-0003.001840 : 00007.985340</XY-Location>
+        <XY-Location>-0003.075316 : 00008.010101</XY-Location>
+        <XY-Location>-0003.191408 : 00008.046438</XY-Location>
+        <XY-Location>-0003.344905 : 00008.090315</XY-Location>
+        <XY-Location>-0003.530596 : 00008.137698</XY-Location>
+        <XY-Location>-0003.743272 : 00008.184553</XY-Location>
+        <XY-Location>-0003.977721 : 00008.226843</XY-Location>
+        <XY-Location>-0004.228733 : 00008.260534</XY-Location>
+        <XY-Location>-0004.491098 : 00008.281591</XY-Location>
+        <XY-Location>-0004.759606 : 00008.285980</XY-Location>
+        <XY-Location>-0005.029044 : 00008.269664</XY-Location>
+        <XY-Location>-0005.294204 : 00008.228610</XY-Location>
+        <XY-Location>-0005.549874 : 00008.158783</XY-Location>
+        <XY-Location>-0005.790845 : 00008.056147</XY-Location>
+        <XY-Location>-0006.011905 : 00007.916667</XY-Location>
+        <XY-Location>-0006.154355 : 00007.793857</XY-Location>
+        <XY-Location>-0006.284497 : 00007.654175</XY-Location>
+        <XY-Location>-0006.402698 : 00007.501377</XY-Location>
+        <XY-Location>-0006.509328 : 00007.339219</XY-Location>
+        <XY-Location>-0006.604755 : 00007.171457</XY-Location>
+        <XY-Location>-0006.689345 : 00007.001847</XY-Location>
+        <XY-Location>-0006.763469 : 00006.834144</XY-Location>
+        <XY-Location>-0006.827493 : 00006.672105</XY-Location>
+        <XY-Location>-0006.881786 : 00006.519485</XY-Location>
+        <XY-Location>-0006.926716 : 00006.380041</XY-Location>
+        <XY-Location>-0006.962652 : 00006.257528</XY-Location>
+        <XY-Location>-0006.989961 : 00006.155702</XY-Location>
+        <XY-Location>-0007.009011 : 00006.078319</XY-Location>
+        <XY-Location>-0007.020172 : 00006.029134</XY-Location>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>13</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0002.976190 : 00007.976190</XY-Location>
+        <XY-Location>-0006.011905 : 00007.916667</XY-Location>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0005.549874 : 00008.158783</XY-Location>
+        <XY-Location>-0004.824396 : 00008.665442</XY-Location>
+        <XY-Location>-0004.667571 : 00008.091234</XY-Location>
+        <XY-Location>-0005.549874 : 00008.158783</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000002 : S-0000002</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000030</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : 00008.988095</XY-Location>
+        <XY-Location>-0006.970014 : 00008.988165</XY-Location>
+        <XY-Location>-0006.986468 : 00008.988505</XY-Location>
+        <XY-Location>-0007.012554 : 00008.989312</XY-Location>
+        <XY-Location>-0007.047178 : 00008.990784</XY-Location>
+        <XY-Location>-0007.089245 : 00008.993118</XY-Location>
+        <XY-Location>-0007.137661 : 00008.996509</XY-Location>
+        <XY-Location>-0007.191333 : 00009.001156</XY-Location>
+        <XY-Location>-0007.249165 : 00009.007254</XY-Location>
+        <XY-Location>-0007.310064 : 00009.015002</XY-Location>
+        <XY-Location>-0007.372934 : 00009.024595</XY-Location>
+        <XY-Location>-0007.436683 : 00009.036231</XY-Location>
+        <XY-Location>-0007.500215 : 00009.050107</XY-Location>
+        <XY-Location>-0007.562437 : 00009.066420</XY-Location>
+        <XY-Location>-0007.622254 : 00009.085366</XY-Location>
+        <XY-Location>-0007.678572 : 00009.107143</XY-Location>
+        <XY-Location>-0007.865272 : 00009.228317</XY-Location>
+        <XY-Location>-0007.981520 : 00009.393753</XY-Location>
+        <XY-Location>-0008.035847 : 00009.595650</XY-Location>
+        <XY-Location>-0008.036789 : 00009.826211</XY-Location>
+        <XY-Location>-0007.992879 : 00010.077637</XY-Location>
+        <XY-Location>-0007.912650 : 00010.342130</XY-Location>
+        <XY-Location>-0007.804635 : 00010.611891</XY-Location>
+        <XY-Location>-0007.677369 : 00010.879122</XY-Location>
+        <XY-Location>-0007.539385 : 00011.136023</XY-Location>
+        <XY-Location>-0007.399217 : 00011.374798</XY-Location>
+        <XY-Location>-0007.265398 : 00011.587646</XY-Location>
+        <XY-Location>-0007.146462 : 00011.766770</XY-Location>
+        <XY-Location>-0007.050942 : 00011.904371</XY-Location>
+        <XY-Location>-0006.987372 : 00011.992650</XY-Location>
+        <XY-Location>-0006.964286 : 00012.023810</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>23</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : 00008.988095</XY-Location>
+        <XY-Location>-0007.678572 : 00009.107143</XY-Location>
+        <XY-Location>-0006.964286 : 00012.023810</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0007.677369 : 00010.879122</XY-Location>
+        <XY-Location>-0007.766974 : 00009.998785</XY-Location>
+        <XY-Location>-0008.304381 : 00010.254720</XY-Location>
+        <XY-Location>-0007.677369 : 00010.879122</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000013 : S-0000008</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000032</Arc-UID>
+      <View-Points>
+        <XY-Location>-0002.916667 : 00001.130952</XY-Location>
+        <XY-Location>-0002.957598 : 00001.137655</XY-Location>
+        <XY-Location>-0003.073609 : 00001.154412</XY-Location>
+        <XY-Location>-0003.254529 : 00001.176197</XY-Location>
+        <XY-Location>-0003.490184 : 00001.197982</XY-Location>
+        <XY-Location>-0003.770404 : 00001.214742</XY-Location>
+        <XY-Location>-0004.085015 : 00001.221448</XY-Location>
+        <XY-Location>-0004.423845 : 00001.213075</XY-Location>
+        <XY-Location>-0004.776722 : 00001.184595</XY-Location>
+        <XY-Location>-0005.133474 : 00001.130982</XY-Location>
+        <XY-Location>-0005.483929 : 00001.047208</XY-Location>
+        <XY-Location>-0005.817914 : 00000.928248</XY-Location>
+        <XY-Location>-0006.125258 : 00000.769074</XY-Location>
+        <XY-Location>-0006.395787 : 00000.564659</XY-Location>
+        <XY-Location>-0006.619330 : 00000.309977</XY-Location>
+        <XY-Location>-0006.785715 : 00000.000000</XY-Location>
+        <XY-Location>-0006.817838 : -0000.088236</XY-Location>
+        <XY-Location>-0006.845864 : -0000.179101</XY-Location>
+        <XY-Location>-0006.870073 : -0000.271302</XY-Location>
+        <XY-Location>-0006.890743 : -0000.363549</XY-Location>
+        <XY-Location>-0006.908153 : -0000.454549</XY-Location>
+        <XY-Location>-0006.922582 : -0000.543013</XY-Location>
+        <XY-Location>-0006.934309 : -0000.627647</XY-Location>
+        <XY-Location>-0006.943611 : -0000.707160</XY-Location>
+        <XY-Location>-0006.950769 : -0000.780262</XY-Location>
+        <XY-Location>-0006.956061 : -0000.845661</XY-Location>
+        <XY-Location>-0006.959765 : -0000.902065</XY-Location>
+        <XY-Location>-0006.962161 : -0000.948183</XY-Location>
+        <XY-Location>-0006.963528 : -0000.982723</XY-Location>
+        <XY-Location>-0006.964143 : -0001.004394</XY-Location>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>10</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0002.916667 : 00001.130952</XY-Location>
+        <XY-Location>-0006.785715 : 00000.000000</XY-Location>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0005.483929 : 00001.047208</XY-Location>
+        <XY-Location>-0004.742624 : 00001.530415</XY-Location>
+        <XY-Location>-0004.604236 : 00000.951488</XY-Location>
+        <XY-Location>-0005.483929 : 00001.047208</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000004 : S-0000004</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000034</Arc-UID>
+      <View-Points>
+        <XY-Location>-0003.035714 : -0005.952381</XY-Location>
+        <XY-Location>-0003.071854 : -0005.946905</XY-Location>
+        <XY-Location>-0003.174558 : -0005.933402</XY-Location>
+        <XY-Location>-0003.335254 : -0005.916259</XY-Location>
+        <XY-Location>-0003.545371 : -0005.899865</XY-Location>
+        <XY-Location>-0003.796334 : -0005.888607</XY-Location>
+        <XY-Location>-0004.079573 : -0005.886873</XY-Location>
+        <XY-Location>-0004.386515 : -0005.899050</XY-Location>
+        <XY-Location>-0004.708587 : -0005.929527</XY-Location>
+        <XY-Location>-0005.037217 : -0005.982691</XY-Location>
+        <XY-Location>-0005.363833 : -0006.062929</XY-Location>
+        <XY-Location>-0005.679863 : -0006.174629</XY-Location>
+        <XY-Location>-0005.976733 : -0006.322180</XY-Location>
+        <XY-Location>-0006.245872 : -0006.509969</XY-Location>
+        <XY-Location>-0006.478708 : -0006.742383</XY-Location>
+        <XY-Location>-0006.666667 : -0007.023810</XY-Location>
+        <XY-Location>-0006.709938 : -0007.111309</XY-Location>
+        <XY-Location>-0006.749211 : -0007.201639</XY-Location>
+        <XY-Location>-0006.784635 : -0007.293487</XY-Location>
+        <XY-Location>-0006.816361 : -0007.385538</XY-Location>
+        <XY-Location>-0006.844540 : -0007.476479</XY-Location>
+        <XY-Location>-0006.869322 : -0007.564994</XY-Location>
+        <XY-Location>-0006.890856 : -0007.649771</XY-Location>
+        <XY-Location>-0006.909294 : -0007.729496</XY-Location>
+        <XY-Location>-0006.924786 : -0007.802853</XY-Location>
+        <XY-Location>-0006.937482 : -0007.868530</XY-Location>
+        <XY-Location>-0006.947532 : -0007.925212</XY-Location>
+        <XY-Location>-0006.955088 : -0007.971586</XY-Location>
+        <XY-Location>-0006.960298 : -0008.006337</XY-Location>
+        <XY-Location>-0006.963314 : -0008.028151</XY-Location>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>10</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0003.035714 : -0005.952381</XY-Location>
+        <XY-Location>-0006.666667 : -0007.023810</XY-Location>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0005.363833 : -0006.062929</XY-Location>
+        <XY-Location>-0004.625566 : -0005.575094</XY-Location>
+        <XY-Location>-0004.483559 : -0006.153144</XY-Location>
+        <XY-Location>-0005.363833 : -0006.062929</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000006 : S-0000006</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000037</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : 00002.976190</XY-Location>
+        <XY-Location>-0006.972373 : 00002.979302</XY-Location>
+        <XY-Location>-0006.995456 : 00002.988504</XY-Location>
+        <XY-Location>-0007.031770 : 00003.003596</XY-Location>
+        <XY-Location>-0007.079551 : 00003.024379</XY-Location>
+        <XY-Location>-0007.137033 : 00003.050652</XY-Location>
+        <XY-Location>-0007.202452 : 00003.082217</XY-Location>
+        <XY-Location>-0007.274043 : 00003.118873</XY-Location>
+        <XY-Location>-0007.350040 : 00003.160420</XY-Location>
+        <XY-Location>-0007.428678 : 00003.206659</XY-Location>
+        <XY-Location>-0007.508193 : 00003.257390</XY-Location>
+        <XY-Location>-0007.586820 : 00003.312412</XY-Location>
+        <XY-Location>-0007.662793 : 00003.371528</XY-Location>
+        <XY-Location>-0007.734348 : 00003.434535</XY-Location>
+        <XY-Location>-0007.799720 : 00003.501236</XY-Location>
+        <XY-Location>-0007.857143 : 00003.571429</XY-Location>
+        <XY-Location>-0007.957187 : 00003.752986</XY-Location>
+        <XY-Location>-0008.007484 : 00003.949491</XY-Location>
+        <XY-Location>-0008.014383 : 00004.156872</XY-Location>
+        <XY-Location>-0007.984236 : 00004.371059</XY-Location>
+        <XY-Location>-0007.923394 : 00004.587980</XY-Location>
+        <XY-Location>-0007.838205 : 00004.803564</XY-Location>
+        <XY-Location>-0007.735022 : 00005.013740</XY-Location>
+        <XY-Location>-0007.620195 : 00005.214437</XY-Location>
+        <XY-Location>-0007.500074 : 00005.401583</XY-Location>
+        <XY-Location>-0007.381009 : 00005.571107</XY-Location>
+        <XY-Location>-0007.269352 : 00005.718937</XY-Location>
+        <XY-Location>-0007.171453 : 00005.841004</XY-Location>
+        <XY-Location>-0007.093663 : 00005.933235</XY-Location>
+        <XY-Location>-0007.042332 : 00005.991559</XY-Location>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>22</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : 00002.976190</XY-Location>
+        <XY-Location>-0007.857143 : 00003.571429</XY-Location>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0007.735022 : 00005.013740</XY-Location>
+        <XY-Location>-0007.835106 : 00004.134533</XY-Location>
+        <XY-Location>-0008.369427 : 00004.396851</XY-Location>
+        <XY-Location>-0007.735022 : 00005.013740</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000011 : S-0000002</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000039</Arc-UID>
+      <View-Points>
+        <XY-Location>-0003.095238 : 00004.047619</XY-Location>
+        <XY-Location>-0003.047571 : 00004.036200</XY-Location>
+        <XY-Location>-0002.912972 : 00004.006190</XY-Location>
+        <XY-Location>-0002.704048 : 00003.963954</XY-Location>
+        <XY-Location>-0002.433405 : 00003.915862</XY-Location>
+        <XY-Location>-0002.113649 : 00003.868280</XY-Location>
+        <XY-Location>-0001.757384 : 00003.827577</XY-Location>
+        <XY-Location>-0001.377217 : 00003.800119</XY-Location>
+        <XY-Location>-0000.985754 : 00003.792275</XY-Location>
+        <XY-Location>-0000.595600 : 00003.810413</XY-Location>
+        <XY-Location>-0000.219361 : 00003.860899</XY-Location>
+        <XY-Location>00000.130357 : 00003.950101</XY-Location>
+        <XY-Location>00000.440948 : 00004.084388</XY-Location>
+        <XY-Location>00000.699807 : 00004.270127</XY-Location>
+        <XY-Location>00000.894327 : 00004.513684</XY-Location>
+        <XY-Location>00001.011904 : 00004.821429</XY-Location>
+        <XY-Location>00001.029754 : 00004.921553</XY-Location>
+        <XY-Location>00001.041102 : 00005.025785</XY-Location>
+        <XY-Location>00001.046729 : 00005.132490</XY-Location>
+        <XY-Location>00001.047416 : 00005.240039</XY-Location>
+        <XY-Location>00001.043944 : 00005.346798</XY-Location>
+        <XY-Location>00001.037094 : 00005.451135</XY-Location>
+        <XY-Location>00001.027649 : 00005.551419</XY-Location>
+        <XY-Location>00001.016388 : 00005.646016</XY-Location>
+        <XY-Location>00001.004095 : 00005.733296</XY-Location>
+        <XY-Location>00000.991549 : 00005.811626</XY-Location>
+        <XY-Location>00000.979532 : 00005.879374</XY-Location>
+        <XY-Location>00000.968825 : 00005.934908</XY-Location>
+        <XY-Location>00000.960210 : 00005.976596</XY-Location>
+        <XY-Location>00000.954469 : 00006.002806</XY-Location>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>10</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0003.095238 : 00004.047619</XY-Location>
+        <XY-Location>00001.011904 : 00004.821429</XY-Location>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0000.219361 : 00003.860899</XY-Location>
+        <XY-Location>-0001.005710 : 00003.455095</XY-Location>
+        <XY-Location>-0001.084873 : 00004.045045</XY-Location>
+        <XY-Location>-0000.219361 : 00003.860899</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000003 : S-0000003</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000040</Arc-UID>
+      <View-Points>
+        <XY-Location>-0003.035714 : -0002.976190</XY-Location>
+        <XY-Location>-0002.987744 : -0002.987176</XY-Location>
+        <XY-Location>-0002.852324 : -0003.015937</XY-Location>
+        <XY-Location>-0002.642189 : -0003.056178</XY-Location>
+        <XY-Location>-0002.370076 : -0003.101603</XY-Location>
+        <XY-Location>-0002.048719 : -0003.145916</XY-Location>
+        <XY-Location>-0001.690854 : -0003.182822</XY-Location>
+        <XY-Location>-0001.309216 : -0003.206024</XY-Location>
+        <XY-Location>-0000.916542 : -0003.209228</XY-Location>
+        <XY-Location>-0000.525566 : -0003.186138</XY-Location>
+        <XY-Location>-0000.149025 : -0003.130457</XY-Location>
+        <XY-Location>00000.200347 : -0003.035891</XY-Location>
+        <XY-Location>00000.509814 : -0002.896144</XY-Location>
+        <XY-Location>00000.766640 : -0002.704919</XY-Location>
+        <XY-Location>00000.958090 : -0002.455922</XY-Location>
+        <XY-Location>00001.071428 : -0002.142857</XY-Location>
+        <XY-Location>00001.087157 : -0002.046715</XY-Location>
+        <XY-Location>00001.096968 : -0001.946954</XY-Location>
+        <XY-Location>00001.101577 : -0001.845093</XY-Location>
+        <XY-Location>00001.101701 : -0001.742650</XY-Location>
+        <XY-Location>00001.098055 : -0001.641146</XY-Location>
+        <XY-Location>00001.091357 : -0001.542098</XY-Location>
+        <XY-Location>00001.082323 : -0001.447027</XY-Location>
+        <XY-Location>00001.071669 : -0001.357452</XY-Location>
+        <XY-Location>00001.060111 : -0001.274891</XY-Location>
+        <XY-Location>00001.048367 : -0001.200864</XY-Location>
+        <XY-Location>00001.037151 : -0001.136890</XY-Location>
+        <XY-Location>00001.027180 : -0001.084488</XY-Location>
+        <XY-Location>00001.019172 : -0001.045177</XY-Location>
+        <XY-Location>00001.013841 : -0001.020476</XY-Location>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>10</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0003.035714 : -0002.976190</XY-Location>
+        <XY-Location>00001.071428 : -0002.142857</XY-Location>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0000.149025 : -0003.130457</XY-Location>
+        <XY-Location>-0000.929857 : -0003.546777</XY-Location>
+        <XY-Location>-0001.016931 : -0002.957942</XY-Location>
+        <XY-Location>-0000.149025 : -0003.130457</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000005 : S-0000005</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000041</Arc-UID>
+      <View-Points>
+        <XY-Location>-0003.095238 : -0009.940476</XY-Location>
+        <XY-Location>-0003.047869 : -0009.951256</XY-Location>
+        <XY-Location>-0002.914080 : -0009.979383</XY-Location>
+        <XY-Location>-0002.706349 : -0010.018536</XY-Location>
+        <XY-Location>-0002.437154 : -0010.062393</XY-Location>
+        <XY-Location>-0002.118973 : -0010.104635</XY-Location>
+        <XY-Location>-0001.764284 : -0010.138940</XY-Location>
+        <XY-Location>-0001.385566 : -0010.158989</XY-Location>
+        <XY-Location>-0000.995295 : -0010.158459</XY-Location>
+        <XY-Location>-0000.605950 : -0010.131030</XY-Location>
+        <XY-Location>-0000.230010 : -0010.070382</XY-Location>
+        <XY-Location>00000.120049 : -0009.970193</XY-Location>
+        <XY-Location>00000.431747 : -0009.824143</XY-Location>
+        <XY-Location>00000.692608 : -0009.625912</XY-Location>
+        <XY-Location>00000.890153 : -0009.369178</XY-Location>
+        <XY-Location>00001.011904 : -0009.047620</XY-Location>
+        <XY-Location>00001.028618 : -0008.960050</XY-Location>
+        <XY-Location>00001.040727 : -0008.869668</XY-Location>
+        <XY-Location>00001.048743 : -0008.777786</XY-Location>
+        <XY-Location>00001.053177 : -0008.685716</XY-Location>
+        <XY-Location>00001.054542 : -0008.594770</XY-Location>
+        <XY-Location>00001.053348 : -0008.506259</XY-Location>
+        <XY-Location>00001.050108 : -0008.421496</XY-Location>
+        <XY-Location>00001.045332 : -0008.341792</XY-Location>
+        <XY-Location>00001.039534 : -0008.268458</XY-Location>
+        <XY-Location>00001.033223 : -0008.202808</XY-Location>
+        <XY-Location>00001.026913 : -0008.146152</XY-Location>
+        <XY-Location>00001.021115 : -0008.099803</XY-Location>
+        <XY-Location>00001.016339 : -0008.065073</XY-Location>
+        <XY-Location>00001.013099 : -0008.043272</XY-Location>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>10</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0003.095238 : -0009.940476</XY-Location>
+        <XY-Location>00001.011904 : -0009.047620</XY-Location>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0000.230010 : -0010.070382</XY-Location>
+        <XY-Location>-0001.005306 : -0010.496923</XY-Location>
+        <XY-Location>-0001.100107 : -0009.909282</XY-Location>
+        <XY-Location>-0000.230010 : -0010.070382</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000010 : S-0000007</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000053</Arc-UID>
+      <View-Points>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+        <XY-Location>00000.942196 : 00006.011905</XY-Location>
+        <XY-Location>00000.912566 : 00006.011905</XY-Location>
+        <XY-Location>00000.864881 : 00006.011905</XY-Location>
+        <XY-Location>00000.800529 : 00006.011905</XY-Location>
+        <XY-Location>00000.720900 : 00006.011905</XY-Location>
+        <XY-Location>00000.627381 : 00006.011905</XY-Location>
+        <XY-Location>00000.521362 : 00006.011905</XY-Location>
+        <XY-Location>00000.404233 : 00006.011905</XY-Location>
+        <XY-Location>00000.277381 : 00006.011905</XY-Location>
+        <XY-Location>00000.142196 : 00006.011905</XY-Location>
+        <XY-Location>00000.000066 : 00006.011905</XY-Location>
+        <XY-Location>-0000.147619 : 00006.011905</XY-Location>
+        <XY-Location>-0000.299471 : 00006.011905</XY-Location>
+        <XY-Location>-0000.454100 : 00006.011905</XY-Location>
+        <XY-Location>-0000.610119 : 00006.011905</XY-Location>
+        <XY-Location>-0000.846376 : 00006.011905</XY-Location>
+        <XY-Location>-0001.080529 : 00006.011905</XY-Location>
+        <XY-Location>-0001.310476 : 00006.011905</XY-Location>
+        <XY-Location>-0001.534114 : 00006.011905</XY-Location>
+        <XY-Location>-0001.749338 : 00006.011905</XY-Location>
+        <XY-Location>-0001.954047 : 00006.011905</XY-Location>
+        <XY-Location>-0002.146137 : 00006.011905</XY-Location>
+        <XY-Location>-0002.323505 : 00006.011905</XY-Location>
+        <XY-Location>-0002.484047 : 00006.011905</XY-Location>
+        <XY-Location>-0002.625661 : 00006.011905</XY-Location>
+        <XY-Location>-0002.746243 : 00006.011905</XY-Location>
+        <XY-Location>-0002.843690 : 00006.011905</XY-Location>
+        <XY-Location>-0002.915899 : 00006.011905</XY-Location>
+        <XY-Location>-0002.960767 : 00006.011905</XY-Location>
+        <XY-Location>-0002.976190 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+        <XY-Location>-0000.610119 : 00006.011905</XY-Location>
+        <XY-Location>-0002.976190 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0001.954047 : 00006.011905</XY-Location>
+        <XY-Location>-0001.120714 : 00006.309524</XY-Location>
+        <XY-Location>-0001.120714 : 00005.714286</XY-Location>
+        <XY-Location>-0001.954047 : 00006.011905</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>S-0000003 : C-0000018</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000054</Arc-UID>
+      <View-Points>
+        <XY-Location>-0002.976190 : 00006.011905</XY-Location>
+        <XY-Location>-0002.986569 : 00006.011905</XY-Location>
+        <XY-Location>-0003.016763 : 00006.011905</XY-Location>
+        <XY-Location>-0003.065357 : 00006.011905</XY-Location>
+        <XY-Location>-0003.130934 : 00006.011905</XY-Location>
+        <XY-Location>-0003.212081 : 00006.011905</XY-Location>
+        <XY-Location>-0003.307381 : 00006.011905</XY-Location>
+        <XY-Location>-0003.415419 : 00006.011905</XY-Location>
+        <XY-Location>-0003.534779 : 00006.011905</XY-Location>
+        <XY-Location>-0003.664048 : 00006.011905</XY-Location>
+        <XY-Location>-0003.801808 : 00006.011905</XY-Location>
+        <XY-Location>-0003.946645 : 00006.011905</XY-Location>
+        <XY-Location>-0004.097143 : 00006.011905</XY-Location>
+        <XY-Location>-0004.251888 : 00006.011905</XY-Location>
+        <XY-Location>-0004.409463 : 00006.011905</XY-Location>
+        <XY-Location>-0004.568453 : 00006.011905</XY-Location>
+        <XY-Location>-0004.813625 : 00006.011905</XY-Location>
+        <XY-Location>-0005.056614 : 00006.011905</XY-Location>
+        <XY-Location>-0005.295239 : 00006.011905</XY-Location>
+        <XY-Location>-0005.527315 : 00006.011905</XY-Location>
+        <XY-Location>-0005.750662 : 00006.011905</XY-Location>
+        <XY-Location>-0005.963096 : 00006.011905</XY-Location>
+        <XY-Location>-0006.162434 : 00006.011905</XY-Location>
+        <XY-Location>-0006.346495 : 00006.011905</XY-Location>
+        <XY-Location>-0006.513096 : 00006.011905</XY-Location>
+        <XY-Location>-0006.660053 : 00006.011905</XY-Location>
+        <XY-Location>-0006.785186 : 00006.011905</XY-Location>
+        <XY-Location>-0006.886310 : 00006.011905</XY-Location>
+        <XY-Location>-0006.961244 : 00006.011905</XY-Location>
+        <XY-Location>-0007.007805 : 00006.011905</XY-Location>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>18</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0002.976190 : 00006.011905</XY-Location>
+        <XY-Location>-0004.568453 : 00006.011905</XY-Location>
+        <XY-Location>-0007.023810 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0005.295239 : 00006.011905</XY-Location>
+        <XY-Location>-0004.461905 : 00006.309524</XY-Location>
+        <XY-Location>-0004.461905 : 00005.714286</XY-Location>
+        <XY-Location>-0005.295239 : 00006.011905</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>C-0000018 : S-0000002</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000055</Arc-UID>
+      <View-Points>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+        <XY-Location>00000.962487 : 00006.016738</XY-Location>
+        <XY-Location>00000.991886 : 00006.030799</XY-Location>
+        <XY-Location>00001.039200 : 00006.053427</XY-Location>
+        <XY-Location>00001.103052 : 00006.083965</XY-Location>
+        <XY-Location>00001.182062 : 00006.121752</XY-Location>
+        <XY-Location>00001.274853 : 00006.166131</XY-Location>
+        <XY-Location>00001.380047 : 00006.216441</XY-Location>
+        <XY-Location>00001.496265 : 00006.272023</XY-Location>
+        <XY-Location>00001.622130 : 00006.332220</XY-Location>
+        <XY-Location>00001.756264 : 00006.396370</XY-Location>
+        <XY-Location>00001.897288 : 00006.463817</XY-Location>
+        <XY-Location>00002.043824 : 00006.533899</XY-Location>
+        <XY-Location>00002.194494 : 00006.605959</XY-Location>
+        <XY-Location>00002.347921 : 00006.679337</XY-Location>
+        <XY-Location>00002.502726 : 00006.753374</XY-Location>
+        <XY-Location>00002.758027 : 00006.875474</XY-Location>
+        <XY-Location>00003.011055 : 00006.996488</XY-Location>
+        <XY-Location>00003.259538 : 00007.115328</XY-Location>
+        <XY-Location>00003.501203 : 00007.230906</XY-Location>
+        <XY-Location>00003.733777 : 00007.342137</XY-Location>
+        <XY-Location>00003.954987 : 00007.447933</XY-Location>
+        <XY-Location>00004.162561 : 00007.547208</XY-Location>
+        <XY-Location>00004.354227 : 00007.638874</XY-Location>
+        <XY-Location>00004.527710 : 00007.721844</XY-Location>
+        <XY-Location>00004.680739 : 00007.795032</XY-Location>
+        <XY-Location>00004.811041 : 00007.857350</XY-Location>
+        <XY-Location>00004.916343 : 00007.907712</XY-Location>
+        <XY-Location>00004.994373 : 00007.945031</XY-Location>
+        <XY-Location>00005.042857 : 00007.968219</XY-Location>
+        <XY-Location>00005.059524 : 00007.976190</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>22</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+        <XY-Location>00002.502726 : 00006.753374</XY-Location>
+        <XY-Location>00005.059524 : 00007.976190</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00004.162561 : 00007.547208</XY-Location>
+        <XY-Location>00003.539192 : 00006.919170</XY-Location>
+        <XY-Location>00003.282373 : 00007.456154</XY-Location>
+        <XY-Location>00004.162561 : 00007.547208</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Red, 22, 0xFF0000</Arc-State>
+      <Arc-Node-UIDs>S-0000003 : C-0000020</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000056</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.059524 : 00007.976190</XY-Location>
+        <XY-Location>00005.069417 : 00007.971317</XY-Location>
+        <XY-Location>00005.098196 : 00007.957143</XY-Location>
+        <XY-Location>00005.144513 : 00007.934330</XY-Location>
+        <XY-Location>00005.207018 : 00007.903544</XY-Location>
+        <XY-Location>00005.284362 : 00007.865449</XY-Location>
+        <XY-Location>00005.375196 : 00007.820710</XY-Location>
+        <XY-Location>00005.478172 : 00007.769990</XY-Location>
+        <XY-Location>00005.591940 : 00007.713955</XY-Location>
+        <XY-Location>00005.715151 : 00007.653269</XY-Location>
+        <XY-Location>00005.846456 : 00007.588596</XY-Location>
+        <XY-Location>00005.984507 : 00007.520601</XY-Location>
+        <XY-Location>00006.127953 : 00007.449949</XY-Location>
+        <XY-Location>00006.275447 : 00007.377302</XY-Location>
+        <XY-Location>00006.425638 : 00007.303327</XY-Location>
+        <XY-Location>00006.577179 : 00007.228688</XY-Location>
+        <XY-Location>00006.823857 : 00007.107190</XY-Location>
+        <XY-Location>00007.068339 : 00006.986773</XY-Location>
+        <XY-Location>00007.308429 : 00006.868520</XY-Location>
+        <XY-Location>00007.541931 : 00006.753512</XY-Location>
+        <XY-Location>00007.766650 : 00006.642829</XY-Location>
+        <XY-Location>00007.980389 : 00006.537555</XY-Location>
+        <XY-Location>00008.180952 : 00006.438770</XY-Location>
+        <XY-Location>00008.366143 : 00006.347557</XY-Location>
+        <XY-Location>00008.533767 : 00006.264996</XY-Location>
+        <XY-Location>00008.681628 : 00006.192169</XY-Location>
+        <XY-Location>00008.807529 : 00006.130158</XY-Location>
+        <XY-Location>00008.909274 : 00006.080045</XY-Location>
+        <XY-Location>00008.984669 : 00006.042910</XY-Location>
+        <XY-Location>00009.031515 : 00006.019837</XY-Location>
+        <XY-Location>00009.047619 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>20</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.059524 : 00007.976190</XY-Location>
+        <XY-Location>00006.577179 : 00007.228688</XY-Location>
+        <XY-Location>00009.047619 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00007.766650 : 00006.642829</XY-Location>
+        <XY-Location>00006.887573 : 00006.744047</XY-Location>
+        <XY-Location>00007.150579 : 00007.278028</XY-Location>
+        <XY-Location>00007.766650 : 00006.642829</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Red, 22, 0xFF0000</Arc-State>
+      <Arc-Node-UIDs>C-0000020 : S-0000009</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000058</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.059524 : 00003.988095</XY-Location>
+        <XY-Location>00005.049437 : 00003.993065</XY-Location>
+        <XY-Location>00005.020095 : 00004.007524</XY-Location>
+        <XY-Location>00004.972871 : 00004.030794</XY-Location>
+        <XY-Location>00004.909142 : 00004.062196</XY-Location>
+        <XY-Location>00004.830283 : 00004.101054</XY-Location>
+        <XY-Location>00004.737670 : 00004.146690</XY-Location>
+        <XY-Location>00004.632678 : 00004.198425</XY-Location>
+        <XY-Location>00004.516682 : 00004.255582</XY-Location>
+        <XY-Location>00004.391058 : 00004.317484</XY-Location>
+        <XY-Location>00004.257182 : 00004.383452</XY-Location>
+        <XY-Location>00004.116428 : 00004.452809</XY-Location>
+        <XY-Location>00003.970173 : 00004.524877</XY-Location>
+        <XY-Location>00003.819791 : 00004.598978</XY-Location>
+        <XY-Location>00003.666658 : 00004.674435</XY-Location>
+        <XY-Location>00003.512150 : 00004.750569</XY-Location>
+        <XY-Location>00003.256552 : 00004.876516</XY-Location>
+        <XY-Location>00003.003230 : 00005.001341</XY-Location>
+        <XY-Location>00002.754458 : 00005.123924</XY-Location>
+        <XY-Location>00002.512513 : 00005.243144</XY-Location>
+        <XY-Location>00002.279669 : 00005.357879</XY-Location>
+        <XY-Location>00002.058201 : 00005.467008</XY-Location>
+        <XY-Location>00001.850386 : 00005.569410</XY-Location>
+        <XY-Location>00001.658498 : 00005.663963</XY-Location>
+        <XY-Location>00001.484813 : 00005.749547</XY-Location>
+        <XY-Location>00001.331606 : 00005.825040</XY-Location>
+        <XY-Location>00001.201153 : 00005.889322</XY-Location>
+        <XY-Location>00001.095728 : 00005.941270</XY-Location>
+        <XY-Location>00001.017608 : 00005.979764</XY-Location>
+        <XY-Location>00000.969067 : 00006.003683</XY-Location>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.059524 : 00003.988095</XY-Location>
+        <XY-Location>00003.512150 : 00004.750569</XY-Location>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00002.058201 : 00005.467008</XY-Location>
+        <XY-Location>00002.937261 : 00005.365637</XY-Location>
+        <XY-Location>00002.674162 : 00004.831701</XY-Location>
+        <XY-Location>00002.058201 : 00005.467008</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>C-0000021 : S-0000003</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000059</Arc-UID>
+      <View-Points>
+        <XY-Location>00009.047619 : 00006.011905</XY-Location>
+        <XY-Location>00009.037337 : 00006.011905</XY-Location>
+        <XY-Location>00009.007425 : 00006.011905</XY-Location>
+        <XY-Location>00008.959286 : 00006.011905</XY-Location>
+        <XY-Location>00008.894321 : 00006.011905</XY-Location>
+        <XY-Location>00008.813933 : 00006.011905</XY-Location>
+        <XY-Location>00008.719524 : 00006.011905</XY-Location>
+        <XY-Location>00008.612496 : 00006.011905</XY-Location>
+        <XY-Location>00008.494250 : 00006.011905</XY-Location>
+        <XY-Location>00008.366190 : 00006.011905</XY-Location>
+        <XY-Location>00008.229718 : 00006.011905</XY-Location>
+        <XY-Location>00008.086234 : 00006.011905</XY-Location>
+        <XY-Location>00007.937143 : 00006.011905</XY-Location>
+        <XY-Location>00007.783845 : 00006.011905</XY-Location>
+        <XY-Location>00007.627742 : 00006.011905</XY-Location>
+        <XY-Location>00007.470238 : 00006.011905</XY-Location>
+        <XY-Location>00007.229524 : 00006.011905</XY-Location>
+        <XY-Location>00006.990952 : 00006.011905</XY-Location>
+        <XY-Location>00006.756667 : 00006.011905</XY-Location>
+        <XY-Location>00006.528810 : 00006.011905</XY-Location>
+        <XY-Location>00006.309524 : 00006.011905</XY-Location>
+        <XY-Location>00006.100952 : 00006.011905</XY-Location>
+        <XY-Location>00005.905238 : 00006.011905</XY-Location>
+        <XY-Location>00005.724524 : 00006.011905</XY-Location>
+        <XY-Location>00005.560953 : 00006.011905</XY-Location>
+        <XY-Location>00005.416667 : 00006.011905</XY-Location>
+        <XY-Location>00005.293810 : 00006.011905</XY-Location>
+        <XY-Location>00005.194524 : 00006.011905</XY-Location>
+        <XY-Location>00005.120953 : 00006.011905</XY-Location>
+        <XY-Location>00005.075238 : 00006.011905</XY-Location>
+        <XY-Location>00005.059524 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>22</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00009.047619 : 00006.011905</XY-Location>
+        <XY-Location>00007.470238 : 00006.011905</XY-Location>
+        <XY-Location>00005.059524 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00005.905238 : 00006.011905</XY-Location>
+        <XY-Location>00006.738572 : 00006.309524</XY-Location>
+        <XY-Location>00006.738572 : 00005.714286</XY-Location>
+        <XY-Location>00005.905238 : 00006.011905</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>S-0000009 : C-0000019</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000060</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.059524 : 00006.011905</XY-Location>
+        <XY-Location>00005.049048 : 00006.011905</XY-Location>
+        <XY-Location>00005.018572 : 00006.011905</XY-Location>
+        <XY-Location>00004.969524 : 00006.011905</XY-Location>
+        <XY-Location>00004.903334 : 00006.011905</XY-Location>
+        <XY-Location>00004.821429 : 00006.011905</XY-Location>
+        <XY-Location>00004.725238 : 00006.011905</XY-Location>
+        <XY-Location>00004.616191 : 00006.011905</XY-Location>
+        <XY-Location>00004.495714 : 00006.011905</XY-Location>
+        <XY-Location>00004.365238 : 00006.011905</XY-Location>
+        <XY-Location>00004.226191 : 00006.011905</XY-Location>
+        <XY-Location>00004.080000 : 00006.011905</XY-Location>
+        <XY-Location>00003.928095 : 00006.011905</XY-Location>
+        <XY-Location>00003.771905 : 00006.011905</XY-Location>
+        <XY-Location>00003.612857 : 00006.011905</XY-Location>
+        <XY-Location>00003.452381 : 00006.011905</XY-Location>
+        <XY-Location>00003.202751 : 00006.011905</XY-Location>
+        <XY-Location>00002.955344 : 00006.011905</XY-Location>
+        <XY-Location>00002.712381 : 00006.011905</XY-Location>
+        <XY-Location>00002.476085 : 00006.011905</XY-Location>
+        <XY-Location>00002.248677 : 00006.011905</XY-Location>
+        <XY-Location>00002.032381 : 00006.011905</XY-Location>
+        <XY-Location>00001.829418 : 00006.011905</XY-Location>
+        <XY-Location>00001.642011 : 00006.011905</XY-Location>
+        <XY-Location>00001.472381 : 00006.011905</XY-Location>
+        <XY-Location>00001.322751 : 00006.011905</XY-Location>
+        <XY-Location>00001.195344 : 00006.011905</XY-Location>
+        <XY-Location>00001.092381 : 00006.011905</XY-Location>
+        <XY-Location>00001.016085 : 00006.011905</XY-Location>
+        <XY-Location>00000.968677 : 00006.011905</XY-Location>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>18</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.059524 : 00006.011905</XY-Location>
+        <XY-Location>00003.452381 : 00006.011905</XY-Location>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00002.712381 : 00006.011905</XY-Location>
+        <XY-Location>00003.545714 : 00006.309524</XY-Location>
+        <XY-Location>00003.545714 : 00005.714286</XY-Location>
+        <XY-Location>00002.712381 : 00006.011905</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>C-0000019 : S-0000003</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000061</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.059524 : 00007.976190</XY-Location>
+        <XY-Location>00005.035774 : 00007.983701</XY-Location>
+        <XY-Location>00004.967607 : 00008.003938</XY-Location>
+        <XY-Location>00004.859644 : 00008.033455</XY-Location>
+        <XY-Location>00004.716510 : 00008.068805</XY-Location>
+        <XY-Location>00004.542827 : 00008.106543</XY-Location>
+        <XY-Location>00004.343218 : 00008.143223</XY-Location>
+        <XY-Location>00004.122306 : 00008.175399</XY-Location>
+        <XY-Location>00003.884714 : 00008.199624</XY-Location>
+        <XY-Location>00003.635065 : 00008.212454</XY-Location>
+        <XY-Location>00003.377982 : 00008.210442</XY-Location>
+        <XY-Location>00003.118087 : 00008.190142</XY-Location>
+        <XY-Location>00002.860005 : 00008.148107</XY-Location>
+        <XY-Location>00002.608357 : 00008.080894</XY-Location>
+        <XY-Location>00002.367767 : 00007.985054</XY-Location>
+        <XY-Location>00002.142857 : 00007.857143</XY-Location>
+        <XY-Location>00001.986452 : 00007.738551</XY-Location>
+        <XY-Location>00001.841446 : 00007.603510</XY-Location>
+        <XY-Location>00001.707749 : 00007.455669</XY-Location>
+        <XY-Location>00001.585269 : 00007.298680</XY-Location>
+        <XY-Location>00001.473916 : 00007.136191</XY-Location>
+        <XY-Location>00001.373599 : 00006.971854</XY-Location>
+        <XY-Location>00001.284227 : 00006.809318</XY-Location>
+        <XY-Location>00001.205709 : 00006.652234</XY-Location>
+        <XY-Location>00001.137955 : 00006.504252</XY-Location>
+        <XY-Location>00001.080873 : 00006.369022</XY-Location>
+        <XY-Location>00001.034374 : 00006.250193</XY-Location>
+        <XY-Location>00000.998366 : 00006.151418</XY-Location>
+        <XY-Location>00000.972758 : 00006.076344</XY-Location>
+        <XY-Location>00000.957460 : 00006.028623</XY-Location>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>13</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.059524 : 00007.976190</XY-Location>
+        <XY-Location>00002.142857 : 00007.857143</XY-Location>
+        <XY-Location>00000.952381 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00002.608357 : 00008.080894</XY-Location>
+        <XY-Location>00003.336667 : 00008.583473</XY-Location>
+        <XY-Location>00003.490267 : 00008.008395</XY-Location>
+        <XY-Location>00002.608357 : 00008.080894</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000020 : S-0000003</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000062</Arc-UID>
+      <View-Points>
+        <XY-Location>00009.047619 : 00006.011905</XY-Location>
+        <XY-Location>00009.037746 : 00006.006895</XY-Location>
+        <XY-Location>00009.009026 : 00005.992320</XY-Location>
+        <XY-Location>00008.962804 : 00005.968864</XY-Location>
+        <XY-Location>00008.900427 : 00005.937210</XY-Location>
+        <XY-Location>00008.823240 : 00005.898041</XY-Location>
+        <XY-Location>00008.732591 : 00005.852040</XY-Location>
+        <XY-Location>00008.629826 : 00005.799890</XY-Location>
+        <XY-Location>00008.516290 : 00005.742275</XY-Location>
+        <XY-Location>00008.393330 : 00005.679878</XY-Location>
+        <XY-Location>00008.262293 : 00005.613381</XY-Location>
+        <XY-Location>00008.124525 : 00005.543468</XY-Location>
+        <XY-Location>00007.981371 : 00005.470823</XY-Location>
+        <XY-Location>00007.834178 : 00005.396128</XY-Location>
+        <XY-Location>00007.684293 : 00005.320067</XY-Location>
+        <XY-Location>00007.533062 : 00005.243323</XY-Location>
+        <XY-Location>00007.286075 : 00005.117986</XY-Location>
+        <XY-Location>00007.041286 : 00004.993765</XY-Location>
+        <XY-Location>00006.800895 : 00004.871775</XY-Location>
+        <XY-Location>00006.567100 : 00004.753133</XY-Location>
+        <XY-Location>00006.342099 : 00004.638954</XY-Location>
+        <XY-Location>00006.128093 : 00004.530353</XY-Location>
+        <XY-Location>00005.927278 : 00004.428447</XY-Location>
+        <XY-Location>00005.741854 : 00004.334352</XY-Location>
+        <XY-Location>00005.574020 : 00004.249182</XY-Location>
+        <XY-Location>00005.425974 : 00004.174055</XY-Location>
+        <XY-Location>00005.299915 : 00004.110085</XY-Location>
+        <XY-Location>00005.198042 : 00004.058388</XY-Location>
+        <XY-Location>00005.122553 : 00004.020080</XY-Location>
+        <XY-Location>00005.075648 : 00003.996277</XY-Location>
+        <XY-Location>00005.059524 : 00003.988095</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00009.047619 : 00006.011905</XY-Location>
+        <XY-Location>00007.533062 : 00005.243323</XY-Location>
+        <XY-Location>00005.059524 : 00003.988095</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00006.128093 : 00004.530353</XY-Location>
+        <XY-Location>00006.736536 : 00005.172863</XY-Location>
+        <XY-Location>00007.005898 : 00004.642060</XY-Location>
+        <XY-Location>00006.128093 : 00004.530353</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>S-0000009 : C-0000021</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000063</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.059524 : 00003.988095</XY-Location>
+        <XY-Location>00005.083888 : 00003.979674</XY-Location>
+        <XY-Location>00005.153722 : 00003.956893</XY-Location>
+        <XY-Location>00005.264141 : 00003.923474</XY-Location>
+        <XY-Location>00005.410257 : 00003.883140</XY-Location>
+        <XY-Location>00005.587186 : 00003.839612</XY-Location>
+        <XY-Location>00005.790040 : 00003.796613</XY-Location>
+        <XY-Location>00006.013935 : 00003.757866</XY-Location>
+        <XY-Location>00006.253983 : 00003.727093</XY-Location>
+        <XY-Location>00006.505298 : 00003.708016</XY-Location>
+        <XY-Location>00006.762995 : 00003.704357</XY-Location>
+        <XY-Location>00007.022188 : 00003.719838</XY-Location>
+        <XY-Location>00007.277990 : 00003.758183</XY-Location>
+        <XY-Location>00007.525515 : 00003.823113</XY-Location>
+        <XY-Location>00007.759877 : 00003.918351</XY-Location>
+        <XY-Location>00007.976190 : 00004.047619</XY-Location>
+        <XY-Location>00008.127247 : 00004.171210</XY-Location>
+        <XY-Location>00008.265210 : 00004.313042</XY-Location>
+        <XY-Location>00008.390474 : 00004.469149</XY-Location>
+        <XY-Location>00008.503437 : 00004.635563</XY-Location>
+        <XY-Location>00008.604495 : 00004.808318</XY-Location>
+        <XY-Location>00008.694045 : 00004.983447</XY-Location>
+        <XY-Location>00008.772485 : 00005.156983</XY-Location>
+        <XY-Location>00008.840210 : 00005.324960</XY-Location>
+        <XY-Location>00008.897618 : 00005.483409</XY-Location>
+        <XY-Location>00008.945105 : 00005.628366</XY-Location>
+        <XY-Location>00008.983068 : 00005.755861</XY-Location>
+        <XY-Location>00009.011904 : 00005.861930</XY-Location>
+        <XY-Location>00009.032010 : 00005.942605</XY-Location>
+        <XY-Location>00009.043783 : 00005.993919</XY-Location>
+        <XY-Location>00009.047619 : 00006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>14</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.059524 : 00003.988095</XY-Location>
+        <XY-Location>00007.976190 : 00004.047619</XY-Location>
+        <XY-Location>00009.047619 : 00006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00007.759877 : 00003.918351</XY-Location>
+        <XY-Location>00007.099899 : 00003.328901</XY-Location>
+        <XY-Location>00006.875808 : 00003.880346</XY-Location>
+        <XY-Location>00007.759877 : 00003.918351</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000021 : S-0000009</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000064</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : 00002.976190</XY-Location>
+        <XY-Location>-0006.964286 : 00002.965908</XY-Location>
+        <XY-Location>-0006.964286 : 00002.935996</XY-Location>
+        <XY-Location>-0006.964286 : 00002.887857</XY-Location>
+        <XY-Location>-0006.964286 : 00002.822892</XY-Location>
+        <XY-Location>-0006.964286 : 00002.742504</XY-Location>
+        <XY-Location>-0006.964286 : 00002.648095</XY-Location>
+        <XY-Location>-0006.964286 : 00002.541067</XY-Location>
+        <XY-Location>-0006.964286 : 00002.422821</XY-Location>
+        <XY-Location>-0006.964286 : 00002.294761</XY-Location>
+        <XY-Location>-0006.964286 : 00002.158289</XY-Location>
+        <XY-Location>-0006.964286 : 00002.014805</XY-Location>
+        <XY-Location>-0006.964286 : 00001.865714</XY-Location>
+        <XY-Location>-0006.964286 : 00001.712416</XY-Location>
+        <XY-Location>-0006.964286 : 00001.556313</XY-Location>
+        <XY-Location>-0006.964286 : 00001.398809</XY-Location>
+        <XY-Location>-0006.964286 : 00001.158095</XY-Location>
+        <XY-Location>-0006.964286 : 00000.919523</XY-Location>
+        <XY-Location>-0006.964286 : 00000.685238</XY-Location>
+        <XY-Location>-0006.964286 : 00000.457381</XY-Location>
+        <XY-Location>-0006.964286 : 00000.238095</XY-Location>
+        <XY-Location>-0006.964286 : 00000.029523</XY-Location>
+        <XY-Location>-0006.964286 : -0000.166191</XY-Location>
+        <XY-Location>-0006.964286 : -0000.346905</XY-Location>
+        <XY-Location>-0006.964286 : -0000.510476</XY-Location>
+        <XY-Location>-0006.964286 : -0000.654762</XY-Location>
+        <XY-Location>-0006.964286 : -0000.777619</XY-Location>
+        <XY-Location>-0006.964286 : -0000.876905</XY-Location>
+        <XY-Location>-0006.964286 : -0000.950476</XY-Location>
+        <XY-Location>-0006.964286 : -0000.996191</XY-Location>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>16</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : 00002.976190</XY-Location>
+        <XY-Location>-0006.964286 : 00001.398809</XY-Location>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0006.964286 : 00001.158095</XY-Location>
+        <XY-Location>-0007.261905 : 00001.991428</XY-Location>
+        <XY-Location>-0006.666667 : 00001.991428</XY-Location>
+        <XY-Location>-0006.964286 : 00001.158095</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Blue, 24, 0x0000FF</Arc-State>
+      <Arc-Node-UIDs>C-0000011 : S-0000004</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000065</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+        <XY-Location>-0006.964286 : -0001.020538</XY-Location>
+        <XY-Location>-0006.964286 : -0001.045653</XY-Location>
+        <XY-Location>-0006.964286 : -0001.086072</XY-Location>
+        <XY-Location>-0006.964286 : -0001.140618</XY-Location>
+        <XY-Location>-0006.964286 : -0001.208113</XY-Location>
+        <XY-Location>-0006.964286 : -0001.287381</XY-Location>
+        <XY-Location>-0006.964286 : -0001.377245</XY-Location>
+        <XY-Location>-0006.964286 : -0001.476526</XY-Location>
+        <XY-Location>-0006.964286 : -0001.584048</XY-Location>
+        <XY-Location>-0006.964286 : -0001.698634</XY-Location>
+        <XY-Location>-0006.964286 : -0001.819105</XY-Location>
+        <XY-Location>-0006.964286 : -0001.944286</XY-Location>
+        <XY-Location>-0006.964286 : -0002.072999</XY-Location>
+        <XY-Location>-0006.964286 : -0002.204066</XY-Location>
+        <XY-Location>-0006.964286 : -0002.336310</XY-Location>
+        <XY-Location>-0006.964286 : -0002.501244</XY-Location>
+        <XY-Location>-0006.964286 : -0002.664709</XY-Location>
+        <XY-Location>-0006.964286 : -0002.825238</XY-Location>
+        <XY-Location>-0006.964286 : -0002.981363</XY-Location>
+        <XY-Location>-0006.964286 : -0003.131614</XY-Location>
+        <XY-Location>-0006.964286 : -0003.274524</XY-Location>
+        <XY-Location>-0006.964286 : -0003.408624</XY-Location>
+        <XY-Location>-0006.964286 : -0003.532447</XY-Location>
+        <XY-Location>-0006.964286 : -0003.644524</XY-Location>
+        <XY-Location>-0006.964286 : -0003.743386</XY-Location>
+        <XY-Location>-0006.964286 : -0003.827566</XY-Location>
+        <XY-Location>-0006.964286 : -0003.895595</XY-Location>
+        <XY-Location>-0006.964286 : -0003.946005</XY-Location>
+        <XY-Location>-0006.964286 : -0003.977328</XY-Location>
+        <XY-Location>-0006.964286 : -0003.988095</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+        <XY-Location>-0006.964286 : -0002.336310</XY-Location>
+        <XY-Location>-0006.964286 : -0003.988095</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0006.964286 : -0003.274524</XY-Location>
+        <XY-Location>-0007.261905 : -0002.441191</XY-Location>
+        <XY-Location>-0006.666667 : -0002.441191</XY-Location>
+        <XY-Location>-0006.964286 : -0003.274524</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>S-0000004 : C-0000022</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000066</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : -0003.988095</XY-Location>
+        <XY-Location>-0006.972540 : -0003.982804</XY-Location>
+        <XY-Location>-0006.996004 : -0003.967308</XY-Location>
+        <XY-Location>-0007.032725 : -0003.942174</XY-Location>
+        <XY-Location>-0007.080754 : -0003.907970</XY-Location>
+        <XY-Location>-0007.138142 : -0003.865263</XY-Location>
+        <XY-Location>-0007.202936 : -0003.814618</XY-Location>
+        <XY-Location>-0007.273188 : -0003.756605</XY-Location>
+        <XY-Location>-0007.346946 : -0003.691789</XY-Location>
+        <XY-Location>-0007.422261 : -0003.620737</XY-Location>
+        <XY-Location>-0007.497182 : -0003.544017</XY-Location>
+        <XY-Location>-0007.569759 : -0003.462196</XY-Location>
+        <XY-Location>-0007.638042 : -0003.375841</XY-Location>
+        <XY-Location>-0007.700079 : -0003.285518</XY-Location>
+        <XY-Location>-0007.753922 : -0003.191794</XY-Location>
+        <XY-Location>-0007.797619 : -0003.095238</XY-Location>
+        <XY-Location>-0007.847776 : -0002.912201</XY-Location>
+        <XY-Location>-0007.861930 : -0002.724131</XY-Location>
+        <XY-Location>-0007.844904 : -0002.533646</XY-Location>
+        <XY-Location>-0007.801522 : -0002.343362</XY-Location>
+        <XY-Location>-0007.736606 : -0002.155895</XY-Location>
+        <XY-Location>-0007.654981 : -0001.973864</XY-Location>
+        <XY-Location>-0007.561470 : -0001.799883</XY-Location>
+        <XY-Location>-0007.460896 : -0001.636571</XY-Location>
+        <XY-Location>-0007.358083 : -0001.486544</XY-Location>
+        <XY-Location>-0007.257854 : -0001.352419</XY-Location>
+        <XY-Location>-0007.165032 : -0001.236812</XY-Location>
+        <XY-Location>-0007.084441 : -0001.142340</XY-Location>
+        <XY-Location>-0007.020904 : -0001.071621</XY-Location>
+        <XY-Location>-0006.979244 : -0001.027270</XY-Location>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : -0003.988095</XY-Location>
+        <XY-Location>-0007.797619 : -0003.095238</XY-Location>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0007.654981 : -0001.973864</XY-Location>
+        <XY-Location>-0007.724380 : -0002.856023</XY-Location>
+        <XY-Location>-0008.267513 : -0002.612476</XY-Location>
+        <XY-Location>-0007.654981 : -0001.973864</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000022 : S-0000004</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000067</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : -0003.988095</XY-Location>
+        <XY-Location>-0006.964286 : -0003.998474</XY-Location>
+        <XY-Location>-0006.964286 : -0004.028668</XY-Location>
+        <XY-Location>-0006.964286 : -0004.077262</XY-Location>
+        <XY-Location>-0006.964286 : -0004.142839</XY-Location>
+        <XY-Location>-0006.964286 : -0004.223986</XY-Location>
+        <XY-Location>-0006.964286 : -0004.319285</XY-Location>
+        <XY-Location>-0006.964286 : -0004.427323</XY-Location>
+        <XY-Location>-0006.964286 : -0004.546684</XY-Location>
+        <XY-Location>-0006.964286 : -0004.675952</XY-Location>
+        <XY-Location>-0006.964286 : -0004.813712</XY-Location>
+        <XY-Location>-0006.964286 : -0004.958549</XY-Location>
+        <XY-Location>-0006.964286 : -0005.109047</XY-Location>
+        <XY-Location>-0006.964286 : -0005.263792</XY-Location>
+        <XY-Location>-0006.964286 : -0005.421367</XY-Location>
+        <XY-Location>-0006.964286 : -0005.580357</XY-Location>
+        <XY-Location>-0006.964286 : -0005.825529</XY-Location>
+        <XY-Location>-0006.964286 : -0006.068518</XY-Location>
+        <XY-Location>-0006.964286 : -0006.307143</XY-Location>
+        <XY-Location>-0006.964286 : -0006.539219</XY-Location>
+        <XY-Location>-0006.964286 : -0006.762566</XY-Location>
+        <XY-Location>-0006.964286 : -0006.975000</XY-Location>
+        <XY-Location>-0006.964286 : -0007.174338</XY-Location>
+        <XY-Location>-0006.964286 : -0007.358399</XY-Location>
+        <XY-Location>-0006.964286 : -0007.525000</XY-Location>
+        <XY-Location>-0006.964286 : -0007.671957</XY-Location>
+        <XY-Location>-0006.964286 : -0007.797090</XY-Location>
+        <XY-Location>-0006.964286 : -0007.898214</XY-Location>
+        <XY-Location>-0006.964286 : -0007.973148</XY-Location>
+        <XY-Location>-0006.964286 : -0008.019709</XY-Location>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>16</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : -0003.988095</XY-Location>
+        <XY-Location>-0006.964286 : -0005.580357</XY-Location>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0006.964286 : -0005.825529</XY-Location>
+        <XY-Location>-0007.261905 : -0004.992196</XY-Location>
+        <XY-Location>-0006.666667 : -0004.992196</XY-Location>
+        <XY-Location>-0006.964286 : -0005.825529</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Green, 23, 0x00D000</Arc-State>
+      <Arc-Node-UIDs>C-0000022 : S-0000006</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000068</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+        <XY-Location>-0006.951166 : -0008.043415</XY-Location>
+        <XY-Location>-0006.914118 : -0008.065903</XY-Location>
+        <XY-Location>-0006.856610 : -0008.102261</XY-Location>
+        <XY-Location>-0006.782112 : -0008.151568</XY-Location>
+        <XY-Location>-0006.694093 : -0008.212906</XY-Location>
+        <XY-Location>-0006.596020 : -0008.285355</XY-Location>
+        <XY-Location>-0006.491364 : -0008.367995</XY-Location>
+        <XY-Location>-0006.383592 : -0008.459909</XY-Location>
+        <XY-Location>-0006.276173 : -0008.560175</XY-Location>
+        <XY-Location>-0006.172577 : -0008.667876</XY-Location>
+        <XY-Location>-0006.076271 : -0008.782091</XY-Location>
+        <XY-Location>-0005.990726 : -0008.901902</XY-Location>
+        <XY-Location>-0005.919408 : -0009.026389</XY-Location>
+        <XY-Location>-0005.865788 : -0009.154633</XY-Location>
+        <XY-Location>-0005.833334 : -0009.285715</XY-Location>
+        <XY-Location>-0005.825652 : -0009.448686</XY-Location>
+        <XY-Location>-0005.850194 : -0009.612710</XY-Location>
+        <XY-Location>-0005.902262 : -0009.775965</XY-Location>
+        <XY-Location>-0005.977159 : -0009.936630</XY-Location>
+        <XY-Location>-0006.070188 : -0010.092883</XY-Location>
+        <XY-Location>-0006.176652 : -0010.242901</XY-Location>
+        <XY-Location>-0006.291852 : -0010.384863</XY-Location>
+        <XY-Location>-0006.411091 : -0010.516947</XY-Location>
+        <XY-Location>-0006.529673 : -0010.637331</XY-Location>
+        <XY-Location>-0006.642899 : -0010.744193</XY-Location>
+        <XY-Location>-0006.746072 : -0010.835711</XY-Location>
+        <XY-Location>-0006.834494 : -0010.910063</XY-Location>
+        <XY-Location>-0006.903469 : -0010.965427</XY-Location>
+        <XY-Location>-0006.948299 : -0010.999982</XY-Location>
+        <XY-Location>-0006.964286 : -0011.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>22</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+        <XY-Location>-0005.833334 : -0009.285715</XY-Location>
+        <XY-Location>-0006.964286 : -0011.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0006.291852 : -0010.384863</XY-Location>
+        <XY-Location>-0005.997855 : -0009.550245</XY-Location>
+        <XY-Location>-0005.535653 : -0009.925315</XY-Location>
+        <XY-Location>-0006.291852 : -0010.384863</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>S-0000006 : C-0000023</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000069</Arc-UID>
+      <View-Points>
+        <XY-Location>-0006.964286 : -0011.011905</XY-Location>
+        <XY-Location>-0006.977660 : -0010.998496</XY-Location>
+        <XY-Location>-0007.015020 : -0010.959683</XY-Location>
+        <XY-Location>-0007.072221 : -0010.897582</XY-Location>
+        <XY-Location>-0007.145119 : -0010.814314</XY-Location>
+        <XY-Location>-0007.229568 : -0010.711995</XY-Location>
+        <XY-Location>-0007.321425 : -0010.592746</XY-Location>
+        <XY-Location>-0007.416545 : -0010.458684</XY-Location>
+        <XY-Location>-0007.510783 : -0010.311927</XY-Location>
+        <XY-Location>-0007.599995 : -0010.154595</XY-Location>
+        <XY-Location>-0007.680036 : -0009.988805</XY-Location>
+        <XY-Location>-0007.746761 : -0009.816677</XY-Location>
+        <XY-Location>-0007.796027 : -0009.640328</XY-Location>
+        <XY-Location>-0007.823688 : -0009.461877</XY-Location>
+        <XY-Location>-0007.825600 : -0009.283442</XY-Location>
+        <XY-Location>-0007.797619 : -0009.107143</XY-Location>
+        <XY-Location>-0007.761802 : -0008.994237</XY-Location>
+        <XY-Location>-0007.713669 : -0008.883914</XY-Location>
+        <XY-Location>-0007.655410 : -0008.776947</XY-Location>
+        <XY-Location>-0007.589219 : -0008.674106</XY-Location>
+        <XY-Location>-0007.517285 : -0008.576162</XY-Location>
+        <XY-Location>-0007.441801 : -0008.483887</XY-Location>
+        <XY-Location>-0007.364958 : -0008.398051</XY-Location>
+        <XY-Location>-0007.288948 : -0008.319425</XY-Location>
+        <XY-Location>-0007.215963 : -0008.248781</XY-Location>
+        <XY-Location>-0007.148193 : -0008.186890</XY-Location>
+        <XY-Location>-0007.087831 : -0008.134523</XY-Location>
+        <XY-Location>-0007.037067 : -0008.092451</XY-Location>
+        <XY-Location>-0006.998094 : -0008.061444</XY-Location>
+        <XY-Location>-0006.973103 : -0008.042275</XY-Location>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>12</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0006.964286 : -0011.011905</XY-Location>
+        <XY-Location>-0007.797619 : -0009.107143</XY-Location>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0007.796027 : -0009.640328</XY-Location>
+        <XY-Location>-0007.285164 : -0010.362852</XY-Location>
+        <XY-Location>-0007.858452 : -0010.523008</XY-Location>
+        <XY-Location>-0007.796027 : -0009.640328</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000023 : S-0000006</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000071</Arc-UID>
+      <View-Points>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+        <XY-Location>00001.022928 : -0001.006402</XY-Location>
+        <XY-Location>00001.054993 : -0000.990386</XY-Location>
+        <XY-Location>00001.106592 : -0000.964601</XY-Location>
+        <XY-Location>00001.176217 : -0000.929787</XY-Location>
+        <XY-Location>00001.262361 : -0000.886686</XY-Location>
+        <XY-Location>00001.363516 : -0000.836040</XY-Location>
+        <XY-Location>00001.478175 : -0000.778592</XY-Location>
+        <XY-Location>00001.604830 : -0000.715082</XY-Location>
+        <XY-Location>00001.741974 : -0000.646252</XY-Location>
+        <XY-Location>00001.888099 : -0000.572844</XY-Location>
+        <XY-Location>00002.041697 : -0000.495601</XY-Location>
+        <XY-Location>00002.201261 : -0000.415263</XY-Location>
+        <XY-Location>00002.365283 : -0000.332573</XY-Location>
+        <XY-Location>00002.532256 : -0000.248273</XY-Location>
+        <XY-Location>00002.700672 : -0000.163103</XY-Location>
+        <XY-Location>00002.930657 : -0000.046551</XY-Location>
+        <XY-Location>00003.158490 : 00000.069170</XY-Location>
+        <XY-Location>00003.382139 : 00000.182992</XY-Location>
+        <XY-Location>00003.599572 : 00000.293846</XY-Location>
+        <XY-Location>00003.808758 : 00000.400665</XY-Location>
+        <XY-Location>00004.007664 : 00000.502380</XY-Location>
+        <XY-Location>00004.194259 : 00000.597924</XY-Location>
+        <XY-Location>00004.366511 : 00000.686227</XY-Location>
+        <XY-Location>00004.522389 : 00000.766223</XY-Location>
+        <XY-Location>00004.659860 : 00000.836842</XY-Location>
+        <XY-Location>00004.776892 : 00000.897016</XY-Location>
+        <XY-Location>00004.871454 : 00000.945678</XY-Location>
+        <XY-Location>00004.941514 : 00000.981759</XY-Location>
+        <XY-Location>00004.985040 : 00001.004190</XY-Location>
+        <XY-Location>00005.000000 : 00001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+        <XY-Location>00002.700672 : -0000.163103</XY-Location>
+        <XY-Location>00005.000000 : 00001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00004.007664 : 00000.502380</XY-Location>
+        <XY-Location>00003.401218 : -0000.142015</XY-Location>
+        <XY-Location>00003.130209 : 00000.387950</XY-Location>
+        <XY-Location>00004.007664 : 00000.502380</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Blue, 24, 0x0000FF</Arc-State>
+      <Arc-Node-UIDs>S-0000005 : C-0000025</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000072</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.000000 : 00001.011905</XY-Location>
+        <XY-Location>00005.010966 : 00001.006357</XY-Location>
+        <XY-Location>00005.042869 : 00000.990220</XY-Location>
+        <XY-Location>00005.094218 : 00000.964259</XY-Location>
+        <XY-Location>00005.163519 : 00000.929234</XY-Location>
+        <XY-Location>00005.249281 : 00000.885910</XY-Location>
+        <XY-Location>00005.350011 : 00000.835050</XY-Location>
+        <XY-Location>00005.464216 : 00000.777414</XY-Location>
+        <XY-Location>00005.590406 : 00000.713768</XY-Location>
+        <XY-Location>00005.727086 : 00000.644872</XY-Location>
+        <XY-Location>00005.872766 : 00000.571491</XY-Location>
+        <XY-Location>00006.025953 : 00000.494386</XY-Location>
+        <XY-Location>00006.185154 : 00000.414321</XY-Location>
+        <XY-Location>00006.348877 : 00000.332059</XY-Location>
+        <XY-Location>00006.515630 : 00000.248362</XY-Location>
+        <XY-Location>00006.683921 : 00000.163992</XY-Location>
+        <XY-Location>00006.919650 : 00000.045996</XY-Location>
+        <XY-Location>00007.153358 : -0000.070795</XY-Location>
+        <XY-Location>00007.382935 : -0000.185353</XY-Location>
+        <XY-Location>00007.606271 : -0000.296652</XY-Location>
+        <XY-Location>00007.821256 : -0000.403662</XY-Location>
+        <XY-Location>00008.025781 : -0000.505357</XY-Location>
+        <XY-Location>00008.217734 : -0000.600710</XY-Location>
+        <XY-Location>00008.395007 : -0000.688693</XY-Location>
+        <XY-Location>00008.555489 : -0000.768278</XY-Location>
+        <XY-Location>00008.697071 : -0000.838439</XY-Location>
+        <XY-Location>00008.817642 : -0000.898147</XY-Location>
+        <XY-Location>00008.915092 : -0000.946375</XY-Location>
+        <XY-Location>00008.987311 : -0000.982095</XY-Location>
+        <XY-Location>00009.032190 : -0001.004281</XY-Location>
+        <XY-Location>00009.047619 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>19</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.000000 : 00001.011905</XY-Location>
+        <XY-Location>00006.683921 : 00000.163992</XY-Location>
+        <XY-Location>00009.047619 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00007.606271 : -0000.296652</XY-Location>
+        <XY-Location>00006.727675 : -0000.191337</XY-Location>
+        <XY-Location>00006.993168 : 00000.341413</XY-Location>
+        <XY-Location>00007.606271 : -0000.296652</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Blue, 24, 0x0000FF</Arc-State>
+      <Arc-Node-UIDs>C-0000025 : S-0000010</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000073</Arc-UID>
+      <View-Points>
+        <XY-Location>00009.047619 : -0001.011905</XY-Location>
+        <XY-Location>00009.036534 : -0001.017382</XY-Location>
+        <XY-Location>00009.004288 : -0001.033320</XY-Location>
+        <XY-Location>00008.952396 : -0001.058977</XY-Location>
+        <XY-Location>00008.882372 : -0001.093614</XY-Location>
+        <XY-Location>00008.795732 : -0001.136489</XY-Location>
+        <XY-Location>00008.693991 : -0001.186862</XY-Location>
+        <XY-Location>00008.578662 : -0001.243993</XY-Location>
+        <XY-Location>00008.451261 : -0001.307140</XY-Location>
+        <XY-Location>00008.313303 : -0001.375564</XY-Location>
+        <XY-Location>00008.166302 : -0001.448523</XY-Location>
+        <XY-Location>00008.011773 : -0001.525276</XY-Location>
+        <XY-Location>00007.851231 : -0001.605084</XY-Location>
+        <XY-Location>00007.686190 : -0001.687205</XY-Location>
+        <XY-Location>00007.518165 : -0001.770899</XY-Location>
+        <XY-Location>00007.348672 : -0001.855426</XY-Location>
+        <XY-Location>00007.113866 : -0001.972705</XY-Location>
+        <XY-Location>00006.881226 : -0002.089093</XY-Location>
+        <XY-Location>00006.652832 : -0002.203524</XY-Location>
+        <XY-Location>00006.430763 : -0002.314931</XY-Location>
+        <XY-Location>00006.217097 : -0002.422246</XY-Location>
+        <XY-Location>00006.013914 : -0002.524404</XY-Location>
+        <XY-Location>00005.823292 : -0002.620337</XY-Location>
+        <XY-Location>00005.647311 : -0002.708979</XY-Location>
+        <XY-Location>00005.488049 : -0002.789264</XY-Location>
+        <XY-Location>00005.347585 : -0002.860123</XY-Location>
+        <XY-Location>00005.227998 : -0002.920491</XY-Location>
+        <XY-Location>00005.131367 : -0002.969301</XY-Location>
+        <XY-Location>00005.059771 : -0003.005486</XY-Location>
+        <XY-Location>00005.015289 : -0003.027979</XY-Location>
+        <XY-Location>00005.000000 : -0003.035714</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00009.047619 : -0001.011905</XY-Location>
+        <XY-Location>00007.348672 : -0001.855426</XY-Location>
+        <XY-Location>00005.000000 : -0003.035714</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00006.013914 : -0002.524404</XY-Location>
+        <XY-Location>00006.624747 : -0001.884165</XY-Location>
+        <XY-Location>00006.892130 : -0002.415968</XY-Location>
+        <XY-Location>00006.013914 : -0002.524404</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>S-0000010 : C-0000026</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000074</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.000000 : -0003.035714</XY-Location>
+        <XY-Location>00004.989139 : -0003.030129</XY-Location>
+        <XY-Location>00004.957540 : -0003.013885</XY-Location>
+        <XY-Location>00004.906681 : -0002.987751</XY-Location>
+        <XY-Location>00004.838040 : -0002.952495</XY-Location>
+        <XY-Location>00004.753094 : -0002.908888</XY-Location>
+        <XY-Location>00004.653321 : -0002.857696</XY-Location>
+        <XY-Location>00004.540198 : -0002.799689</XY-Location>
+        <XY-Location>00004.415202 : -0002.735635</XY-Location>
+        <XY-Location>00004.279812 : -0002.666304</XY-Location>
+        <XY-Location>00004.135504 : -0002.592463</XY-Location>
+        <XY-Location>00003.983757 : -0002.514881</XY-Location>
+        <XY-Location>00003.826047 : -0002.434327</XY-Location>
+        <XY-Location>00003.663853 : -0002.351570</XY-Location>
+        <XY-Location>00003.498652 : -0002.267378</XY-Location>
+        <XY-Location>00003.331921 : -0002.182520</XY-Location>
+        <XY-Location>00003.100590 : -0002.064988</XY-Location>
+        <XY-Location>00002.871232 : -0001.948674</XY-Location>
+        <XY-Location>00002.645918 : -0001.834598</XY-Location>
+        <XY-Location>00002.426720 : -0001.723782</XY-Location>
+        <XY-Location>00002.215711 : -0001.617247</XY-Location>
+        <XY-Location>00002.014963 : -0001.516013</XY-Location>
+        <XY-Location>00001.826549 : -0001.421102</XY-Location>
+        <XY-Location>00001.652540 : -0001.333533</XY-Location>
+        <XY-Location>00001.495009 : -0001.254328</XY-Location>
+        <XY-Location>00001.356028 : -0001.184508</XY-Location>
+        <XY-Location>00001.237670 : -0001.125093</XY-Location>
+        <XY-Location>00001.142006 : -0001.077104</XY-Location>
+        <XY-Location>00001.071109 : -0001.041563</XY-Location>
+        <XY-Location>00001.027051 : -0001.019490</XY-Location>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>19</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.000000 : -0003.035714</XY-Location>
+        <XY-Location>00003.331921 : -0002.182520</XY-Location>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00002.426720 : -0001.723782</XY-Location>
+        <XY-Location>00003.304695 : -0001.834154</XY-Location>
+        <XY-Location>00003.036140 : -0002.365366</XY-Location>
+        <XY-Location>00002.426720 : -0001.723782</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>C-0000026 : S-0000005</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000075</Arc-UID>
+      <View-Points>
+        <XY-Location>00009.047619 : -0001.011905</XY-Location>
+        <XY-Location>00009.036023 : -0001.011905</XY-Location>
+        <XY-Location>00009.002290 : -0001.011905</XY-Location>
+        <XY-Location>00008.948001 : -0001.011905</XY-Location>
+        <XY-Location>00008.874737 : -0001.011905</XY-Location>
+        <XY-Location>00008.784079 : -0001.011905</XY-Location>
+        <XY-Location>00008.677609 : -0001.011905</XY-Location>
+        <XY-Location>00008.556908 : -0001.011905</XY-Location>
+        <XY-Location>00008.423556 : -0001.011905</XY-Location>
+        <XY-Location>00008.279136 : -0001.011905</XY-Location>
+        <XY-Location>00008.125229 : -0001.011905</XY-Location>
+        <XY-Location>00007.963415 : -0001.011905</XY-Location>
+        <XY-Location>00007.795277 : -0001.011905</XY-Location>
+        <XY-Location>00007.622395 : -0001.011905</XY-Location>
+        <XY-Location>00007.446350 : -0001.011905</XY-Location>
+        <XY-Location>00007.268724 : -0001.011905</XY-Location>
+        <XY-Location>00007.042188 : -0001.011905</XY-Location>
+        <XY-Location>00006.817668 : -0001.011905</XY-Location>
+        <XY-Location>00006.597182 : -0001.011905</XY-Location>
+        <XY-Location>00006.382745 : -0001.011905</XY-Location>
+        <XY-Location>00006.176375 : -0001.011905</XY-Location>
+        <XY-Location>00005.980089 : -0001.011905</XY-Location>
+        <XY-Location>00005.795902 : -0001.011905</XY-Location>
+        <XY-Location>00005.625832 : -0001.011905</XY-Location>
+        <XY-Location>00005.471895 : -0001.011905</XY-Location>
+        <XY-Location>00005.336107 : -0001.011905</XY-Location>
+        <XY-Location>00005.220486 : -0001.011905</XY-Location>
+        <XY-Location>00005.127049 : -0001.011905</XY-Location>
+        <XY-Location>00005.057810 : -0001.011905</XY-Location>
+        <XY-Location>00005.014789 : -0001.011905</XY-Location>
+        <XY-Location>00005.000000 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00009.047619 : -0001.011905</XY-Location>
+        <XY-Location>00007.268724 : -0001.011905</XY-Location>
+        <XY-Location>00005.000000 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00005.980089 : -0001.011905</XY-Location>
+        <XY-Location>00006.813422 : -0000.714286</XY-Location>
+        <XY-Location>00006.813422 : -0001.309524</XY-Location>
+        <XY-Location>00005.980089 : -0001.011905</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>S-0000010 : C-0000024</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000076</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.000000 : -0001.011905</XY-Location>
+        <XY-Location>00004.988588 : -0001.011905</XY-Location>
+        <XY-Location>00004.955390 : -0001.011905</XY-Location>
+        <XY-Location>00004.901961 : -0001.011905</XY-Location>
+        <XY-Location>00004.829858 : -0001.011905</XY-Location>
+        <XY-Location>00004.740638 : -0001.011905</XY-Location>
+        <XY-Location>00004.635856 : -0001.011905</XY-Location>
+        <XY-Location>00004.517068 : -0001.011905</XY-Location>
+        <XY-Location>00004.385831 : -0001.011905</XY-Location>
+        <XY-Location>00004.243700 : -0001.011905</XY-Location>
+        <XY-Location>00004.092233 : -0001.011905</XY-Location>
+        <XY-Location>00003.932984 : -0001.011905</XY-Location>
+        <XY-Location>00003.767511 : -0001.011905</XY-Location>
+        <XY-Location>00003.597370 : -0001.011905</XY-Location>
+        <XY-Location>00003.424116 : -0001.011905</XY-Location>
+        <XY-Location>00003.249306 : -0001.011905</XY-Location>
+        <XY-Location>00003.025897 : -0001.011905</XY-Location>
+        <XY-Location>00002.804478 : -0001.011905</XY-Location>
+        <XY-Location>00002.587035 : -0001.011905</XY-Location>
+        <XY-Location>00002.375559 : -0001.011905</XY-Location>
+        <XY-Location>00002.172039 : -0001.011905</XY-Location>
+        <XY-Location>00001.978462 : -0001.011905</XY-Location>
+        <XY-Location>00001.796818 : -0001.011905</XY-Location>
+        <XY-Location>00001.629096 : -0001.011905</XY-Location>
+        <XY-Location>00001.477284 : -0001.011905</XY-Location>
+        <XY-Location>00001.343372 : -0001.011905</XY-Location>
+        <XY-Location>00001.229347 : -0001.011905</XY-Location>
+        <XY-Location>00001.137199 : -0001.011905</XY-Location>
+        <XY-Location>00001.068917 : -0001.011905</XY-Location>
+        <XY-Location>00001.026490 : -0001.011905</XY-Location>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>16</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.000000 : -0001.011905</XY-Location>
+        <XY-Location>00003.249306 : -0001.011905</XY-Location>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00003.025897 : -0001.011905</XY-Location>
+        <XY-Location>00003.859231 : -0000.714286</XY-Location>
+        <XY-Location>00003.859231 : -0001.309524</XY-Location>
+        <XY-Location>00003.025897 : -0001.011905</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>C-0000024 : S-0000005</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000077</Arc-UID>
+      <View-Points>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+        <XY-Location>00001.022866 : -0008.029870</XY-Location>
+        <XY-Location>00001.054761 : -0008.012886</XY-Location>
+        <XY-Location>00001.106111 : -0007.985587</XY-Location>
+        <XY-Location>00001.175433 : -0007.948797</XY-Location>
+        <XY-Location>00001.261247 : -0007.903340</XY-Location>
+        <XY-Location>00001.362073 : -0007.850040</XY-Location>
+        <XY-Location>00001.476429 : -0007.789721</XY-Location>
+        <XY-Location>00001.602834 : -0007.723208</XY-Location>
+        <XY-Location>00001.739808 : -0007.651324</XY-Location>
+        <XY-Location>00001.885871 : -0007.574894</XY-Location>
+        <XY-Location>00002.039540 : -0007.494742</XY-Location>
+        <XY-Location>00002.199336 : -0007.411692</XY-Location>
+        <XY-Location>00002.363777 : -0007.326568</XY-Location>
+        <XY-Location>00002.531382 : -0007.240194</XY-Location>
+        <XY-Location>00002.700672 : -0007.153394</XY-Location>
+        <XY-Location>00002.929061 : -0007.037052</XY-Location>
+        <XY-Location>00003.155737 : -0006.922375</XY-Location>
+        <XY-Location>00003.378621 : -0006.810306</XY-Location>
+        <XY-Location>00003.595630 : -0006.701787</XY-Location>
+        <XY-Location>00003.804686 : -0006.597761</XY-Location>
+        <XY-Location>00004.003706 : -0006.499170</XY-Location>
+        <XY-Location>00004.190611 : -0006.406956</XY-Location>
+        <XY-Location>00004.363319 : -0006.322062</XY-Location>
+        <XY-Location>00004.519750 : -0006.245429</XY-Location>
+        <XY-Location>00004.657824 : -0006.178001</XY-Location>
+        <XY-Location>00004.775459 : -0006.120719</XY-Location>
+        <XY-Location>00004.870574 : -0006.074527</XY-Location>
+        <XY-Location>00004.941090 : -0006.040365</XY-Location>
+        <XY-Location>00004.984926 : -0006.019177</XY-Location>
+        <XY-Location>00005.000000 : -0006.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+        <XY-Location>00002.700672 : -0007.153394</XY-Location>
+        <XY-Location>00005.000000 : -0006.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00004.003706 : -0006.499170</XY-Location>
+        <XY-Location>00003.389089 : -0007.135776</XY-Location>
+        <XY-Location>00003.124863 : -0006.602398</XY-Location>
+        <XY-Location>00004.003706 : -0006.499170</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Green, 23, 0x00D000</Arc-State>
+      <Arc-Node-UIDs>S-0000007 : C-0000027</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000078</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.000000 : -0006.011905</XY-Location>
+        <XY-Location>00005.010982 : -0006.017204</XY-Location>
+        <XY-Location>00005.042927 : -0006.032620</XY-Location>
+        <XY-Location>00005.094337 : -0006.057434</XY-Location>
+        <XY-Location>00005.163713 : -0006.090926</XY-Location>
+        <XY-Location>00005.249557 : -0006.132377</XY-Location>
+        <XY-Location>00005.350368 : -0006.181067</XY-Location>
+        <XY-Location>00005.464649 : -0006.236276</XY-Location>
+        <XY-Location>00005.590900 : -0006.297286</XY-Location>
+        <XY-Location>00005.727623 : -0006.363375</XY-Location>
+        <XY-Location>00005.873318 : -0006.433825</XY-Location>
+        <XY-Location>00006.026487 : -0006.507917</XY-Location>
+        <XY-Location>00006.185631 : -0006.584929</XY-Location>
+        <XY-Location>00006.349250 : -0006.664144</XY-Location>
+        <XY-Location>00006.515847 : -0006.744841</XY-Location>
+        <XY-Location>00006.683921 : -0006.826300</XY-Location>
+        <XY-Location>00006.920075 : -0006.940841</XY-Location>
+        <XY-Location>00007.154091 : -0007.054436</XY-Location>
+        <XY-Location>00007.383872 : -0007.166056</XY-Location>
+        <XY-Location>00007.607321 : -0007.274668</XY-Location>
+        <XY-Location>00007.822341 : -0007.379243</XY-Location>
+        <XY-Location>00008.026835 : -0007.478749</XY-Location>
+        <XY-Location>00008.218707 : -0007.572157</XY-Location>
+        <XY-Location>00008.395858 : -0007.658435</XY-Location>
+        <XY-Location>00008.556192 : -0007.736554</XY-Location>
+        <XY-Location>00008.697613 : -0007.805482</XY-Location>
+        <XY-Location>00008.818023 : -0007.864188</XY-Location>
+        <XY-Location>00008.915326 : -0007.911643</XY-Location>
+        <XY-Location>00008.987424 : -0007.946815</XY-Location>
+        <XY-Location>00009.032221 : -0007.968675</XY-Location>
+        <XY-Location>00009.047619 : -0007.976190</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>20</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.000000 : -0006.011905</XY-Location>
+        <XY-Location>00006.683921 : -0006.826300</XY-Location>
+        <XY-Location>00009.047619 : -0007.976190</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00007.822341 : -0007.379243</XY-Location>
+        <XY-Location>00006.942770 : -0007.282415</XY-Location>
+        <XY-Location>00007.203107 : -0006.747127</XY-Location>
+        <XY-Location>00007.822341 : -0007.379243</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Green, 23, 0x00D000</Arc-State>
+      <Arc-Node-UIDs>C-0000027 : S-0000011</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000079</Arc-UID>
+      <View-Points>
+        <XY-Location>00009.047619 : -0007.976190</XY-Location>
+        <XY-Location>00009.036581 : -0007.981931</XY-Location>
+        <XY-Location>00009.004463 : -0007.998617</XY-Location>
+        <XY-Location>00008.952759 : -0008.025445</XY-Location>
+        <XY-Location>00008.882965 : -0008.061610</XY-Location>
+        <XY-Location>00008.796575 : -0008.106308</XY-Location>
+        <XY-Location>00008.695083 : -0008.158735</XY-Location>
+        <XY-Location>00008.579983 : -0008.218088</XY-Location>
+        <XY-Location>00008.452771 : -0008.283561</XY-Location>
+        <XY-Location>00008.314941 : -0008.354351</XY-Location>
+        <XY-Location>00008.167987 : -0008.429654</XY-Location>
+        <XY-Location>00008.013404 : -0008.508666</XY-Location>
+        <XY-Location>00007.852686 : -0008.590582</XY-Location>
+        <XY-Location>00007.687329 : -0008.674599</XY-Location>
+        <XY-Location>00007.518826 : -0008.759912</XY-Location>
+        <XY-Location>00007.348672 : -0008.845717</XY-Location>
+        <XY-Location>00007.115113 : -0008.962889</XY-Location>
+        <XY-Location>00006.883378 : -0009.078508</XY-Location>
+        <XY-Location>00006.655582 : -0009.191606</XY-Location>
+        <XY-Location>00006.433844 : -0009.301215</XY-Location>
+        <XY-Location>00006.220280 : -0009.406368</XY-Location>
+        <XY-Location>00006.017008 : -0009.506098</XY-Location>
+        <XY-Location>00005.826145 : -0009.599438</XY-Location>
+        <XY-Location>00005.649807 : -0009.685419</XY-Location>
+        <XY-Location>00005.490112 : -0009.763075</XY-Location>
+        <XY-Location>00005.349177 : -0009.831438</XY-Location>
+        <XY-Location>00005.229119 : -0009.889540</XY-Location>
+        <XY-Location>00005.132055 : -0009.936415</XY-Location>
+        <XY-Location>00005.060102 : -0009.971095</XY-Location>
+        <XY-Location>00005.015378 : -0009.992613</XY-Location>
+        <XY-Location>00005.000000 : -0010.000000</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00009.047619 : -0007.976190</XY-Location>
+        <XY-Location>00007.348672 : -0008.845717</XY-Location>
+        <XY-Location>00005.000000 : -0010.000000</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00006.017008 : -0009.506098</XY-Location>
+        <XY-Location>00006.634058 : -0008.871850</XY-Location>
+        <XY-Location>00006.896240 : -0009.406236</XY-Location>
+        <XY-Location>00006.017008 : -0009.506098</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>S-0000011 : C-0000029</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000080</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.000000 : -0010.000000</XY-Location>
+        <XY-Location>00004.989137 : -0009.994588</XY-Location>
+        <XY-Location>00004.957532 : -0009.978847</XY-Location>
+        <XY-Location>00004.906664 : -0009.953522</XY-Location>
+        <XY-Location>00004.838013 : -0009.919356</XY-Location>
+        <XY-Location>00004.753055 : -0009.877093</XY-Location>
+        <XY-Location>00004.653270 : -0009.827478</XY-Location>
+        <XY-Location>00004.540136 : -0009.771253</XY-Location>
+        <XY-Location>00004.415132 : -0009.709164</XY-Location>
+        <XY-Location>00004.279735 : -0009.641954</XY-Location>
+        <XY-Location>00004.135426 : -0009.570367</XY-Location>
+        <XY-Location>00003.983681 : -0009.495146</XY-Location>
+        <XY-Location>00003.825980 : -0009.417037</XY-Location>
+        <XY-Location>00003.663800 : -0009.336782</XY-Location>
+        <XY-Location>00003.498621 : -0009.255126</XY-Location>
+        <XY-Location>00003.331921 : -0009.172812</XY-Location>
+        <XY-Location>00003.100531 : -0009.058726</XY-Location>
+        <XY-Location>00002.871130 : -0008.945801</XY-Location>
+        <XY-Location>00002.645788 : -0008.835031</XY-Location>
+        <XY-Location>00002.426574 : -0008.727410</XY-Location>
+        <XY-Location>00002.215561 : -0008.623932</XY-Location>
+        <XY-Location>00002.014817 : -0008.525591</XY-Location>
+        <XY-Location>00001.826414 : -0008.433381</XY-Location>
+        <XY-Location>00001.652422 : -0008.348296</XY-Location>
+        <XY-Location>00001.494912 : -0008.271331</XY-Location>
+        <XY-Location>00001.355953 : -0008.203479</XY-Location>
+        <XY-Location>00001.237617 : -0008.145734</XY-Location>
+        <XY-Location>00001.141974 : -0008.099092</XY-Location>
+        <XY-Location>00001.071094 : -0008.064545</XY-Location>
+        <XY-Location>00001.027047 : -0008.043087</XY-Location>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>19</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.000000 : -0010.000000</XY-Location>
+        <XY-Location>00003.331921 : -0009.172812</XY-Location>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00002.426574 : -0008.727410</XY-Location>
+        <XY-Location>00003.305781 : -0008.827499</XY-Location>
+        <XY-Location>00003.043461 : -0009.361817</XY-Location>
+        <XY-Location>00002.426574 : -0008.727410</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Cyan, 25, 0x00FFFF</Arc-State>
+      <Arc-Node-UIDs>C-0000029 : S-0000007</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000081</Arc-UID>
+      <View-Points>
+        <XY-Location>00009.047619 : -0007.976190</XY-Location>
+        <XY-Location>00009.036023 : -0007.976486</XY-Location>
+        <XY-Location>00009.002291 : -0007.977324</XY-Location>
+        <XY-Location>00008.948002 : -0007.978625</XY-Location>
+        <XY-Location>00008.874739 : -0007.980313</XY-Location>
+        <XY-Location>00008.784083 : -0007.982309</XY-Location>
+        <XY-Location>00008.677613 : -0007.984536</XY-Location>
+        <XY-Location>00008.556913 : -0007.986917</XY-Location>
+        <XY-Location>00008.423563 : -0007.989374</XY-Location>
+        <XY-Location>00008.279143 : -0007.991829</XY-Location>
+        <XY-Location>00008.125236 : -0007.994206</XY-Location>
+        <XY-Location>00007.963422 : -0007.996427</XY-Location>
+        <XY-Location>00007.795283 : -0007.998413</XY-Location>
+        <XY-Location>00007.622400 : -0008.000089</XY-Location>
+        <XY-Location>00007.446353 : -0008.001376</XY-Location>
+        <XY-Location>00007.268724 : -0008.002196</XY-Location>
+        <XY-Location>00007.042192 : -0008.002488</XY-Location>
+        <XY-Location>00006.817676 : -0008.002008</XY-Location>
+        <XY-Location>00006.597192 : -0008.000866</XY-Location>
+        <XY-Location>00006.382757 : -0007.999174</XY-Location>
+        <XY-Location>00006.176387 : -0007.997045</XY-Location>
+        <XY-Location>00005.980100 : -0007.994588</XY-Location>
+        <XY-Location>00005.795912 : -0007.991917</XY-Location>
+        <XY-Location>00005.625841 : -0007.989142</XY-Location>
+        <XY-Location>00005.471902 : -0007.986375</XY-Location>
+        <XY-Location>00005.336113 : -0007.983728</XY-Location>
+        <XY-Location>00005.220490 : -0007.981312</XY-Location>
+        <XY-Location>00005.127051 : -0007.979238</XY-Location>
+        <XY-Location>00005.057812 : -0007.977619</XY-Location>
+        <XY-Location>00005.014789 : -0007.976566</XY-Location>
+        <XY-Location>00005.000000 : -0007.976190</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>22</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00009.047619 : -0007.976190</XY-Location>
+        <XY-Location>00007.268724 : -0008.002196</XY-Location>
+        <XY-Location>00005.000000 : -0007.976190</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00005.795912 : -0007.991917</XY-Location>
+        <XY-Location>00006.633474 : -0007.706414</XY-Location>
+        <XY-Location>00006.624842 : -0008.301590</XY-Location>
+        <XY-Location>00005.795912 : -0007.991917</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>S-0000011 : C-0000028</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000082</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.000000 : -0007.976190</XY-Location>
+        <XY-Location>00004.988588 : -0007.976359</XY-Location>
+        <XY-Location>00004.955390 : -0007.976850</XY-Location>
+        <XY-Location>00004.901961 : -0007.977642</XY-Location>
+        <XY-Location>00004.829858 : -0007.978710</XY-Location>
+        <XY-Location>00004.740638 : -0007.980032</XY-Location>
+        <XY-Location>00004.635855 : -0007.981585</XY-Location>
+        <XY-Location>00004.517068 : -0007.983347</XY-Location>
+        <XY-Location>00004.385830 : -0007.985294</XY-Location>
+        <XY-Location>00004.243700 : -0007.987404</XY-Location>
+        <XY-Location>00004.092232 : -0007.989653</XY-Location>
+        <XY-Location>00003.932984 : -0007.992019</XY-Location>
+        <XY-Location>00003.767511 : -0007.994480</XY-Location>
+        <XY-Location>00003.597370 : -0007.997011</XY-Location>
+        <XY-Location>00003.424116 : -0007.999591</XY-Location>
+        <XY-Location>00003.249306 : -0008.002196</XY-Location>
+        <XY-Location>00003.025897 : -0008.005529</XY-Location>
+        <XY-Location>00002.804477 : -0008.008836</XY-Location>
+        <XY-Location>00002.587035 : -0008.012087</XY-Location>
+        <XY-Location>00002.375559 : -0008.015251</XY-Location>
+        <XY-Location>00002.172038 : -0008.018299</XY-Location>
+        <XY-Location>00001.978462 : -0008.021200</XY-Location>
+        <XY-Location>00001.796818 : -0008.023924</XY-Location>
+        <XY-Location>00001.629096 : -0008.026440</XY-Location>
+        <XY-Location>00001.477284 : -0008.028719</XY-Location>
+        <XY-Location>00001.343372 : -0008.030731</XY-Location>
+        <XY-Location>00001.229347 : -0008.032444</XY-Location>
+        <XY-Location>00001.137199 : -0008.033829</XY-Location>
+        <XY-Location>00001.068917 : -0008.034856</XY-Location>
+        <XY-Location>00001.026490 : -0008.035495</XY-Location>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>17</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.000000 : -0007.976190</XY-Location>
+        <XY-Location>00003.249306 : -0008.002196</XY-Location>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00002.804477 : -0008.008836</XY-Location>
+        <XY-Location>00003.633273 : -0007.698805</XY-Location>
+        <XY-Location>00003.642162 : -0008.293977</XY-Location>
+        <XY-Location>00002.804477 : -0008.008836</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>C-0000028 : S-0000007</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000083</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.000000 : 00001.011905</XY-Location>
+        <XY-Location>00004.977260 : 00001.018532</XY-Location>
+        <XY-Location>00004.911982 : 00001.036317</XY-Location>
+        <XY-Location>00004.808580 : 00001.062115</XY-Location>
+        <XY-Location>00004.671468 : 00001.092783</XY-Location>
+        <XY-Location>00004.505060 : 00001.125175</XY-Location>
+        <XY-Location>00004.313771 : 00001.156147</XY-Location>
+        <XY-Location>00004.102013 : 00001.182554</XY-Location>
+        <XY-Location>00003.874200 : 00001.201254</XY-Location>
+        <XY-Location>00003.634747 : 00001.209100</XY-Location>
+        <XY-Location>00003.388068 : 00001.202948</XY-Location>
+        <XY-Location>00003.138577 : 00001.179655</XY-Location>
+        <XY-Location>00002.890686 : 00001.136075</XY-Location>
+        <XY-Location>00002.648811 : 00001.069064</XY-Location>
+        <XY-Location>00002.417366 : 00000.975478</XY-Location>
+        <XY-Location>00002.200763 : 00000.852173</XY-Location>
+        <XY-Location>00002.042938 : 00000.732796</XY-Location>
+        <XY-Location>00001.896946 : 00000.596684</XY-Location>
+        <XY-Location>00001.762647 : 00000.447538</XY-Location>
+        <XY-Location>00001.639900 : 00000.289059</XY-Location>
+        <XY-Location>00001.528565 : 00000.124946</XY-Location>
+        <XY-Location>00001.428501 : -0000.041099</XY-Location>
+        <XY-Location>00001.339567 : -0000.205377</XY-Location>
+        <XY-Location>00001.261623 : -0000.364186</XY-Location>
+        <XY-Location>00001.194527 : -0000.513827</XY-Location>
+        <XY-Location>00001.138140 : -0000.650599</XY-Location>
+        <XY-Location>00001.092320 : -0000.770801</XY-Location>
+        <XY-Location>00001.056928 : -0000.870734</XY-Location>
+        <XY-Location>00001.031821 : -0000.946695</XY-Location>
+        <XY-Location>00001.016861 : -0000.994986</XY-Location>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>13</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.000000 : 00001.011905</XY-Location>
+        <XY-Location>00002.200763 : 00000.852173</XY-Location>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00002.648811 : 00001.069064</XY-Location>
+        <XY-Location>00003.372433 : 00001.578371</XY-Location>
+        <XY-Location>00003.531355 : 00001.004740</XY-Location>
+        <XY-Location>00002.648811 : 00001.069064</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000025 : S-0000005</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000084</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.000000 : -0003.035714</XY-Location>
+        <XY-Location>00005.026640 : -0003.045126</XY-Location>
+        <XY-Location>00005.102891 : -0003.070568</XY-Location>
+        <XY-Location>00005.223246 : -0003.107851</XY-Location>
+        <XY-Location>00005.382200 : -0003.152784</XY-Location>
+        <XY-Location>00005.574248 : -0003.201178</XY-Location>
+        <XY-Location>00005.793884 : -0003.248842</XY-Location>
+        <XY-Location>00006.035603 : -0003.291587</XY-Location>
+        <XY-Location>00006.293899 : -0003.325223</XY-Location>
+        <XY-Location>00006.563267 : -0003.345559</XY-Location>
+        <XY-Location>00006.838201 : -0003.348406</XY-Location>
+        <XY-Location>00007.113196 : -0003.329574</XY-Location>
+        <XY-Location>00007.382747 : -0003.284872</XY-Location>
+        <XY-Location>00007.641347 : -0003.210112</XY-Location>
+        <XY-Location>00007.883492 : -0003.101102</XY-Location>
+        <XY-Location>00008.103675 : -0002.953653</XY-Location>
+        <XY-Location>00008.241318 : -0002.827106</XY-Location>
+        <XY-Location>00008.366168 : -0002.683732</XY-Location>
+        <XY-Location>00008.478714 : -0002.527318</XY-Location>
+        <XY-Location>00008.579445 : -0002.361653</XY-Location>
+        <XY-Location>00008.668851 : -0002.190523</XY-Location>
+        <XY-Location>00008.747420 : -0002.017716</XY-Location>
+        <XY-Location>00008.815642 : -0001.847019</XY-Location>
+        <XY-Location>00008.874007 : -0001.682220</XY-Location>
+        <XY-Location>00008.923002 : -0001.527105</XY-Location>
+        <XY-Location>00008.963118 : -0001.385464</XY-Location>
+        <XY-Location>00008.994842 : -0001.261083</XY-Location>
+        <XY-Location>00009.018666 : -0001.157749</XY-Location>
+        <XY-Location>00009.035077 : -0001.079249</XY-Location>
+        <XY-Location>00009.044565 : -0001.029372</XY-Location>
+        <XY-Location>00009.047619 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>14</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.000000 : -0003.035714</XY-Location>
+        <XY-Location>00008.103675 : -0002.953653</XY-Location>
+        <XY-Location>00009.047619 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00007.883492 : -0003.101102</XY-Location>
+        <XY-Location>00007.245783 : -0003.714575</XY-Location>
+        <XY-Location>00007.001435 : -0003.171802</XY-Location>
+        <XY-Location>00007.883492 : -0003.101102</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000026 : S-0000010</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000085</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.000000 : -0006.011905</XY-Location>
+        <XY-Location>00004.977217 : -0006.004952</XY-Location>
+        <XY-Location>00004.911823 : -0005.986240</XY-Location>
+        <XY-Location>00004.808251 : -0005.958989</XY-Location>
+        <XY-Location>00004.670932 : -0005.926419</XY-Location>
+        <XY-Location>00004.504299 : -0005.891751</XY-Location>
+        <XY-Location>00004.312783 : -0005.858205</XY-Location>
+        <XY-Location>00004.100818 : -0005.829001</XY-Location>
+        <XY-Location>00003.872835 : -0005.807359</XY-Location>
+        <XY-Location>00003.633267 : -0005.796500</XY-Location>
+        <XY-Location>00003.386545 : -0005.799644</XY-Location>
+        <XY-Location>00003.137102 : -0005.820012</XY-Location>
+        <XY-Location>00002.889370 : -0005.860822</XY-Location>
+        <XY-Location>00002.647782 : -0005.925297</XY-Location>
+        <XY-Location>00002.416768 : -0006.016656</XY-Location>
+        <XY-Location>00002.200763 : -0006.138119</XY-Location>
+        <XY-Location>00002.041498 : -0006.258077</XY-Location>
+        <XY-Location>00001.894464 : -0006.395501</XY-Location>
+        <XY-Location>00001.759475 : -0006.546578</XY-Location>
+        <XY-Location>00001.636346 : -0006.707491</XY-Location>
+        <XY-Location>00001.524894 : -0006.874427</XY-Location>
+        <XY-Location>00001.424932 : -0007.043570</XY-Location>
+        <XY-Location>00001.336277 : -0007.211105</XY-Location>
+        <XY-Location>00001.258744 : -0007.373217</XY-Location>
+        <XY-Location>00001.192148 : -0007.526092</XY-Location>
+        <XY-Location>00001.136304 : -0007.665914</XY-Location>
+        <XY-Location>00001.091028 : -0007.788869</XY-Location>
+        <XY-Location>00001.056135 : -0007.891141</XY-Location>
+        <XY-Location>00001.031439 : -0007.968916</XY-Location>
+        <XY-Location>00001.016758 : -0008.018379</XY-Location>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>12</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.000000 : -0006.011905</XY-Location>
+        <XY-Location>00002.200763 : -0006.138119</XY-Location>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00002.889370 : -0005.860822</XY-Location>
+        <XY-Location>00003.663244 : -0005.431705</XY-Location>
+        <XY-Location>00003.759998 : -0006.019027</XY-Location>
+        <XY-Location>00002.889370 : -0005.860822</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000027 : S-0000007</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000086</Arc-UID>
+      <View-Points>
+        <XY-Location>00005.000000 : -0010.000000</XY-Location>
+        <XY-Location>00005.026665 : -0010.009655</XY-Location>
+        <XY-Location>00005.102984 : -0010.035792</XY-Location>
+        <XY-Location>00005.223440 : -0010.074164</XY-Location>
+        <XY-Location>00005.382517 : -0010.120527</XY-Location>
+        <XY-Location>00005.574699 : -0010.170638</XY-Location>
+        <XY-Location>00005.794468 : -0010.220249</XY-Location>
+        <XY-Location>00006.036310 : -0010.265118</XY-Location>
+        <XY-Location>00006.294707 : -0010.300999</XY-Location>
+        <XY-Location>00006.564144 : -0010.323647</XY-Location>
+        <XY-Location>00006.839103 : -0010.328818</XY-Location>
+        <XY-Location>00007.114069 : -0010.312267</XY-Location>
+        <XY-Location>00007.383526 : -0010.269749</XY-Location>
+        <XY-Location>00007.641957 : -0010.197019</XY-Location>
+        <XY-Location>00007.883845 : -0010.089832</XY-Location>
+        <XY-Location>00008.103675 : -0009.943944</XY-Location>
+        <XY-Location>00008.242455 : -0009.816806</XY-Location>
+        <XY-Location>00008.368129 : -0009.672312</XY-Location>
+        <XY-Location>00008.481221 : -0009.514334</XY-Location>
+        <XY-Location>00008.582254 : -0009.346742</XY-Location>
+        <XY-Location>00008.671753 : -0009.173411</XY-Location>
+        <XY-Location>00008.750241 : -0008.998210</XY-Location>
+        <XY-Location>00008.818243 : -0008.825013</XY-Location>
+        <XY-Location>00008.876282 : -0008.657691</XY-Location>
+        <XY-Location>00008.924883 : -0008.500116</XY-Location>
+        <XY-Location>00008.964569 : -0008.356161</XY-Location>
+        <XY-Location>00008.995864 : -0008.229697</XY-Location>
+        <XY-Location>00009.019293 : -0008.124595</XY-Location>
+        <XY-Location>00009.035379 : -0008.044729</XY-Location>
+        <XY-Location>00009.044646 : -0007.993970</XY-Location>
+        <XY-Location>00009.047619 : -0007.976190</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>14</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00005.000000 : -0010.000000</XY-Location>
+        <XY-Location>00008.103675 : -0009.943944</XY-Location>
+        <XY-Location>00009.047619 : -0007.976190</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>00007.883845 : -0010.089832</XY-Location>
+        <XY-Location>00007.242537 : -0010.699541</XY-Location>
+        <XY-Location>00007.001388 : -0010.155340</XY-Location>
+        <XY-Location>00007.883845 : -0010.089832</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Gray, 19, 0x909090</Arc-State>
+      <Arc-Node-UIDs>C-0000029 : S-0000011</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000087</Arc-UID>
+      <View-Points>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+        <XY-Location>00001.000669 : -0001.011905</XY-Location>
+        <XY-Location>00000.967981 : -0001.011905</XY-Location>
+        <XY-Location>00000.915374 : -0001.011905</XY-Location>
+        <XY-Location>00000.844381 : -0001.011905</XY-Location>
+        <XY-Location>00000.756533 : -0001.011905</XY-Location>
+        <XY-Location>00000.653362 : -0001.011905</XY-Location>
+        <XY-Location>00000.536402 : -0001.011905</XY-Location>
+        <XY-Location>00000.407183 : -0001.011905</XY-Location>
+        <XY-Location>00000.267239 : -0001.011905</XY-Location>
+        <XY-Location>00000.118101 : -0001.011905</XY-Location>
+        <XY-Location>-0000.038697 : -0001.011905</XY-Location>
+        <XY-Location>-0000.201625 : -0001.011905</XY-Location>
+        <XY-Location>-0000.369149 : -0001.011905</XY-Location>
+        <XY-Location>-0000.539738 : -0001.011905</XY-Location>
+        <XY-Location>-0000.711859 : -0001.011905</XY-Location>
+        <XY-Location>-0000.932013 : -0001.011905</XY-Location>
+        <XY-Location>-0001.150207 : -0001.011905</XY-Location>
+        <XY-Location>-0001.364482 : -0001.011905</XY-Location>
+        <XY-Location>-0001.572877 : -0001.011905</XY-Location>
+        <XY-Location>-0001.773433 : -0001.011905</XY-Location>
+        <XY-Location>-0001.964190 : -0001.011905</XY-Location>
+        <XY-Location>-0002.143188 : -0001.011905</XY-Location>
+        <XY-Location>-0002.308467 : -0001.011905</XY-Location>
+        <XY-Location>-0002.458067 : -0001.011905</XY-Location>
+        <XY-Location>-0002.590029 : -0001.011905</XY-Location>
+        <XY-Location>-0002.702392 : -0001.011905</XY-Location>
+        <XY-Location>-0002.793198 : -0001.011905</XY-Location>
+        <XY-Location>-0002.860485 : -0001.011905</XY-Location>
+        <XY-Location>-0002.902295 : -0001.011905</XY-Location>
+        <XY-Location>-0002.916667 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>22</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00001.011905 : -0001.011905</XY-Location>
+        <XY-Location>-0000.711859 : -0001.011905</XY-Location>
+        <XY-Location>-0002.916667 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0002.143188 : -0001.011905</XY-Location>
+        <XY-Location>-0001.309854 : -0000.714286</XY-Location>
+        <XY-Location>-0001.309854 : -0001.309524</XY-Location>
+        <XY-Location>-0002.143188 : -0001.011905</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>S-0000005 : C-0000030</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000088</Arc-UID>
+      <View-Points>
+        <XY-Location>-0002.916667 : -0001.011905</XY-Location>
+        <XY-Location>-0002.928242 : -0001.011905</XY-Location>
+        <XY-Location>-0002.961916 : -0001.011905</XY-Location>
+        <XY-Location>-0003.016110 : -0001.011905</XY-Location>
+        <XY-Location>-0003.089246 : -0001.011905</XY-Location>
+        <XY-Location>-0003.179745 : -0001.011905</XY-Location>
+        <XY-Location>-0003.286028 : -0001.011905</XY-Location>
+        <XY-Location>-0003.406518 : -0001.011905</XY-Location>
+        <XY-Location>-0003.539635 : -0001.011905</XY-Location>
+        <XY-Location>-0003.683801 : -0001.011905</XY-Location>
+        <XY-Location>-0003.837439 : -0001.011905</XY-Location>
+        <XY-Location>-0003.998968 : -0001.011905</XY-Location>
+        <XY-Location>-0004.166812 : -0001.011905</XY-Location>
+        <XY-Location>-0004.339391 : -0001.011905</XY-Location>
+        <XY-Location>-0004.515127 : -0001.011905</XY-Location>
+        <XY-Location>-0004.692441 : -0001.011905</XY-Location>
+        <XY-Location>-0004.919289 : -0001.011905</XY-Location>
+        <XY-Location>-0005.144117 : -0001.011905</XY-Location>
+        <XY-Location>-0005.364907 : -0001.011905</XY-Location>
+        <XY-Location>-0005.579639 : -0001.011905</XY-Location>
+        <XY-Location>-0005.786292 : -0001.011905</XY-Location>
+        <XY-Location>-0005.982849 : -0001.011905</XY-Location>
+        <XY-Location>-0006.167289 : -0001.011905</XY-Location>
+        <XY-Location>-0006.337593 : -0001.011905</XY-Location>
+        <XY-Location>-0006.491742 : -0001.011905</XY-Location>
+        <XY-Location>-0006.627716 : -0001.011905</XY-Location>
+        <XY-Location>-0006.743496 : -0001.011905</XY-Location>
+        <XY-Location>-0006.837063 : -0001.011905</XY-Location>
+        <XY-Location>-0006.906396 : -0001.011905</XY-Location>
+        <XY-Location>-0006.949477 : -0001.011905</XY-Location>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>18</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0002.916667 : -0001.011905</XY-Location>
+        <XY-Location>-0004.692441 : -0001.011905</XY-Location>
+        <XY-Location>-0006.964286 : -0001.011905</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0005.364907 : -0001.011905</XY-Location>
+        <XY-Location>-0004.531574 : -0000.714286</XY-Location>
+        <XY-Location>-0004.531574 : -0001.309524</XY-Location>
+        <XY-Location>-0005.364907 : -0001.011905</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>C-0000030 : S-0000004</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000089</Arc-UID>
+      <View-Points>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+        <XY-Location>00001.000669 : -0008.035460</XY-Location>
+        <XY-Location>00000.967983 : -0008.034726</XY-Location>
+        <XY-Location>00000.915379 : -0008.033559</XY-Location>
+        <XY-Location>00000.844388 : -0008.032004</XY-Location>
+        <XY-Location>00000.756543 : -0008.030106</XY-Location>
+        <XY-Location>00000.653375 : -0008.027909</XY-Location>
+        <XY-Location>00000.536417 : -0008.025460</XY-Location>
+        <XY-Location>00000.407201 : -0008.022804</XY-Location>
+        <XY-Location>00000.267258 : -0008.019985</XY-Location>
+        <XY-Location>00000.118122 : -0008.017049</XY-Location>
+        <XY-Location>-0000.038678 : -0008.014041</XY-Location>
+        <XY-Location>-0000.201608 : -0008.011007</XY-Location>
+        <XY-Location>-0000.369136 : -0008.007991</XY-Location>
+        <XY-Location>-0000.539730 : -0008.005039</XY-Location>
+        <XY-Location>-0000.711859 : -0008.002196</XY-Location>
+        <XY-Location>-0000.932000 : -0007.998775</XY-Location>
+        <XY-Location>-0001.150185 : -0007.995604</XY-Location>
+        <XY-Location>-0001.364454 : -0007.992682</XY-Location>
+        <XY-Location>-0001.572846 : -0007.990005</XY-Location>
+        <XY-Location>-0001.773400 : -0007.987572</XY-Location>
+        <XY-Location>-0001.964158 : -0007.985381</XY-Location>
+        <XY-Location>-0002.143158 : -0007.983429</XY-Location>
+        <XY-Location>-0002.308441 : -0007.981715</XY-Location>
+        <XY-Location>-0002.458046 : -0007.980237</XY-Location>
+        <XY-Location>-0002.590012 : -0007.978991</XY-Location>
+        <XY-Location>-0002.702381 : -0007.977977</XY-Location>
+        <XY-Location>-0002.793191 : -0007.977192</XY-Location>
+        <XY-Location>-0002.860482 : -0007.976634</XY-Location>
+        <XY-Location>-0002.902294 : -0007.976301</XY-Location>
+        <XY-Location>-0002.916667 : -0007.976190</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>21</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>00001.011905 : -0008.035714</XY-Location>
+        <XY-Location>-0000.711859 : -0008.002196</XY-Location>
+        <XY-Location>-0002.916667 : -0007.976190</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0001.964158 : -0007.985381</XY-Location>
+        <XY-Location>-0001.127461 : -0007.697353</XY-Location>
+        <XY-Location>-0001.134298 : -0008.292552</XY-Location>
+        <XY-Location>-0001.964158 : -0007.985381</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>S-0000007 : C-0000031</Arc-Node-UIDs>
+    </Mcln-Arc>
+    <Mcln-Arc>
+      <Arc-UID>A-0000090</Arc-UID>
+      <View-Points>
+        <XY-Location>-0002.916667 : -0007.976190</XY-Location>
+        <XY-Location>-0002.928242 : -0007.976359</XY-Location>
+        <XY-Location>-0002.961916 : -0007.976851</XY-Location>
+        <XY-Location>-0003.016110 : -0007.977642</XY-Location>
+        <XY-Location>-0003.089246 : -0007.978711</XY-Location>
+        <XY-Location>-0003.179745 : -0007.980033</XY-Location>
+        <XY-Location>-0003.286028 : -0007.981587</XY-Location>
+        <XY-Location>-0003.406518 : -0007.983349</XY-Location>
+        <XY-Location>-0003.539635 : -0007.985296</XY-Location>
+        <XY-Location>-0003.683802 : -0007.987406</XY-Location>
+        <XY-Location>-0003.837439 : -0007.989656</XY-Location>
+        <XY-Location>-0003.998969 : -0007.992022</XY-Location>
+        <XY-Location>-0004.166812 : -0007.994482</XY-Location>
+        <XY-Location>-0004.339391 : -0007.997013</XY-Location>
+        <XY-Location>-0004.515127 : -0007.999592</XY-Location>
+        <XY-Location>-0004.692441 : -0008.002196</XY-Location>
+        <XY-Location>-0004.919289 : -0008.005531</XY-Location>
+        <XY-Location>-0005.144118 : -0008.008839</XY-Location>
+        <XY-Location>-0005.364908 : -0008.012091</XY-Location>
+        <XY-Location>-0005.579639 : -0008.015256</XY-Location>
+        <XY-Location>-0005.786293 : -0008.018303</XY-Location>
+        <XY-Location>-0005.982849 : -0008.021204</XY-Location>
+        <XY-Location>-0006.167290 : -0008.023928</XY-Location>
+        <XY-Location>-0006.337594 : -0008.026444</XY-Location>
+        <XY-Location>-0006.491743 : -0008.028722</XY-Location>
+        <XY-Location>-0006.627717 : -0008.030733</XY-Location>
+        <XY-Location>-0006.743496 : -0008.032446</XY-Location>
+        <XY-Location>-0006.837063 : -0008.033830</XY-Location>
+        <XY-Location>-0006.906396 : -0008.034857</XY-Location>
+        <XY-Location>-0006.949477 : -0008.035495</XY-Location>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+      </View-Points>
+      <Arc-Arrow-Tip-Index>17</Arc-Arrow-Tip-Index>
+      <Arc-Knob-Index>0</Arc-Knob-Index>
+      <Arc-Knot-Locations>
+        <XY-Location>-0002.916667 : -0007.976190</XY-Location>
+        <XY-Location>-0004.692441 : -0008.002196</XY-Location>
+        <XY-Location>-0006.964286 : -0008.035714</XY-Location>
+      </Arc-Knot-Locations>
+      <Arrow-Points>
+        <XY-Location>-0005.144118 : -0008.008839</XY-Location>
+        <XY-Location>-0004.315254 : -0007.698991</XY-Location>
+        <XY-Location>-0004.306496 : -0008.294165</XY-Location>
+        <XY-Location>-0005.144118 : -0008.008839</XY-Location>
+      </Arrow-Points>
+      <Arc-State>Yellow, 27, 0xFFFF00</Arc-State>
+      <Arc-Node-UIDs>C-0000031 : S-0000006</Arc-Node-UIDs>
+    </Mcln-Arc>
+  </Mcln-Model>
+</Mcln-Project>
+

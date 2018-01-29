@@ -2,7 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/ANT-DEPLOYMENT-RESOURCES" vcs="" />
-    <mapping directory="$PROJECT_DIR$/Mcln Project Storage" vcs="" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
 </project>
