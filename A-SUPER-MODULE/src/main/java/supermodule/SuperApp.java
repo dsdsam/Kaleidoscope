@@ -34,7 +34,7 @@ public class SuperApp {
 
     private static DSDSSEApp dsdsseApp;
     private static SEMApp semApp;
-
+// Test
     public static void main(String[] args) {
         Runnable runnable = () -> {
             try {
