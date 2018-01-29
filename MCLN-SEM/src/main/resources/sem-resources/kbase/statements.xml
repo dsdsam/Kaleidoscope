@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Statements>
+    <Statement>"Value 1"<Color>123.456.789</Color>
+    </Statement>
+    <Statement>        Value   2        <Color>111.222.333</Color>
+    </Statement>
+    <Statement>
+
+
+        Value   3
+    </Statement>
+</Statements>    

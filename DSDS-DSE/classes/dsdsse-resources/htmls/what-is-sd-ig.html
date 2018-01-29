@@ -1,0 +1,74 @@
+<html>
+<body bgcolor="#FFFFF7">
+<blockquote>
+    <center><h3>The Rule Driven Input Generator
+    </h3></center>
+    <p>
+        The <b>Rule-Driven Input Simulating Program (RDISP)</b> is, in general, a <font color="#009900">
+        DsdsseCell input generator</font>, representing the case when the DsdsseCell input depends on
+        its current state.
+    </p>
+
+    <p>
+        In many modeled cases, the state of the DsdsseCell
+        (or, the value the DsdsseCell takes) is strictly defined as
+        the function of state of some other Cells and can be changed
+        only when the state of the other Cells is changed. Such state
+        is considered to be a <font color="#009900">stable</font> one.
+        Meanwhile, sometimes there
+        may exist some <font color="#009900">unstable</font> states. These states can be changed
+        spontaneously, without any visible reasons.
+    </p>
+
+    <p>
+        The DsdsseCell's spontaneous transition from some particular state
+        to another particular state is simulated with RDISP.
+        This program is specified
+        as a set of rules, and each rule is described as triplet:
+    </p>
+    <center>
+        <p><b><font color="#990000">Conditional&nbsp;State-Ticks-Target&nbsp;State</font></b>.</p>
+        // <p><b><font color="#990000">Ticks-State</font></b>.</p>
+    </center>
+    <p>
+
+
+        The <b><font color="#990000">Conditional State</font></b> is the unstable state at which
+        the spontaneous transition takes place.
+
+        The <b><font color="#990000">Ticks</font></b> is the number of simulating ticks, which have to
+        pass before the transition happens, so, they represent
+        the life time of the unstable state. And the <b><font color="#990000">Target State</font></b> is
+        the state, which has to replace the unstable one.
+
+    </p>
+
+    <p>
+        To create the Rule-Driven Input Simulating Program you have to:
+    <ol>
+        <li><p>
+            insert into the table desired number of rules (rows);
+        </p></li>
+        <li><p>
+            select one of the rules to define it;
+        </p></li>
+        <li><p>
+            pick up the state value from the <font color="#009900">Allowed States List</font>
+            to set the state value for the rule's Conditional State;
+        </p></li>
+        <li><p>
+            set the amount of ticks for the selected rule according to the format described below;
+        </p></li>
+        <li><p>
+            pick up the state value from the <font color="#009900">Allowed States List</font>
+            to set the state value for the rule's Target State;
+        </p></li>
+        <li><p>
+            repeat items 2 through 5 for all program rules.
+        </p></li>
+    </ol>
+    sb.append(format);
+    <br>
+</blockquote>
+</body>
+</html>

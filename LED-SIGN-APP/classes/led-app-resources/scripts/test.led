@@ -1,0 +1,90 @@
+!! The Demo script
+Do
+   Appear center=true text=^wAppear
+   Sleep delay=500
+
+!!   ScrollCenter delay=40 center=true text=^yScroll Center
+!!   Sleep delay=500
+
+   OverCenter delay=40 center=true text=Over Center
+   Sleep delay=500
+
+!!   Blink delay=400 times=3
+!!   Sleep delay=1500
+
+!!  ScrollLeft delay=30 startspace=20 endspace=120 times=2 text=ScrollLeft
+!!  Sleep delay=1500
+
+!!   ScrollRight delay=30 center=true  text=ScrollRight
+!!   Sleep delay=1500
+
+   ScrollUp delay=40 center=true text=^gScroll Up
+   Sleep delay=500
+
+   ScrollDown delay=40 center=true  text=^bScroll Down
+   Sleep delay=500
+!!
+!!   O V E R
+!!
+
+!!   OverUp delay=40 center=true text=Over Up
+!!   Sleep delay=500
+
+!!   OverDown delay=40 center=true text=Over Down
+!!   Sleep delay=500
+
+!!   OverCenter delay=40 center=true text=Over Center
+!!   Sleep delay=500
+
+!!   OverLeft delay=40 center=true text=Over Left
+!!   Sleep delay=500
+
+!!   OverRight delay=40 center=true text=Over Right
+!!   Sleep delay=500
+
+!!   OverCenter delay=40 center=true text=E N D
+!!   Sleep delay=500
+
+!!   ScrollCenter delay=40 center=true text=ScrollCenter
+!!    Sleep delay=1500
+
+
+!! NOK    OverCenter delay=40 center=true text=OverCenter
+!!    Sleep delay=1500
+
+
+
+
+
+!!   ScrollLeft delay=30 clear=true
+!!   Blink delay=400 times=3
+!!   Sleep delay=1000
+!!   Appear center=true text=9
+!!   Sleep delay=50
+!!   Appear center=true text=8
+!!   Sleep delay=50
+!!   Appear center=true text=7
+!!   Sleep delay=50
+!!   Appear center=true text=6
+!!   Sleep delay=50
+!!   Appear center=true text=5
+!!   Sleep delay=50
+!!   Appear center=true text=4
+!!   Sleep delay=50
+!!   Appear center=true text=3
+!!   Sleep delay=50
+!!   Appear center=true text=2
+!!   Sleep delay=50
+!!   Appear center=true text=1
+!!   Sleep delay=50
+
+
+!!   Sleep delay=500
+!!   OverUp delay=30 center=true text=What?
+!!   ScrollDown delay=20 center=true text=Here we GO!!!!
+!!  ScrollLeft delay=30 startspace=20 endspace=20 text=ScrollLeft
+
+!!   Sleep delay=500
+
+!! repeat infinitely
+Repeat times=1

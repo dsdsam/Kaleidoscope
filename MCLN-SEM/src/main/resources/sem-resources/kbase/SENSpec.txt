@@ -1,0 +1,77 @@
+Rules
+if
+(SE001.Move Direction = moveForward)
+:& (SE001.Engine State = started)
+& (SE001.Front Touch Sensor 001 = Touch)
+& (IM001.Act on Front Touch=off)
+then
+IM001.Act on Front Touch=on
+
+if
+ (SE001.Front Touch Sensor 001 = Normal)
+& (IM001.Act on Front Touch=Done)
+then
+IM001.Act on Front Touch=off
+
+if
+(SE001.Move Direction = moveBackward)
+:& (SE001.Engine State = started)
+ & (SE001.Rear Touch Sensor 001 = Touch)
+then
+IM001.Act on Rear Touch=on
+
+: =============== Act on Front Touch ========================
+:if
+:   (IM001.Act on Front Touch = on)
+: & (SE001.Move Direction = moveForward)
+:then
+: SE001.Engine State = Stopped
+
+:if
+:   (IM001.Act on Front Touch = on)
+: & (SE001.Move Direction = moveForward)
+: & (SE001.Engine State = Stopped)
+:then
+: SE001.Move Direction = moveBackward
+
+:if
+:   (IM001.Act on Front Touch = on)
+: & (SE001.Move Direction = moveBackward)
+:then
+: SE001.Engine State = Started
+
+:if
+:(SE001.Move Direction = moveForward)
+:& (BD001.Front Touch Sensor 001=Touch)
+:then
+:SE001.Rotation Direction=turnRight
+
+:if
+:(IM001.Act on Front Touch = on)
+: & (SE001.Move Direction = moveBackward)
+: & (SE001.Engine State = Started)
+: & (BD001.Front Touch Sensor 001 = Normal)
+:then
+: IM001.Act on Front Touch=off
+
+: ================= Act on Rear Touch ==================
+
+:if
+:(SE001.Act on Rear Touch = on)
+: & (SE001.Move Direction = moveBackward)
+: & (BD001.Rear Touch Sensor 001 = Touch)
+:then
+:SE001.Move Direction = moveForward
+
+:if
+:(SE001.Act on Rear Touch = on)
+: & (BD001.Rear Touch Sensor 001 = Normal)
+:then
+: SE001.Act on Rear Touch = off
+
+:if
+:(LT001.Speed=low) & (RT001.Front Touch Sensor 001=well)
+:then
+:BD001.yawAngle=ninty
+End
+

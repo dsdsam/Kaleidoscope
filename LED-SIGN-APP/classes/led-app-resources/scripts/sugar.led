@@ -1,0 +1,49 @@
+!! The Demo script
+Do
+
+   ScrollDown delay=30 center=true text=\yWelcome !!!
+   Sleep delay=2000
+      
+   Do
+      ScrollLeft delay=30 startspace=20 endspace=20 text=\yWelcome to my home page!
+   Repeat times=2
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=The current time is \{tt} on \{mn}-\{dn}-\{yy}.
+   ScrollLeft delay=30 startspace=20 endspace=120 text=Today is \{dd} \{mm} \{dn}, \{YY}.
+
+   Appear center=true text=T minus 10 seconds
+   Sleep delay=1500
+   OverDown delay=20 center=true text=9
+   Sleep delay=600
+   OverUp delay=20 center=true text=\o8
+   Sleep delay=600
+   OverDown delay=20 center=true text=\y7
+   Sleep delay=600
+   OverUp delay=20 center=true text=\g6
+   Sleep delay=600
+   OverDown delay=20 center=true text=\c5
+   Sleep delay=600
+   OverUp delay=20 center=true text=\b4
+   Sleep delay=600
+   OverDown delay=20 center=true text=\p3
+   Sleep delay=600
+   OverUp delay=20 center=true text=\r2
+   Sleep delay=600
+   OverDown delay=20 center=true text=\o1
+   Sleep delay=600
+   
+   Pixel delay=10 pixels=10 center=true text=Java is \ccool!
+   Sleep delay=500
+   ScrollLeft endspace=20 URL=http://www/~yonasiro endspace=40 text=Click on this sign now to go to
+     
+   Appear center=true URL=http://www/~yonasiro text=YonaYona Page
+   Sleep URL=http://www/~yonasiro delay=500
+   Blink times=6 delay=500 URL=http://~yonasiro
+   ScrollDown delay=70 center=true text=T\oH\yE \gE\bN\pD
+   Sleep delay=2000
+
+   Pixel delay=10 pixels=15 clear=true
+   Sleep delay=1000
+
+!! repeat infinitely
+Repeat times=-1

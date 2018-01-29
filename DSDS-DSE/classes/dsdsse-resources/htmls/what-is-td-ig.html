@@ -1,0 +1,103 @@
+<html>
+
+<body bgcolor="#FFFFF7">
+<blockquote>
+    <center><h3>The Time Driven Input Generator
+    </h3></center>
+    <p>
+        The <b>Time-Driven Input Simulating Program (TDISP)</b> is, in general, a <font color="#009900">
+        DsdsseCell input generator</font>, providing the sequence of states the DsdsseCell takes over time.
+    </p>
+
+    <p>
+        As far as, the simulating runs in discrete steps termed <font color="#009900">
+        ticks</font>, the program is described as the sequence of pairs:
+    </p>
+    <center>
+        <p><b><font color="#990000">Ticks-State</font></b>.</p>
+    </center>
+    <p>
+        The <b><font color="#990000">Ticks</font></b>,
+        here, is the number of simulating ticks which have to pass before the next
+        input takes place, and the <b><font color="#990000">State</font></b> is the
+        value of the input expected.
+    </p>
+
+    <p>
+        You can specify that the first step of the sequence is the program's <b>
+        <font color="#009900">phase</font></b>. The <b> <font color="#009900">
+        phase</font></b> step is accomplished only ones when the simulation starts.
+        All other steps are accomplished one after another, repeatedly.
+    </p>
+
+    <p>
+        To create the Time-Driven Input Simulating Program you have to:
+    </p>
+    <ol>
+        <li><p>
+            specify if the program has phase by checking the box
+            <font color="#009900">Has Phase</font>;
+        </p></li>
+        <li><p>
+            insert into the table desired number of steps (rows);
+        </p></li>
+        <li><p>
+            select one of the steps to define it;
+        </p></li>
+        <li><p>
+            set the amount of ticks for the selected step according to the format described below;
+        </p></li>
+        <li><p>
+            pick up the state value from the <font color="#009900">Allowed States List</font>
+            to set the state value for the step;
+        </p></li>
+        <li><p>
+            repeat items 3 through 5 for all program steps.
+        </p></li>
+    </ol>
+
+    <center>---------- || ----------</center>
+
+    <p>
+        Both, the <b>Time-Driven</b> and the <b>Rule-Driven ISP</b> have the
+        same format for the <b><font color="#009900">Ticks</font></b>
+        column. It is either
+    </p>
+
+    <p>
+    <center><font color="#0000FF">XXX</font></center>
+    or,
+    <center><font color="#0000FF">R&nbsp;=&nbsp;XXX</font></center>
+    </p>
+
+    <p>
+        The first format is used to describe that the amount of ticks is defined
+        as a <font color="#009900">constant</font> and
+        <font color="#0000FF">XXX</font> is the value of the constant.
+    </p>
+
+    <p>
+        The second format is used to specify that the amount of ticks is defined
+        as a <font color="#009900">random number</font> and <font
+            color="#0000FF">XXX</font> is that number's range.
+    </p>
+
+    <p>
+        The reasonable interval for value <font color="#0000FF">XXX</font> is established as:
+    </p>
+
+    <p>
+    <center> 0&lt;<font color="#0000FF">XXX</font>&lt;=999.</center>
+    </p>
+
+    <p>
+        Entering anything other then format allows is considered as an
+        error, and causes the table cell is
+        highlighted in red. The error character is placed in brackets, e.g.
+        <font color="#CC0000">R/34[A],</font> and, the error message dialog box
+        springs up informing you that the wrong input was made. When the box is closed,
+        the character is automatically deleted from the editor.
+    </p>
+</blockquote>
+</body>
+</html>

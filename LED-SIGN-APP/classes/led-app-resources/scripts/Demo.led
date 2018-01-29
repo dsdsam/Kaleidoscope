@@ -1,0 +1,104 @@
+!! The Demo script
+Do
+   Do
+      ScrollLeft delay=30 startspace=20 endspace=20 text=Welcome to my sign
+   Repeat times=2
+
+   ScrollLeft delay=30 clear=true
+
+   ScrollDown delay=20 center=true text=Here we GO!!!!
+   Sleep delay=1500
+   
+   Appear center=true text=9
+   Sleep delay=50
+   Appear center=true text=8
+   Sleep delay=50
+   Appear center=true text=7
+   Sleep delay=50
+   Appear center=true text=6
+   Sleep delay=50
+   Appear center=true text=5
+   Sleep delay=50
+   Appear center=true text=4
+   Sleep delay=50
+   Appear center=true text=3
+   Sleep delay=50
+   Appear center=true text=2
+   Sleep delay=50
+   Appear center=true text=1
+   Sleep delay=50
+   
+   Pixel delay=10 pixels=30 center=true text=Check it out!!
+   Sleep delay=1500
+
+   OverRight delay=30 center=true text=LED Sign!!!
+   
+   Blink delay=500 times=3
+   Sleep delay=500
+
+   OverLeft delay=30 center=true text=Fully configurable
+   Sleep delay=1000
+
+   ScrollDown delay=30 center=true text=Script controlled
+   Sleep delay=1000
+
+   !! Split a long line...
+   ScrollLeft delay=30 endspace=3 text=This sign can display messages just like
+   ScrollLeft delay=30 startspace=0 endspace=3 text=the real LED signs that you typically see
+   ScrollLeft delay=30 startspace=0 endspace=0 text=at airport terminals and the like.
+   ScrollLeft delay=30 clear=true
+
+   OverUp delay=30 center=true text=What?
+   Sleep delay=1000
+
+   OverDown delay=30 center=true text=Don't like red?
+   Sleep delay=1000
+
+   ScrollRight delay=30 center=true text=then how 'bout
+   Sleep delay=1000
+
+   Pixel delay=10 pixels=30 center=true text=C\oo\yl\go\br\ps
+   Sleep delay=1000
+   
+   !! I'm just splitting up a really long line here
+   ScrollLeft delay=30 text=This sign can also do c\oo\yl\go\br\ps \ras \yyou \bhave \gjust \oseen.
+   ScrollLeft delay=30 text=I \blike \oit \y:-)
+
+   ScrollLeft delay=30 clear=true
+   
+   ScrollLeft delay=30 endspace=50 text=This sign can do 11 different transitions including:
+   ScrollLeft delay=30 clear=true
+   OverRight delay=30 center=true text=OverRight
+   OverLeft delay=30 center=true text=OverLeft
+   Sleep delay=500
+   OverUp delay=30 center=true text=OverUp
+   Sleep delay=500
+   OverDown delay=30 center=true text=OverDown
+   Sleep delay=500
+   OverCenter delay=30 center=true text=OverCenter
+   Sleep delay=300
+   Pixel delay=20 pixels=15 center=true text=Pixel in
+   Sleep delay=800
+   Appear center=true text=Appear
+   Sleep delay=1000
+   ScrollLeft delay=30 center=true text=ScrollLeft
+   ScrollRight delay=30 center=true text=ScrollRight
+   Sleep delay=500
+   ScrollUp delay=30 center=true text=ScrollUp
+   Sleep delay=500
+   ScrollDown delay=30 center=true text=ScrollDown
+   Sleep delay=500
+   ScrollCenter delay=30 center=true text=ScrollCenter
+   Sleep delay=500
+   Appear center=true text=And...
+   Sleep delay=800
+   Appear center=true text=Blink
+   Blink delay=400 times=3
+   Sleep delay=500
+   ScrollDown delay=70 center=true text=THE END
+   Sleep delay=2000
+
+   Pixel delay=5 pixels=7 clear=true
+
+!! repeat infinitely
+Repeat times=-1

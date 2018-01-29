@@ -1,0 +1,12 @@
+!! An simple example script
+Do
+   !! This is a comment
+
+   ScrollUp center=true text=Hello
+   Sleep delay=1000
+   
+   ScrollLeft delay=30 center=true text=This is a test.
+   Sleep delay=1500
+   
+!! repeat infinitely
+Repeat times=-1

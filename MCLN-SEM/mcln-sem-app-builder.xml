@@ -1,0 +1,255 @@
+<project name="mcln-sem-app-builder" basedir="." default="create-deployment-zip-files">
+
+    <!--  src directories -->
+    <!--<property name="adf.src.dir" value="..\ADF\src"/>-->
+    <!--<property name="adf-csys-view.src.dir" value="..\ADF-CSYS-VIEW\src"/>-->
+    <!--<property name="vw.src.dir" value="..\VECTOR-WORKS\src"/>-->
+    <!--<property name="mathematica.src.dir" value="..\MATHEMATICA\src"/>-->
+    <!--<property name="mcln.model.src.dir" value="..\MCLN-MODEL\src"/>-->
+    <!--<property name="mcln.view.src.dir" value="..\MCLN-VIEW\src"/>-->
+    <!--<property name="sem-mcln.src.dir" value="src"/>-->
+
+    <!-- class directories -->
+    <property name="adf.classes.dir" value="..\ADF\classes"/>
+    <property name="adf.utils.classes.dir" value="..\ADF-UTILS\classes"/>
+    <property name="adf.ui.classes.dir" value="..\ADF-UI\classes"/>
+    <property name="adf-csys-view.classes.dir" value="..\ADF-CSYS-VIEW\classes"/>
+    <property name="vw.classes.dir" value="..\VECTOR-WORKS\classes"/>
+    <property name="mathematics.classes.dir" value="..\MATHEMATICS\classes"/>
+    <property name="mcln.model.classes.dir" value="..\MCLN-MODEL\classes"/>
+    <property name="mcln.view.classes.dir" value="..\MCLN-VIEW\classes"/>
+    <property name="led.sign.classes.dir" value="..\LED-SIGN-APP\classes"/>
+    <property name="sem-mcln.classes.dir" value="classes"/>
+
+    <property name="main-class" value="sem.app.SEMApp"/>
+
+    <!--build version-->
+    <property name="sem-build-version" value="0.0.0"/>
+
+    <!--build directories-->
+    <property name="ant.app.build.area" value="..\..\ANT-APP-BUILD-AREA"/>
+    <property name="sem-mcln.dir" value="${ant.app.build.area}/MCLN-SEM"/>
+    <property name="mcln-sem.release.dir" value="${ant.app.build.area}/MCLN-SEM-RELEASE"/>
+    <property name="build.dir" value="${sem-mcln.dir}/build"/>
+    <property name="dir.build.classes" value="${build.dir}/classes"/>
+    <property name="dir.build.jar" value="${build.dir}/jar"/>
+
+    <property name="deployment.jre.dir" value="..\..\ANT-DEPLOYMENT-JRE\"/>
+    <property name="deployment.resources.dir" value="..\ANT-DEPLOYMENT-RESOURCES\"/>
+
+    <property name="sem-win-app" value="sem-win-app"/>
+    <property name="sem-mac-app" value="sem-mac-app"/>
+    <property name="sem.win.deployment.dir"
+              value="${sem-mcln.dir}/Deployment-Package-Win/${sem-win-app}-${sem-build-version}"/>
+    <property name="sem.mac.deployment.dir"
+              value="${sem-mcln.dir}/Deployment-Package-Mac/${sem-mac-app}-${sem-build-version}"/>
+    <property name="deployment.package.win.dir" value="${sem-mcln.dir}/Deployment-Package-Win"/>
+    <property name="deployment.package.mac.dir" value="${sem-mcln.dir}/Deployment-Package-Mac"/>
+    <property name="sem.win.app.jar.name" value="${sem-win-app}"/>
+    <property name="sem.mac.app.jar.name" value="${sem-mac-app}"/>
+
+    <property name="sem-win" value="sem-win"/>
+    <property name="sem-mac" value="sem-mac"/>
+    <property name="deployment.win.name" value="${sem-win}"/>
+    <property name="deployment.mac.name" value="${sem-mac}"/>
+
+    <target name="clean">
+        <delete dir="${sem-mcln.dir}"/>
+    </target>
+
+
+    <target name="copy-classes" depends="clean">
+        <mkdir dir="${dir.build.classes}"/>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${adf.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${adf.utils.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${adf.ui.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${adf-csys-view.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${mcln.model.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${mcln.view.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${vw.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${mathematics.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${mcln.model.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${sem-mcln.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${led.sign.classes.dir}"/>
+        </copy>
+
+    </target>
+
+
+    <target name="win-jar" depends="copy-classes">
+        <mkdir dir="${dir.build.jar}"/>
+        <!-- run the ant timestamp task -->
+        <tstamp>
+            <format property="TODAY" pattern="MMM dd yyyy HH:mm"/>
+        </tstamp>
+        <jar destfile="${dir.build.jar}/${sem.win.app.jar.name}.jar" basedir="${dir.build.classes}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Application-Version" value="${sem-build-version}"/>
+                <attribute name="Built-Date" value="${TODAY}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="mac-jar" depends="copy-classes">
+        <mkdir dir="${dir.build.jar}"/>
+        <!-- run the ant timestamp task -->
+        <tstamp>
+            <format property="TODAY" pattern="MMM dd yyyy HH:mm"/>
+        </tstamp>
+        <jar destfile="${dir.build.jar}/${sem.mac.app.jar.name}.jar" basedir="${dir.build.classes}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Application-Version" value="${sem-build-version}"/>
+                <attribute name="Built-Date" value="${TODAY}"/>
+            </manifest>
+        </jar>
+    </target>
+
+
+    <!--<target name="run-jar-from-build-dir" depends="jar">-->
+    <!--<java fork="true" classname="${main-class}">-->
+    <!--<classpath>-->
+    <!--<path location="${dir.build.jar}/${ant.project.name}.jar"/>-->
+    <!--</classpath>-->
+    <!--</java>-->
+    <!--</target>-->
+
+
+    <target name="build-win-deployment-package" depends="win-jar">
+        <mkdir dir="${sem.win.deployment.dir}"/>
+        <copy toDir="${sem.win.deployment.dir}">
+            <fileset dir="${deployment.jre.dir}/A-JRE"/>
+        </copy>
+        <copy file="${deployment.resources.dir}/SEM/start-sem-app.bat" toDir="${sem.win.deployment.dir}"/>
+        <copy file="${dir.build.jar}/${sem.win.app.jar.name}.jar" toDir="${sem.win.deployment.dir}"/>
+    </target>
+
+
+    <target name="build-mac-deployment-package" depends="mac-jar">
+        <mkdir dir="${sem.mac.deployment.dir}"/>
+        <copy file="${dir.build.jar}/${sem.mac.app.jar.name}.jar" toDir="${sem.mac.deployment.dir}"/>
+        <copy file="${deployment.resources.dir}/SEM/start-sem-app.sh" toDir="${sem.mac.deployment.dir}"/>
+        <copy file="${deployment.resources.dir}/SEM/start-sem-app.command" toDir="${sem.mac.deployment.dir}"/>
+    </target>
+
+
+    <!--<target name="run-jar-from-deploument-package" depends="jar">-->
+    <!--<java fork="true" classname="${main-class}">-->
+    <!--<classpath>-->
+    <!--<path location="${deployment.package.dir}/${ant.project.name}.jar"/>-->
+    <!--</classpath>-->
+    <!--</java>-->
+    <!--</target>-->
+
+
+    <!--<target name="create-deployment-jar" depends="build-deployment-package">-->
+    <!--<zip destfile="${sem-mcln.dir}/${deployment.jar.name}.zip" basedir="${deployment.package.dir}"/>-->
+    <!--</target>-->
+
+    <!--Win-->
+    <target name="create-win-deployment-zip" depends="build-win-deployment-package">
+        <zip destfile="${sem-mcln.dir}/${deployment.win.name}.zip" basedir="${deployment.package.win.dir}"/>
+    </target>
+
+    <!--Mac-->
+    <target name="create-mac-deployment-zip" depends="build-mac-deployment-package">
+        <zip destfile="${sem-mcln.dir}/${deployment.mac.name}.zip" basedir="${deployment.package.mac.dir}"/>
+    </target>
+
+    <target name="create-deployment-zip-files" depends="create-win-deployment-zip,create-mac-deployment-zip ">
+    </target>
+
+    <!--================   R e l e a s e   ================================-->
+
+    <target name="jars" depends="copy-classes">
+
+        <mkdir dir="${dir.build.jar}"/>
+
+        <!--Making Applivation version built number-->
+        <property name="version.num" value="2.1."/>
+        <buildnumber file="sem-build.num"/>
+        <property name="release-app-version" value="${version.num}${build.number}"/>
+
+        <!-- run the ant timestamp task -->
+        <tstamp>
+            <format property="TODAY" pattern="MMM dd yyyy HH:mm"/>
+        </tstamp>
+
+        <!--win-->
+        <jar destfile="${dir.build.jar}/${sem.win.app.jar.name}.jar" basedir="${dir.build.classes}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Application-Version" value="${release-app-version}"/>
+                <attribute name="Built-Date" value="${TODAY}"/>
+            </manifest>
+        </jar>
+
+        <!--mac-->
+        <jar destfile="${dir.build.jar}/${sem.mac.app.jar.name}.jar" basedir="${dir.build.classes}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Application-Version" value="${release-app-version}"/>
+                <attribute name="Built-Date" value="${TODAY}"/>
+            </manifest>
+        </jar>
+    </target>
+
+
+    <target name="create-release-zip-files" depends="jars">
+
+        <property name="sem.win.release.dir"
+                  value="${sem-mcln.dir}/Deployment-Package-Win/${sem-win-app}-${release-app-version}"/>
+        <property name="sem.mac.release.dir"
+                  value="${sem-mcln.dir}/Deployment-Package-Mac/${sem-mac-app}-${release-app-version}"/>
+
+        <mkdir dir="${sem.win.release.dir}"/>
+        <copy toDir="${sem.win.release.dir}">
+            <fileset dir="${deployment.jre.dir}/A-JRE"/>
+        </copy>
+        <copy file="${deployment.resources.dir}/SEM/start-sem-app.bat" toDir="${sem.win.release.dir}"/>
+        <copy file="${dir.build.jar}/${sem.win.app.jar.name}.jar" toDir="${sem.win.release.dir}"/>
+
+        <mkdir dir="${sem.mac.release.dir}"/>
+        <copy file="${dir.build.jar}/${sem.mac.app.jar.name}.jar" toDir="${sem.mac.release.dir}"/>
+        <copy file="${deployment.resources.dir}/SEM/start-sem-app.sh" toDir="${sem.mac.release.dir}"/>
+        <copy file="${deployment.resources.dir}/SEM/start-sem-app.command" toDir="${sem.mac.release.dir}"/>
+
+        <zip destfile="${mcln-sem.release.dir}/${deployment.win.name}.zip" basedir="${deployment.package.win.dir}"/>
+        <zip destfile="${mcln-sem.release.dir}/${deployment.mac.name}.zip" basedir="${deployment.package.mac.dir}"/>
+
+    </target>
+
+</project>

@@ -1,0 +1,24 @@
+!! The Demo script
+Do
+   Do
+   Appear center=true text=Appear
+   Sleep delay=1000
+   Sleep delay=500
+   ScrollUp delay=2000 center=true text=ScrollUp
+   Sleep delay=500
+   ScrollDown delay=30 center=true text=ScrollDown
+   Sleep delay=500
+   ScrollCenter delay=30 center=true text=ScrollCenter
+   Sleep delay=500
+   Appear center=true text=And...
+   Sleep delay=800
+   Appear center=true text=Blink
+   Blink delay=400 times=3
+   Sleep delay=500
+   ScrollUp delay=70 center=true text=THE END
+   Sleep delay=1000
+
+   Pixel delay=40 pixels=7 clear=true
+
+!! repeat infinitely
+Repeat times=-1

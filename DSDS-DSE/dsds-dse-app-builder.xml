@@ -1,0 +1,252 @@
+<project name="dsds-dse-app-builder" basedir="." default="create-deployment-zip-files">
+
+    <!--  src directories -->
+    <!--<property name="adf.src.dir" value="..\ADF\src"/>-->
+    <!--<property name="adf-csys-view.src.dir" value="..\ADF-CSYS-VIEW\src"/>-->
+    <!--<property name="vw.src.dir" value="..\VECTOR-WORKS\src"/>-->
+    <!--<property name="mathematica.src.dir" value="..\MATHEMATICA\src"/>-->
+    <!--<property name="mcln-model.src.dir" value="..\MCLN-MODEL\src"/>-->
+    <!--<property name="dsdsse.src.dir" value="src"/>-->
+
+    <!-- class directories -->
+    <property name="adf.utils.classes.dir" value="..\ADF-UTILS\classes"/>
+    <property name="adf.classes.dir" value="..\ADF\classes"/>
+    <property name="adf.ui.classes.dir" value="..\ADF-UI\classes"/>
+    <property name="adf-csys-view.classes.dir" value="..\ADF-CSYS-VIEW\classes"/>
+    <property name="vw.classes.dir" value="..\VECTOR-WORKS\classes"/>
+    <property name="mathematics.classes.dir" value="..\MATHEMATICS\classes"/>
+    <property name="mcln-model.classes.dir" value="..\MCLN-MODEL\classes"/>
+    <property name="dsdsse.classes.dir" value="classes"/>
+
+    <property name="main-class" value="dsdsse.app.DSDSSEApp"/>
+
+    <property name="dsdsse-build-version" value="0.0.0"/>
+
+    <!--build directories-->
+    <property name="ant.app.build.area" value="..\..\ANT-APP-BUILD-AREA"/>
+    <property name="dsdsse.dir" value="${ant.app.build.area}/DSDSSE"/>
+    <property name="dsdsse.release.dir" value="${ant.app.build.area}/DSDSSE-RELEASE"/>
+    <property name="build.dir" value="${dsdsse.dir}/build"/>
+    <property name="dir.build.classes" value="${build.dir}/classes"/>
+    <property name="dir.build.jar" value="${build.dir}/jar"/>
+
+    <property name="deployment.jre.dir" value="..\..\ANT-DEPLOYMENT-JRE\"/>
+    <property name="deployment.resources.dir" value="..\ANT-DEPLOYMENT-RESOURCES\"/>
+
+    <property name="dsds-dse-win-app" value="dsds-dse-win-app"/>
+    <property name="dsds-dse-mac-app" value="dsds-dse-mac-app"/>
+    <property name="dsdsse.win.deployment.dir"
+              value="${dsdsse.dir}/Deployment-Package-Win/${dsds-dse-win-app}-${dsdsse-build-version}"/>
+    <property name="dsdsse.mac.deployment.dir"
+              value="${dsdsse.dir}/Deployment-Package-Mac/${dsds-dse-mac-app}-${dsdsse-build-version}"/>
+    <property name="deployment.package.win.dir" value="${dsdsse.dir}/Deployment-Package-Win"/>
+    <property name="deployment.package.mac.dir" value="${dsdsse.dir}/Deployment-Package-Mac"/>
+    <property name="dsdsse.win.app.jar.name" value="${dsds-dse-win-app}"/>
+    <property name="dsdsse.mac.app.jar.name" value="${dsds-dse-mac-app}"/>
+
+    <property name="dsds-dse-win" value="dsds-dse-win"/>
+    <property name="dsds-dse-mac" value="dsds-dse-mac"/>
+    <property name="deployment.win.name" value="${dsds-dse-win}"/>
+    <property name="deployment.mac.name" value="${dsds-dse-mac}"/>
+
+    <target name="clean">
+        <delete dir="${dsdsse.dir}"/>
+    </target>
+
+    <target name="copyclasses" depends="clean">
+        <mkdir dir="${dir.build.classes}"/>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${adf.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${adf.utils.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${adf.ui.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${adf-csys-view.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${vw.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${mathematics.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${mcln-model.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${dsdsse.classes.dir}"/>
+        </copy>
+
+    </target>
+
+    <target name="win-jar" depends="copyclasses">
+        <mkdir dir="${dir.build.jar}"/>
+        <!-- run the ant timestamp task -->
+        <tstamp>
+            <format property="TODAY" pattern="MMM dd yyyy HH:mm"/>
+        </tstamp>
+        <jar destfile="${dir.build.jar}/${dsdsse.win.app.jar.name}.jar" basedir="${dir.build.classes}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Application-Version" value="${dsdsse-build-version}"/>
+                <attribute name="Built-Date" value="${TODAY}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="mac-jar" depends="copyclasses">
+        <mkdir dir="${dir.build.jar}"/>
+        <!-- run the ant timestamp task -->
+        <tstamp>
+            <format property="TODAY" pattern="MMM dd yyyy HH:mm"/>
+        </tstamp>
+        <jar destfile="${dir.build.jar}/${dsdsse.mac.app.jar.name}.jar" basedir="${dir.build.classes}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Application-Version" value="${dsdsse-build-version}"/>
+                <attribute name="Built-Date" value="${TODAY}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!--<target name="run-jar-from-build-dir" depends="jar">-->
+    <!--<java fork="true" classname="${main-class}">-->
+    <!--<classpath>-->
+    <!--<path location="${dir.build.jar}/${ant.project.name}.jar"/>-->
+    <!--</classpath>-->
+    <!--</java>-->
+    <!--</target>-->
+
+
+    <target name="build-win-deployment-package" depends="win-jar">
+        <mkdir dir="${dsdsse.win.deployment.dir}"/>
+        <copy toDir="${dsdsse.win.deployment.dir}">
+            <fileset dir="${deployment.jre.dir}/A-JRE"/>
+        </copy>
+        <copy toDir="${dsdsse.win.deployment.dir}/Mcln Project Storage">
+            <fileset dir="${deployment.resources.dir}/Mcln Project Storage"/>
+        </copy>
+        <copy file="${dir.build.jar}/${dsdsse.win.app.jar.name}.jar" toDir="${dsdsse.win.deployment.dir}"/>
+        <copy file="${deployment.resources.dir}/DSDSSE/start-dsds-dse.bat" toDir="${dsdsse.win.deployment.dir}"/>
+    </target>
+
+    <target name="build-mac-deployment-package" depends="mac-jar">
+        <mkdir dir="${dsdsse.mac.deployment.dir}"/>
+        <copy toDir="${dsdsse.mac.deployment.dir}/Mcln Project Storage">
+            <fileset dir="${deployment.resources.dir}/Mcln Project Storage"/>
+        </copy>
+        <copy file="${dir.build.jar}/${dsdsse.mac.app.jar.name}.jar" toDir="${dsdsse.mac.deployment.dir}"/>
+        <copy file="${deployment.resources.dir}/DSDSSE/start-dsds-dse.sh" toDir="${dsdsse.mac.deployment.dir}"/>
+        <copy file="${deployment.resources.dir}/DSDSSE/start-dsds-dse.command" toDir="${dsdsse.mac.deployment.dir}"/>
+    </target>
+
+
+    <!--<target name="run-jar-from-deployment-package" depends="jar">-->
+    <!--<java fork="true" classname="${main-class}">-->
+    <!--<classpath>-->
+    <!--<path location="${deployment.package.dir}/${ant.project.name}.jar"/>-->
+    <!--</classpath>-->
+    <!--</java>-->
+    <!--</target>-->
+
+
+    <target name="create-win-deployment-zip" depends="build-win-deployment-package">
+        <zip destfile="${dsdsse.dir}/${deployment.win.name}.zip" basedir="${deployment.package.win.dir}"/>
+    </target>
+
+    <target name="create-mac-deployment-zip" depends="build-mac-deployment-package">
+        <zip destfile="${dsdsse.dir}/${deployment.mac.name}.zip" basedir="${deployment.package.mac.dir}"/>
+    </target>
+
+    <!--<target name="apple-package" description="Use the Task"  >-->
+    <!--<taskdef name="AppBuilder" classname="com.ultramixer.jarbundler.JarBundler" classpath="jarbundler-core-3.3.0.jar"/>-->
+    <!--<AppBuilder dir="result" name="dsds-dse-apple" jar="AYZApp.jar"-->
+    <!--version="2.0 b 3"-->
+    <!--mainclass="dsdsse.app.DSDSApp"-->
+    <!--jvmversion="1.8.112+"-->
+    <!--vmoptions="-Xmx256m"-->
+    <!--/>-->
+    <!--</target>-->
+
+    <target name="create-deployment-zip-files" depends="create-win-deployment-zip,create-mac-deployment-zip ">
+    </target>
+
+    <!--================   R e l e a s e   ================================-->
+
+    <target name="jars" depends="copyclasses">
+
+        <mkdir dir="${dir.build.jar}"/>
+
+        <!--Making Applivation version built number-->
+        <property name="version.num" value="2.1."/>
+        <buildnumber file="dse-build.num"/>
+        <property name="release-app-version" value="${version.num}${build.number}"/>
+
+        <!-- run the ant timestamp task -->
+        <tstamp>
+            <format property="TODAY" pattern="MMM dd yyyy HH:mm"/>
+        </tstamp>
+
+        <!--win-->
+        <jar destfile="${dir.build.jar}/${dsdsse.win.app.jar.name}.jar" basedir="${dir.build.classes}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Application-Version" value="${release-app-version}"/>
+                <attribute name="Built-Date" value="${TODAY}"/>
+            </manifest>
+        </jar>
+
+        <!--mac-->
+        <jar destfile="${dir.build.jar}/${dsdsse.mac.app.jar.name}.jar" basedir="${dir.build.classes}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+                <attribute name="Application-Version" value="${release-app-version}"/>
+                <attribute name="Built-Date" value="${TODAY}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="create-release-zip-files" depends="jars">
+
+        <property name="dsdsse.win.release.dir"
+                  value="${dsdsse.dir}/Deployment-Package-Win/${dsds-dse-win-app}-${release-app-version}"/>
+        <property name="dsdsse.mac.release.dir"
+                  value="${dsdsse.dir}/Deployment-Package-Mac/${dsds-dse-mac-app}-${release-app-version}"/>
+
+        <!--win-->
+        <mkdir dir="${dsdsse.win.release.dir}"/>
+        <copy toDir="${dsdsse.win.release.dir}">
+            <fileset dir="${deployment.jre.dir}/A-JRE"/>
+        </copy>
+        <copy toDir="${dsdsse.win.release.dir}/Mcln Project Storage">
+            <fileset dir="${deployment.resources.dir}/Mcln Project Storage"/>
+        </copy>
+        <copy file="${dir.build.jar}/${dsdsse.win.app.jar.name}.jar" toDir="${dsdsse.win.release.dir}"/>
+        <copy file="${deployment.resources.dir}/DSDSSE/start-dsds-dse.bat" toDir="${dsdsse.win.release.dir}"/>
+
+        <!--mac -->
+        <mkdir dir="${dsdsse.mac.release.dir}"/>
+        <copy toDir="${dsdsse.mac.release.dir}/Mcln Project Storage">
+            <fileset dir="${deployment.resources.dir}/Mcln Project Storage"/>
+        </copy>
+        <copy file="${dir.build.jar}/${dsdsse.mac.app.jar.name}.jar" toDir="${dsdsse.mac.release.dir}"/>
+        <copy file="${deployment.resources.dir}/DSDSSE/start-dsds-dse.sh" toDir="${dsdsse.mac.release.dir}"/>
+        <copy file="${deployment.resources.dir}/DSDSSE/start-dsds-dse.command" toDir="${dsdsse.mac.release.dir}"/>
+
+        <zip destfile="${dsdsse.release.dir}/${deployment.win.name}.zip" basedir="${deployment.package.win.dir}"/>
+        <zip destfile="${dsdsse.release.dir}/${deployment.mac.name}.zip" basedir="${deployment.package.mac.dir}"/>
+
+    </target>
+
+</project>

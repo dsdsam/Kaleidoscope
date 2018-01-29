@@ -1,0 +1,231 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+
+<!--
+    file: what-is-graphical-editor.html
+-->
+
+<html>
+
+<style type="text/css">
+
+    .main-space{
+    margin-left: 50;
+    margin-right: 50;
+    }
+
+    .header{
+    margin-left: auto;
+    margin-right: auto;
+    font-size:12px;
+    font-weight: bold;
+    color:#780000;
+    text-align:center;
+    }
+
+    .content{
+    margin-left: auto;
+    margin-right: auto;
+    font-size:11px;
+    font-weight: plain;
+    text-align: justify;
+    }
+
+
+</style>
+
+<body text="#404040" bgcolor="#FFFFF7">
+<blockquote>
+
+    <a href="what-is-dsdsse.html"><img src="up.png" ALT="Previous Page" BORDER="0" align="CENTER"></a>
+
+    <div class="header">
+        <p>
+            Menu and Toolbar Commands
+        </p>
+    </div>
+
+
+    <div class="content">
+
+    </div>
+
+    <blockquote><b>When the DDSSE is started the default Project named <font color="#008000">"Proj
+        000"</font> is automatically created.</b>
+
+        <p><b>The <font color="#0000FF">New Proj</font>, <font color="#0000FF">Open</font>,
+            <font color="#0000FF">Save</font>, <font color="#0000FF">Save As</font>,
+            <font color="#0000FF">Erase Proj</font>, <font color="#0000FF">Print</font>,
+            and <font color="#0000FF">Exit</font> operations are used to operate with
+            entire Project.</b>
+
+        <p><b><font color="#0000FF">New Proj:</font></b>
+            <br><b>The New Proj currentOperation removes existing Project and creates new
+                one with default name <font color="#008000">"Proj XXX"</font>, where <font
+                        color="#008000">XXX</font>
+                is the number of projects created in session. The default name of the Project
+                can be changed when it is saved with currentOperation <font color="#0000FF">Save
+                    As</font>.</b>
+
+        <p><b><font color="#0000FF">Open:</font></b>
+            <br><b>The Open currentOperation opens "File/Open" dialog allowing you to find
+                and load the Project from hard drive.</b>
+
+        <p><b><font color="#0000FF">Save:</font></b>
+            <br><b>The Save currentOperation saves the Project on hard drive with its default
+                name and extension "prj".</b>
+
+        <p><b><font color="#0000FF">Save As:</font></b>
+            <br><b>The Save As currentOperation opens "File/Save" dialog allowing you to replace
+                the Project default name and directory with your own.</b>
+
+        <p><b><font color="#0000FF">Erase Proj:</font></b>
+            <br><b>The Erase Proj currentOperation is similar to <font color="#0000FF">New
+                Proj</font> one. It removes all the Models and data from current Project
+                but does not change its name.</b>
+
+        <p><b><font color="#0000FF">Print:</font></b>
+            <br><b>The Print currentOperation prints out the Project on the printer.</b>
+
+        <p><b><font color="#0000FF">Exit:</font></b>
+            <br><b>The Exit currentOperation closes the DDSSE.</b>
+            <br>&nbsp;
+            <br>&nbsp;</blockquote>
+
+    <!-- HOW TO CREATE MODEL -->
+    <h3>
+        <font color="#FF0000">How to create Model.</font></h3>
+
+    <blockquote><b>The Model is created on the basis of Multi-Color Logical
+        Net (MCLNet) formalism.</b>
+
+        <p>
+            <b>When the DDSSE is started the default Model named <font
+                    color="#008000">"Model 000"</font> is automatically set.</b></p>
+
+        <p
+                ><b>Use <font color="#0000FF">New Model</font> menu or toolbar button to set new Model each time
+            when new model creation is started. The new default Model name <font color="#008000">"Model XXX"</font>,
+            where <font color="#008000">XXX</font>
+            is the number of models created in project, is set.</b></p>
+
+        <p><b>Creating the model is straight forward and takes fore simple steps.</b>
+        <ul>
+            <li>
+                <b>First, you create Cells - the elements which represent discrete variables
+                    of the system.</b></li>
+
+            <li>
+                <b>Then you create Junctions - the elements which represent rules that
+                    are governing the Cells state.</b></li>
+
+            <li>
+                <b>As the third step, you connect the Junctions to the Cells and the
+                    Cells to the Junctions with Arcs.</b></li>
+
+            <li>
+                <b>Finally, you set initial state of the Cells and Arcs and save the Project
+                    on your hard drive.</b></li>
+        </ul>
+        <b>That is all.</b>
+
+        <p><b>When operating with Model:</b></p>
+        <ol>
+            <li><p>
+                <b> use left mouse button to indicate new elements location or to
+                    pick up existing one;</b></p></li>
+            <li><p>
+                <b>use right mouse button to bring an element popup menu,
+                    to undo preceding currentOperation step or to quit the currentOperation.
+                </b></p></li>
+        </ol>
+
+    </blockquote>
+
+    <h3>
+        <font color="#FF0000">How to Create Cells.</font></h3>
+
+    <blockquote>
+        <b>To create Cells push the menu or toolbar button "Create
+            Cells" and just pick points on the Project Area of the screen by
+            pressing left mouse button to locate
+            them or right mouse button to remove created Cell or quit the currentOperation.</b>
+    </blockquote>
+
+    <h3>
+        <font color="#FF0000">How to Create Junctions.</font></h3>
+
+    <blockquote><b>There are two ways to create Junction: on the bases of "fragment"
+        and by placing on the screen one of four "oriented" junctions.</b>
+
+        <p><b>To create Junction on the bases of fragment.</b>
+        <ol>
+            <li><p>
+                <b>Pick one of the Junction input Cell, then pick its output Cell. The
+                    Cells get highlighted in magenta.</b></p></li>
+
+            <li><p>
+                <b>Pick the desired location for Junction. Two Arcs connecting selected
+                    Cells with Junction will appear.</b></p></li>
+
+            <li><p>
+                <b>To finish creating the rule create additional Arcs using <a href="#HTCA">"How
+                    to Create Arc"</a> technique.</b></p></li>
+        </ol>
+
+        <b>To create oriented Junctions use one of four "Create Junction" menu
+            or toolbar button allowing to create Vertical, Horizontal, Slanted to
+            the Right and Slanted to the Left Junctions. Push the button with one
+            of appropriate for particular case orientation and pick points on the Project Area of the screen by
+            pressing left mouse button to locate
+            Junction or right mouse button to remove created one or quit the
+            currentOperation. To finish creating the rule create additional Arcs using <a
+                    href="#HTCA">"How to Create Arc"</a> technique.</b>
+
+    </blockquote>
+    <a NAME="HTCA"></a>
+
+    <h3>
+        <font color="#FF0000">How to Create Arc.</font></h3>
+
+    <blockquote>
+        <p><b>The arc is created in rubber bending mode and goes from
+            its input node (a Cell or a Junction) to its output node (a Junction
+            or a Cell) respectively. Pick the input
+            node of the arc and draw the mouse in the desired direction. The arc line
+            will follow the mouse. The shape of the arc may be different and you have
+            choices here.</b></p>
+
+        <ol>
+            <li>
+                <p><b>you can create straight arc by picking up output node right after
+                    the input node was picked and then picking this node again to indicate
+                    that creating is finished.</b></p></li>
+
+            <li>
+                <p>
+                    <b>you may create three point arc by picking up output node right after
+                        the input node was picked and then continuing to move mouse apart from
+                        output Arc. The Arc connecting the nodes will be banding according to current
+                        mouse location. Third pick will finish the Arc creating and the Arc
+                        Knob will be placed at the last point picked.</b></p></li>
+
+            <li>
+                <p>
+                    <b>you may create multi-knot arc which will go through multiple knots
+                        on the screen before it reaches the arc output node. To make that move the mouse
+                        to a position where the knot should be located and press the left mouse button.
+                        When you see the knot created continue moving mouse and creating additional
+                        knots. When all the knots are created pick the output node and then select
+                        one of the knots as a place where the Arc Knob should be placed.</b></p></li>
+        </ol>
+    </blockquote>
+
+    <p align="center">
+        <img SRC="../images/help/red_line.gif" height="2" width="150">
+    </p>
+
+    <a href="what-is-dsdsse.html"><img src="up.png" ALT="Previous Page" BORDER="0" align="CENTER"></a>
+
+</blockquote>
+</body>
+</html>

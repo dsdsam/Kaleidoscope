@@ -1,0 +1,150 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+
+<!--
+    file: what-is-simulating-engine.html
+-->
+
+<html>
+<head>
+
+    <title>The Simulating Engine</title>
+
+    <style type="text/css">
+
+        .header{
+        margin-left: auto;
+        margin-right: auto;
+        font-size:13px;
+        font-weight: bold;
+        color:#780000;
+        text-align:center;
+        }
+
+        .content{
+        margin-left: auto;
+        margin-right: auto;
+        font-size:11px;
+        font-weight: plain;
+        text-align: justify;
+        }
+
+        .link{
+        font-size:11px;
+        }
+
+    </style>
+
+</head>
+<body text="#404040" bgcolor="#FFFFF7">
+<blockquote>
+
+    <a href="what-is-model-creator.html"><img src="prev.png" ALT="Previous Page" BORDER="0" align="CENTER"></a>
+    &nbsp;
+    <a href="what-is-dsdsse.html"><img src="up.png" ALT="Main Page" BORDER="0" align="CENTER"></a>
+    &nbsp;
+    <a href="running-model-examples.html"><img src="next.png" ALT="Next Page" BORDER="0" align="CENTER"></a>
+
+    <div class="header">
+        <p>
+            The Simulating Engine
+        </p>
+    </div>
+
+    <div class="content">
+
+        <p>
+            The Simulation Engine is the DSE component that can simulate developed model behavior over time
+            and represent the simulation steps (ticks) on the screen.
+            It simulates the model behavior by cyclically analyzing the model current state, recognizing current
+            situations and mapping the situations to the dependent on the situations states, that the properties
+            should take at the next to the current moment of time.
+        </p>
+
+        <p>
+            To enable Simulation Engine user sets DSE to Simulation mode by selecting menu item
+            <span style="color:#BB6000; font-weight:bold">Simulation -> Set Simulation Mode</span>.
+        </p>
+
+        <p>
+            The Simulation Engine has four buttons located on the Design Space Toolbar:
+            <span style="color:#007030; font-weight:bold">Start</span>,
+            <span style="color:#007030; font-weight:bold">Stop</span>,
+            <span style="color:#007030; font-weight:bold">Step</span>, and
+            <span style="color:#007030; font-weight:bold">Reset</span>.
+            The
+            <span style="color:#007030; font-weight:bold">Start</span>,
+            <span style="color:#007030; font-weight:bold">Step</span>, and
+            <span style="color:#007030; font-weight:bold">Reset</span>
+            buttons default state is enabled, while state of
+            <span style="color:#007030; font-weight:bold">Stop</span> button is disabled.
+        </p>
+
+        <p>
+            Clicking on
+            <span style="color:#007030; font-weight:bold">Start</span> button starts auto simulation process.
+            This click disables
+            <span style="color:#007030; font-weight:bold">Start</span> and
+            <span style="color:#007030; font-weight:bold">Step</span>
+            buttons while enabling <span style="color:#007030; font-weight:bold">Stop</span> button.
+        </p>
+
+        <p>
+            Clicking on
+            <span style="color:#007030; font-weight:bold">Stop</span>
+            button stops auto simulation process and returns
+            <span style="color:#007030; font-weight:bold">Start</span> and
+            <span style="color:#007030; font-weight:bold">Step</span>
+            buttons back to their enabled state.
+        </p>
+
+        <p>
+            Clicking on
+            <span style="color:#007030; font-weight:bold">Step</span>
+            button executes only one simulation step at a time.
+        </p>
+
+        <p>
+            Clicking on
+            <span style="color:#007030; font-weight:bold">Reset</span>
+            button resets model to its initial state.
+        </p>
+
+        <p>
+            Located below Design Space simulation analysis tools allow user to select all or subset of model Property
+            Nodes and analyse model behavior over time. The Model Current State Panel presents each selected
+            Property Node current state and provides its interpretation in the form of statement that includes
+            property name as the statement's subject and describes the value of the current state as the statement's
+            predicate. The Simulation Trace Log Panel presents selected states history over simulation time.
+            Both panels are updates after each simulation tick in real time.
+        </p>
+
+        <br>
+
+        <div style="  text-align:center;  ">
+            The <span style="color:#BB6000; font-weight:bold">Presentation Shows & Help</span> menu item:
+        </div>
+        <div style=" font-weight: bold;  text-align:center; margin-top: 5;margin-bottom: 5; ">
+            <a class="link" href="Start Simulation Presentation" style="text-decoration:none;">"How to Run Model
+                Simulation"</a>
+        </div>
+        <div style=" text-align:justify;">
+            provides short and self-driven presentation on the process of model simulation.
+        </div>
+
+    </div>
+
+    <p align="center">
+        <img src="red-line.gif" height="2" width="150"/>
+    </p>
+
+    <p>
+        <a href="what-is-model-creator.html"><img src="prev.png" ALT="Previous Page" BORDER="0" align="CENTER"></a>
+        &nbsp;
+        <a href="what-is-dsdsse.html"><img src="up.png" ALT="Main Page" BORDER="0" align="CENTER"></a>
+        &nbsp;
+        <a href="running-model-examples.html"><img src="next.png" ALT="Next Page" BORDER="0" align="CENTER"></a>
+    </p>
+
+</blockquote>
+</body>
+</html>

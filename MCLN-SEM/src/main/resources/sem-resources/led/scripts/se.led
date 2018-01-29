@@ -1,0 +1,42 @@
+!! The Space Exploration Mission script
+Do
+   Appear delay=30  center=true text=
+    
+
+!!   Appear delay=30 center=true text=
+   Sleep delay=1000
+ 
+   ScrollDown delay=10 center=true text=\r!!! Indicative qiotes !!!
+   Sleep delay=2000
+
+!!   Appear delay=0 center=true text=
+!!   Sleep delay=500
+   
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\rEUR.USD \gBid \y1.30645 \gOffer \y1.30659
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\rUSD.JPY \gBid \y83.406 \gOffer \y83.421
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\rEUR.JPY \gBid \y108.967 \gOffer \y108.993
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\rGBP.USD \gBid \y1.30645 \gOffer \y1.30659
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\rEUR.GBP \gBid \y83.406 \gOffer \y83.421
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\rUSD.CHF \gBid \y108.967 \gOffer \y108.993
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\rEUR.CHF \gBid \y108.967 \gOffer \y108.993
+
+
+
+   ScrollLeft delay=30 clear=true
+  
+
+   
+   
+    
+   Sleep delay=2000   
+   Appear delay=30 center=true text=
+
+    
+!! repeat infinitely
+Repeat times=-1

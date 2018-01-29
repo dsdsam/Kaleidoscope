@@ -1,0 +1,77 @@
+!! The Space Exploration Mission script
+Do
+   Appear delay=30  center=true text=
+   Sleep delay=10000
+
+   ScrollDown delay=30 center=true text=\rA t t e n t i o n  !!!
+   Sleep delay=3000
+
+ 
+   ScrollDown delay=30 center=true text=\rTransmission  begins  in  10  seconds  !!!
+   Sleep delay=5000
+   Appear delay=30  center=true text=
+ 
+   
+   !! Sleep delay=500
+
+   OverDown delay=0 center=true text=\y10
+   Sleep delay=30
+   OverDown delay=0 center=true text=\y9
+   Sleep delay=30
+   OverDown delay=0 center=true text=\y8
+   Sleep delay=30
+   OverDown delay=0 center=true text=\y7
+   Sleep delay=30
+   OverDown delay=0 center=true text=\y6
+   Sleep delay=30
+   OverDown delay=0 center=true text=\y5
+   Sleep delay=30
+   OverDown delay=0 center=true text=\y4
+   Sleep delay=30
+   OverDown delay=0 center=true text=\y3
+   Sleep delay=30
+   OverDown delay=0 center=true text=\y2
+   Sleep delay=30
+   OverDown delay=0 center=true text=\y1
+   Sleep delay=30
+   OverDown delay=0 center=true text=\y0
+   Sleep delay=100
+
+!!   Appear delay=30 center=true text=
+   Sleep delay=1000
+ 
+   ScrollDown delay=10 center=true text=\rA t t e n t i o n  !!!
+   Sleep delay=2000
+
+!!   Appear delay=0 center=true text=
+!!   Sleep delay=500
+   
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\r* * *  Space Exploration Mission  * * *
+
+   ScrollLeft delay=10 startspace=10 endspace=10 text=\g \{dd}. \{mm}. \{dn}, \{YY}
+   ScrollLeft delay=10 startspace=10 endspace=10 text=\gTime \{tt} 
+  
+   ScrollLeft delay=10 startspace=10 endspace=10 text=\rTelemetry #
+   ScrollLeft delay=10 startspace=10 endspace=10 text=\gTemperatute:  \y273.16K   \gPressure:  \y678.47 
+   ScrollLeft delay=10 startspace=10 endspace=10 text=\gAlpha:  \y12.56   \gBeta:  \y67.56   \gGamma:  \y1634.36 
+   ScrollLeft delay=30 clear=true
+   Sleep delay=1000
+
+   Appear delay=30 center=true text=
+
+   Sleep delay=2000
+  
+   Pixel delay=10 pixels=10 center=true text=Java is \ccool!
+   Sleep delay=2000
+   Appear delay=30 center=true text=\pF X a l l   i s   c o o l  !!!
+   Sleep delay=2000 
+   Blink delay=4000 times=3
+    
+   Sleep delay=2000   
+   Appear delay=30 center=true text=
+
+   ScrollDown delay=70 center=true text=T\oH\yE \gE\bN\pD
+   Sleep delay=2000   
+
+!! repeat infinitely
+Repeat times=-1

@@ -1,0 +1,58 @@
+!! The Space Exploration Mission script
+Do
+   Appear delay=30  center=true text=
+    
+
+!!   Appear delay=30 center=true text=
+   Sleep delay=1000
+ 
+   ScrollDown delay=10 center=true text=\w!!! Indicative Quotes !!!
+   Sleep delay=2000
+
+!!   Appear delay=0 center=true text=
+!!   Sleep delay=500
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\oEUR.USD \yBid \g1.30645 \yOffer #g1.30659
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\oUSD.JPY \yBid \g83.406  \yOffer \g83.421
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\oEUR.JPY \yBid \g108.967 \yOffer \g108.993
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\oGBP.USD \yBid \g1.30645 \yOffer \g1.30659
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\oEUR.GBP \yBid \g83.406  \yOffer \g83.421
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\oUSD.CHF \yBid \g108.967 \yOffer \g108.993
+
+   ScrollLeft delay=30 startspace=20 endspace=20 text=\oEUR.CHF \yBid \g108.967 \yOffer \g108.993
+
+
+   
+!!   ScrollLeft delay=30 startspace=20 endspace=20 text=\rEUR\p.\rUSD \cBid \g1.30645 \cOffer \g1.30659
+
+!!   ScrollLeft delay=30 startspace=20 endspace=20 text=\rUSD\p.\rJPY \cBid \g83.406 \cOffer \g83.421
+
+!!   ScrollLeft delay=30 startspace=20 endspace=20 text=\rEUR\p.\rJPY \cBid \g108.967 \cOffer \g108.993
+
+!!   ScrollLeft delay=30 startspace=20 endspace=20 text=\rGBP\p.\rUSD \cBid \g1.30645 \cOffer \g1.30659
+
+!!   ScrollLeft delay=30 startspace=20 endspace=20 text=\rEUR\p.\rGBP \cBid \g83.406 \cOffer \g83.421
+
+!!   ScrollLeft delay=30 startspace=20 endspace=20 text=\rUSD\p.\rCHF \cBid \g108.967 \cOffer \g108.993
+
+!!   ScrollLeft delay=30 startspace=20 endspace=20 text=\rEUR\p.\rCHF \cBid \g108.967 \cOffer \g108.993
+
+
+
+   ScrollLeft delay=30 clear=true
+  
+
+   
+   
+    
+   Sleep delay=2000   
+   Appear delay=30 center=true text=
+
+    
+!! repeat infinitely
+Repeat times=-1
