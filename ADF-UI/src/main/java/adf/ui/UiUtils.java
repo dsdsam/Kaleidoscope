@@ -36,7 +36,6 @@ public class UiUtils {
     }
 
     /**
-     *
      * @param top
      * @param left
      * @param bottom
@@ -50,6 +49,17 @@ public class UiUtils {
                                             Color textColor) {
         Border roundedLineBorder = new RoundedLineBorder(lineColor);
         TitledBorder titledBorder = BorderFactory.createTitledBorder(roundedLineBorder, title);
+        titledBorder.setTitleColor(textColor);
+        Border compoundTitledBorder = BorderFactory.createCompoundBorder(titledBorder,
+                BorderFactory.createEmptyBorder(top, left, bottom, right));
+        return compoundTitledBorder;
+    }
+
+    public static Border createTitledBorder(int top, int left, int bottom, int right, Color lineColor, String title,
+                                            Color textColor, int titleJustification, int titlePosition) {
+        Border roundedLineBorder = new RoundedLineBorder(lineColor);
+        TitledBorder titledBorder = BorderFactory.createTitledBorder(roundedLineBorder, title,
+                titleJustification, titlePosition);
         titledBorder.setTitleColor(textColor);
         Border compoundTitledBorder = BorderFactory.createCompoundBorder(titledBorder,
                 BorderFactory.createEmptyBorder(top, left, bottom, right));
