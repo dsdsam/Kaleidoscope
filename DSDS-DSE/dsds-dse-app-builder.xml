@@ -1,4 +1,4 @@
-<project name="dsds-dse-app-builder" basedir="." default="create-deployment-zip-files">
+<project name="dsds-dse-app-builder" basedir="." default="create-release-zip-files">
 
     <!--  src directories -->
     <!--<property name="adf.src.dir" value="..\ADF\src"/>-->

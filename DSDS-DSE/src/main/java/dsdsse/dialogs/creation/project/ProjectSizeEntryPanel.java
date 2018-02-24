@@ -49,12 +49,14 @@ final class ProjectSizeEntryPanel extends JPanel {
         Border widthTextFieldInnerBorder = new EmptyBorder(0, 2, 0, 2);
         Border widthTextFieldBorder = BorderFactory.createCompoundBorder(widthTextFieldBevelBorder, widthTextFieldInnerBorder);
         widthEntryField.setBorder(widthTextFieldBorder);
+        widthEntryField.setHorizontalAlignment(JTextField.RIGHT);
 
         Border heightTextFieldBevelBorder = BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.WHITE, Color.LIGHT_GRAY,
                 Color.GRAY, Color.LIGHT_GRAY);
         Border heightTextFieldInnerBorder = new EmptyBorder(0, 2, 0, 2);
         Border heightTextFieldBorder = BorderFactory.createCompoundBorder(heightTextFieldBevelBorder, heightTextFieldInnerBorder);
         heightEntryField.setBorder(heightTextFieldBorder);
+        heightEntryField.setHorizontalAlignment(JTextField.RIGHT);
 
         initContext();
     }
