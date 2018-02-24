@@ -16,7 +16,17 @@ public class MclnDoubleRectangle {
     private final double width;
     private final double height;
 
-    public MclnDoubleRectangle(double x, double y, double width, double height){
+    public MclnDoubleRectangle() {
+        this(0.0, 0.0, 0.0, 0.0);
+    }
+
+    // Copy constructor
+    public MclnDoubleRectangle(MclnDoubleRectangle mclnDoubleRectangle) {
+        this(mclnDoubleRectangle.getX(), mclnDoubleRectangle.getY(),
+                mclnDoubleRectangle.getWidth(), mclnDoubleRectangle.getHeight());
+    }
+
+    public MclnDoubleRectangle(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -100,5 +110,29 @@ public class MclnDoubleRectangle {
         }
 
 //        reshape((int) x0, (int) y0, (int) x1, (int) y1);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(this instanceof MclnDoubleRectangle)) {
+            return false;
+        }
+        MclnDoubleRectangle otherMclnDoubleRectangle = (MclnDoubleRectangle) other;
+        if (this.getX() != otherMclnDoubleRectangle.getX()) {
+            return false;
+        }
+        if (this.getY() != otherMclnDoubleRectangle.getY()) {
+            return false;
+        }
+        if (this.getWidth() != otherMclnDoubleRectangle.getWidth()) {
+            return false;
+        }
+        if (this.getHeight() != otherMclnDoubleRectangle.getHeight()) {
+            return false;
+        }
+        return true;
     }
 }

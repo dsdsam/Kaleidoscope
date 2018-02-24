@@ -1,13 +1,14 @@
 package dsdsse.designspace.controller;
 
 import dsdsse.app.AppController;
-import dsdsse.app.DsdsseEnvironment;
 import dsdsse.app.AppStateModel;
+import dsdsse.app.DsdsseEnvironment;
 import dsdsse.demo.*;
-import dsdsse.designspace.executor.MclnSimulationController;
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import dsdsse.designspace.DesignSpaceModel;
 import dsdsse.designspace.DesignSpaceView;
+import dsdsse.designspace.executor.MclnSimulationController;
+import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
+import mcln.model.MclnDoubleRectangle;
 import mcln.model.MclnModel;
 import mcln.model.MclnProject;
 
@@ -27,23 +28,8 @@ public class DesignSpaceController {
     }
 
     //
-    //   Creation, Saving and Retrieval of MCLN Projects
+    //   Creating, Saving and Retrieving MCLN Projects
     //
-
-    /**
-     * Called from App Controller on New MCLN Project menu command
-     */
-//    public MclnProject onNewMclnProject() {
-//        System.out.println("DesignSpaceController.onMewMclnProject");
-//        MclnProject mclnProject = DesignSpaceModel.getInstance().onCreateNewEmptyMclnProject();
-//        DesignSpaceModel.getInstance().resetMclnProject(mclnProject);
-//        return mclnProject;
-//    }
-
-//    public void onRenameMclnProject() {
-//        System.out.println("DesignSpaceController.onRenameMclnProject");
-//         DesignSpaceModel.getInstance().onRenameMclnProject();
-//    }
 
     /**
      * Called to retrieve MCLN Project from Store
@@ -106,9 +92,10 @@ public class DesignSpaceController {
      */
     private void onCreateBasicBlockExampleProject(String projectName) {
 
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(-15, 15, 30, 30);
         MclnModel mclnModel = MclnModel.createInstance(AppController.DEMO_PROJECT_BASIC_BLOCK,
-                "MG01", -15, 15, 30, 30);
-        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnModel);
+                "MG01", mclnDoubleRectangle);
+        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnDoubleRectangle, mclnModel);
 
         DesignSpaceModel.getInstance().resetMclnProject(mclnProject);
 
@@ -128,12 +115,10 @@ public class DesignSpaceController {
         double width = 2 * Math.abs(x);
         double height = 2 * Math.abs(y);
 
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(x, y, width, height);
         MclnModel mclnModel = MclnModel.createInstance(AppController.DEMO_PROJECT_LOGICAL_BLOCKS,
-                "MG01", x, y, width, height);
-
-//        MclnModel mclnModel = MclnModel.createInstance(AppStateModel.DEMO_PROJECT_LOGICAL_BLOCKS,
-//                "MG01", -50, -30, 100, 60);
-        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnModel);
+                "MG01", mclnDoubleRectangle);
+        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnDoubleRectangle, mclnModel);
 
         DesignSpaceModel.getInstance().resetMclnProject(mclnProject);
 
@@ -148,9 +133,10 @@ public class DesignSpaceController {
      */
     private void onCreateTwoRulesExampleProject(String projectName) {
 
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(-20, 20, 40, 40);
         MclnModel mclnModel = MclnModel.createInstance(AppController.DEMO_PROJECT_TWO_RULES,
-                "MG01", -20, 20, 40, 40);
-        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnModel);
+                "MG01", mclnDoubleRectangle);
+        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnDoubleRectangle, mclnModel);
 
         DesignSpaceModel.getInstance().resetMclnProject(mclnProject);
 
@@ -167,9 +153,10 @@ public class DesignSpaceController {
      */
     private void onCreateThreeRulesExampleProject(String projectName) {
 
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(-20, 20, 40, 40);
         MclnModel mclnModel = MclnModel.createInstance(AppController.DEMO_PROJECT_THREE_RULES,
-                "MG01", -20, 20, 40, 40);
-        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnModel);
+                "MG01", mclnDoubleRectangle);
+        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnDoubleRectangle, mclnModel);
 
         DesignSpaceModel.getInstance().resetMclnProject(mclnProject);
 
@@ -184,9 +171,10 @@ public class DesignSpaceController {
      */
     private void onCreateTriggerExampleProject(String projectName) {
 
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(-20, 20, 40, 40);
         MclnModel mclnModel = MclnModel.createInstance(AppController.DEMO_PROJECT_TRIGGER,
-                "MG01", -20, 20, 40, 40);
-        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnModel);
+                "MG01", mclnDoubleRectangle);
+        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnDoubleRectangle, mclnModel);
 
         DesignSpaceModel.getInstance().resetMclnProject(mclnProject);
 
@@ -201,9 +189,10 @@ public class DesignSpaceController {
      */
     private void createOneStatementProcessExampleProject(String projectName) {
 
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(-50, 30, 100, 60);
         MclnModel mclnModel = MclnModel.createInstance(AppController.DEMO_SINGLE_PROPERTY,
-                "MG01", -50, 30, 100, 60);
-        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnModel);
+                "MG01", mclnDoubleRectangle);
+        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnDoubleRectangle, mclnModel);
 
         DesignSpaceModel.getInstance().resetMclnProject(mclnProject);
 
@@ -215,9 +204,10 @@ public class DesignSpaceController {
 
     private void createTernaryCounterExampleProject(String projectName) {
 
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(-50, 30, 100, 60);
         MclnModel mclnModel = MclnModel.createInstance(AppController.DEMO_TERNARY_COUNTER,
-                "MG01", -50, 30, 100, 60);
-        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnModel);
+                "MG01", mclnDoubleRectangle);
+        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnDoubleRectangle, mclnModel);
 
         DesignSpaceModel.getInstance().resetMclnProject(mclnProject);
 
@@ -234,9 +224,10 @@ public class DesignSpaceController {
      */
     private void onCreateMutualExclusionExampleProject(String projectName) {
 
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(-30., 15., 60, 30);
         MclnModel mclnModel = MclnModel.createInstance(AppController.DEMO_PROJECT_MUTUAL_EXCLUSION,
-                "MG01", -30., 15., 60, 30);
-        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnModel);
+                "MG01", mclnDoubleRectangle);
+        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnDoubleRectangle, mclnModel);
         if (animatedCreation) {
             DesignSpaceModel.getInstance().resetMclnProject(mclnProject);
             MclnGraphModel mclnGraphModel = DsdsseEnvironment.getMclnGraphModel();
@@ -259,9 +250,10 @@ public class DesignSpaceController {
         double y = 25;
         double width = 2 * Math.abs(x);
         double height = 2 * Math.abs(y);
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(x, y, width, height);
         MclnModel mclnModel = MclnModel.createInstance(AppController.DEMO_PROJECT_DINING_PHILOSOPHERS,
-                "MG01", x, y, width, height);
-        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnModel);
+                "MG01", mclnDoubleRectangle);
+        MclnProject mclnProject = MclnProject.createDemoMclnProject(projectName, mclnDoubleRectangle, mclnModel);
 
         DesignSpaceModel.getInstance().resetMclnProject(mclnProject);
 

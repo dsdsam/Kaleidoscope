@@ -1,7 +1,6 @@
 package dsdsse.dialogs.creation.project;
 
 import adf.app.StandardFonts;
-import dsdsse.preferences.DsdsseUserPreference;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -12,11 +11,13 @@ import java.awt.event.ItemEvent;
 final class EntryChosePanel extends JPanel {
 
     private static final int PANEL_WIDTH = 1;
-    private static final int PANEL_HEIGHT = 50;
+    private static final int PANEL_HEIGHT = 40;
     private static final Dimension PANEL_SIZE = new Dimension(PANEL_WIDTH, PANEL_HEIGHT);
 
-    private static final String CHOICE_CORNER_TEXT = "Set rectangle lower right corner X and Y coordinates";
-    private static final String CHOICE_WIDTH_TEXT = "Set rectangle width and height";
+    private static final String CHOICE_WIDTH_TEXT = "Set rectangle's width and height (rectangle will be centered).";
+    private static final String CHOICE_CORNER_TEXT =
+            "Set rectangle's upper left and lower right corners X and Y coordinates.";
+
 
     //
     //   I n s t a n c e
@@ -27,9 +28,13 @@ final class EntryChosePanel extends JPanel {
     private static final Font RADIO_BUTTON_FONT = StandardFonts.FONT_DIALOG_PLAIN_11;
     private static final Border border = new EmptyBorder(0, 10, 0, 0);
 
-    EntryChosePanel() {
+    private final JPanel cardPanel;
+    private String currentChoice = ProjectSpaceSetupPanel.INIT_SIZE_ID;
+
+    EntryChosePanel(JPanel cardPanel) {
+        this.cardPanel = cardPanel;
         setLayout(new GridBagLayout());
-        setOpaque(false);
+        setOpaque(true);
         setPreferredSize(PANEL_SIZE);
         setMinimumSize(PANEL_SIZE);
         init();
@@ -64,9 +69,20 @@ final class EntryChosePanel extends JPanel {
                 if (e.getStateChange() != ItemEvent.SELECTED) {
                     return;
                 }
+                CardLayout cardLayout = (CardLayout) cardPanel.getLayout();
                 String key = ((JRadioButton) e.getItem()).getText();
-//                System.out.println("SELECTED " + selectedOption);
+                if (key.equalsIgnoreCase(CHOICE_WIDTH_TEXT)) {
+                    cardLayout.show(cardPanel, ProjectSpaceSetupPanel.INIT_SIZE_ID);
+                    currentChoice = ProjectSpaceSetupPanel.INIT_SIZE_ID;
+                } else {
+                    cardLayout.show(cardPanel, ProjectSpaceSetupPanel.INIT_CORNERS_ID);
+                    currentChoice = ProjectSpaceSetupPanel.INIT_CORNERS_ID;
+                }
             });
         }
+    }
+
+    final boolean isActivePanelWidthAndHeight() {
+        return currentChoice == ProjectSpaceSetupPanel.INIT_SIZE_ID;
     }
 }

@@ -6,8 +6,11 @@ import dsdsse.app.DsdsseEnvironment;
 import dsdsse.app.DsdsseMainFrame;
 import dsdsse.designspace.executor.MclnSimulationController;
 import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
+import dsdsse.dialogs.creation.project.ProjectAttributesSetupMainPanel;
+import mcln.model.MclnDoubleRectangle;
 import mcln.model.MclnModel;
 import mcln.model.MclnProject;
+import mcln.model.ProjectAttributes;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -22,6 +25,8 @@ import java.util.List;
  */
 public class DesignSpaceModel {
 
+    private static final String INITIALIZE_PROJECT_ATTRIBUTES_DIALOG_TITLE = "Initialize Project Attributes";
+    private static final String CHANGE_PROJECT_ATTRIBUTES_DIALOG_TITLE = "Change Project Attributes";
 
     private static DesignSpaceModel designSpaceModel;
 
@@ -109,13 +114,60 @@ public class DesignSpaceModel {
         return mclnProject;
     }
 
+    /**
+     * Initialising project's name and design space rectangle
+     *
+     * @return
+     */
     public MclnProject onCreateNewEmptyMclnProject() {
+        JFrame mainFrame = DsdsseMainFrame.getInstance();
+        String suggestedProjectName = "Mcln Project " + String.format("%03d", (projectCounter + 1));
+        MclnDoubleRectangle suggestedMclnDoubleRectangle = new MclnDoubleRectangle(-20, 20, 40, 40);
+        ProjectAttributes suggestedProjectAttributes =
+                new ProjectAttributes(suggestedProjectName, suggestedMclnDoubleRectangle);
+        ProjectAttributesSetupMainPanel projectAttributesSetupMainPanel =
+                ProjectAttributesSetupMainPanel.createInstance(mainFrame, suggestedProjectAttributes);
+        ProjectAttributes projectAttributesToApply =
+                projectAttributesSetupMainPanel.showInitProjectAttributesDialog(mainFrame,
+                        INITIALIZE_PROJECT_ATTRIBUTES_DIALOG_TITLE);
+        if (projectAttributesToApply == null) {
+            return null;
+        }
         projectCounter++;
-        String projectName = "Mcln Project " + String.format("%03d", projectCounter);
-        MclnModel mclnModel = MclnModel.createInstance("Mcln Model-01", "MG01", -15, 15, 30, 30);
-        MclnProject mclnProject = MclnProject.createNewEmptyMclnProject(projectName, mclnModel);
+        String projectName = projectAttributesToApply.getProjectName();
+        MclnDoubleRectangle mclnDoubleRectangleToApply = projectAttributesToApply.getMclnDoubleRectangle();
+        MclnModel mclnModel = MclnModel.createInstance("Mcln Model-01", "MG01", mclnDoubleRectangleToApply);
+        MclnProject mclnProject = MclnProject.createNewEmptyMclnProject(projectName, mclnDoubleRectangleToApply, mclnModel);
         projectModifiedSinceTraceHistoryStarted = true;
         return mclnProject;
+    }
+
+    /**
+     * Changing project's name and design space rectangle
+     *
+     * @param currentMclnProject
+     * @return
+     */
+    public ProjectAttributes onChangeProjectAttributes(MclnProject currentMclnProject) {
+        JFrame mainFrame = DsdsseMainFrame.getInstance();
+        String currentProjectName = currentMclnProject.getProjectName();
+        MclnDoubleRectangle currentProjectSpaceRectangle = currentMclnProject.getProjectSpaceRectangleCopy();
+        ProjectAttributes suggestedProjectAttributes =
+                new ProjectAttributes(currentProjectName, currentProjectSpaceRectangle);
+        ProjectAttributesSetupMainPanel projectAttributesSetupMainPanel =
+                ProjectAttributesSetupMainPanel.createInstance(mainFrame, suggestedProjectAttributes);
+        ProjectAttributes projectAttributesToApply =
+                projectAttributesSetupMainPanel.showChangeProjectAttributesDialog(mainFrame,
+                        CHANGE_PROJECT_ATTRIBUTES_DIALOG_TITLE);
+        if (projectAttributesToApply == null) {
+            return null;
+        }
+
+        MclnModel currentMclnModel = currentMclnProject.getCurrentMclnModel();
+        MclnDoubleRectangle changedProjectSpaceRectangle = projectAttributesToApply.getMclnDoubleRectangle();
+        currentMclnModel.setModelSpaceRectangle(changedProjectSpaceRectangle);
+        projectModifiedSinceTraceHistoryStarted = true;
+        return projectAttributesToApply;
     }
 
     //  ================================================================================================================
@@ -133,14 +185,11 @@ public class DesignSpaceModel {
     public MclnProject replaceCurrentProjectWithPresentationProject(String modelName) {
         // stashing current project
         String projectName = "Presentation Show";
-        System.out.println("\nPresentation Project: " + projectName + ", Presentation Model \"" + modelName + "\"");
         stashedMclnProject = mclnProject;
-        System.out.println("\nReplace Current Project With Presentation Project: replaced project " + mclnProject.getProjectName() +
-                ", restored model \"" + mclnProject.getCurrentMclnModel().getModelName() + "\"");
         // creating new project
-        MclnModel mclnModel = MclnModel.createInstance(modelName, "MP01", -15, 15, 30, 30);
-
-        MclnProject presentationProject = MclnProject.createPresentationMclnProject(projectName, mclnModel);
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(-15, 15, 30, 30);
+        MclnModel mclnModel = MclnModel.createInstance(modelName, "MP01", mclnDoubleRectangle);
+        MclnProject presentationProject = MclnProject.createPresentationMclnProject(projectName, mclnDoubleRectangle, mclnModel);
 
         // set presentation project
         mclnGraphModel.replaceCurrentProjectWithPresentationProject(presentationProject);
@@ -167,7 +216,6 @@ public class DesignSpaceModel {
      */
     public void restoreStashedProject() {
         if (stashedMclnProject == null) {
-            System.out.println("\nRestore Stashed Project: No stashed project to restore");
             return;
         }
         MclnProject recreatedMclnProject = MclnProject.recreateStashedMclnProject(stashedMclnProject);
@@ -175,8 +223,6 @@ public class DesignSpaceModel {
         MclnModel currentMclnModel = mclnProject.getCurrentMclnModel();
         MclnSimulationController.getInstance().setMclnModel(currentMclnModel);
         stashedMclnProject = null;
-        System.out.println("\nRestore Stashed Project: restored project " + mclnProject.getProjectName() +
-                ", restored model \"" + currentMclnModel.getModelName() + "\"");
         return;
     }
 
@@ -193,6 +239,18 @@ public class DesignSpaceModel {
         updateFrameTitleProjectName(mclnProject);
         projectModifiedSinceTraceHistoryStarted = true;
         mclnGraphModel.resetMclnModel(mclnProject);
+        // call Design Space View
+        if (designSpaceModelListener != null) {
+            designSpaceModelListener.onMclnProjectReplaced(mclnProject);
+        }
+    }
+
+    public void resetMclnProjectUpOnAttributesModified(ProjectAttributes projectAttributes) {
+        mclnProject.resetProjectAttributes(projectAttributes);
+        this.projectName = projectAttributes.getProjectName();
+        updateFrameTitleProjectName(mclnProject);
+        projectModifiedSinceTraceHistoryStarted = true;
+        mclnGraphModel.resetMclnProjectUpOnAttributesModified(mclnProject);
         // call Design Space View
         if (designSpaceModelListener != null) {
             designSpaceModelListener.onMclnProjectReplaced(mclnProject);

@@ -78,6 +78,12 @@ public class MclnGraphModel {
         fireCurrentMclnModelReplaced(currentMclnModel);
     }
 
+    public void resetMclnProjectUpOnAttributesModified(MclnProject newMclnProject) {
+        mclnModelStructureChangedListener.mclnModelViewRectangleUpdated(this);
+        // this call will recreate scale and regenerate view
+        fireMclnModelUpdated(currentMclnModel);
+    }
+
     public void demoProjectComplete(MclnModel mclnModel) {
         this.currentMclnModel = mclnModel;
         fireDemoProjectComplete(currentMclnModel);
@@ -92,7 +98,6 @@ public class MclnGraphModel {
     //
 
     public void addMclnModelBuildingListener(MclnModelStructureChangedListener mclnModelStructureChangedListener) {
-//        mclnModelStructureChangedListeners.add(mclnModelStructureChangedListener);
         this.mclnModelStructureChangedListener = mclnModelStructureChangedListener;
     }
 
@@ -131,10 +136,6 @@ public class MclnGraphModel {
         currentMclnModel.removeMclnModelSimulationListener(mclnModelSimulationListener);
     }
 
-//    public void addMclnArc(MclnArc mclnArc) {
-//        currentMclnModel.addMclnArc(mclnArc);
-//    }
-
     public List<MclnStatement> getMclnStatements() {
         return currentMclnModel.getMclnStatements();
     }
@@ -156,14 +157,6 @@ public class MclnGraphModel {
     public MclnDoubleRectangle getViewRectangle() {
         return currentMclnModel.getModelSpaceRectangle();
     }
-
-    /**
-     * @param modelSpaceRectangle
-     */
-//    public void setModelSpaceRectangle(MclnDoubleRectangle modelSpaceRectangle) {
-//        currentMclnModel.setModelSpaceRectangle(modelSpaceRectangle);
-//        fireMclnModelViewRectangleUpdated();
-//    }
 
     //
     //   C r e a t i n g    M c l n    G r a p h    E n t i t i e s    b y    E d i t o r
@@ -213,20 +206,12 @@ public class MclnGraphModel {
         return mclnArcView;
     }
 
-//    public void registerCompletedMclnArcAndUpdateView( MclnGraphViewArc mclnGraphViewArc ) {
-//        MclnArc mclnArc = mclnGraphViewArc.getMclnArc();
-//        currentMclnModel.addMclnArc(mclnArc);
-//        mclnModelStructureChangedListener.arcCreationCompleted(mclnGraphViewArc);
-//        fireMclnModelUpdated(currentMclnModel);
-//    }
-
     /**
      * is used by Editor to create Fragment Arc
      */
     public MclnArcView createCompleteMclnArcAndUpdateView(ArrowTipLocationPolicy arrowTipLocationPolicy,
                                                           MclnGraphViewNode inpNodeView,
                                                           MclnGraphViewNode outNodeView) {
-
         //
         // Create Mcln Arc model
         //
@@ -344,17 +329,6 @@ public class MclnGraphModel {
         mclnModelStructureChangedListener.mclnArcRemoved(mclnArc);
         fireMclnModelUpdated(currentMclnModel);
     }
-
-    /*
-      called when new Demo Model created
-     */
-//    public void fireModelUpdated(MclnModel newCurrentMclnModel) {
-//        fireCurrentMclnModelReplaced(newCurrentMclnModel);
-//    }
-
-//    private void fireMclnModelViewRectangleUpdated() {
-//        mclnModelStructureChangedListener.mclnModelViewRectangleUpdated(this);
-//    }
 
     private void fireMclnModelCleared() {
         for (MclnModeChangedListener mclnModeChangedListener : mclnModeChangedListeners) {

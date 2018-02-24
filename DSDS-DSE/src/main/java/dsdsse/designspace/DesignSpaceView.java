@@ -14,6 +14,7 @@ import dsdsse.preferences.DsdsseUserPreference;
 import dsdsse.preferences.GroupID;
 import dsdsse.printing.MclnPrintPreviewPanel;
 import dsdsse.printing.PrintViewButtonPanel;
+import mcln.model.MclnDoubleRectangle;
 import mcln.model.MclnModel;
 import mcln.model.MclnProject;
 
@@ -29,17 +30,7 @@ import java.awt.*;
  */
 public class DesignSpaceView extends JPanel {
 
-    private static final Color VIEW_BACKGROUND_COLOR = new Color(0xACACAC);
-    private static final int TOP_PANEL_HEIGHT = 5;
-    private static final int SIDE_PANEL_WIDTH = 100;
-
-    private static final Color PAGE_PANEL_BACKGROUND_COLOR = Color.WHITE;
-
-    public static String DS00 = "DS00"; // desine space
     public static String MG01 = "MG01"; // mcln model graph
-
-    public static final String EDITOR_VIEW = "EDITOR_VIEW";
-    public static final String SIMULATOR_VIEW = "SIMULATOR_VIEW";
 
     private static DesignSpaceView designSpaceView = new DesignSpaceView();
 
@@ -72,6 +63,8 @@ public class DesignSpaceView extends JPanel {
         public void onMclnProjectReplaced(MclnProject newMclnProject) {
             mclnProject = newMclnProject;
             currentMclnModel = mclnProject.getCurrentMclnModel();
+            mclnGraphDesignerView.regenerateGraphView();
+            mclnGraphDesignerView.repaint();
         }
     };
 
@@ -115,7 +108,7 @@ public class DesignSpaceView extends JPanel {
             DsdsseUserPreference.getInstance().addGroupChangeListener(
                     DsdsseUserPreference.PREF_PS_VISIBLE_KEY, GroupID.GROUP2, groupDesignSpaceViewChangeListener);
         } catch (Throwable t) {
-            t.printStackTrace(System.out);
+            t.printStackTrace();
         }
     }
 
@@ -128,9 +121,10 @@ public class DesignSpaceView extends JPanel {
         appStatusPanel = new AppStatusPanel();
         add(appStatusPanel, BorderLayout.NORTH);
 
-        // creating empty MCLN project/model
-        currentMclnModel = MclnModel.createInstance("Default Mcln Model", MG01, -15, 15, 30, 30);
-        mclnProject = MclnProject.createInitialMclnProject(MclnProject.DEFAULT_PROJECT_NAME, currentMclnModel);
+        // creating default empty MCLN project/model
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(-15, 15, 30, 30);
+        currentMclnModel = MclnModel.createInstance("Default Mcln Model", MG01, mclnDoubleRectangle);
+        mclnProject = MclnProject.createInitialMclnProject(MclnProject.DEFAULT_PROJECT_NAME, mclnDoubleRectangle, currentMclnModel);
         mclnGraphModel = new MclnGraphModel(mclnProject);
 
 
@@ -201,7 +195,7 @@ public class DesignSpaceView extends JPanel {
         try {
             initPrintPreviewContent();
         } catch (Throwable t) {
-            t.printStackTrace(System.out);
+            t.printStackTrace();
         }
     }
 

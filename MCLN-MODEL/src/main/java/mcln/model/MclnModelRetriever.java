@@ -1,6 +1,7 @@
 package mcln.model;
 
-import mcln.palette.*;
+import mcln.palette.MclnState;
+import mcln.palette.MclnStatePalette;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -130,9 +131,6 @@ public class MclnModelRetriever {
 //        MclnModel mclnModel = mclnModelList.get(0);
 //        System.out.println("Recreated MclnModel:\n" + mclnModel.toXml());
 //        System.out.println();
-//    }
-//
-//    private static List<MclnModel> processXmlDocument(Document doc) {
 
         MclnStatement currentMclnStatement = null;
         mclnAsXmlDocument.getDocumentElement().normalize();
@@ -163,6 +161,8 @@ public class MclnModelRetriever {
         int nOfModels = listOfMclnModels.getLength();
         System.out.println("Information on all Mcln Models, number is " + nOfModels);
 
+        MclnDoubleRectangle projectSpaceRectangle = new MclnDoubleRectangle();
+
         List<MclnModel> mclnModelList = new ArrayList();
 
         MclnModel mclnModel = null;
@@ -185,8 +185,9 @@ public class MclnModelRetriever {
                     outline[currentCorner++] = xyLocation;
                 }
 
-                mclnModel = MclnModel.createInstance(mclnModelElement.getTagName(), "M-0001",
-                        outline[0][0], outline[0][1], outline[1][0], outline[1][1]);
+                projectSpaceRectangle =
+                        new MclnDoubleRectangle(outline[0][0], outline[0][1], outline[1][0], outline[1][1]);
+                mclnModel = MclnModel.createInstance(mclnModelElement.getTagName(), "M-0001", projectSpaceRectangle);
 
 //                mclnModel.setCSysRectangle(outline);
 
@@ -244,8 +245,7 @@ public class MclnModelRetriever {
         // Creating and populating project
         //
 
-        MclnProject mclnProject = MclnProject.createRetrievedMclnProject(projectName, mclnModel);
-
+        MclnProject mclnProject = MclnProject.createRetrievedMclnProject(projectName, projectSpaceRectangle, mclnModel);
         return mclnProject;
     }
 
@@ -351,7 +351,6 @@ public class MclnModelRetriever {
      */
     private static MclnStatement domElementToMclnStatement(Element mclnStatementElement) {
 
-//        NodeList statementChildNodes = mclnStatementElement.getChildNodes();
         NamedNodeMap namedNodeMap = mclnStatementElement.getAttributes();
         Node mclnStatesPaletteNameNode = namedNodeMap.getNamedItem(MclnStatement.MCLN_PALETTE_ATTRIBUTE_NAME);
         String mclnStatesPaletteName = mclnStatesPaletteNameNode.getNodeValue();
@@ -365,7 +364,6 @@ public class MclnModelRetriever {
                     stringToBoolean(mclnStatementHasInputGenerator) : false;
         }
         String uid = getElementProperty(mclnStatementElement, MclnStatement.MCLN_STATEMENT_UID_TAG);
-//        MclnState mclnState = ThreeShadesConfettiPalette.MCLN_CREATION_STATE;
         System.out.println("Statement ID is: " + uid);
         if (uid == null) {
             return null;
@@ -991,16 +989,4 @@ public class MclnModelRetriever {
         }
         return booleanValue;
     }
-
-//    private static double stringToDouble(String value){
-//        double doubleValue;
-//        try{
-//           doubleValue = Double.parseDouble(value);
-//        }  catch(Exception e){
-//            doubleValue = 0.0D;
-//        }
-//        return doubleValue;
-//    }
-
-
 }

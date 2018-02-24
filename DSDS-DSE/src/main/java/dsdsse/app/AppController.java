@@ -24,6 +24,7 @@ import dsdsse.splash.DsdsseSplash;
 import dsdsse.welcome.WelcomePanel;
 import mcln.model.MclnModel;
 import mcln.model.MclnProject;
+import mcln.model.ProjectAttributes;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,8 +58,8 @@ public class AppController {
 
     // Project Menu
     public static final String MENU_ITEM_PROJECT = "  Project  ";
-    public static final String MENU_ITEM_NEW_PROJECT = "New Project";
-    public static final String MENU_ITEM_RENAME_PROJECT = "Rename Project";
+    public static final String MENU_ITEM_NEW_PROJECT = "Create New Project";
+    public static final String MENU_ITEM_CHANGE_ATTRIBUTES = "Change Project Attributes";
     public static final String MENU_ITEM_RENAME_MODEL = "Rename Model";
     public static final String MENU_ITEM_CLEAR_DESIGN_SPACE = "Clear Design Space";
     public static final String MENU_ITEM_OPEN_PROJECT = "Retrieve Project";
@@ -157,8 +158,12 @@ public class AppController {
     //
     //
 
+    private static final StringBuilder stringBuilder = new StringBuilder();
+
     private static final String SELECTED_OPERATION_IS_TO_DISCARD_CURRENT_PROJECT =
             " Selected operation is to discard current Project";
+    private static final String SELECTED_OPERATION_IS_TO_CLEAR_CURRENT_MODEL =
+            " Selected operation is to clear current Model";
     private static final String UNSAVED_INITIALIZATIONS_QUESTION =
             "There are unsaved initialization(s) in the Project. Do you want to save the changes ?   ";
     private static final String STRUCTURE_CHANGED_QUESTION =
@@ -173,7 +178,6 @@ public class AppController {
 
     private static final GroupChangeListener groupChangeListener = (preference) -> {
         boolean status = DsdsseUserPreference.isInitAssistantEmbedded();
-//        System.out.println("IA embedded " + status);
     };
 
     static {
@@ -431,15 +435,24 @@ public class AppController {
 
             setDevelopmentMode();
             MclnProject mclnProject = DesignSpaceModel.getInstance().onCreateNewEmptyMclnProject();
+            if (mclnProject == null) {
+                // Project attributes not specified
+                return true;
+            }
             DesignSpaceModel.getInstance().resetMclnProject(mclnProject);
             MclnModel currentMclnModel = mclnProject.getCurrentMclnModel();
             MclnSimulationController.getInstance().setMclnModel(currentMclnModel);
 
-        } else if (MENU_ITEM_RENAME_PROJECT.equals(cmd)) {
-            // finishing currently active operation
-            unselectCreationOperation();
+        } else if (MENU_ITEM_CHANGE_ATTRIBUTES.equals(cmd)) {
 
-            DesignSpaceModel.getInstance().onRenameMclnProject();
+            unselectCreationOperation();
+            setDevelopmentMode();
+            ProjectAttributes projectAttributes = DesignSpaceModel.getInstance().onChangeProjectAttributes(MclnProject.getInstance());
+            if (projectAttributes == null) {
+                // Project attributes not specified
+                return true;
+            }
+            DesignSpaceModel.getInstance().resetMclnProjectUpOnAttributesModified(projectAttributes.getCopy());
 
         } else if (MENU_ITEM_RENAME_MODEL.equals(cmd)) {
             // finishing currently active operation
@@ -709,92 +722,15 @@ public class AppController {
                                 } else if (MENU_ITEM_HOW_TO_USE_CREATION_OPERATIONS.equals(cmd)) {
                                     return startPresentationShow(HowToUseCreateOperationsScript.SCRIPT_NAME);
 
-//                                    if (PresentationRunner.isDemoRunning()) {
-//                                        System.out.println("isDemoRunning true ");
-//                                        return true;
-//                                    }
-//                                    if (!AppController.getInstance().releaseEastSideSpaceIfPossible()) {
-//                                        return true;
-//                                    }
-//                                    System.out.println("\nAppController Starting How To Create Script\n");
-//                                    if (AppStateModel.isSimulationMode()) {
-//                                        AppController.getInstance().setDevelopmentMode();
-//                                    }
-//
-////                                    unselectCreationOperation();
-////                                    setDevelopmentMode();
-//                                    // creating new project
-//
-//                                    // creating new presentation project
-//                                    MclnProject mclnProject = DesignSpaceModel.getInstance().
-//                                            replaceCurrentProjectWithPresentationProject(
-//                                                    HowToUseCreateOperationsScript.SCRIPT_NAME);
-//
-//                                    MclnModel currentMclnModel = mclnProject.getCurrentMclnModel();
-//                                    MclnSimulationController.getInstance().setMclnModel(currentMclnModel);
-//
-//                                    HowToUseCreateOperationsScript createOperationsScript =
-//                                            HowToUseCreateOperationsScript.createHowToUseCreateOperationsScript();
-//                                    PresentationRunner.presentDemo(createOperationsScript);
-//                                    return true;
-
                                 } else if (MENU_ITEM_HOW_USE_MODIFICATION_OPERATIONS.equals(cmd)) {
                                     return startPresentationShow(HowToUseModificationOperationsScript.SCRIPT_NAME);
-
-//                                    if (PresentationRunner.isDemoRunning()) {
-//                                        return true;
-//                                    }
-//                                    if (!AppController.getInstance().releaseEastSideSpaceIfPossible()) {
-//                                        return true;
-//                                    }
-//
-//                                    if (AppStateModel.isSimulationMode()) {
-//                                        AppController.getInstance().setDevelopmentMode();
-//                                    }
-//
-//                                    MclnProject mclnProject = DesignSpaceModel.getInstance().
-//                                            replaceCurrentProjectWithPresentationProject(
-//                                                    HowToUseModificationOperationsScript.SCRIPT_NAME);
-//                                    MclnModel currentMclnModel = mclnProject.getCurrentMclnModel();
-//                                    MclnSimulationController.getInstance().setMclnModel(currentMclnModel);
-//
-//                                    HowToUseModificationOperationsScript modificationOperationsScript =
-//                                            HowToUseModificationOperationsScript.createHowToUseModificationOperationsScript();
-//                                    PresentationRunner.presentDemo(modificationOperationsScript);
-//                                    return true;
 
                                 } else if (MENU_ITEM_HOW_TO_RUN_MODEL_SIMULATION.equals(cmd)) {
                                     return startPresentationShow(HowToUseSimulationOperationsScript.SCRIPT_NAME);
 
-//                                    if (PresentationRunner.isDemoRunning()) {
-//                                        return true;
-//                                    }
-//                                    if (!AppController.getInstance().releaseEastSideSpaceIfPossible()) {
-//                                        return true;
-//                                    }
-//
-//                                    if (AppStateModel.isSimulationMode()) {
-//                                        AppController.getInstance().setDevelopmentMode();
-//                                    }
-//
-//                                    MclnProject mclnProject = DesignSpaceModel.getInstance().
-//                                            replaceCurrentProjectWithPresentationProject(
-//                                                    HowToUseSimulationOperationsScript.SCRIPT_NAME);
-//                                    MclnModel currentMclnModel = mclnProject.getCurrentMclnModel();
-//                                    MclnSimulationController.getInstance().setMclnModel(currentMclnModel);
-//
-//                                    HowToUseSimulationOperationsScript howToRunModelUseSimulationScript =
-//                                            HowToUseSimulationOperationsScript.createHowToRunModelUseSimulationScript();
-//                                    PresentationRunner.presentDemo(howToRunModelUseSimulationScript);
-//                                    return true;
-
                                 }
-//                                else if (MENU_ITEM_SHOW_HELP_PANEL.equals(cmd)) {
-//                                    return onOpenHelpPanelButtonClicked();
-//                                }
                                 else if (MENU_ITEM_WHAT_IS_DSDS_DSE.equals(cmd)) {
                                     return onOpenHelpPanelButtonClicked();
-//                                    onHelpRootPage();
                                 } else if (MENU_ITEM_RUNNING_EXAMPLES.equals(cmd)) {
                                     onHelpRunningModelExamples();
                                 } else if (MENU_ITEM_MENU_COMMANDS.equals(cmd)) {
@@ -805,17 +741,14 @@ public class AppController {
                                     onHelpWhatIsSimEngine();
                                 } else if (MENU_ITEM_WHAT_IS_TD_IG.equals(cmd)) {
                                     onHelpWhatIsTDIG();
-//            DsdsseEnvironment.showQuickHelp(DsdsseEnvironment.QH_TDISP, false, true);
                                 } else if (MENU_ITEM_WHAT_IS_SD_IG.equals(cmd)) {
                                     onHelpWhatIsSDIG();
-//            DsdsseEnvironment.showQuickHelp(DsdsseEnvironment.QH_RDISP, false, true);
                                 } else if (MENU_ITEM_ABOUT.equals(cmd)) {
                                     DsdsseSplash.showAboutPopup(DsdsseMainFrame.getInstance());
-//            DsdsseEnvironment.showAboutDlg();
                                 } else {
                                     lastMenuCommand = null;
                                 }
-        // button will be enabled
+        // returning "true" makes button enabled
         return true;
     }
 
@@ -866,19 +799,19 @@ public class AppController {
 
         unselectCreationOperation();
 
-        //  Checking if cleaning is possible or makes sense
-
-        boolean projectSavedOrDiscarded =
-                saveOrDiscardProjectIfModified(SELECTED_OPERATION_IS_TO_DISCARD_CURRENT_PROJECT);
-        if (!projectSavedOrDiscarded) {
-            return;
-        }
+        //  Checking if cleaning makes sense or is possible
 
         DesignSpaceView designSpaceView = DesignSpaceView.getInstance();
         boolean designSpaceIsEmpty = designSpaceView.isDesignSpaceEmpty();
         if (designSpaceIsEmpty) {
             DsdsDseMessagesAndDialogs.showMessage(designSpaceView, "Clear Design Space operation",
                     AllMessages.DESIGN_SPACE_IS_EMPTY_MESSAGE.getText());
+            return;
+        }
+
+        boolean projectSavedOrDiscarded =
+                saveOrDiscardProjectIfModelModified(SELECTED_OPERATION_IS_TO_CLEAR_CURRENT_MODEL);
+        if (!projectSavedOrDiscarded) {
             return;
         }
 
@@ -921,14 +854,8 @@ public class AppController {
             DesignSpaceView.getInstance().switchToPrintPreviewContent();
             DseMenuMediator.openPrintContextMenuItemClickedAndDisabled();
             return false;
-//            DseMenuAndToolbarBuilder.onPrintPreviewContentChanged(true);
         }
         return true;
-//        else {
-//            DesignSpaceView.getInstance().restoreDesignSpaceView();
-
-////            DseMenuAndToolbarBuilder.onPrintPreviewContentChanged(false);
-//        }
     }
 
     /**
@@ -940,54 +867,12 @@ public class AppController {
     }
 
     private final void onHidePrintPreviewPanel() {
-//        if (!DseMenuAndToolbarBuilder.TOGGLE_MENU_AND_TOOLBAR_BUTTONS) {
         DesignSpaceView.getInstance().restoreDesignSpaceView();
         Action action = getUIAction(MENU_ITEM_SHOW_PRINT_CONTENT);
         if (action != null) {
             action.setEnabled(true);
         }
-//        } else {
-//            openPrintPreviewContent();
-//        }
     }
-
-
-//    private void onSetInitState() {
-//        if (DseMenuAndToobarBuilder.TOGGLE_MENU_AND_TOOLBAR_BUTTONS) {
-//            return;
-//        }
-//
-//        setInitializationState();
-//
-//        if (!DsdsseUserPreference.isInitAssistantEmbedded()) {
-//            if (!InitAssistantInterface.isInitAssistantUpAndRunning()) {
-//                // Open Init Assistant
-//                if (!canCurrentEditingBeCanceledWhileInitAssistantBeIdle()) {
-//                    return;
-//                }
-//                DsdsseMainFrame mainFrame = DsdsseMainFrame.getInstance();
-//                InitAssistantInterface.createInitializationAssistant(mainFrame);
-//                appStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE, false);
-//            } else {
-//                // Close Init Assistant
-//                InitAssistantInterface.shutDownInitAssistantUnconditionally();
-//                setDevelopmentMode();
-//                appStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE, false);
-//            }
-//        } else {
-//            // We are here since Init Assistant is embedded
-//            if (!InitAssistantInterface.isInitAssistantUpAndRunning()) {
-//                // Open Init Assistant
-//                DsdsseMainFrame mainFrame = DsdsseMainFrame.getInstance();
-//                InitAssistantInterface.createInitializationAssistant(mainFrame);
-//                appStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE, false);
-//            } else {
-//                // Close Init Assistant
-//                shutdownInitAssistantIfPossible();
-//            }
-//        }
-//
-//    }
 
     public void setOperationSelected(String menuItem, Boolean selected) {
         AdfBasicAction action = getUIAction(menuItem);
@@ -1155,35 +1040,6 @@ public class AppController {
         if (appStateModel.isDevelopmentMode()) {
             demoMenuActionGroup.enableAllActions(enable);
         }
-
-        //  DseMenuMediator.enableAll(enable);
-//        demoMenuActionGroup.enableAllActions(enable);
-
-//        actionToEnableDisable = getUIAction(MENU_ITEM_LAUNCH_IA);
-//        actionToEnableDisable.setEnabledAnLock(enable);
-
-
-//        if (!MENU_ITEM_LAUNCH_IA.equalsIgnoreCase(lastMenuCommand) &&
-//                AppStateModel.getInstance().getCurrentOperation().isInitialization()) {
-//            // This may happen when Editing command selected after IA was open
-//            // and then some entity was placed into IA for initialization.
-//            // At this point the IA is the currentCommand that should be enabled
-//            // so that when clicked again to stop IA not the last editing command
-//            lastMenuCommand = null;//MENU_ITEM_LAUNCH_IA;
-////            return;
-//        }
-//        if (enable || lastMenuCommand == null) {
-//            AdfBasicAction currentCommandAction = getUIAction(lastMenuCommand);
-////            if (currentCommandAction != null) {
-////                currentCommandAction.setSelected();
-////            }
-//            return;
-//        }
-//        AdfBasicAction currentCommandAction = getUIAction(lastMenuCommand);
-//        if (currentCommandAction != null) {
-////            currentCommandAction.setEnabled(!enable);
-////            currentCommandAction.setSelected();
-//        }
     }
 
     /**
@@ -1274,12 +1130,8 @@ public class AppController {
      */
     private void setSimulationMode() {
 
-//        System.out.println("Set Simulation Enabled button clicked");
-
         AdfBasicAction developmentModeAction = getUIAction(MENU_ITEM_SET_DEVELOPMENT_MODE);
-//        Action simulationModeAction = getUIAction(MENU_ITEM_SET_SIMULATION_MODE);
         developmentModeAction.setEnabled(true);
-//        simulationModeAction.setEnabled(false);
 
         unselectActiveEditingOperationUpOnSimulationModeSelected();
 
@@ -1319,8 +1171,6 @@ public class AppController {
      * S t a r t   S i m u l a t i o n
      */
     private void onStartSimulation() {
-//        System.out.println("Start Simulation button clicked");
-
         Action startSimulationAction = getUIAction(MENU_ITEM_START_SIMULATION);
         Action stopSimulationAction = getUIAction(MENU_ITEM_STOP_SIMULATION);
         Action oneSimulationStepAction = getUIAction(MENU_ITEM_EXECUTE_ONE_SIMULATION_STEP);
@@ -1339,8 +1189,6 @@ public class AppController {
      * S t o p   S i m u l a t i o n
      */
     private void onStopSimulation() {
-//        System.out.println("Stop Simulation button clicked");
-
         MclnSimulationController.getInstance().setSimulationStopped();
         Action startSimulationAction = getUIAction(MENU_ITEM_START_SIMULATION);
         Action stopSimulationAction = getUIAction(MENU_ITEM_STOP_SIMULATION);
@@ -1350,7 +1198,6 @@ public class AppController {
         stopSimulationAction.setEnabled(false);
         oneSimulationStepAction.setEnabled(true);
         resetSimulationAction.setEnabled(true);
-
         appStateModel.setCurrentSimulationOperation(AppStateModel.Operation.SIMULATION_STOPPED);
     }
 
@@ -1358,8 +1205,6 @@ public class AppController {
      * R e s e t   S i m u l a t i o n
      */
     private void onResetSimulation() {
-//        System.out.println("Reset Model State button clicked");
-
         LogPanel.getInstance().clearLog();
         MclnSimulationController.getInstance().setSimulationReset();
 
@@ -1379,7 +1224,6 @@ public class AppController {
      * O n e   S i m u l a t i o n   S t e p
      */
     private void onExecuteOneSimulationStep() {
-//        System.out.println("One simulation step button clicked");
         MclnSimulationController.getInstance().executeOneSimulationStep();
         appStateModel.setCurrentSimulationOperation(AppStateModel.Operation.SIMULATION_ONE_STEP);
     }
@@ -1411,18 +1255,12 @@ public class AppController {
         if (!DesignSpaceContentManager.isThisComponentEastPanel(preferencesSetupPanel)) {
             DesignSpaceContentManager.setEastPanel(preferencesSetupPanel);
             DseMenuMediator.openSetupPanelMenuItemClickedAndDisabled();
-        } else {
-//            onHideSetupPanel();
         }
     }
 
     private void onHideSetupPanel() {
         if (!DseMenuAndToolbarBuilder.TOGGLE_MENU_AND_TOOLBAR_BUTTONS) {
             DesignSpaceContentManager.hideEastPanel(PreferencesSetupPanel.getInstance());
-//            Action action = getUIAction(MENU_ITEM_SHOW_SETUP_PANEL);
-//            if (action != null) {
-//                action.setEnabled(true);
-//            }
         } else {
             DesignSpaceContentManager.hideEastPanel(PreferencesSetupPanel.getInstance());
             Action action = getUIAction(MENU_ITEM_SHOW_SETUP_PANEL);
@@ -1447,11 +1285,6 @@ public class AppController {
         }
         return false;
     }
-
-//    private void onHelpRootPage() {
-//        HelpPanelHolder helpPanelHolder = HelpPanelHolder.getInitializedInstance(HelpPanelHolder.HelpMenuItems.WhatIsDSDSSE);
-//        showHelpPanel(helpPanelHolder);
-//    }
 
     private void onHelpRunningModelExamples() {
         HelpPanelHolder helpPanelHolder = HelpPanelHolder.getInitializedInstance(HelpPanelHolder.HelpMenuItems.RunningExamples);
@@ -1567,8 +1400,6 @@ public class AppController {
     // ================================================================================================================
 
     public final void cleanupAfterDemoPresentationIsCompleteOrCanceled() {
-        System.out.println("Presentation Cleanup: Current Operation is \"" + AppStateModel.getCurrentOperation() + "\"");
-        System.out.println("Presentation Cleanup: Current Step      is \"" + AppStateModel.getCurrentOperationStep() + "\"");
         mclnGraphViewEditor.cleanupAfterDemoPresentationIsCompleteOrCanceled();
 
         if (AppStateModel.isSimulationMode()) {
@@ -1600,7 +1431,6 @@ public class AppController {
      */
     public static boolean startPresentationShow(String scriptName) {
         if (PresentationRunner.isDemoRunning()) {
-            System.out.println("isDemoRunning true ");
             return true;
         }
 
@@ -1614,8 +1444,6 @@ public class AppController {
         if (!AppController.getInstance().releaseEastSideSpaceIfPossible()) {
             return true;
         }
-
-        System.out.println("\nAppController Starting How To Create Script\n");
 
         if (AppStateModel.isSimulationMode()) {
             AppController.getInstance().setDevelopmentMode();
@@ -1650,22 +1478,100 @@ public class AppController {
 
     //   C h e c k i n g   a n d   s a v i n g   P r o j e c t
 
+    /**
+     * projectChanged[0] -> boolean[1] = projectAttributesChanged && modelChanged[0]
+     * projectChanged[1] -> boolean[1] = projectAttributesChanged
+     * projectChanged[2] -> boolean[]  = modelChanged, where
+     * <p>
+     * modelChanged[0] - true when something changed = modelChanged[1] | modelChanged[2] |modelChanged[3]
+     * modelChanged[1] - true when initialized
+     * modelChanged[2] - true when structure changed
+     * modelChanged[3] - true when model moved
+     *
+     * @return
+     */
     private final boolean saveOrDiscardProjectIfModified(String title) {
+        if (MclnProject.getInstance().isPresentationProject()) {
+            // we do not want to ask user when running Presentation
+            return true;
+        }
+        boolean[][] projectModified = MclnProject.getInstance().wasProjectModified();
+        if (!projectModified[0][0]) {
+            // project was not modified
+            return true;
+        }
+        boolean userWantsToDiscardChanges = letUserToConfirmIfProjectShouldBeSaved(title, projectModified);
+        if (!userWantsToDiscardChanges) {
+            return false;
+        }
+        return userWantsToDiscardChanges;
+    }
 
-        if(MclnProject.getInstance().isPresentationProject()){
+    /**
+     * @param title
+     * @return
+     */
+    private final boolean saveOrDiscardProjectIfModelModified(String title) {
+        if (MclnProject.getInstance().isPresentationProject()) {
             // we do not want to ask user when running Presentation
             return true;
         }
 
-        boolean[] projectModified = MclnProject.getInstance().wasProjectModified();
-        String question = null;
-        if (projectModified[0]) {
-            question = UNSAVED_INITIALIZATIONS_QUESTION;
-        } else if (projectModified[1]) {
-            question = STRUCTURE_CHANGED_QUESTION;
-        } else if (projectModified[2]) {
-            question = MODEL_OR_FRAGMENT_MOVED_QUESTION;
+        boolean[][] projectModified = new boolean[3][];
+        boolean[] modelChanged = MclnProject.getInstance().wasModelModified();
+
+
+        projectModified[0] = new boolean[]{modelChanged[0]};
+        if (!projectModified[0][0]) {
+            // model was not modified
+            return true;
         }
+        projectModified[1] = new boolean[]{false};
+        projectModified[2] = modelChanged;
+
+        boolean userWantsToDiscardChanges = letUserToConfirmIfProjectShouldBeSaved(title, projectModified);
+        if (!userWantsToDiscardChanges) {
+            return false;
+        }
+        return userWantsToDiscardChanges;
+    }
+
+    /**
+     *
+     * @param title
+     * @param projectModified
+     * @return
+     */
+    private boolean letUserToConfirmIfProjectShouldBeSaved(String title, boolean[][] projectModified) {
+
+        stringBuilder.delete(0, stringBuilder.length());
+        stringBuilder.append("<html>").
+                append("<div style=\" font-size:11px; font-weight: plain;    color:#550000; text-align:justify;   ").
+                append("<br> \">").
+                append("Here below are unsaved change(s) that will be lost if the Project is not saved.&nbsp;&nbsp;<br>");
+
+        if (projectModified[0][0]) {
+            stringBuilder.append("<ul>");
+            if (projectModified[1].length == 1 && projectModified[1][0]) {
+                stringBuilder.append("<li>Change in the Project's attributes.</li>");
+            }
+
+            if (projectModified[2] != null && projectModified[2][0]) {
+                if (projectModified[2][1]) {
+                    stringBuilder.append("<li>Unsaved model initializations.</li>");
+                }
+                if (projectModified[2][2]) {
+                    stringBuilder.append("<li>Change in the Model structure.</li>");
+                }
+                if (projectModified[2][3]) {
+                    stringBuilder.append("<li>Change in the Model or its fragment location.</li>");
+                }
+            }
+            stringBuilder.append("</ul>");
+            stringBuilder.append(" Do you want to save the Project ? ");
+            stringBuilder.append("</div></html>");
+        }
+        String question = stringBuilder.toString();
 
         if (question != null) {
             Component background = DesignSpaceView.getInstance();

@@ -53,7 +53,13 @@ public class MclnModel {
     //
     public static MclnModel createInstance(String modelName, String modelId,
                                            double cSysX, double cSysY, double cSysWidth, double cSysHeight) {
-        MclnModel mclnModel = new MclnModel(null, modelName, modelId, cSysX, cSysY, cSysWidth, cSysHeight);
+        MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(cSysX, cSysY, cSysWidth, cSysHeight);
+        MclnModel mclnModel = new MclnModel(null, modelName, modelId, mclnDoubleRectangle);
+        return mclnModel;
+    }
+
+    public static MclnModel createInstance(String modelName, String modelId, MclnDoubleRectangle modelSpaceRectangle) {
+        MclnModel mclnModel = new MclnModel(null, modelName, modelId, modelSpaceRectangle);
         return mclnModel;
     }
 
@@ -82,9 +88,6 @@ public class MclnModel {
     private int conditionCounter;
     private int arcCounter;
 
-    private final CopyOnWriteArrayList<SimulatedStateChangeListener> simulatedStateChangeListeners =
-            new CopyOnWriteArrayList();
-
     private final CopyOnWriteArrayList<MclnModelSimulationListener> mclnModelSimulationListeners =
             new CopyOnWriteArrayList();
 
@@ -109,18 +112,14 @@ public class MclnModel {
      * @param sourceXml
      * @param modelName
      * @param modelId
-     * @param cSysX
-     * @param cSysY
-     * @param cSysWidth
-     * @param cSysHeight
+     * @param modelSpaceRectangle
      */
-    private MclnModel(String sourceXml, String modelName, String modelId,
-                      double cSysX, double cSysY, double cSysWidth, double cSysHeight) {
+    private MclnModel(String sourceXml, String modelName, String modelId, MclnDoubleRectangle modelSpaceRectangle) {
         this.sourceXml = sourceXml;
         this.modelName = modelName;
         this.modelId = modelId;
 
-        this.modelSpaceRectangle = new MclnDoubleRectangle(cSysX, cSysY, cSysWidth, cSysHeight);
+        this.modelSpaceRectangle = modelSpaceRectangle;
         this.cSysX = modelSpaceRectangle.getX();
         this.cSysY = modelSpaceRectangle.getY();
         this.cSysWidth = modelSpaceRectangle.getWidth();
@@ -187,14 +186,6 @@ public class MclnModel {
         statementCounter = 0;
         conditionCounter = 0;
         arcCounter = 0;
-    }
-
-    public void addStateChangeListener(SimulatedStateChangeListener simulatedStateChangeListener) {
-        simulatedStateChangeListeners.add(simulatedStateChangeListener);
-    }
-
-    public void removeStateChangeListener(SimulatedStateChangeListener simulatedStateChangeListener) {
-        simulatedStateChangeListeners.remove(simulatedStateChangeListener);
     }
 
     public void addMclnModelSimulationListener(MclnModelSimulationListener mclnModelSimulationListener) {

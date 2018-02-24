@@ -96,8 +96,10 @@ public class MclnProject {
     //   F a c t o r y   m e t h o d s
     //
 
-    public static final MclnProject createInitialMclnProject(String projectName, MclnModel mclnModel) {
-        currentMclnProject = new MclnProject(false,false, projectName, mclnModel);
+    public static final MclnProject createInitialMclnProject(String projectName,
+                                                             MclnDoubleRectangle projectSpaceRectangle,
+                                                             MclnModel mclnModel) {
+        currentMclnProject = new MclnProject(projectSpaceRectangle, false, false, projectName, mclnModel);
         currentMclnProject.backupProject();
         return currentMclnProject;
     }
@@ -107,12 +109,14 @@ public class MclnProject {
      * a) When DSDSSE GUI is created
      * b) When DSDSSE GUI user creates new projects
      *
-     * @param projectName
+     * @param projectSpaceRectangle
      * @param mclnModel
      * @return
      */
-    public static final MclnProject createNewEmptyMclnProject(String projectName, MclnModel mclnModel) {
-        currentMclnProject = new MclnProject(false,false, projectName, mclnModel);
+    public static final MclnProject createNewEmptyMclnProject(String projectName,
+                                                              MclnDoubleRectangle projectSpaceRectangle,
+                                                              MclnModel mclnModel) {
+        currentMclnProject = new MclnProject(projectSpaceRectangle, false, false, projectName, mclnModel);
         currentMclnProject.backupProject();
         return currentMclnProject;
     }
@@ -126,8 +130,10 @@ public class MclnProject {
      * @param mclnModel
      * @return NewEmptyMclnProject
      */
-    public static final MclnProject createPresentationMclnProject(String projectName, MclnModel mclnModel) {
-        currentMclnProject = new MclnProject(true, false, projectName, mclnModel);
+    public static final MclnProject createPresentationMclnProject(String projectName,
+                                                                  MclnDoubleRectangle projectSpaceRectangle,
+                                                                  MclnModel mclnModel) {
+        currentMclnProject = new MclnProject(projectSpaceRectangle, true, false, projectName, mclnModel);
         return currentMclnProject;
     }
 
@@ -136,9 +142,11 @@ public class MclnProject {
      * @param mclnModel
      * @return
      */
-    public static final MclnProject createDemoMclnProject(String projectName, MclnModel mclnModel) {
+    public static final MclnProject createDemoMclnProject(String projectName, MclnDoubleRectangle projectSpaceRectangle,
+                                                          MclnModel mclnModel) {
         boolean currentProjectIsPresentationOne = MclnProject.getInstance().isPresentationProject();
-        currentMclnProject = new MclnProject(currentProjectIsPresentationOne, true, projectName, mclnModel);
+        currentMclnProject = new MclnProject(projectSpaceRectangle, currentProjectIsPresentationOne,
+                true, projectName, mclnModel);
         return currentMclnProject;
     }
 
@@ -149,8 +157,8 @@ public class MclnProject {
      * @param projectName
      * @return
      */
-    public static final MclnProject createRetrievedMclnProject(String projectName, MclnModel mclnModel) {
-        currentMclnProject = new MclnProject(false,false, projectName, mclnModel);
+    public static final MclnProject createRetrievedMclnProject(String projectName, MclnDoubleRectangle projectSpaceRectangle, MclnModel mclnModel) {
+        currentMclnProject = new MclnProject(projectSpaceRectangle, false, false, projectName, mclnModel);
         currentMclnProject.backupProject();
         return currentMclnProject;
     }
@@ -161,11 +169,13 @@ public class MclnProject {
      * the project structure. This will preserve entity's initialized flag that might be
      * set before the project was temporarily stashed.
      *
-     * @param mclnProject
+     * @param stashedMclnProject
      * @return
      */
-    public static final MclnProject recreateStashedMclnProject(MclnProject mclnProject) {
-        currentMclnProject = new MclnProject(false,false, mclnProject.getProjectName(), mclnProject.getCurrentMclnModel());
+    public static final MclnProject recreateStashedMclnProject(MclnProject stashedMclnProject) {
+        MclnDoubleRectangle projectSpaceRectangle = stashedMclnProject.projectSpaceRectangle;
+        currentMclnProject = new MclnProject(projectSpaceRectangle, false,
+                false, stashedMclnProject.getProjectName(), stashedMclnProject.getCurrentMclnModel());
         currentMclnProject.backupProject();
         return currentMclnProject;
     }
@@ -238,19 +248,6 @@ public class MclnProject {
 
         MclnStatement mclnStatement = MclnModelFactory.createMclnStatementWithTimeDrivenProgram(getStatementUID(),
                 subject, availableMclnStatementStates, cSysLocation, initialState, inputSimulatingProgramData);
-
-//        List<ProgramStep> programSteps = new ArrayList();
-//        for (int i = 0; i < inputSimulatingProgramData.length; i++) {
-//            Object[] programData = inputSimulatingProgramData[i];
-//            int ticks = (int) programData[0];
-//            MclnState mclnState = (MclnState) programData[1];
-//            TimeProgramStep timeProgramStep = new TimeProgramStep(ticks, mclnState);
-//            programSteps.add(timeProgramStep);
-//        }
-//        InputSimulatingProgram inputSimulatingProgram = new TimeDrivenProgram(programSteps);
-//        MclnStatement mclnStatement = new MclnStatement(getStatementUID(), subject, availableMclnStatementStates, cSysLocation,
-//                initialState, inputSimulatingProgram);
-
         return mclnStatement;
     }
 
@@ -270,23 +267,16 @@ public class MclnProject {
 
         MclnStatement mclnStatement = MclnModelFactory.createMclnStatementWithStateDrivenProgram(getStatementUID(),
                 subject, availableMclnStatementStates, cSysLocation, initialState, inputSimulatingProgramData);
-
-//        List<ProgramStep> stateDrivenProgramSteps = new ArrayList();
-//        for (int i = 0; i < inputSimulatingProgramData.length; i++) {
-//            Object[] programData = inputSimulatingProgramData[i];
-//            MclnState expectedMclnState = (MclnState) programData[0];
-//            int ticks = (int) programData[1];
-//            MclnState generatedMclnState = (MclnState) programData[2];
-//            StateProgramStep stateProgramStep = new StateProgramStep(expectedMclnState, ticks, generatedMclnState);
-//            stateDrivenProgramSteps.add(stateProgramStep);
-//        }
-//
-//        InputSimulatingProgram inputSimulatingProgram = new StateDrivenProgram(stateDrivenProgramSteps);
-//        MclnStatement mclnStatement = new MclnStatement(getStatementUID(), subject, availableMclnStatementStates,
-//                cSysLocation, initialState, inputSimulatingProgram);
         return mclnStatement;
     }
 
+    /**
+     *
+     * @param mclnStatement
+     * @param theProgramHasPhase
+     * @param timeDrivenProgram
+     * @param programStepDataList
+     */
     public static final void updateInputGeneratingProgram(MclnStatement mclnStatement,
                                                           boolean theProgramHasPhase,
                                                           boolean timeDrivenProgram,
@@ -461,6 +451,7 @@ public class MclnProject {
     private MclnProject backupMclnProject;
     private MclnModel backupMclnModel;
 
+    private ProjectAttributes backupProjectAttributes = new ProjectAttributes("", 0, 0, 0, 0);
     private List<MclnStatement> backupMclnStatements = new ArrayList();
     private List<MclnCondition> backupMclnConditions = new ArrayList();
     private List<MclnArc> backupMclnArcs = new ArrayList();
@@ -469,6 +460,8 @@ public class MclnProject {
 
     //   Instance data
 
+    private ProjectAttributes projectAttributes;
+    private MclnDoubleRectangle projectSpaceRectangle;
     private final boolean demoProject;
     private final boolean presentationProject;
     private Map<String, MclnModel> models = new ConcurrentHashMap();
@@ -488,18 +481,25 @@ public class MclnProject {
      * @return
      */
     private MclnProject(String projectName) {
-        this(false, false, projectName, null);
+        this(null, false, false, projectName, null);
     }
 
     /**
      * @param projectName
      * @param mclnModel
      */
-    private MclnProject(boolean presentationProject, boolean demoProject, String projectName, MclnModel mclnModel) {
+    private MclnProject(MclnDoubleRectangle projectSpaceRectangle, boolean presentationProject, boolean demoProject,
+                        String projectName, MclnModel mclnModel) {
+        projectAttributes = new ProjectAttributes(projectName, projectSpaceRectangle);
+        this.projectSpaceRectangle = projectSpaceRectangle;
         this.presentationProject = presentationProject;
         this.demoProject = demoProject;
         this.projectName = projectName;
         addMclnModel(mclnModel);
+    }
+
+    public final MclnDoubleRectangle getProjectSpaceRectangleCopy() {
+        return new MclnDoubleRectangle(projectSpaceRectangle);
     }
 
     public String getProjectName() {
@@ -511,8 +511,15 @@ public class MclnProject {
      *
      * @param projectName
      */
-    public void resetProjectName(String projectName) {
+    public final void resetProjectName(String projectName) {
         this.projectName = projectName;
+        lastSavedOrRetrievedProjectFileName = null;
+    }
+
+    public final void resetProjectAttributes(ProjectAttributes projectAttributes) {
+        this.projectName = projectAttributes.getProjectName();
+        projectSpaceRectangle = projectAttributes.getMclnDoubleRectangle();
+        this.projectAttributes = projectAttributes;
         lastSavedOrRetrievedProjectFileName = null;
     }
 
@@ -602,10 +609,6 @@ public class MclnProject {
     //   Checking if Project is modified
     //
 
-    public boolean[] wasProjectModified() {
-        return wasProjectChanged();
-    }
-
     private void backupProjectAndCleanInitializationUpdatedFlag() {
         backupProject();
         clearInitializationUpdatedFlag();
@@ -619,6 +622,7 @@ public class MclnProject {
         backupMclnProject = MclnProject.getInstance();
         backupMclnModel = backupMclnProject.getCurrentMclnModel();
 
+        backupProjectAttributes = backupMclnProject.projectAttributes.getCopy();
         backupMclnStatements = (List<MclnStatement>) ((ArrayList) backupMclnModel.getMclnStatements()).clone();
         backupMclnConditions = (List<MclnCondition>) ((ArrayList) backupMclnModel.getMclnConditions()).clone();
         backupMclnArcs = (List<MclnArc>) ((ArrayList) backupMclnModel.getMclnArcs()).clone();
@@ -665,20 +669,59 @@ public class MclnProject {
         }
     }
 
-    private boolean[] wasProjectChanged() {
-        boolean[] projectChanged = new boolean[3];
+    /**
+     * projectChanged[0] -> boolean[1] = projectAttributesChanged && modelChanged[0]
+     * projectChanged[1] -> boolean[1] = projectAttributesChanged
+     * projectChanged[2] -> boolean[]  = modelChanged, where
+     * <p>
+     * modelChanged[0] - true when something changed = modelChanged[1] | modelChanged[2] |modelChanged[3]
+     * modelChanged[1] - true when initialized
+     * modelChanged[2] - true when structure changed
+     * modelChanged[3] - true when model moved
+     *
+     * @return
+     */
+    public boolean[][] wasProjectModified() {
+        boolean[][] projectChanged = new boolean[3][];
+        boolean projectAttributesChanged = wereProjectAttributesChanged();
+        boolean[] modelChanged = wasModelModified();
+        projectChanged[0] = new boolean[]{projectAttributesChanged || modelChanged[0]};
+        if (!projectChanged[0][0]) {
+            return projectChanged;
+        }
+        projectChanged[1] = new boolean[]{projectAttributesChanged};
+        projectChanged[2] = modelChanged;
+        return projectChanged;
+    }
+
+    /**
+     * @return
+     */
+    public boolean[] wasModelModified() {
+        boolean[] modelChanged = new boolean[4];
 
         boolean entityInitializationChanged = isEntityInitializationChanged();
-        projectChanged[0] = entityInitializationChanged;
+        modelChanged[1] = entityInitializationChanged;
 
         boolean modelStructureChanged = isModelStructureChanged();
         boolean modelUIDChanged = wasUIDChanged();
-        projectChanged[1] = modelStructureChanged | modelUIDChanged;
+        modelChanged[2] = modelStructureChanged | modelUIDChanged;
 
         boolean modelOrFragmentWasMoved = wasModelOrFragmentMoved();
-        projectChanged[2] = modelOrFragmentWasMoved;
+        modelChanged[3] = modelOrFragmentWasMoved;
 
-        return projectChanged;
+        modelChanged[0] = modelChanged[1] || modelChanged[2] || modelChanged[3];
+
+        return modelChanged;
+    }
+
+    /**
+     * @return
+     */
+    private boolean wereProjectAttributesChanged() {
+        MclnProject currentMclnProject = MclnProject.getInstance();
+        boolean attributesWereChanged = !currentMclnProject.projectAttributes.equals(currentMclnProject.backupProjectAttributes);
+        return attributesWereChanged;
     }
 
     /**
@@ -703,7 +746,7 @@ public class MclnProject {
         return modelChanged;
     }
 
-    private boolean wasUIDChanged(){
+    private boolean wasUIDChanged() {
         boolean modelChanged = false;
 
         MclnProject currentMclnProject = MclnProject.getInstance();
@@ -713,7 +756,7 @@ public class MclnProject {
         List<MclnCondition> currentMclnConditions = currentMclnModel.getMclnConditions();
         List<MclnArc> currentMclnArcs = currentMclnModel.getMclnArcs();
 
-        Set<String> backupStatementUIDsSet = new HashSet( );
+        Set<String> backupStatementUIDsSet = new HashSet();
         for (MclnStatement mclnStatement : backupMclnStatements) {
             backupStatementUIDsSet.add(mclnStatement.getUID());
         }
@@ -735,14 +778,14 @@ public class MclnProject {
             boolean contains = backupStatementUIDsSet.contains(currentUID);
             modelChanged |= !contains;
         }
-        if(modelChanged){
+        if (modelChanged) {
             return true;
         }
 
         for (MclnCondition mclnCondition : currentMclnConditions) {
             modelChanged |= !backupConditionUIDsSet.contains(mclnCondition.getUID());
         }
-        if(modelChanged){
+        if (modelChanged) {
             return true;
         }
 
@@ -780,38 +823,6 @@ public class MclnProject {
         return statementInitializationChanged || arcInitializationChanged;
     }
 
-
-//    package com.fxall.restingorders.ui.orders;
-//
-//    import java.util.ArrayList;
-//
-//    /**
-//     * Created by u0180093 on 10/25/2017.
-//     */
-//    public class AAA implements Cloneable {
-//        private ArrayList c = new ArrayList();
-//
-//        AAA(){
-//            try {
-//                c.add("123");
-//                AAA aaa = (AAA)clone();
-//                System.out.println();
-//            }catch(CloneNotSupportedException e){
-//
-//            }
-//        }
-//
-//        protected Object clone() throws CloneNotSupportedException{
-//            AAA d = (AAA)super.clone();
-//            d.c = (ArrayList)d.c.clone();
-//            return d;
-//        }
-//        public static void main(String[] args){
-//            AAA a = new AAA();
-//        }
-//    }
-
-
     //
     //   Converting Project to XML
     //
@@ -827,6 +838,4 @@ public class MclnProject {
         stringBuilder.append("</").append(MCLN_PROJECT_XML_TAG).append(">");
         return stringBuilder.toString();
     }
-
-
 }

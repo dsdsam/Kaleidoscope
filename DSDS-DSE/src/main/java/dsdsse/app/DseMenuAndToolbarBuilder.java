@@ -180,7 +180,7 @@ public class DseMenuAndToolbarBuilder {
         adfMenuBar.addAdfAppMenu(AppController.MENU_ITEM_PROJECT);
         adfMenuBar.addMenuItem(AppController.MENU_ITEM_NEW_PROJECT, projectMenuActionGroup);
         adfMenuBar.addMenuSeparator();
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_RENAME_PROJECT, RENAME_PROJECT_ICON, projectMenuActionGroup);
+        adfMenuBar.addMenuItem(AppController.MENU_ITEM_CHANGE_ATTRIBUTES, RENAME_PROJECT_ICON, projectMenuActionGroup);
         adfMenuBar.addMenuItem(AppController.MENU_ITEM_RENAME_MODEL, RENAME_MODEL_ICON, projectMenuActionGroup);
         adfMenuBar.addMenuItem(AppController.MENU_ITEM_CLEAR_DESIGN_SPACE, CLEAR_DESIGN_SPACE_ICON, projectMenuActionGroup);
         adfMenuBar.addMenuSeparator();
@@ -295,7 +295,7 @@ public class DseMenuAndToolbarBuilder {
 
         toolBar.addSeparator();
 
-        toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_RENAME_PROJECT,
+        toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_CHANGE_ATTRIBUTES,
                 RENAME_PROJECT_ICON, " Rename project ", true, ADF_MENU_ACTION_LISTENER, null));
 
         toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_RENAME_MODEL,
@@ -450,9 +450,6 @@ public class DseMenuAndToolbarBuilder {
         //   P R E F E R E N C E S   A N D   H E L P   B U T T O N S
         //
 
-//        if (!TOGGLE_MENU_AND_TOOLBAR_BUTTONS) {
-
-//                toolBar.add(makeMenuAndToolbarButton("help.gif", AppController.MENU_ITEM_SHOW_HELP_PANEL, " Help. ", true, menuActionListener));
         toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_SHOW_SETUP_PANEL,
                 SHOW_SETUP_ICON, " Show Preferences Setup Panel ", true,
                 ADF_MENU_ACTION_LISTENER, ADF_J_BUTTON_ACTION_GROUP, true));
@@ -463,70 +460,7 @@ public class DseMenuAndToolbarBuilder {
                 SHOW_HELP_CONTENT_ICON, " Show Help Panel ", true,
                 ADF_MENU_ACTION_LISTENER, ADF_J_BUTTON_ACTION_GROUP, true));
 
-//        } else {
-//
-//            //
-//            //   P r e f e r e n c e s   t o g g l e   b u t t o n
-//            //
-//
-//            ItemListener preferencesButtonItemListener = (e) -> {
-//                if (e.getStateChange() == ItemEvent.SELECTED) {
-//                    AppController.getInstance().onShowSetup();
-//                } else {
-//                    AppController.getInstance().onHideSetup();
-//                }
-//            };
-//
-////            preferencesButton = createToolbarToggleButton(SHOW_SETUP_ICON, HIDE_SETUP_ICON,
-////                    AppController.MENU_ITEM_SHOW_SETUP_PANEL, AppController.MENU_ITEM_HIDE_SETUP_PANEL,
-////                    false, true, " Show/Hide Preferences Setup Panel ", preferencesButtonItemListener);
-////            preferencesButton.addItemListener(preferencesButtonItemListener);
-////            toggleButtonGroup.add(preferencesButton);
-////            toolBar.add(preferencesButton);
-//
-//            toolBar.addSeparator();
-//
-//            //
-//            //   H e l p   t o g g l e   b u t t o n
-//            //
-//
-////            ItemListener helpButtonItemListener = (e) -> {
-////                if (e.getStateChange() == ItemEvent.SELECTED) {
-////                    AppController.getInstance().onShowHelpContent();
-////                } else {
-////                    AppController.getInstance().onHideHelpContent();
-////                }
-////            };
-//
-////            helpToggleButton = createToolbarToggleButton(SHOW_HELP_CONTENT_ICON, HIDE_HELP_CONTENT_ICON,
-////                    AppController.MENU_ITEM_SHOW_HELP_PANEL, AppController.MENU_ITEM_SHOW_HELP_PANEL,
-////                    false, true, " Show help contents panel ", helpButtonItemListener);
-////            helpToggleButton.addItemListener(helpButtonItemListener);
-////            toggleButtonGroup.add(helpToggleButton);
-////            toolBar.add(helpToggleButton);
-//        }
-
         return toolBar;
-    }
-
-
-    private static AdfTestToggleButton printToggleButton;
-    private static AdfTestToggleButton preferencesButton;
-    private static AdfTestToggleButton helpToggleButton;
-
-    public static void onEastPanelRemoved(JComponent eastPanel) {
-//        if (eastPanel == PreferencesSetupPanel.getInstance()) {
-//            System.out.println("Preference Panel removed");
-//            if (preferencesButton != null) {
-//                preferencesButton.resetState();
-//            }
-//        } else if (eastPanel == HelpPanelHolder.getInstance()) {
-//            System.out.println("Help Panel removed");
-//            if (helpToggleButton != null) {
-//                helpToggleButton.resetState();
-//            }
-//        }
-//        System.out.println();
     }
 
     /**
@@ -568,8 +502,6 @@ public class DseMenuAndToolbarBuilder {
         toolbarButton.setAction(action);
         toolbarButton.setActionCommand(menuItem);
         toolbarButton.setToolTipText(tipText);
-//        toolbarButton.setDisabledIcon(disabledIcon);
-//        toolbarButton.addActionListener(action);
 
         toolbarButton.setEnabled(enabled);
         return toolbarButton;
@@ -738,58 +670,6 @@ public class DseMenuAndToolbarBuilder {
         return toolbarButton;
     }
 
-//    /**
-//     * @param defaultIconName
-//     * @param selectedIconName
-//     * @param defaultMenuItem
-//     * @param selectedMenuItem
-//     * @param selected
-//     * @param enabled
-//     * @param tipText
-//     * @param itemListener
-//     * @return
-//     */
-//    public static AdfTestToggleButton createToolbarToggleButton(String defaultIconName, String selectedIconName,
-//                                                                String defaultMenuItem, String selectedMenuItem,
-//                                                                boolean selected, boolean enabled,
-//                                                                String tipText, ItemListener itemListener) {
-//
-//        ImageIcon defaultIcon = AppHelper.getImageIcon(ICON_CLASS_PATH_PREFIX + defaultIconName);
-//        ImageIcon selectedIcon = AppHelper.getImageIcon(ICON_CLASS_PATH_PREFIX + selectedIconName);
-//        AdfTestToggleButton toggleIconJButton = new AdfTestToggleButton(defaultIcon, selected);
-////        toggleIconJButton.setText("AAA");
-//        if (defaultIcon != null) {
-//            ImageProducer prod = new FilteredImageSource(defaultIcon.getImage().getSource(), filter);
-//            Image disabledImage = Toolkit.getDefaultToolkit().createImage(prod);
-//            toggleIconJButton.setDisabledIcon(new ImageIcon(disabledImage));
-//            toggleIconJButton.setSelectedIcon(selectedIcon);
-////            toggleIconJButton.setSelected(selected);
-//        } else {
-//            new Exception("icon " + defaultIconName + " not found").printStackTrace();
-//        }
-//        toggleIconJButton.setFocusPainted(false);
-//        toggleIconJButton.setActionCommand(defaultIconName);
-//        toggleIconJButton.setToolTipText(tipText);
-//        toggleIconJButton.addActionListener(null);
-//        toggleIconJButton.setMargin(new Insets(0, 0, 0, 0));
-//
-//
-//        toggleIconJButton.setHorizontalAlignment(SwingConstants.CENTER);
-//        toggleIconJButton.setVerticalAlignment(SwingConstants.CENTER);
-//        toggleIconJButton.setBorder(null);
-//        toggleIconJButton.setEnabled(enabled);
-//
-//        AdfMenuAndToolbarAction action = (AdfMenuAndToolbarAction) menuItemLabelToAction.get(defaultMenuItem);
-//        if (action != null) {
-//            action.setButton(toggleIconJButton);
-//        }
-//        action = (AdfMenuAndToolbarAction) menuItemLabelToAction.get(selectedMenuItem);
-//        if (action != null) {
-//            action.setButton(toggleIconJButton);
-//        }
-//        return toggleIconJButton;
-//    }
-
     //
     //   M e n u   A c t i o n
     //
@@ -844,7 +724,6 @@ public class DseMenuAndToolbarBuilder {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            System.out.println("Menu And Toolbar Action: " + menuItemLabel);
             if (menuActionListener == null) {
                 return;
             }
