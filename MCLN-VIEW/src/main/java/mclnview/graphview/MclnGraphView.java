@@ -16,6 +16,8 @@ import java.util.*;
  */
 public class MclnGraphView extends CSysView {
 
+    public static String MG01 = "MG01"; // mcln model graph
+
     private final Color[] axesColors =
             {
                     (new Color(0xFF0000)), (new Color(0xFF0000)), (new Color(0xFF0000)),
@@ -1037,10 +1039,10 @@ public class MclnGraphView extends CSysView {
             public void run() {
                 JFrame frame = new JFrame();
                 frame.setSize(600, 300);
-                MclnModel currentMclnModel = MclnModel.createInstance("Default Mcln Model", "MG01", -15, 15, 30, 30);
-                MclnProject mclnProject = MclnProject.createInitialMclnProject(MclnProject.DEFAULT_PROJECT_NAME, currentMclnModel);
+                MclnDoubleRectangle mclnDoubleRectangle = new MclnDoubleRectangle(-15, 15, 30, 30);
+                MclnModel currentMclnModel = MclnModel.createInstance("Default Mcln Model", MG01, mclnDoubleRectangle);
+                MclnProject mclnProject = MclnProject.createInitialMclnProject(MclnProject.DEFAULT_PROJECT_NAME, mclnDoubleRectangle, currentMclnModel);
                 MclnGraphViewModel mclnGraphViewModel = new MclnGraphViewModel(mclnProject);
-//                MclnGraphViewModel MclnGraphViewModel, int viewPadding, int options
                 MclnGraphView mclnGraphView = new MclnGraphView(mclnGraphViewModel, 20, 0);
                 frame.getContentPane().add(mclnGraphView);
                 frame.setVisible(true);
