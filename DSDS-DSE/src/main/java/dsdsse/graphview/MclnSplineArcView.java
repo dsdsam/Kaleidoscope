@@ -1,6 +1,5 @@
 package dsdsse.graphview;
 
-import adf.csys.view.CSysView;
 import mcln.model.MclnArc;
 import mcln.model.MclnNode;
 import mcln.palette.MclnState;
@@ -9,13 +8,32 @@ import vw.valgebra.VAlgebra;
 import java.awt.*;
 import java.util.List;
 
-public class MclnSplineArcView extends MclnArcView implements Cloneable {
+/**
+ * Created by IntelliJ IDEA.
+ * User: XP Admin
+ * Date: May 26, 2013
+ * Time: 7:35:03 PM
+ * To change this template use File | Settings | File Templates.
+ */
+public class MclnSplineArcView extends MclnGraphEntityView<MclnArc> implements Cloneable {
 
     private static final Color DEFAULT_DRAWING_COLOR = Color.GRAY;
     private static final Color DEFAULT_ARC_COLOR = Color.LIGHT_GRAY;
 
-    private MclnGraphSplineEntity mcLnGraphSplineEntity;
+    private final MclnArc mclnArc; // arc data model
+
+    private MclnGraphDesignerView parentCSys;
+    private MclnState arcMclnState;
+    private MclnGraphViewNode inpNode;
+    private MclnGraphViewNode outNode;
+
+    private boolean straightArc;
     private int selKnotInd = -1;
+
+    private MclnGraphSplineEntity mclnGraphSplineViewEntity;
+    private MclnArcArrow mclnArcArrow;
+
+    private StringBuilder oneLineMessageBuilder = new StringBuilder();
 
     //
     //  C r e a t i o n   m e t h o d s
@@ -29,36 +47,41 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
      * @param inpNode
      */
     MclnSplineArcView(MclnGraphDesignerView parentCSys, MclnArc mclnArc, MclnGraphViewNode inpNode) {
-        super(parentCSys, mclnArc, inpNode);
-        initBeingCreatedArc(parentCSys, inpNode);
-    }
+        super(parentCSys, mclnArc);
+        this.parentCSys = parentCSys;
+//        this.knobLocation = knobLocation;
+//        this.radius = radius;
+//        this.initState = initState;
+//        this.threshold = threshold;
 
-    private void initBeingCreatedArc(CSysView parentCSys, MclnGraphViewNode inpNode) {
-        mcLnGraphSplineEntity = new MclnGraphSplineEntity(parentCSys, inpNode);
+        this.mclnArc = mclnArc;
+        this.inpNode = inpNode;
+
+        // set arc to be a spline
+        straightArc = false;
+        mclnGraphSplineViewEntity = new MclnGraphSplineEntity(parentCSys, inpNode);
         double[] splineScrStartPoint = inpNode.getScrPnt();
 
         createFirstScrKnotMakeItActive(splineScrStartPoint);
         addNextScrKnotAndMakeItActive(splineScrStartPoint);
 
-        mcLnGraphSplineEntity.setSelected(true);
+        mclnGraphSplineViewEntity.setSelected(true);
 
+        arcMclnState = mclnArc.getArcMclnState();
         Color stateColor = (arcMclnState != null) ? new Color(arcMclnState.getRGB()) : DEFAULT_ARC_COLOR;
-        mcLnGraphSplineEntity.setArcColor(stateColor);
+        mclnGraphSplineViewEntity.setArcColor(stateColor);
     }
 
-    /**
-     *
-     */
     public void resetArcSpline() {
-        mcLnGraphSplineEntity = new MclnGraphSplineEntity(parentCSys, inpNode);
+        mclnGraphSplineViewEntity = new MclnGraphSplineEntity(parentCSys, inpNode);
         double[] splineScrStartPoint = inpNode.getScrPnt();
 
         createFirstScrKnotMakeItActive(splineScrStartPoint);
         addNextScrKnotAndMakeItActive(splineScrStartPoint);
 
-        mcLnGraphSplineEntity.setSelected(true);
+        mclnGraphSplineViewEntity.setSelected(true);
         Color stateColor = (arcMclnState != null) ? new Color(arcMclnState.getRGB()) : DEFAULT_ARC_COLOR;
-        mcLnGraphSplineEntity.setArcColor(stateColor);
+        mclnGraphSplineViewEntity.setArcColor(stateColor);
     }
 
     /**
@@ -66,17 +89,15 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
      *
      * @param outNode
      */
-    @Override
     public void setOutputNode(MclnGraphViewNode outNode) {
         this.outNode = outNode;
-        mcLnGraphSplineEntity.setOutputNode(outNode);
+        mclnGraphSplineViewEntity.setOutputNode(outNode);
     }
 
     /**
      *
      */
-    @Override
-    void finishArcCreation() {
+    public void finishArcCreation() {
 
         // complete MCLN Arc creation
         MclnNode mclnArcOutputNode = outNode.getTheElementModel();
@@ -88,10 +109,19 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
 
         // complete spline creation
         Color stateColor = (arcMclnState != null) ? new Color(arcMclnState.getRGB()) : DEFAULT_ARC_COLOR;
-        mcLnGraphSplineEntity.setArcColor(stateColor);
-        mcLnGraphSplineEntity.calculate();
+        mclnGraphSplineViewEntity.setArcColor(stateColor);
+        mclnGraphSplineViewEntity.calculate();
 
-        mclnArcArrow = mcLnGraphSplineEntity.editorFinishedSplineCreation(mclnArc);
+        mclnArcArrow = mclnGraphSplineViewEntity.editorFinishedSplineCreation(mclnArc);
+
+//        mclnArcArrow = constructArrow(parentCSys, stateColor);
+
+        // storing spline cSys points and arrow cSys points for future xmlization
+//        if (mclnArcArrow != null) {
+//            List<double[]> splineCSysPoints = mclnGraphSplineViewEntity.getSplineCSysPoints();
+//            double[][] arrowCSysPoints = mclnArcArrow.arrowScrPointsToCSysPoints(mclnArcArrow.getViewPoints());
+//            mclnArc.setSplineCSysPoints(splineCSysPoints, arrowCSysPoints);
+//        }
     }
 
     /**
@@ -106,20 +136,25 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
      * @param outNode
      */
     MclnSplineArcView(MclnGraphDesignerView parentCSys, MclnArc mclnArc, MclnGraphViewNode inpNode,
-                      MclnGraphViewNode outNode) {
-        super(parentCSys, mclnArc, inpNode, outNode);
+                MclnGraphViewNode outNode) {
+        super(parentCSys, mclnArc);
+        this.parentCSys = parentCSys;
+        this.mclnArc = mclnArc;
+//        this.UID = mclnArc.getUID();
+        this.inpNode = inpNode;
+        this.outNode = outNode;
 
-        mcLnGraphSplineEntity = new MclnGraphSplineEntity(parentCSys, inpNode, outNode);
+        mclnGraphSplineViewEntity = new MclnGraphSplineEntity(parentCSys, inpNode, outNode);
 
         arcMclnState = mclnArc.getArcMclnState();
         Color stateColor = (arcMclnState != null) ? new Color(arcMclnState.getRGB()) : DEFAULT_ARC_COLOR;
-        mcLnGraphSplineEntity.setArcColor(stateColor);
-        mcLnGraphSplineEntity.setMclnArcStateColor(stateColor);
+        mclnGraphSplineViewEntity.setArcColor(stateColor);
+        mclnGraphSplineViewEntity.setMclnArcStateColor(stateColor);
 
         List<double[]> knotCSysLocations = mclnArc.getKnotCSysLocations();
 
         int arrowTipSplineIndex = mclnArc.getArrowTipSplineIndex();
-        mcLnGraphSplineEntity.setArrowTipSplineIndex(arrowTipSplineIndex);
+        mclnGraphSplineViewEntity.setArrowTipSplineIndex(arrowTipSplineIndex);
 
         if (knotCSysLocations.size() == 2) {
 //            new Exception("Arrow with two knots created").printStackTrace();
@@ -132,29 +167,79 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
         if (knotCSysLocations.size() > 3) {
 //            System.out.println();
         }
-        mcLnGraphSplineEntity.setSplineCSysKnots(knotCSysLocations);
+        mclnGraphSplineViewEntity.setSplineCSysKnots(knotCSysLocations);
 
         setDrawKnots(false);
         setSelected(false);
         setSplineThreadSelected(false);
         setAllKnotsSelected(false);
-        mcLnGraphSplineEntity.setNoActiveKnots();
+        mclnGraphSplineViewEntity.setNoActiveKnots();
 
-        mcLnGraphSplineEntity.calculate();
+        mclnGraphSplineViewEntity.calculate();
 
-        MclnArcArrow mclnArcArrow = mcLnGraphSplineEntity.constructRetrievedArrow(mclnArc, parentCSys, stateColor, inpNode, outNode);
+        MclnArcArrow mclnArcArrow = mclnGraphSplineViewEntity.constructRetrievedArrow(mclnArc, parentCSys, stateColor, inpNode, outNode);
         this.mclnArcArrow = mclnArcArrow;
-        mcLnGraphSplineEntity.finishSplineCreation(mclnArc, mclnArcArrow);
+        mclnGraphSplineViewEntity.finishSplineCreation(mclnArc, mclnArcArrow);
+    }
+
+    public Polygon buildTriangleArrow(double arrowLength, double arrowWidth, double[] arrowTipScrLocation) {
+        return mclnArcArrow.buildTriangleArrow(arrowLength, arrowWidth, arrowTipScrLocation);
     }
 
     @Override
-    public MclnArcView clone() {
-        MclnSplineArcView mclnArcViewClone = (MclnSplineArcView) super.clone();
-        if (mclnArcViewClone == null) {
-            return null;
+    public MclnArc getTheElementModel() {
+        return mclnArc;
+    }
+
+    public final boolean isRecognizingArc() {
+        return inpNode != null && (inpNode instanceof MclnPropertyView);
+    }
+
+    public final boolean isGeneratingArc() {
+        return inpNode != null && (inpNode instanceof MclnConditionView);
+    }
+
+    boolean isConnected() {
+        return inpNode != null && outNode != null;
+    }
+
+    boolean isInitialized() {
+        return true;
+    }
+
+    /**
+     * Called from Initialization Assistant to save the result of initialization
+     */
+    public void repaintArrowUponInitialization() {
+        MclnState arcMclnState = mclnArc.getArcMclnState();
+        mclnArcArrow.updateStateColorUponInitialization(arcMclnState.getStateID());
+        parentCSys.drawArcAndConnectedEntitiesOnTheImageAndCallRepaint(this);
+    }
+
+    public String getUID() {
+        return mclnArc.getUID();
+    }
+
+    public MclnGraphViewNode getInpNode() {
+        return inpNode;
+    }
+
+    public MclnGraphViewNode getOutNode() {
+        return outNode;
+    }
+
+    @Override
+    public MclnSplineArcView clone() {
+        MclnSplineArcView mclnArcViewClone = null;
+        try {
+            mclnArcViewClone = (MclnSplineArcView) super.clone();
+            mclnArcViewClone.mclnGraphSplineViewEntity = this.mclnGraphSplineViewEntity.clone();
+
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        } finally {
+            return mclnArcViewClone;
         }
-        mclnArcViewClone.mcLnGraphSplineEntity = this.mcLnGraphSplineEntity.clone();
-        return mclnArcViewClone;
     }
 
     //
@@ -162,26 +247,25 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
     //
 
     void setHighlightFlatSegments(boolean highlightFlatSegments) {
-        mcLnGraphSplineEntity.setHighlightFlatSegments(highlightFlatSegments);
+        mclnGraphSplineViewEntity.setHighlightFlatSegments(highlightFlatSegments);
     }
 
     void setSelectingArrowTipLocation(boolean selectingArrowTipLocation) {
-        mcLnGraphSplineEntity.setSelectingArrowTipLocation(selectingArrowTipLocation);
+        mclnGraphSplineViewEntity.setSelectingArrowTipLocation(selectingArrowTipLocation);
     }
 
     void destroyArcArrowUpOnUndoingArrowTipSelection() {
-        mcLnGraphSplineEntity.destroyArcArrowUpOnUndoingArrowTipSelection();
+        mclnGraphSplineViewEntity.destroyArcArrowUpOnUndoingArrowTipSelection();
     }
 
     public void setHighlightArcKnotsForArrowTipSelection(boolean highlightArcKnotsForArrowTipSelection) {
-        this.mcLnGraphSplineEntity.setHighlightArcKnotsForArrowTipSelection(highlightArcKnotsForArrowTipSelection);
+        this.mclnGraphSplineViewEntity.setHighlightArcKnotsForArrowTipSelection(highlightArcKnotsForArrowTipSelection);
     }
-
 
     //    K n o t s   a n d   s p l i n e   c r e a t i o n
 
     private void createFirstScrKnotMakeItActive(double[] scrPnt) {
-        mcLnGraphSplineEntity.createFirstScrKnotMakeItActive(scrPnt);
+        mclnGraphSplineViewEntity.createFirstScrKnotMakeItActive(scrPnt);
     }
 
     void addNextScrKnotAndMakeItActive(double x, double y) {
@@ -190,12 +274,12 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
     }
 
     private void addNextScrKnotAndMakeItActive(double[] scrPnt) {
-        mcLnGraphSplineEntity.addNextScrKnotAndMakeItActive(scrPnt);
+        mclnGraphSplineViewEntity.addNextScrKnotAndMakeItActive(scrPnt);
     }
 
     void addNextScrKnotAndMakePreviousKnotActive(double x, double y) {
         double[] scrPnt = {x, y, 0};
-        mcLnGraphSplineEntity.addNextScrKnotAndMakePreviousKnotActive(scrPnt);
+        mclnGraphSplineViewEntity.addNextScrKnotAndMakePreviousKnotActive(scrPnt);
     }
 
     @Override
@@ -206,17 +290,20 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
 
     @Override
     public void moveEntityActivePointTo(double[] activePointInCSysCoordinates) {
-        mcLnGraphSplineEntity.moveEntityActivePointTo(activePointInCSysCoordinates);
+//        System.out.println("MclnGraphArcViewEntity (mclnGraph Spline ViewEntity): updateArcPlacement   " +
+//                activePointInCSysCoordinates[0]);
+        mclnGraphSplineViewEntity.moveEntityActivePointTo(activePointInCSysCoordinates);
     }
 
     public int deleteLastPoint() {
-        int nPnts = mcLnGraphSplineEntity.deleteLastCSysKnot();
+        int nPnts = mclnGraphSplineViewEntity.deleteLastCSysKnot();
         return nPnts;
     }
 
     public void removeOutputNode() {
         setOutputNode(null);
         updatePosition();
+//        mclnGraphSplineViewEntity.setColor(Color.red);
     }
 
     //
@@ -224,7 +311,7 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
     //
 
     public void setDrawKnots(boolean status) {
-        mcLnGraphSplineEntity.setDrawKnots(status);
+        mclnGraphSplineViewEntity.setDrawKnots(status);
     }
 
     //   W a t e r m a r k
@@ -232,64 +319,64 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
     @Override
     public void setWatermarked(boolean watermarked) {
         this.watermarked = watermarked;
-        mcLnGraphSplineEntity.setWatermarked(watermarked);
+        mclnGraphSplineViewEntity.setWatermarked(watermarked);
     }
 
     public void setArrowWatermarked(boolean watermarked) {
-        mcLnGraphSplineEntity.setArrowWatermarked(watermarked);
+        mclnGraphSplineViewEntity.setArrowWatermarked(watermarked);
     }
 
     //   P r e - S e l e c t i o n   a n d   S e l e c t i o n
 
     @Override
     public void setPreSelected(boolean preSelected) {
-        mcLnGraphSplineEntity.setSelected(preSelected);
+        mclnGraphSplineViewEntity.setSelected(preSelected);
     }
 
     @Override
     public void setSelected(boolean status) {
-        mcLnGraphSplineEntity.setSelected(status);
+        mclnGraphSplineViewEntity.setSelected(status);
     }
 
     public void setArrowSelected(boolean watermarked) {
-        mcLnGraphSplineEntity.setArrowSelected(watermarked);
+        mclnGraphSplineViewEntity.setArrowSelected(watermarked);
     }
 
     public boolean isSelected() {
-        return mcLnGraphSplineEntity.isSelected();
+        return mclnGraphSplineViewEntity.isSelected();
     }
 
     public void setAllKnotsSelected(boolean status) {
-        mcLnGraphSplineEntity.setAllKnotsSelected(status);
+        mclnGraphSplineViewEntity.setAllKnotsSelected(status);
     }
 
     public void setKnobSelected(boolean status) {
-        mcLnGraphSplineEntity.setKnobSelected(status);
+        mclnGraphSplineViewEntity.setKnobSelected(status);
     }
 
     public void setSplineThreadSelected(boolean status) {
-        mcLnGraphSplineEntity.setThreadSelected(status);
+        mclnGraphSplineViewEntity.setThreadSelected(status);
     }
 
     //   H i g h l i g h t i n g
 
     @Override
     public void setHighlighted(boolean highlighted) {
-        mcLnGraphSplineEntity.setHighlighted(highlighted);
+        mclnGraphSplineViewEntity.setHighlighted(highlighted);
     }
 
     public void setArrowHighlighted(boolean highlighted1) {
-        mcLnGraphSplineEntity.setArrowHighlighted(highlighted1);
+        mclnGraphSplineViewEntity.setArrowHighlighted(highlighted1);
     }
 
     @Override
     public void setHighlightColor(Color highlightedColor) {
-        mcLnGraphSplineEntity.setHighlightColor(highlightedColor);
+        mclnGraphSplineViewEntity.setHighlightColor(highlightedColor);
     }
 
     @Override
     public boolean isMouseHover(int x, int y) {
-        return mcLnGraphSplineEntity.isMouseHover(x, y);
+        return mclnGraphSplineViewEntity.isMouseHover(x, y);
     }
 
     public boolean isKnotPicked(int x, int y) {
@@ -300,15 +387,15 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
 //                            parentCSys.currentOperation == parentCSys.CREATE_ARCS))
 //                return (arrow.isSelected( x, y ));
 
-        int nPnts = mcLnGraphSplineEntity.getNKnots();
-        selKnotInd = mcLnGraphSplineEntity.findKnot(x, y);
+        int nPnts = mclnGraphSplineViewEntity.getNKnots();
+        selKnotInd = mclnGraphSplineViewEntity.findKnot(x, y);
 
 
 //System.out.println("isSelected  "+selKnotInd);
         if (selKnotInd <= 0 || selKnotInd == (nPnts - 1)) {
             selKnotInd = -1;
         }
-        mcLnGraphSplineEntity.setSelectedKnotInd(selKnotInd);
+        mclnGraphSplineViewEntity.setSelectedKnotInd(selKnotInd);
         return selKnotInd != -1;
 
 //            return  mclnGraphSplineViewEntity.isKnobSelected(  x,   y);
@@ -317,14 +404,22 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
     //   M i s c
 
     public void setDrawKnotBoxesFlag(boolean status) {
-        mcLnGraphSplineEntity.setDrawKnotBoxesFlag(status);
+        mclnGraphSplineViewEntity.setDrawKnotBoxesFlag(status);
     }
 
     @Override
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
-        mcLnGraphSplineEntity.setHidden(hidden);
+        mclnGraphSplineViewEntity.setHidden(hidden);
     }
+
+    /**
+     * @return
+     */
+    public MclnArc getMclnArc() {
+        return mclnArc;
+    }
+
 
     /**
      * @param statementRadius
@@ -375,7 +470,7 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
     }
 
     void setKnobIndex(int knobIndex) {
-        mcLnGraphSplineEntity.setArcKnobAt(knobIndex);
+        mclnGraphSplineViewEntity.setArcKnobAt(knobIndex);
     }
 
     /**
@@ -384,23 +479,57 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
     void makeThreePointArc(double[] scrKnobLocation) {
         double[] cSysKnobLocation = parentCSys.screenPointToCSysPoint(null, scrKnobLocation);
 //        setKnobIndex(1);
-        mcLnGraphSplineEntity.updateKnotCSysLocation(1, cSysKnobLocation);
+        mclnGraphSplineViewEntity.updateKnotCSysLocation(1, cSysKnobLocation);
     }
 
     private void updatePosition() {
         // after the arc is moved, it is not more straight.
         straightArc = false;
         updateEnds();
-        mcLnGraphSplineEntity.calculate();
+        mclnGraphSplineViewEntity.calculate();
     }
 
     public void updateActiveScrPoint(double x, double y) {
-        mcLnGraphSplineEntity.updateActiveScrPoint(x, y, 0);
+        mclnGraphSplineViewEntity.updateActiveScrPoint(x, y, 0);
         straightArc = false;
     }
 
     public void updateActiveScrPoint(double x, double y, double z) {
-        mcLnGraphSplineEntity.updateActiveScrPoint(x, y, 0);
+        mclnGraphSplineViewEntity.updateActiveScrPoint(x, y, 0);
+    }
+
+
+    private void updateEnds() {
+//        double alongVec[] = {0, 0, 0};
+//        double dirVec[] = {0, 0, 0};
+//        double radVec[] = {0, 0, 0};
+//        double scrPnt[] = {0, 0, 0};
+//
+//        if (inpNode.type == RtsMVNObject.TRANSITION) {
+//            boolean inputObj = true;
+//            RtsVAlgebra.copyVec3(end1,
+//                    choosTransitionEnd(((RtsMCN_Transition) inpNode), inputObj));
+//        } else {
+//            RtsVAlgebra.initVec3(end1, inpNode.scrBase[0],
+//                    inpNode.scrBase[1], 0);
+//            nodeScrRad = ((RtsMCN_Node) inpNode).getScrRad();
+//        }
+//        spline.csysUpdateFirstScrPoint(end1);
+//
+//        if (outNode == null)
+//            return;
+//
+//        if (outNode.type == RtsMVNObject.TRANSITION) {
+//            boolean inputObj = false;
+//            RtsVAlgebra.copyVec3(end2,
+//                    choosTransitionEnd(((RtsMCN_Transition) outNode), inputObj));
+//        } else {
+//            RtsVAlgebra.initVec3(end2, outNode.scrBase[0],
+//                    outNode.scrBase[1], 0);
+//            nodeScrRad = ((RtsMCN_Node) outNode).getScrRad();
+//        }
+//        spline.csysUpdateLastScrPoint(end2);
+
     }
 
     //
@@ -408,7 +537,7 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
     //
 
     public void deletePoint(int ind) {
-        mcLnGraphSplineEntity.deleteCSysKnot(ind);
+        mclnGraphSplineViewEntity.deleteCSysKnot(ind);
     }
 
     //
@@ -427,7 +556,7 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
 
     @Override
     public void doCSysToScreenTransformation(int[] scr0, double scale) {
-        mcLnGraphSplineEntity.doCSysToScreenTransformation(scr0, scale);
+        mclnGraphSplineViewEntity.doCSysToScreenTransformation(scr0, scale);
     }
 
     //
@@ -436,7 +565,7 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
 
     @Override
     public void translate(double[] translationVector) {
-        mcLnGraphSplineEntity.translate(translationVector);
+        mclnGraphSplineViewEntity.translate(translationVector);
     }
 
     /**
@@ -447,7 +576,7 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
      */
     @Override
     public void translateAndPaintEntityAtInterimLocation(Graphics g, double[] translationVector) {
-        mcLnGraphSplineEntity.translateAndPaintSplineAtInterimLocation(g, translationVector);
+        mclnGraphSplineViewEntity.translateAndPaintSplineAtInterimLocation(g, translationVector);
     }
 
 //    public void takeFinalLocation(double[] translationVector) {
@@ -463,8 +592,8 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
      */
     @Override
     public void takeFinalLocation(double[] translationVector) {
-        mcLnGraphSplineEntity.takeFinalLocation(translationVector);
-        List<double[]> knotCSysLocations = mcLnGraphSplineEntity.getSplineCSysKnots();
+        mclnGraphSplineViewEntity.takeFinalLocation(translationVector);
+        List<double[]> knotCSysLocations = mclnGraphSplineViewEntity.getSplineCSysKnots();
         mclnArc.setCSysKnots(knotCSysLocations);
     }
 
@@ -473,17 +602,39 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
 
     }
 
+
+    //    private int arcKnobInd = -1;
+    // Drawing conditions
+//    private boolean drawArcKnob = false;
+    private boolean drawKnotBoxes = false;
+    private boolean drawArrow = true;
+//    private int selectedKnotIndex;
+
+//    public int getNKnots() {
+//        return 2; //spline.getNKnots();
+//    }
+
+
+//    /**
+//     * @param ind
+//     */
+//    public void setArcKnobAt(int ind) {
+//        mclnGraphSplineViewEntity.setArcKnobAt(ind);
+////        arcKnobInd = ind;
+////        drawArcKnob = ind != -1;
+//    }
+
     public void setSelectedKnotInd(int ind) {
         selKnotInd = ind;
-        mcLnGraphSplineEntity.setSelectedKnotInd(ind);
+        mclnGraphSplineViewEntity.setSelectedKnotInd(ind);
     }
 
     public int getSelectedKnotIndex() {
-        return mcLnGraphSplineEntity.getSelectedKnotIndex();
+        return mclnGraphSplineViewEntity.getSelectedKnotIndex();
     }
 
     public int getNumberOfKnots() {
-        return mcLnGraphSplineEntity.getNKnots();
+        return mclnGraphSplineViewEntity.getNKnots();
     }
 
 
@@ -492,8 +643,24 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
     //
 
     public final List<double[]> getKnotCSysLocations() {
-        return mcLnGraphSplineEntity.getSplineCSysKnots();
+        return mclnGraphSplineViewEntity.getSplineCSysKnots();
     }
+
+    public double[] getScrOutlineCenter() {
+        return mclnArcArrow.getScrOutlineCenter();
+    }
+
+
+//    private final void setKnotCSysLocations(List<double[]> knotCSysLocations) {
+//        mclnGraphSplineViewEntity.setKnotCSysLocations(knotCSysLocations);
+//        int index = 0;
+//        for (double[] cSysPnt : knotCSysLocations) {
+//            double[] scrPnt = parentCSys.cSysPointToScreenPoint(null, cSysPnt);
+//            mclnGraphSplineViewEntity.addScrKnot(index, scrPnt);
+//            index++;
+//        }
+//
+//    }
 
     //
     //   D r a w i n g   A r c
@@ -501,13 +668,13 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
 
     @Override
     public void drawPlainEntity(Graphics g) {
-        mcLnGraphSplineEntity.drawPlainEntity(g);
+        mclnGraphSplineViewEntity.drawPlainEntity(g);
     }
 
     @Override
     public void newDrawEntityAndConnectedEntity(Graphics g, boolean paintExtras) {
         // draw arc first
-        mcLnGraphSplineEntity.drawPlainEntity(g);
+        mclnGraphSplineViewEntity.drawPlainEntity(g);
         if (paintExtras) {
             paintExtras(g);
         }
@@ -517,18 +684,39 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
 
     @Override
     public void drawEntityOnlyAtInterimLocation(Graphics g) {
-        mcLnGraphSplineEntity.drawEntityOnlyAtInterimLocation(g);
+        mclnGraphSplineViewEntity.drawEntityOnlyAtInterimLocation(g);
     }
 
     @Override
     public void drawEntityAndConnectedEntityExtras(Graphics g, boolean paintExtras) {
         // draw arc first
-        mcLnGraphSplineEntity.drawPlainEntity(g);
+        mclnGraphSplineViewEntity.drawPlainEntity(g);
         if (paintExtras) {
             paintExtras(g);
         }
         // draw nodes on the top
         drawConnectedEntities(g, paintExtras);
+    }
+
+    /**
+     * draws connected entity + extras if paintExtras is true
+     *
+     * @param g
+     * @param paintExtras
+     */
+    private void drawConnectedEntities(Graphics g, boolean paintExtras) {
+//        if (inpNode != null) {
+        inpNode.drawPlainEntity(g);
+        if (paintExtras) {
+            inpNode.paintExtras(g);
+        }
+//        }
+        if (outNode != null) {
+            outNode.drawPlainEntity(g);
+            if (paintExtras) {
+                outNode.paintExtras(g);
+            }
+        }
     }
 
     //
@@ -541,14 +729,23 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
             return;
         }
         g.setColor(getDrawColor());
-        mcLnGraphSplineEntity.draw(g);
+        mclnGraphSplineViewEntity.draw(g);
         if (mclnArcArrow != null) {
 //            mclnArcArrow.drawKnob(g, Color.GREEN);
         }
     }
 
-      void paintExtrasAtGivenScreenLocation(Graphics g) {
-        mcLnGraphSplineEntity.paintExtras(g);
+    @Override
+    public void paintExtras(Graphics g) {
+        paintExtrasAtGivenScreenLocation(g);
+    }
+
+    public void paintExtrasAtInterimLocation(Graphics g) {
+        paintExtrasAtGivenScreenLocation(g);
+    }
+
+    private void paintExtrasAtGivenScreenLocation(Graphics g) {
+        mclnGraphSplineViewEntity.paintExtras(g);
         if (inpNode != null) {
             inpNode.drawPlainEntity(g);
         }
@@ -557,11 +754,28 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
         }
     }
 
+
+//    public boolean isKnobSelected(int x, int y) {
+//        if (drawKnobAsArrow) {
+////  System.out.println("Arrow selection "+arcKnobInd);
+//            return false;//(arrow.isSelected( me ));
+//        } else if (arcKnobInd != -1) {
+//            int nPnts = getNKnots();
+//            double knobPnt[] = {0., 0., 0.};
+//            double csysKnobPnt[] = {0., 0., 0.};
+//
+//            knobPnt = copyKnotFromKnotArr(arcKnobInd);
+//            int selKnotInd = findKnot(x, y);
+//            //System.out.println("isSelected  "+selKnotInd);
+//            return selKnotInd == arcKnobInd;
+//        }
+//        return (false);
+//    }
+
     //
     //   p l a c e m e n t
     //
 
-    @Override
     public void updateArcPlacement(int[] scr0, double scale) {
 //        VAlgebra.copyVec3(modelPnt, worldPnt);
 //        System.out.println("MclnGraphArcViewEntity: updateArcPlacement");
@@ -569,15 +783,35 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
         double[] outNodeCSysPnt = outNode.getCSysPnt();
 //            System.out.println("MclnGraphArcViewEntity: updateArcPlacement   " + inpNodeCSysPnt[0]);
 //            System.out.println("MclnGraphArcViewEntity: updateArcPlacement   " + outNodeCSysPnt[0]);
-        mcLnGraphSplineEntity.updateFirstKnotLocation(inpNodeCSysPnt);
-        mcLnGraphSplineEntity.updateLastKnotLocation(outNodeCSysPnt);
+        mclnGraphSplineViewEntity.updateFirstKnotLocation(inpNodeCSysPnt);
+        mclnGraphSplineViewEntity.updateLastKnotLocation(outNodeCSysPnt);
 
-        mcLnGraphSplineEntity.doCSysToScreenTransformation(scr0, scale);
+        mclnGraphSplineViewEntity.doCSysToScreenTransformation(scr0, scale);
     }
 
-    @Override
+
+//    public void prepareToXMLize() {
+//        List<double[]> splineCSysPoints = mclnGraphSplineViewEntity.getSplineCSysPoints();
+//        double[][] arrowScrPoints = mclnArcKnob.getViewPoints();
+//        List<double[]> arrowCSysPoints = new ArrayList<>();
+//        for (int i = 0; i < arrowScrPoints.length; i++) {
+//            double[] currentScrPoint = arrowScrPoints[i];
+//            arrowCSysPoints.add(parentCSys.screenPointToCSysPoint(currentScrPoint));
+//        }
+//        mclnArc.setSplineCSysPoints(splineCSysPoints, arrowCSysPoints);
+//
+//    }
+
+    public String getTooltip() {
+        if (mclnArc == null) {
+            return null;
+        }
+        return mclnArc.getUID();
+    }
+
+
     boolean checkIfArrowTipCanBeFound() {
-        boolean arrowTipFound = mcLnGraphSplineEntity.checkIfArrowTipCanBeFound();
+        boolean arrowTipFound = mclnGraphSplineViewEntity.checkIfArrowTipCanBeFound();
         return arrowTipFound;
     }
 
@@ -590,17 +824,45 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
     int findArrowTipIndexOnTheSpline(int x, int y, boolean userSelectsArrowLocation) {
         int arrowTipSplineScrIndex = -1;
         if (userSelectsArrowLocation) {
-            arrowTipSplineScrIndex = mcLnGraphSplineEntity.findArrowTipIndexOnTheSpline(x, y);
+            arrowTipSplineScrIndex = mclnGraphSplineViewEntity.findArrowTipIndexOnTheSpline(x, y);
         } else {
-            arrowTipSplineScrIndex = mcLnGraphSplineEntity.getTwoMouseClosedKnotsAndFindArrowTipLocation(x, y);
+            arrowTipSplineScrIndex = mclnGraphSplineViewEntity.getTwoMouseClosedKnotsAndFindArrowTipLocation(x, y);
         }
         return arrowTipSplineScrIndex;
     }
 
+    //
+    //   M e t h o d s   t o   d i s c o n n e c t   t h e   A r c   f r o m   t h e   g r a p h
+    //
+
     /**
+     * Called when a node removed from the graph
      *
-     * @return
+     * @param nodeToDisconnectFrom
      */
+    void disconnectFromNode(MclnGraphViewNode nodeToDisconnectFrom) {
+        if (nodeToDisconnectFrom == inpNode) {
+            inpNode = null;
+        }
+        if (nodeToDisconnectFrom == outNode) {
+            outNode = null;
+        }
+    }
+
+    /**
+     * Called when this arc is disconnected from its input and output nodes
+     */
+    void disconnectFromInputAndOutputNodes() {
+        if (inpNode != null) {
+            inpNode.removeOutputArc(this);
+        }
+        if (outNode != null) {
+            outNode.removeInputArc(this);
+        }
+        inpNode = null;
+        outNode = null;
+    }
+
     @Override
     public String getOneLineInfoMessage() {
         if (inpNode == null || outNode == null) {
@@ -662,3 +924,4 @@ public class MclnSplineArcView extends MclnArcView implements Cloneable {
 
 
 }
+
