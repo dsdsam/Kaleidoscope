@@ -1,6 +1,6 @@
 package dsdsse.designspace.history;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import mcln.palette.MclnState;
 
 import javax.swing.*;
@@ -16,14 +16,16 @@ import java.awt.*;
 public class LogViewPanel extends JPanel {
 
 //    private static final Color LIGHT_GRAY_BACKGROUND = new Color(0xFDFDFD);
+//    private static final Color LIGHT_GRAY_BACKGROUND = new Color(0xFAFAFA);
+//
 //    private static final Color LIGHT_BLUE_BACKGROUND = new Color(0xDCEBFF);
-
-    //    private static final Color LIGHT_GRAY_BACKGROUND = new Color(0xFAFAFA);
 //    private static final Color LIGHT_BLUE_BACKGROUND = new Color(0xDEEDFF);
-    //    private static final Color DARK_BLUE_BACKGROUND = new Color(0xD0E1FF);
-//    private static final Color DARK_BACKGROUND = new Color(0xAAAAFF);
+//    private static final Color DARK_BLUE_BACKGROUND = new Color(0xD0E1FF);
+
     private static final Color LIGHT_BACKGROUND = Color.WHITE;
-    private static final Color DARK_BACKGROUND = new Color(0xD6EAFF);
+    private static final Color MEDIUM_BLUE_BACKGROUND = new Color(0xD6EAFF);
+
+    private static final Color DARK_BACKGROUND = new Color(0xAAAAFF);
 
 //    private static final Color LIGHT_YELLOW_BACKGROUND = new Color(0xFFFFF8);
 //    private static final Color DARK_YELLOW_BACKGROUND = new Color(0xFFFACD);
@@ -105,7 +107,7 @@ public class LogViewPanel extends JPanel {
         while (y <= height + ROW_HEIGHT) {
             Color backgroundColor;
             if (highlightedRow) {
-                backgroundColor = DARK_BACKGROUND;
+                backgroundColor = MEDIUM_BLUE_BACKGROUND;
             } else {
                 backgroundColor = LIGHT_BACKGROUND;
             }

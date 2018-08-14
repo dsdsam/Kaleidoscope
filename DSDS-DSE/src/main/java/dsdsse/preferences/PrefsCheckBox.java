@@ -1,6 +1,6 @@
 package dsdsse.preferences;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import adf.ui.laf.checkbox.AdfCheckBox;
 
 import java.awt.*;

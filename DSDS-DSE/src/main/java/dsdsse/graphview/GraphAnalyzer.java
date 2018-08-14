@@ -1,5 +1,8 @@
 package dsdsse.graphview;
 
+import mclnview.graphview.MclnArcView;
+import mclnview.graphview.MclnGraphNodeView;
+
 import java.util.List;
 import java.util.Set;
 
@@ -8,28 +11,28 @@ import java.util.Set;
  */
 final class GraphAnalyzer {
 
-    static boolean findConnectingArcs(Set<MclnGraphViewNode> selectedNodesToBeMoved, Set<MclnArcView> arcsToBeMoved,
+    static boolean findConnectingArcs(Set<MclnGraphNodeView> selectedNodesToBeMoved, Set<MclnArcView> arcsToBeMoved,
                                       Set<MclnArcView> connectingArcsThatWilBeDiscarded) {
         arcsToBeMoved.clear();
         connectingArcsThatWilBeDiscarded.clear();
-        for(MclnGraphViewNode mclnGraphViewNode : selectedNodesToBeMoved){
+        for (MclnGraphNodeView mclnGraphViewNode : selectedNodesToBeMoved) {
             List<MclnArcView> inpArcList = mclnGraphViewNode.inpArcList;
-            for(MclnArcView mclnArcView : inpArcList){
-                MclnGraphViewNode mclnArcViewInpNode = mclnArcView.getInpNode();
+            for (MclnArcView mclnArcView : inpArcList) {
+                MclnGraphNodeView mclnArcViewInpNode = mclnArcView.getInpNode();
                 boolean contains = selectedNodesToBeMoved.contains(mclnArcViewInpNode);
-                if(contains){
+                if (contains) {
                     // the other end of arc is also selected -> adding it to the list
                     arcsToBeMoved.add(mclnArcView);
-                }else{
+                } else {
                     connectingArcsThatWilBeDiscarded.add(mclnArcView);
                 }
             }
             List<MclnArcView> outArcList = mclnGraphViewNode.outArcList;
-            for(MclnArcView mclnArcView : outArcList){
+            for (MclnArcView mclnArcView : outArcList) {
                 // getting arc's other end node
-                MclnGraphViewNode mclnArcViewOutNode = mclnArcView.getOutNode();
+                MclnGraphNodeView mclnArcViewOutNode = mclnArcView.getOutNode();
                 boolean contains = arcsToBeMoved.contains(mclnArcViewOutNode);
-                if(!contains){
+                if (!contains) {
                     connectingArcsThatWilBeDiscarded.add(mclnArcView);
                 }
             }

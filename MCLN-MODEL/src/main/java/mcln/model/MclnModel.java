@@ -106,6 +106,11 @@ public class MclnModel {
 
     protected MclnDoubleRectangle modelSpaceRectangle;
 
+    // Simulation
+    private boolean simulationEnabled;
+    private boolean simulationRunning;
+    private boolean simulationPaused;
+
     /**
      * created to be a part of server
      *
@@ -125,6 +130,36 @@ public class MclnModel {
         this.cSysWidth = modelSpaceRectangle.getWidth();
         this.cSysHeight = modelSpaceRectangle.getHeight();
     }
+
+    // =============================
+    // Simulation runtime attributes
+    // =============================
+
+    public boolean isSimulationEnabled() {
+        return simulationEnabled;
+    }
+
+    public void setSimulationEnabled(boolean simulationEnabled) {
+        this.simulationEnabled = simulationEnabled;
+    }
+
+    public boolean isSimulationRunning() {
+        return simulationRunning;
+    }
+
+    public void setSimulationRunning(boolean simulationRunning) {
+        this.simulationRunning = simulationRunning;
+    }
+
+    public boolean isSimulationPaused() {
+        return simulationPaused;
+    }
+
+    public void setSimulationPaused(boolean simulationPaused) {
+        this.simulationPaused = simulationPaused;
+    }
+
+    // =============================
 
     private int mclnModelsCounter;
 

@@ -41,27 +41,19 @@ public class CSysSplineEntity extends BasicCSysEntity {
 
     // Drawing constants
     private final int dotR = 2, dotD = 2 * dotR;
-    private final int pntRectW2 = 4, pntRectW = 2 * pntRectW2;
-    private final int pntRectH2 = 4, pntRectH = 2 * pntRectH2;
+    private final int pntRectW2 = 5, pntRectW = 2 * pntRectW2;
+    private final int pntRectH2 = 5, pntRectH = 2 * pntRectH2;
 
     // Display
-    private Color arcMclnStateColor = Color.BLACK;
-    private Color color;
     private Color knotColor = Color.BLACK;
-    private Color selectColor = Color.MAGENTA;
 
-    private boolean highlighted;
-    private int selKnotInd = -1;
+    protected int selectedKnotIndex = -1;
     private int activeKnotInd = -1;  // used upon creation
-    private int nSeg;
 
     // knots
     private boolean drawKnots = true;
     private boolean allKnotsSelected;
     private boolean drawKnotBoxes;
-
-    // arrow
-    private boolean arrowSelected;
 
     // thread
     protected boolean threadSelected;
@@ -73,8 +65,6 @@ public class CSysSplineEntity extends BasicCSysEntity {
     public CSysSplineEntity(CSysView parentCSysView) {
         super(parentCSysView);
         this.parentCSysView = parentCSysView;
-        setColor(arcMclnStateColor);
-        nSeg = mathSpline3D.getNSegments();
     }
 
     @Override
@@ -137,13 +127,11 @@ public class CSysSplineEntity extends BasicCSysEntity {
      */
     private void addScrKnot(double[] scrPnt) {
         if (splineScrKnots.size() >= 2) {
-//            System.out.println("CSysSplineEntity n = " + splineScrKnots.size());
             double[] lastScrKnot = splineScrKnots.get(splineScrKnots.size() - 1);
             double[] prevScrKnot = splineScrKnots.get(splineScrKnots.size() - 2);
             double[] clonedLastScrKnot = VAlgebra.initVec3(lastScrKnot[0], lastScrKnot[1], 0);
             double[] clonedPrevScrKnot = VAlgebra.initVec3(prevScrKnot[0], prevScrKnot[1], 0);
             double dist = VAlgebra.distVec3(clonedPrevScrKnot, clonedLastScrKnot);
-//            System.out.println("CSysSplineEntity dist = " + dist);
             if (dist < 5) {
 //                System.out.println("CSysSplineEntity Ignoring knot location " + dist);
                 return;
@@ -201,14 +189,14 @@ public class CSysSplineEntity extends BasicCSysEntity {
     }
 
     //
-    //    w o r k i n g    w i t h     k n o t s
+    //    W o r k i n g    w i t h     k n o t s
     //
 
     public void setDrawKnots(boolean status) {
         drawKnots = status;
     }
 
-    public void setDrawKnotBoxesFlag(boolean status) {
+    public void setDrawKnotBoxes(boolean status) {
         drawKnotBoxes = status;
     }
 
@@ -233,38 +221,6 @@ public class CSysSplineEntity extends BasicCSysEntity {
     }
 
     //
-    //   w o r k i n g   w i t h   k n o b s
-    //
-
-//    protected void setArcKnobAt(int ind) {
-//        arcKnobInd = ind;
-//    }
-//
-//    protected int getArcKnobIndex() {
-//        return arcKnobInd;
-//    }
-
-//    public double[] getKnobCSysLocation() {
-//        if (arcKnobInd < 1 || arcKnobInd >= (mathSpline3D.getNKnots() - 1)) {
-//            int nSplineCSysPoints = splineCSysPoints.size();
-//            if(arcKnobInd < 1 || arcKnobInd >= (nSplineCSysPoints - 1)){
-//                throw new IndexOutOfBoundsException("Index = " + arcKnobInd + ",  n knots = " + (mathSpline3D.getNKnots()));
-//            }
-//            return splineCSysPoints.get(arcKnobInd);
-//        }
-//        return mathSpline3D.getKnotClone(arcKnobInd);
-//    }
-
-
-    public void setArcColor(Color arcMclnStateColor) {
-        this.arcMclnStateColor = arcMclnStateColor;
-    }
-
-    public Color getArcMclnStateColor() {
-        return arcMclnStateColor;
-    }
-
-    //
     //    u p d a t e   o p e r a t i o n s
     //
 
@@ -278,11 +234,7 @@ public class CSysSplineEntity extends BasicCSysEntity {
      */
 
     public void moveEntityActivePointTo(double[] cSysPnt) {
-//        double[] cSysPnt = parentCSys.screenPointToCSysPoint(scrPnt);
         updateKnotCSysLocation(activeKnotInd, cSysPnt);
-//        double[] scrPnt = parentCSys.cSysPointToScreenPoint(null, cSysPnt);
-//        System.out.println("CSysSplineEntity: csysUpdateActiveScrPoint  activeKnotInd= " + activeKnotInd + ",  " + scrPnt[0]);
-//        updateKnotLocation(activeKnotInd, cSysPnt, scrPnt);
     }
 
     /**
@@ -303,16 +255,16 @@ public class CSysSplineEntity extends BasicCSysEntity {
         updateKnotCSysLocation(lastKnotIndex, cSysPnt);
     }
 
+    public void moveSelectedKnotCSysPointTo(int selectedKnotIndex, double[] scrPnt) {
+        double[] cSysPnt = parentCSys.screenPointToCSysPoint(scrPnt);
+        updateKnotCSysLocation(selectedKnotIndex, cSysPnt);
+    }
+
     /**
      * @param ind
      * @param cSysPnt
      */
     public void updateKnotCSysLocation(int ind, double[] cSysPnt) {
-        updateKnotLocation(ind, cSysPnt);
-    }
-
-    private void updateKnotLocation(int ind, double[] cSysPnt) {
-//        System.out.println("csysUpdatePoint " + ind + "  " + getNKnots());
         if (ind < 0 || ind >= getNKnots()) {
             return;
         }
@@ -320,11 +272,6 @@ public class CSysSplineEntity extends BasicCSysEntity {
         mathSpline3D.updateKnot(ind, cSysPnt); // !!!!!!!!!
         calculate();
     }
-
-
-    //    public void setCreating(boolean creating) {
-//        this.creating = creating;
-//    }
 
     //
     //   c a l c u l a t i o n
@@ -354,24 +301,6 @@ public class CSysSplineEntity extends BasicCSysEntity {
 //            splineScrPoints.add(new double[]{0, 0, 0});
 //        }
         doCSysToScreenTransformation(parentCSys.scr0, parentCSys.minScale);
-    }
-
-
-    /**
-     * @param color
-     */
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-
-    public void setHighlighted(boolean state) {
-        highlighted = state;
-    }
-
-    // --------------------------------------------------------
-    public boolean isHighlighted() {
-        return highlighted;
     }
 
 
@@ -419,21 +348,18 @@ public class CSysSplineEntity extends BasicCSysEntity {
     }
 
 
-    // -------------------------------------------------
-/*
-public void printCSysSpline()
-{
- int nPnts = csysPnts.size();
- double[] curPnt;
- System.out.println("n = "+ nPnts );
- for( int i = 0; i < nPnts; i++ )
- {
-  curPnt = (double[])csysPnts.elementAt( i );
-  System.out.println("x = " + curPnt[0]);;
-  System.out.println("y = " + curPnt[1]);
- }
-}
-*/
+    /**
+     *
+     */
+    public void printCSysSpline() {
+        int nKnots = splineCSysKnots.size();
+        System.out.println("n = " + nKnots);
+        for (int i = 0; i < nKnots; i++) {
+            double[] curKnot = splineCSysKnots.get(i);
+            System.out.println("curKnot.x = " + curKnot[0] + ",   curKnot.y = " + curKnot[1]);
+        }
+    }
+
     //
     //  d r a g g i n g   s p l i n e
     //
@@ -644,17 +570,21 @@ public void printCSysSpline()
             Color knotColor = getKnotColor(i);
             int dotX = ((int) (scrPnt[0] + 0.5));
             int dotY = ((int) (scrPnt[1] + 0.5));
-            drawKnot(g, dotX, dotY, knotColor);
+            Color dotColor = Color.BLACK; // creation co;or
+            if (allKnotsSelected) {
+                dotColor = selectedKnotIndex == i ? Color.MAGENTA : Color.BLUE;  // moving color
+            }
+            drawBigKnob(g, dotX, dotY, dotColor, Color.WHITE);
 //            }
 
             // draw boxes
-//                if (drawKnotBoxes && isSelected() && selKnotInd == i) {
-//                    g.setColor(Color.RED);
-//                    int kx = ((int) (scrPnt[0] + 0.5)) - pntRectW2;
-//                    int ky = ((int) (scrPnt[1] + 0.5)) - pntRectH2;
-//                    //      g.drawRect( kx, ky, pntRectW, pntRectH );
-//
-//                }
+            if (drawKnotBoxes) {
+//                dotColor = selectedKnotIndex == i ? Color.MAGENTA : Color.BLUE;  // moving color
+                g.setColor(dotColor);
+                int kx = dotX - pntRectW2;
+                int ky = dotY - pntRectH2;
+                g.drawRect(kx, ky, pntRectW, pntRectH);
+            }
         }
     }
 
@@ -671,7 +601,7 @@ public void printCSysSpline()
      */
     private Color getKnotColor(int knotIndex) {
         Color color;
-        if (selected && (allKnotsSelected || (selKnotInd != -1 && knotIndex == selKnotInd))) {
+        if (selected && (allKnotsSelected || (selectedKnotIndex != -1 && knotIndex == selectedKnotIndex))) {
             color = getHighlightColor();
         } else {
             color = isHighlighted() ? getHighlightColor() : DEFAULT_KNOT_COLOR;
@@ -679,43 +609,23 @@ public void printCSysSpline()
         return color;
     }
 
-//    private Color getKnotColor() {
-//        Color color = DEFAULT_DRAWING_COLOR;
-//
-//        if (isWatermarked()) {
-//            color = getWatermarkColor();
-//            return color;
-//        }
-//
-//        if (creating) {
-//            color = DEFAULT_DRAWING_COLOR;
-//        } else if (areKnotsSelected()) {
-//            color = getHighlightColor();
-//        } else if (isHighlighted()) {
-//            color = getHighlightColor();
-//        } else if (isMouseHover()) {
-//            color = getHighlightColor();
-//        }
-//        return color;
-//    }
-
-
-    private Color locDrawColor, locFillColor, locKnotColor, locSelectColor;
-
-    private void setDrawColor(boolean draw) {
-        if (draw) {
-//            locDrawColor = curDrawColor;
-//            locFillColor = curFillColor;
-//            locKnotColor = Color.black;  // movement
-//            locSelectColor = Color.magenta;
-
-            locDrawColor = Color.black;
-            locFillColor = Color.black;
-            locKnotColor = Color.black;  // movement
-            locSelectColor = Color.magenta;
-        } else {
-            locDrawColor = locFillColor = locKnotColor = locSelectColor = Color.white;
-        }
+    /**
+     * @param g
+     * @param x
+     * @param y
+     * @param fillColor
+     * @param knobOutlineColor
+     */
+    private void drawBigKnob(Graphics g, int x, int y, Color fillColor, Color knobOutlineColor) {
+        g.setColor(knobOutlineColor);
+        g.drawLine(x - 1, y - 3, x + 1, y - 3);
+        g.drawLine(x - 2, y - 2, x + 2, y - 2);
+        g.drawLine(x - 3, y - 1, x + 3, y - 1);
+        g.drawLine(x - 3, y, x + 3, y);
+        g.drawLine(x - 3, y + 1, x + 3, y + 1);
+        g.drawLine(x - 2, y + 2, x + 2, y + 2);
+        g.drawLine(x - 1, y + 3, x + 1, y + 3);
+        drawKnot(g, x, y, fillColor);
     }
 
     /**
@@ -733,32 +643,12 @@ public void printCSysSpline()
         g.drawLine(x - 1, y + 2, x + 1, y + 2);
     }
 
-    /**
-     * @param g
-     * @param x
-     * @param y
-     * @param knobOutlineColor
-     * @param fillColor
-     */
-    private void drawBigKnob(Graphics g, int x, int y, Color knobOutlineColor, Color fillColor) {
-        g.setColor(drawColor);
-        g.drawLine(x - 1, y - 3, x + 1, y - 3);
-        g.drawLine(x - 2, y - 2, x + 2, y - 2);
-        g.drawLine(x - 3, y - 1, x + 3, y - 1);
-        g.drawLine(x - 3, y, x + 3, y);
-        g.drawLine(x - 3, y + 1, x + 3, y + 1);
-        g.drawLine(x - 2, y + 2, x + 2, y + 2);
-        g.drawLine(x - 1, y + 3, x + 1, y + 3);
-        drawKnot(g, x, y, fillColor);
-    }
-
-
     public int getSelectedKnotIndex() {
-        return selKnotInd;
+        return selectedKnotIndex;
     }
 
     public void setSelectedKnotInd(int ind) {
-        selKnotInd = ind;
+        selectedKnotIndex = ind;
         activeKnotInd = ind;
     }
 

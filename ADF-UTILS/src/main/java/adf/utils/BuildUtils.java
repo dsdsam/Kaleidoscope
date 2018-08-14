@@ -11,16 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-//import com.sun.xml.internal.bind.v2.runtime.property.Property;
-
 public class BuildUtils {
 
     public static final Logger logger = Logger.getLogger(BuildUtils.class.getName());
 
-    private static final String ADF_ICON_RESOURCE_PATH_PREFIX = "/adf-icons/";
-
-    public static String USER_DIR = System.getProperty("user.dir");
-    public static String FILE_SEPARATOR = System.getProperty("file.separator");
+    private static final String ADF_ICON_RESOURCE_CLASSPATH_PREFIX = "/adf-resouces/adf-icons/";
+    private static final String ADF_IMAGE_RESOURCE_CLASSPATH_PREFIX = "/adf-resouces/images/";
 
     private static GrayFilter filter = new GrayFilter(true, 40) {
         @Override
@@ -94,7 +90,7 @@ public class BuildUtils {
      */
     public static void resetComponentFont(Component comp, int style, int fontSize) {
         Font font = comp.getFont();
-        comp.setFont(new Font(font.getName(), style, fontSize));
+        comp.setFont(font.deriveFont(style, fontSize));
     }
 
     public static JLabel makeLabelAndAddToPanel(JPanel panel, String text,
@@ -111,8 +107,13 @@ public class BuildUtils {
         return newList;
     }
 
-    public static ImageIcon getAdfImageIcon(String iconFileName) {
-        String iconResourcePath = ADF_ICON_RESOURCE_PATH_PREFIX + iconFileName;
+    public static ImageIcon getAdfIconFromClassPath(String iconFileName) {
+        String iconResourcePath = ADF_ICON_RESOURCE_CLASSPATH_PREFIX + iconFileName;
+        return getImageIcon(iconResourcePath);
+    }
+
+    public static ImageIcon getAdfImageIconFromClassPath(String imageFileName) {
+        String iconResourcePath = ADF_IMAGE_RESOURCE_CLASSPATH_PREFIX + imageFileName;
         return getImageIcon(iconResourcePath);
     }
 

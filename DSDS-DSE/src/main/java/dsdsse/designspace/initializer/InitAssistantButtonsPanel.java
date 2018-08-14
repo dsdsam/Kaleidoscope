@@ -1,6 +1,6 @@
 package dsdsse.designspace.initializer;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import adf.ui.laf.button.Adf3DButton;
 
 import javax.swing.*;

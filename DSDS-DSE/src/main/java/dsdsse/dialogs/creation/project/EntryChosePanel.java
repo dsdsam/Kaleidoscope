@@ -1,6 +1,6 @@
 package dsdsse.dialogs.creation.project;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 
 import javax.swing.*;
 import javax.swing.border.Border;

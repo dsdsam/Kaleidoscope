@@ -33,7 +33,7 @@ public class ImagePanel extends JPanel {
      * 
      * @param imageIcon
      */
-    public ImagePanel( Icon imageIcon ) {
+    public ImagePanel( ImageIcon imageIcon ) {
         setImage( imageIcon );
         setOpaque( true);
     }
@@ -42,11 +42,11 @@ public class ImagePanel extends JPanel {
      * 
      * @param imageIcon
      */
-    public void setImage( Icon imageIcon ) {
+    public void setImage( ImageIcon imageIcon ) {
         if ( imageIcon == null ){
             return;
         }
-        this.image = ((ImageIcon)imageIcon).getImage();
+        this.image = imageIcon.getImage();
         imgWidth = image.getWidth(null);
         imgHeight = image.getHeight(null);
     }
@@ -55,7 +55,6 @@ public class ImagePanel extends JPanel {
 
         int width  = getSize().width;
         int height = getSize().height;
-
         if ( image == null ){
             g.clearRect( 0, 0, width, height );
             g.setColor( getBackground() );
@@ -65,7 +64,6 @@ public class ImagePanel extends JPanel {
 
         int x = 0;
         int y = 0;
-
         while( y < height ){
             x = 0;
             while( x < width ){

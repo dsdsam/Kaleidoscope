@@ -1,6 +1,6 @@
 package dsdsse.designspace;
 
-import dsdsse.app.DsdsseEnvironment;
+import dsdsse.matrixview.MclnGraphMatrixDesignerView;
 import dsdsse.printing.MclnPrintPreviewPanel;
 import dsdsse.graphview.MclnGraphDesignerView;
 import dsdsse.printing.PrintViewButtonPanel;
@@ -21,6 +21,7 @@ public class DesignSpaceContentManager {
     private static final int TOP_GAP = 5;
     private static final int BOTTOM_GAP = 6;
     private static final int SIDE_PANEL_WIDTH = 10;
+    private static final int SPLIT_PANEL_BAR_HEIGHT = 5;
 
     private static final Color PAGE_PANEL_BACKGROUND_COLOR = Color.WHITE;
 
@@ -40,21 +41,17 @@ public class DesignSpaceContentManager {
      * @param designOrSimulationVisualizationCardView
      */
     static void createInstance(DesignSpaceView designSpaceView, MclnGraphDesignerView mclnGraphDesignerView,
+                               MclnGraphMatrixDesignerView mcLnGraphMatrixDesignerView,
                                DesignOrSimulationStatusPanelCardView designOrSimulationVisualizationCardView) {
         if (designSpaceContentManager != null) {
             throw new RuntimeException("DesignSpaceContentManager instance already created.");
         }
         designSpaceContentManager = new DesignSpaceContentManager(designSpaceView, mclnGraphDesignerView,
-                designOrSimulationVisualizationCardView);
+                mcLnGraphMatrixDesignerView, designOrSimulationVisualizationCardView);
     }
 
-    /**
-     * @param printViewButtonPanel
-     * @param mclnPrintPreviewPanel
-     */
-    static void initMcLNPrintPreviewContent(PrintViewButtonPanel printViewButtonPanel,
-                                            MclnPrintPreviewPanel mclnPrintPreviewPanel) {
-        designSpaceContentManager.initMcLNPagePreviewContent(printViewButtonPanel, mclnPrintPreviewPanel);
+    static void initMcLNPrintPreviewContent() {
+        designSpaceContentManager.initMcLNPagePreviewContent();
     }
 
     public static boolean isPrintPreviewContentWestPanel() {
@@ -107,20 +104,19 @@ public class DesignSpaceContentManager {
 
     public static final void setDesignStatusViewPanelHeight() {
         int splitPaneHeight = designSpaceContentManager.splitPane.getHeight();
-        int upperPanelHeight = splitPaneHeight - (DesignStatusView.PREFERRED_HEIGHT + 3);
+        int upperPanelHeight = splitPaneHeight - (DesignStatusView.PREFERRED_HEIGHT + SPLIT_PANEL_BAR_HEIGHT);
         designSpaceContentManager.splitPane.setDividerLocation(upperPanelHeight);
-        designSpaceContentManager.splitPane.setEnabled(false);
     }
 
     public static final void restoreSimulationStatusViewPanelHeight(int executionHistoryPanelHeight) {
         designSpaceContentManager.splitPane.setEnabled(true);
         if (savedSimulationStatusViewPanelHeight > 0) {
             int splitPaneHeight = designSpaceContentManager.splitPane.getHeight();
-            int upperPanelHeight = splitPaneHeight - (savedSimulationStatusViewPanelHeight + 3);
+            int upperPanelHeight = splitPaneHeight - (savedSimulationStatusViewPanelHeight + SPLIT_PANEL_BAR_HEIGHT);
             designSpaceContentManager.splitPane.setDividerLocation(upperPanelHeight);
         } else {
             int splitPaneHeight = designSpaceContentManager.splitPane.getHeight();
-            int upperPanelHeight = splitPaneHeight - (executionHistoryPanelHeight + 3);
+            int upperPanelHeight = splitPaneHeight - (executionHistoryPanelHeight + SPLIT_PANEL_BAR_HEIGHT);
             designSpaceContentManager.splitPane.setDividerLocation(upperPanelHeight);
         }
 
@@ -129,9 +125,8 @@ public class DesignSpaceContentManager {
     public static final void setSimulationStatusViewPanelHeight(int historyPanelHeight) {
         savedSimulationStatusViewPanelHeight = -1;
         int splitPaneHeight = designSpaceContentManager.splitPane.getHeight();
-        int upperPanelHeight = (splitPaneHeight - historyPanelHeight + 3);
+        int upperPanelHeight = (splitPaneHeight - historyPanelHeight + SPLIT_PANEL_BAR_HEIGHT);
         designSpaceContentManager.splitPane.setDividerLocation(upperPanelHeight);
-//        setSimulationStatusViewPanelResizable();
     }
 
 
@@ -139,6 +134,7 @@ public class DesignSpaceContentManager {
 
     private final DesignSpaceView designSpaceView;
     private final MclnGraphDesignerView mclnGraphDesignerView;
+    private final MclnGraphMatrixDesignerView mcLnGraphMatrixDesignerView;
     private final DesignOrSimulationStatusPanelCardView designOrSimulationVisualizationCardView;
     private JPanel designSpaceSidePanelHolder;
     private JComponent westPanel;
@@ -148,11 +144,14 @@ public class DesignSpaceContentManager {
     private JSplitPane splitPane;
 
     private DesignSpaceContentManager(DesignSpaceView designSpaceView, MclnGraphDesignerView mclnGraphDesignerView,
+                                      MclnGraphMatrixDesignerView mcLnGraphMatrixDesignerView,
                                       DesignOrSimulationStatusPanelCardView designOrSimulationVisualizationCardView) {
         this.designSpaceView = designSpaceView;
         this.mclnGraphDesignerView = mclnGraphDesignerView;
+        this.mcLnGraphMatrixDesignerView = mcLnGraphMatrixDesignerView;
         this.designOrSimulationVisualizationCardView = designOrSimulationVisualizationCardView;
-        designSpaceSidePanelHolder = initDesignSpaceView(mclnGraphDesignerView, designOrSimulationVisualizationCardView);
+        designSpaceSidePanelHolder = initDesignSpaceView(mclnGraphDesignerView,
+                mcLnGraphMatrixDesignerView, designOrSimulationVisualizationCardView);
     }
 
 
@@ -160,38 +159,34 @@ public class DesignSpaceContentManager {
      * @param mclnGraphDesignerView
      * @param cardLayoutPanel
      */
-    private JPanel initDesignSpaceView(MclnGraphDesignerView mclnGraphDesignerView, JPanel cardLayoutPanel) {
+    private JPanel initDesignSpaceView(MclnGraphDesignerView mclnGraphDesignerView,
+                                       MclnGraphMatrixDesignerView mcLnGraphMatrixDesignerView,
+                                       JPanel cardLayoutPanel) {
 
-        JPanel mclnGraphViewHolderPanel = new JPanel(new BorderLayout());
-        mclnGraphViewHolderPanel.setBackground(PAGE_PANEL_BACKGROUND_COLOR);
-        Border marginBorder = new EmptyBorder(15, 15, 15, 15);
-        Border lineBorder = new LineBorder(Color.GRAY);
-        mclnGraphViewHolderPanel.setBorder(BorderFactory.createCompoundBorder(marginBorder, lineBorder));
-        mclnGraphViewHolderPanel.add(mclnGraphDesignerView, BorderLayout.CENTER);
-
-        JPanel designSpaceViewPanel = new JPanel(new BorderLayout());
-        designSpaceViewPanel.setOpaque(true);
-        designSpaceViewPanel.setBackground(VIEW_BACKGROUND_COLOR);
+        JPanel graphViewHolderPanel = new JPanel(new BorderLayout());
+        graphViewHolderPanel.setOpaque(true);
+        graphViewHolderPanel.setBackground(VIEW_BACKGROUND_COLOR);
         Border designSpacePanelSidesBorder = new EmptyBorder(TOP_GAP, SIDE_PANEL_WIDTH, BOTTOM_GAP, SIDE_PANEL_WIDTH);
-//        Border designSpacePaneTopBorder = new MatteBorder(1, 0, 0, 0, Color.DARK_GRAY);
-//        Border compoundBorder = BorderFactory.createCompoundBorder(designSpacePaneTopBorder, designSpacePanelSidesBorder);
-        designSpaceViewPanel.setBorder(designSpacePanelSidesBorder);
-//        designSpaceViewPanel.setBorder(null);
-        designSpaceViewPanel.add(mclnGraphViewHolderPanel, BorderLayout.CENTER);
+        Border marginBorder = new MatteBorder(15, 15, 15, 15, Color.WHITE);
+        Border border = BorderFactory.createCompoundBorder(designSpacePanelSidesBorder, marginBorder);
+        graphViewHolderPanel.setBorder(border);
+        graphViewHolderPanel.add(mclnGraphDesignerView, BorderLayout.CENTER);
+
+        designSpaceGraphOrMatrixViewCardPanel = DesignSpaceGraphOrMatrixViewCardPanel.createInstance(
+                graphViewHolderPanel, mclnGraphDesignerView, mcLnGraphMatrixDesignerView);
 
         JPanel designSpaceSidePanelHolder = new JPanel(new BorderLayout());
-        designSpaceSidePanelHolder.add(designSpaceViewPanel, BorderLayout.CENTER);
+        designSpaceSidePanelHolder.add(designSpaceGraphOrMatrixViewCardPanel, BorderLayout.CENTER);
 
         splitPane = initSplitPanel(designSpaceSidePanelHolder, cardLayoutPanel);
-        splitPane.setBorder(null);
         centerPanel = new JPanel(new BorderLayout());
-//        centerPanel.setBorder(null);
         centerPanel.add(splitPane, BorderLayout.CENTER);
-//        designSpaceView.setBorder(null);
         designSpaceView.add(centerPanel, BorderLayout.CENTER);
         showingDesignSpace = true;
         return designSpaceSidePanelHolder;
     }
+
+    DesignSpaceGraphOrMatrixViewCardPanel designSpaceGraphOrMatrixViewCardPanel;
 
     /**
      * @param designSpaceSidePanelHolder
@@ -200,18 +195,11 @@ public class DesignSpaceContentManager {
      */
     private JSplitPane initSplitPanel(JPanel designSpaceSidePanelHolder, JPanel cardLayoutPanel) {
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, designSpaceSidePanelHolder, cardLayoutPanel);
+        splitPane.setBorder(null);
         splitPane.setResizeWeight(1);
 
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerSize(3);
-
-        JFrame frame = DsdsseEnvironment.getMainFrame();
-        int frameHeight = frame.getHeight();
-        int defaultDividerLocation = frameHeight - 210;
-        if (frameHeight < 520) {
-            defaultDividerLocation = frameHeight - 180;
-        }
-//        splitPane.setDividerLocation(defaultDividerLocation);
+        splitPane.setDividerSize(SPLIT_PANEL_BAR_HEIGHT);
 
         splitPane.setContinuousLayout(true);
         splitPane.validate();
@@ -222,11 +210,12 @@ public class DesignSpaceContentManager {
     //   Initializing McLN Print Preview Content
     //
 
-    private void initMcLNPagePreviewContent(PrintViewButtonPanel printViewButtonPanel,
-                                            MclnPrintPreviewPanel mclnPrintPreviewPanel) {
-        centerPanel.removeAll();
+    private void initMcLNPagePreviewContent() {
+        MclnPrintPreviewPanel mclnPrintPreviewPanel = new MclnPrintPreviewPanel(DesignSpaceModel.getInstance(),
+                designSpaceGraphOrMatrixViewCardPanel.getCurrentView());
+        PrintViewButtonPanel printViewButtonPanel = new PrintViewButtonPanel(mclnPrintPreviewPanel);
 
-        mclnGraphDesignerView.setBorder(new MatteBorder(1, 1, 1, 1, Color.GRAY));
+        centerPanel.removeAll();
 
         JPanel printPreviewHolderPanel = new JPanel(new GridBagLayout());
         printPreviewHolderPanel.setOpaque(true);
@@ -263,52 +252,47 @@ public class DesignSpaceContentManager {
 
         centerPanel.removeAll();
 
-        mclnGraphDesignerView.setBorder(null);
-
-        JPanel mclnGraphViewHolderPanel = new JPanel(new BorderLayout());
-        mclnGraphViewHolderPanel.setBackground(PAGE_PANEL_BACKGROUND_COLOR);
-        Border marginBorder = new EmptyBorder(15, 15, 15, 15);
-        Border lineBorder = new LineBorder(Color.GRAY);
-        mclnGraphViewHolderPanel.setBorder(BorderFactory.createCompoundBorder(marginBorder, lineBorder));
-        mclnGraphViewHolderPanel.add(mclnGraphDesignerView, BorderLayout.CENTER);
-
-        JPanel designSpaceViewPanel = new JPanel(new BorderLayout());
-        designSpaceViewPanel.setOpaque(true);
-        designSpaceViewPanel.setBackground(VIEW_BACKGROUND_COLOR);
+        JPanel graphViewHolderPanel = new JPanel(new BorderLayout());
+        graphViewHolderPanel.setOpaque(true);
+        graphViewHolderPanel.setBackground(VIEW_BACKGROUND_COLOR);
         Border designSpacePanelSidesBorder = new EmptyBorder(TOP_GAP, SIDE_PANEL_WIDTH, BOTTOM_GAP, SIDE_PANEL_WIDTH);
-        Border designSpacePaneTopBorder = new MatteBorder(1, 0, 0, 0, Color.DARK_GRAY);
-        Border compoundBorder = BorderFactory.createCompoundBorder(designSpacePaneTopBorder, designSpacePanelSidesBorder);
-        designSpaceViewPanel.setBorder(designSpacePanelSidesBorder);
-        designSpaceViewPanel.add(mclnGraphViewHolderPanel, BorderLayout.CENTER);
+        Border marginBorder = new MatteBorder(15, 15, 15, 15, Color.WHITE);
+        Border border = BorderFactory.createCompoundBorder(designSpacePanelSidesBorder, marginBorder);
+        graphViewHolderPanel.setBorder(border);
+        graphViewHolderPanel.add(mclnGraphDesignerView, BorderLayout.CENTER);
+
+        boolean currentViewIsMclnGraphDesignerView =
+                designSpaceGraphOrMatrixViewCardPanel.isCurrentViewIsMclnGraphDesignerView();
+
+        designSpaceGraphOrMatrixViewCardPanel = DesignSpaceGraphOrMatrixViewCardPanel.createInstance(
+                graphViewHolderPanel, mclnGraphDesignerView, mcLnGraphMatrixDesignerView);
+
+        designSpaceGraphOrMatrixViewCardPanel.setCurrentView(currentViewIsMclnGraphDesignerView);
 
         designSpaceSidePanelHolder = new JPanel(new BorderLayout());
-        designSpaceSidePanelHolder.add(designSpaceViewPanel, BorderLayout.CENTER);
-
+        designSpaceSidePanelHolder.add(designSpaceGraphOrMatrixViewCardPanel, BorderLayout.CENTER);
+        //
         // restoring Design Status or Simulation History panel to its height
         //
         int height = splitPane.getHeight();
-//        int cardLayoutPanelHeight = designOrSimulationVisualizationCardView.getHeight();
         int cardLayoutPanelHeight = designOrSimulationVisualizationCardView.getCurrentCardViewHeight();
         int actualHeight = height - cardLayoutPanelHeight;
         if (actualHeight < 0) {
             actualHeight = height;
         }
-
         splitPane = initSplitPanel(designSpaceSidePanelHolder, designOrSimulationVisualizationCardView);
         splitPane.setDividerLocation(actualHeight);
 
-        // restoring East panel if existed
-        if (eastPanel != null) {
-            designSpaceSidePanelHolder.add(eastPanel, BorderLayout.EAST);
-        }
-
         centerPanel.add(splitPane, BorderLayout.CENTER);
 
-        designSpaceSidePanelHolder.validate();
-        centerPanel.validate();
-        centerPanel.repaint();
-
         showingDesignSpace = true;
+
+        // restoring East panel if existed
+        if (eastPanel != null) {
+            insertEastPanel(eastPanel);
+        }
+        centerPanel.revalidate();
+        centerPanel.repaint();
     }
 
     /**
@@ -351,6 +335,8 @@ public class DesignSpaceContentManager {
         JPanel removedPanel = eastPanel;
         eastPanel = null;
         designSpaceView.validate();
+//        designSpaceGraphOrMatrixViewCardPanel.revalidate();
+//        designSpaceGraphOrMatrixViewCardPanel.repaint();
         designSpaceView.repaint();
         return removedPanel;
     }

@@ -28,34 +28,25 @@ public class SEMainFrame extends AdfMainFrame {
     public static final String MAIN_PANEL_FE = "MAIN_PANEL_FE";
     public static final String MAIN_PANEL_RE = "MAIN_PANEL_RE";
 
-    private static SEMainFrame seMainFrame;
+    private static SEMainFrame semMainFrame;
 
-    /**
-     * @return
-     */
-    public static SEMainFrame createMainFrame() {
-        if (seMainFrame != null) {
-            logger.severe("SEMainFrame instance already created !!!");
-            return seMainFrame;
-        }
-        return new SEMainFrame();
+    public static final synchronized SEMainFrame createMainFrame(){
+        assert semMainFrame == null : "SEM Main Frame is a singleton and already created";
+        return semMainFrame = new SEMainFrame();
     }
 
-    /**
-     * @return
-     */
-    public static SEMainFrame getInstance() {
-        return seMainFrame;
+    public static final SEMainFrame getInstance() {
+        assert semMainFrame != null : "SEM Main Frame is a singleton and not yet created";
+        return semMainFrame;
     }
 
+    //
     //   I n s t a n c e
+    //
 
     private CardLayout cardLayout = new CardLayout();
     private Container contentPane;
     private Map panelMap = new HashMap();
-
-
-    // =========    C o n s t r u c t o r s    ====================
 
     private KeyboardFocusManager newManager = new DefaultKeyboardFocusManager() {
         public boolean dispatchEvent(AWTEvent e) {
@@ -109,85 +100,19 @@ public class SEMainFrame extends AdfMainFrame {
 
     }
 
-
     private SEMainFrame() {
-        seMainFrame = this;
-        AdfMessagesAndDialogs.setMainFrame(seMainFrame);
+        AdfMessagesAndDialogs.setMainFrame(semMainFrame);
         String allowUserKeys = System.getProperty("allow.user.keys");
         if (allowUserKeys != null && allowUserKeys.equalsIgnoreCase("true")) {
             KeyboardFocusManager.setCurrentKeyboardFocusManager(newManager);
         }
     }
 
-    public void init(JPanel seMainPanel) {
+    public void setSemMainPanel(JPanel seMainPanel) {
         contentPane = getContentPane();
         this.getRootPane().setBorder(null);
         contentPane.setLayout(cardLayout);
         contentPane.add(seMainPanel, MAIN_PANEL_SE);
         panelMap.put(MAIN_PANEL_SE, seMainPanel);
-
-
-    }
-
-    @Override
-    public void setVisible(boolean state) {
-        Dimension size = getSize();
-        super.setVisible(state);
-    }
-
-
-    public Dimension initMainFrame(double percent) {
-        setTitle(System.getProperty(ConfigProperties.APP_TITLE_KEY) + " - " + AppManifestAttributes.getAppVersion());
-        Image image = BuildUtils.getImageIcon(sem.app.SEMApp.ICONS_DIR_CLASS_PATH + "title-logo.png").getImage();
-        if (image != null) {
-            setIconImage(image);
-        }
-
-        // set Main Frame size
-        Toolkit tk = getToolkit();
-        Dimension screenSize = tk.getScreenSize();
-//       System.out.println( "curSize.width = " + curSize.width );
-//       System.out.println( "curSize.height = " + curSize.height );
-
-//        if (screenSize.width == 1024 && screenSize.height == 768) {
-//            curSize.width = screenSize.width;
-//            curSize.height = screenSize.height;
-//            pack();
-//            setSize(curSize);
-//            this.setMinimumSize(new Dimension(300, 500));
-//            return new Dimension(0, 0);
-//        }
-//
-//        if (screenSize.width > 640) {
-////            int height = (int) (((float) screenSize.height) * percent);
-////            int portion = height / 3;
-//            int width = 1024;
-//            int portion = width / 4;
-//            curSize.width = (portion * 4);
-//            curSize.height = portion * 3;// - 60;
-//        }
-//                    int width = 580;
-//            int portion = width / 4;
-//            curSize.width = (portion * 4);
-//            curSize.height = portion * 3;// - 60;
-
-//        curSize.width = 1024;
-//        curSize.height = 840;
-
-//       System.out.println( "curSize.width = " + curSize.width );
-//       System.out.println( "curSize.height = " + curSize.height );
-//       initTest();
-
-//        pack();
-//        setSize(curSize.width, curSize.height);
-
-        Dimension minSize = new Dimension(900, 740);
-        Dimension preferredSize = new Dimension(1200, 860);
-        preferredSize = new Dimension(1200, 740);
-        setSize(preferredSize);
-        setPreferredSize(preferredSize);
-        this.setMinimumSize(minSize);
-
-        return new Dimension(screenSize.width - curSize.width, screenSize.height - curSize.height);
     }
 }

@@ -3,7 +3,7 @@ package dsdsse.animation;
 import dsdsse.app.AppController;
 import dsdsse.designspace.DesignSpaceView;
 import dsdsse.graphview.MclnGraphDesignerView;
-import dsdsse.graphview.MclnGraphViewNode;
+import mclnview.graphview.MclnGraphNodeView;
 import vw.valgebra.VAlgebra;
 
 import java.awt.*;
@@ -345,7 +345,7 @@ public class HowToUseModificationOperationsScript extends PresentationScriptHand
     //   Find and Pick Up NcLN Graph Node
     //
 
-    private MclnGraphViewNode mclnGraphNode;
+    private MclnGraphNodeView mclnGraphNode;
     private int[] nodeIntScrLocation;
     AnimatingTickExecutor findPickUpAndDeleteGraphEntityExecutor = (ScriptItem scriptItem, int tickToExecute) -> {
         String inputNodeID = scriptItem.getActionAttribute1();

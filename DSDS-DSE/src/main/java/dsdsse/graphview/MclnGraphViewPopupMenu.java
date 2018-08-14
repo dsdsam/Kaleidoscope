@@ -2,6 +2,9 @@ package dsdsse.graphview;
 
 import dsdsse.app.AppStateModel;
 import mcln.model.MclnStatementState;
+import mclnview.graphview.MclnArcView;
+import mclnview.graphview.MclnConditionView;
+import mclnview.graphview.MclnPropertyView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,19 +14,19 @@ import java.awt.*;
  */
 public class MclnGraphViewPopupMenu extends JPopupMenu {
 
-    public static MclnGraphViewPopupMenu getPopupMenu(MclnPropertyView mclnPropertyView) {
+    public static MclnGraphViewPopupMenu getPopupMenu(MclnPropertyView mcLnPropertyView) {
         if (AppStateModel.getInstance().isDevelopmentMode()) {
-            return new EditorPopupMenu(mclnPropertyView);
+            return new EditorPopupMenu(mcLnPropertyView);
         } else if (AppStateModel.getInstance().isSimulationMode()) {
-            return new SimulatorPopupMenu(mclnPropertyView);
+            return new SimulatorPopupMenu(mcLnPropertyView);
         } else {
             return null;
         }
     }
 
-    public static MclnGraphViewPopupMenu getPopupMenu(MclnConditionView mclnConditionView) {
+    public static MclnGraphViewPopupMenu getPopupMenu(MclnConditionView mcLnConditionView) {
         if (AppStateModel.getInstance().isDevelopmentMode()) {
-            return new EditorPopupMenu(mclnConditionView);
+            return new EditorPopupMenu(mcLnConditionView);
         }
         return null;
     }

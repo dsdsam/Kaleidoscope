@@ -51,8 +51,6 @@ public class MclnSimulationController {
 
     private MclnModelPublicInterface mclnModelPublicInterface;
 
-    private LogPanel logPanel = LogPanel.getInstance();
-
     private Timer noneSwingSimulationTimer = new Timer("MCLN Controller Timer", true);
 
     private TimerTask timerTask = new TimerTask() {
@@ -94,11 +92,11 @@ public class MclnSimulationController {
             if (!mclnStatement.shouldStateBeLogged()) {
                 return;
             }
-            System.out.println("Mcln Simulation Controller/SimulatedStateChangeListener.simulatedPropertyStateChanged: " + mclnStatement.toString());
-            final long time = System.currentTimeMillis();
-            final String uid = mclnStatement.getUID();
-            final String statementText = mclnStatement.getStatementText();
-            final MclnState mclnState = mclnStatement.getCurrentMclnState();
+//            System.out.println("Mcln Simulation Controller/SimulatedStateChangeListener.simulatedPropertyStateChanged: " + mclnStatement.toString());
+//            final long time = System.currentTimeMillis();
+//            final String uid = mclnStatement.getUID();
+//            final String statementText = mclnStatement.getStatementText();
+//            final MclnState mclnState = mclnStatement.getCurrentMclnState();
         }
     };
 
@@ -119,6 +117,8 @@ public class MclnSimulationController {
     public void clearSimulation() {
         simulationEnabled = false;
         simulationRunning = false;
+        mclnModel.setSimulationEnabled(simulationEnabled);
+        mclnModel.setSimulationRunning(simulationRunning);
         mclnModelPublicInterface.clearSimulation();
         ticksCounter = 0;
         AppStateModel.getInstance().updateSimulationTicks(ticksCounter);
@@ -140,8 +140,12 @@ public class MclnSimulationController {
      */
     public void setSimulationEnabled() {
         simulationRunning = false;
+        mclnModel.setSimulationRunning(simulationRunning);
         mclnModelPublicInterface.initializeSimulation();
         simulationEnabled = true;
+        mclnModel.setSimulationEnabled(simulationEnabled);
+        // called to put in the Trace History initial state
+        mclnModel.fireSimulationStepExecuted();
     }
 
     /**
@@ -149,8 +153,10 @@ public class MclnSimulationController {
      */
     public void setSimulationDisabled() {
         simulationRunning = false;
+        mclnModel.setSimulationRunning(simulationRunning);
         setSimulationReset();
         simulationEnabled = false;
+        mclnModel.setSimulationEnabled(simulationEnabled);
     }
 
     /**
@@ -161,6 +167,8 @@ public class MclnSimulationController {
             return;
         }
         simulationRunning = true;
+        mclnModel.setSimulationRunning(simulationRunning);
+
         mclnModelPublicInterface.startSimulation();
         mclnModel.fireModelStateChanged();
     }
@@ -173,11 +181,13 @@ public class MclnSimulationController {
             return;
         }
         this.simulationRunning = false;
+        mclnModel.setSimulationRunning(simulationRunning);
         mclnModelPublicInterface.stopSimulation();
     }
 
     public final void setSimulationPaused() {
         simulationPaused = true;
+        mclnModel.setSimulationPaused(simulationPaused);
     }
 
     /**
@@ -185,6 +195,7 @@ public class MclnSimulationController {
      */
     public void setSimulationResumed() {
         simulationPaused = false;
+        mclnModel.setSimulationPaused(simulationPaused);
     }
 
     /**
@@ -195,6 +206,7 @@ public class MclnSimulationController {
             return;
         }
         this.simulationRunning = false;
+        mclnModel.setSimulationRunning(simulationRunning);
         ticksCounter = 0;
         AppStateModel.getInstance().updateSimulationTicks(ticksCounter);
         mclnModelPublicInterface.clearSimulation();

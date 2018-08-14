@@ -5,8 +5,8 @@ import adf.app.AdfMessagesAndDialogs;
 import adf.app.AppManifestAttributes;
 import adf.utils.BuildUtils;
 import dsdsse.designspace.DesignSpaceView;
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import dsdsse.graphview.MclnGraphViewEditor;
+import mclnview.graphview.MclnGraphModel;
 
 import java.awt.*;
 
@@ -40,7 +40,7 @@ public final class DsdsseEnvironment extends AdfEnv implements DSDSSEConstants {
 
     public static String getAppInitialFrameTitle() {
         String appVersion = AppManifestAttributes.getAppVersion();
-        return APP_FRAME_TITLE + " - " + appVersion + "  ";
+        return APP_FRAME_TITLE + " - " + appVersion;
     }
 
     public static MclnGraphModel getMclnGraphModel() {
@@ -80,10 +80,6 @@ public final class DsdsseEnvironment extends AdfEnv implements DSDSSEConstants {
     // ===========================================================
     //   c o n v e n i e n c e    m e t h o d s
     // ===========================================================
-    public static void putMainPanel(Object obj) {
-        put("main.panel", obj);
-    }
-
 
 //    public static void showMessagePopup(char type, String header, String message) {
 //        messageDlg(dsdsseMainFrame, type, header, message);

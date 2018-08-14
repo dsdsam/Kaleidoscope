@@ -1,10 +1,10 @@
 package dsdsse.history;
 
 import adf.utils.RingStack;
-import dsdsse.graphview.MclnPropertyView;
 import mcln.palette.MclnPaletteFactory;
 import mcln.palette.MclnState;
 import mcln.palette.MclnStatesNewPalette;
+import mclnview.graphview.MclnPropertyView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,11 +21,6 @@ import java.util.List;
 public class SimulationTracePanel extends JPanel {
 
     static int stateDotSize;
-//
-//    static {
-//        int propertyStateDisplaySize = DsdsseUserPreference.getPropertyStateDisplaySize();
-//        SimulationTracePanel.stateDotSize = propertyStateDisplaySize;
-//    }
 
     private static final Color LINE_SEPARATOR_COLOR = new Color(0xD0D0D0);
 
@@ -36,15 +31,11 @@ public class SimulationTracePanel extends JPanel {
     private int lineNum;
     private final List<MclnPropertyView> presentedPropertyList = new ArrayList();
 
-    private boolean sizeInitialized;
-    private final ExecutionHistoryPanel executionHistoryPanel;
-
     /**
-     * @param executionHistoryPanel
+     *
      */
-    public SimulationTracePanel(ExecutionHistoryPanel executionHistoryPanel) {
+    public SimulationTracePanel() {
         setBorder(null);
-        this.executionHistoryPanel = executionHistoryPanel;
         setBackground(Color.WHITE);
         setOpaque(true);
     }
@@ -75,9 +66,6 @@ public class SimulationTracePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawLines(g);
-//        if (state == STATE_STARTED || state == STATE_PAUSED) {
-//            drawLines(g);
-//        }
     }
 
     /**
@@ -94,9 +82,9 @@ public class SimulationTracePanel extends JPanel {
 //        int stateY2 = 2;
         int stateY2 = ((LINE_HEIGHT - 1) - (stateDotSize + 1)) / 2;
         for (int i = 0; i < lineNum; i++, y += LINE_HEIGHT, stateY += LINE_HEIGHT) {
-            MclnPropertyView mclnPropertyView = presentedPropertyList.get(i);
-            RingStack ringStack = mclnPropertyView.getHistory();
-            String mclnPaletteName = mclnPropertyView.getMclnStatesPaletteName();
+            MclnPropertyView mcLnPropertyView = presentedPropertyList.get(i);
+            RingStack ringStack = mcLnPropertyView.getHistory();
+            String mclnPaletteName = mcLnPropertyView.getMclnStatesPaletteName();
             MclnStatesNewPalette mclnStatesNewPalette = MclnPaletteFactory.getPaletteByName(mclnPaletteName);
             int size = ringStack.getSize();
             int stateX = HALF_LINE_HEIGHT - 3;
@@ -106,13 +94,10 @@ public class SimulationTracePanel extends JPanel {
                 if (mclnState == null) {
                     break;
                 }
-//                drawState(  g,   stateX,   y,   fillColor);
                 int col = mclnState.getStateID();
-//                mclnStatesNewPalette.get
                 Color fillColor = new Color(col);//Color.RED;
                 g.setColor(fillColor);
                 g.fillOval(stateX2, stateY2, stateDotSize, stateDotSize);
-
 
                 Graphics2D g2D = (Graphics2D) g;
                 Object currentSetting = g2D.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
@@ -121,33 +106,10 @@ public class SimulationTracePanel extends JPanel {
                 g.drawOval(stateX2, stateY2, stateDotSize, stateDotSize);
                 g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, currentSetting);
                 stateX2 += LINE_HEIGHT;
-
-//                drawBIgState(g, stateX, stateY, Color.GRAY, fillColor);
             }
             stateY2 += LINE_HEIGHT;
             g.setColor(LINE_SEPARATOR_COLOR);
             g.drawLine(0, y, panelWidth, y);
         }
     }
-
-//    private void drawBIgState(Graphics g, int x, int y, Color drawColor, Color fillColor) {
-//        g.setColor(drawColor);
-//        g.drawLine(x - 1, y - 3, x + 1, y - 3);
-//        g.drawLine(x - 2, y - 2, x + 2, y - 2);
-//        g.drawLine(x - 3, y - 1, x + 3, y - 1);
-//        g.drawLine(x - 3, y, x + 3, y);
-//        g.drawLine(x - 3, y + 1, x + 3, y + 1);
-//        g.drawLine(x - 2, y + 2, x + 2, y + 2);
-//        g.drawLine(x - 1, y + 3, x + 1, y + 3);
-//        drawState(g, x, y, fillColor);
-//    }
-//
-//    private void drawState(Graphics g, int x, int y, Color fillColor) {
-//        g.setColor(fillColor);
-//        g.drawLine(x - 1, y - 2, x + 1, y - 2);
-//        g.drawLine(x - 2, y - 1, x + 2, y - 1);
-//        g.drawLine(x - 2, y, x + 2, y);
-//        g.drawLine(x - 2, y + 1, x + 2, y + 1);
-//        g.drawLine(x - 1, y + 2, x + 1, y + 2);
-//    }
 }

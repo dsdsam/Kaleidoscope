@@ -11,7 +11,6 @@ import adf.app.AppManifestAttributes;
 import adf.app.ConfigProperties;
 import adf.ui.tootippopup.AdfDetailedTooltipPopup;
 import adf.utils.BuildUtils;
-import adf.utils.WaitingSignPopup;
 import dsdsse.help.HelpPanelHolder;
 import dsdsse.preferences.DsdsseUserPreference;
 import dsdsse.welcome.WelcomePanel;
@@ -20,7 +19,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -28,18 +26,14 @@ import java.util.Properties;
  */
 public class DSDSSEApp extends AdfApp {
 
-    private static final double OCCUPANCY_PERCENT = 0.80;
-    private static final double LOCATION_PERCENT = 0.40;
+    private static final Dimension DEFAULT_FRAME_SIZE = new Dimension(1200, 740);
+    public static Dimension DSE_INITIAL_AND_MINIMUM_SIZE = new Dimension(960, 700);
 
     private static final String CONFIG_FILE_LOCATION = "/dsdsse-resources/config/";
     private static final String CONFIG_FILE_NAME = "config.properties";
     private static final String FILE_SEPARATOR = System.getProperty("file.separator");
     public static String BASE_IMAGE_LOCATION = "/dsdsse-resources/images/app-icons/";
     public static String PREFIX = "/dsdsse-resources/images/splash/";
-
-
-    public static final Dimension DSE_INITIAL_AND_MINIMUM_SIZE = new Dimension(1100, 820);
-//    public static Dimension DSE_INITIAL_AND_MINIMUM_SIZE = new Dimension(700, 400);
 
     private static Color DSDSSE_APP_BACKGROUND = new Color(236, 233, 216);
 
@@ -105,15 +99,18 @@ public class DSDSSEApp extends AdfApp {
                     DSE_INITIAL_AND_MINIMUM_SIZE.width, DSE_INITIAL_AND_MINIMUM_SIZE.height);
         }
     };
-    private Object lock;
 
     //
     //   C o n s t r u c t i n g
     //
+    private static DSDSSEApp dsdsdsepp;
 
-    // made public to be accessible from Super Module
-    public DSDSSEApp() {
-        super(false); // false means DSDSSE does not use ADF config properties
+    public static final synchronized void createDSDSSEApp() {
+        assert dsdsdsepp == null : "DSDSSEApp is a singleton and already created";
+        dsdsdsepp = new DSDSSEApp();
+    }
+
+    private DSDSSEApp() {
     }
 
     @Override
@@ -121,59 +118,44 @@ public class DSDSSEApp extends AdfApp {
 
         System.out.println(System.lineSeparator() + "Initializing DSDS DSE instance.");
 
-        Locale initialLocale = Locale.getDefault();
-        System.out.println();
-        System.out.println("Initial Locale: Locale Name = \"" + initialLocale.getDisplayName() + "\"");
-        System.out.println("Initial Locale: Country = \"" + initialLocale.getDisplayCountry() + "\"");
-        System.out.println("Initial Locale: Language = \"" + initialLocale.getDisplayLanguage() + "\"");
-
-        Locale.setDefault(Locale.US);
-        Locale installedLocale = Locale.getDefault();
-        System.out.println();
-        System.out.println("Installed Locale: Locale Name = \"" + installedLocale.getDisplayName() + "\"");
-        System.out.println("Installed Locale: Country = \"" + installedLocale.getDisplayCountry() + "\"");
-        System.out.println("Installed Locale: Language = \"" + installedLocale.getDisplayLanguage() + "\"");
-        System.out.println();
-
-        AdfEnv.loadAndRegisterFont("calibrib.ttf");
-        AdfEnv.loadAndRegisterFont("calibri.ttf");
-        AdfEnv.loadAndRegisterFont("roboto/Roboto-Italic.ttf");
-        System.setProperty("java.util.prefs.PreferencesFactory", "adf.utils.preferences.AppUserPreferencesFactory");
-
         // init Help System
-        // DsdsseEnvironment.createQuickHelpPanel();
         HelpPanelHolder.getInstance();
 
         // Initializing application version from jar's manifest
         AppManifestAttributes.initialize();
 
-        try {
-            new DseEventQueue();
-            Properties dsdsseConfig = ConfigProperties.initConfigProperties(CONFIG_FILE_LOCATION, CONFIG_FILE_NAME);
-            ConfigProperties.logConfigProperties("DSDS Simulating Environment config properties", dsdsseConfig);
+        new DseEventQueue();
 
-            // application creation steps
-            initUIManager();
-            createMainFrame();
-
-            showSplash();
-            initController();
-            initModel();
-            initUI();
-            initRelations();
-            showWelcomePanel();
-            WaitingSignPopup waitingSign = new WaitingSignPopup(DsdsseMainFrame.getInstance());
-
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+        super.appInitialization();
     }
 
     //
-    //   C r e a t i o n   s t e p s
+    //    C r e a t i o n   s t e p s
     //
+    //    initConfig();
+    //    initLocale();
+    //    initFonts();
+    //    initUIManager();
+    //    createMainFrame();
+    //    showSplash();
+    //    initModel();
+    //    initUI();
+    //    initController();
+    //    initRelations();
+    //    showMainFrame();
 
-    private void initUIManager() {
+    @Override
+    protected void initConfig() {
+        Properties dsdsseConfig = ConfigProperties.initConfigProperties(CONFIG_FILE_LOCATION, CONFIG_FILE_NAME);
+        ConfigProperties.logConfigProperties("DSDS Development & Simulating Environment config properties", dsdsseConfig);
+    }
+
+    @Override
+    protected void initUIManager() throws Exception {
+
+        String lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
+        UIManager.setLookAndFeel(lookAndFeel);
+
         String appTitle = ConfigProperties.getStrConfigProperty(ConfigProperties.APP_TITLE_KEY, "DSDSSE");
         System.getProperties().put(ConfigProperties.APP_TITLE_KEY, appTitle);
 
@@ -187,7 +169,6 @@ public class DSDSSEApp extends AdfApp {
 
 //      ToolTip
         Color tooltipBackground = new Color(0xFFFFDD);
-//        Color tooltipBackground = new Color(0xAAFFFF);
         UIManager.put("ToolTip.background", tooltipBackground);
 
         UIManager.put("RootPane.frameBorder",
@@ -209,7 +190,8 @@ public class DSDSSEApp extends AdfApp {
 
     //   C r e a t i n g   M a i n   F r a m e
 
-    private final void createMainFrame() {
+    @Override
+    protected final void createMainFrame() {
         dsdsseMainFrame = DsdsseMainFrame.createMainFrame();
         AdfEnv.putMainFrame(dsdsseMainFrame);
 
@@ -224,74 +206,76 @@ public class DSDSSEApp extends AdfApp {
         dsdsseMainFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         dsdsseMainFrame.addWindowListener(windowAdapter);
 
+        // Setting Frame size and location
+
         Dimension frameSize = DsdsseUserPreference.getAppSize();
-        dsdsseMainFrame.setSize(frameSize);
-        int frameWidthDefault = 0;
-        int frameHeightDefault = 0;
 
-        int xLocation = 0;
-        int yLocation = 0;
-        if (frameSize.width == frameWidthDefault && frameSize.height == frameHeightDefault) {
+        if (frameSize.width == 0 || frameSize.height == 0) {
             // We are here when size is not yet stored
-            Dimension restOfScreen = dsdsseMainFrame.initMainFrame(OCCUPANCY_PERCENT);
-            if (restOfScreen.width == 0 && restOfScreen.height == 0) {
-                // full screen case
-                dsdsseMainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            int occupancyPercent = ConfigProperties.geIntProperty(ConfigProperties.OCCUPANCY_PERCENT_KEY, 0);
+            boolean useOccupancyPercent = occupancyPercent != 0;
+            if (useOccupancyPercent) {
+                // setting size based on occupancy percent
+                dsdsseMainFrame.initFrameSize(((double) occupancyPercent) / 100);
             } else {
-                boolean placeInTheMiddleOfTheScreen = true;
-
-                if (placeInTheMiddleOfTheScreen) {
-                    xLocation = restOfScreen.width >> 1;
-                    yLocation = restOfScreen.height >> 1;
-                } else {
-                    xLocation = (int) (restOfScreen.width * LOCATION_PERCENT);
-                    yLocation = (int) (restOfScreen.height * LOCATION_PERCENT);
-                }
+                // setting default size
+                dsdsseMainFrame.setSize(DEFAULT_FRAME_SIZE);
+                dsdsseMainFrame.setPreferredSize(DEFAULT_FRAME_SIZE);
             }
+            dsdsseMainFrame.setLocationRelativeTo(null);
 
         } else {
             // size was stored
+            dsdsseMainFrame.setSize(frameSize);
+            dsdsseMainFrame.setPreferredSize(frameSize);
+            // set stored location
             Point xyLocation = DsdsseUserPreference.getAppLocation();
-            xLocation = xyLocation.x;
-            yLocation = xyLocation.y;
+            dsdsseMainFrame.setLocation(xyLocation.x, xyLocation.y);
         }
-
-        dsdsseMainFrame.setLocation(xLocation, yLocation);
         dsdsseMainFrame.setMinimumSize(DSE_INITIAL_AND_MINIMUM_SIZE);
+
+        AdfDetailedTooltipPopup.initPopup(dsdsseMainFrame);
     }
 
     //   S h o w i n g   s p l a s h
 
-    private final void showSplash() {
-        AdfDetailedTooltipPopup.initPopup(dsdsseMainFrame);
-    }
-
-
-    //   I n i t i a l i z i n g   C o n t r o l l e r s
-
-    private void initController() {
+    @Override
+    protected final void showSplash() {
+//        AdfDetailedTooltipPopup.initPopup(dsdsseMainFrame);
+//        DsdsseSplash.showAboutPopup(DsdsseMainFrame.getInstance());
     }
 
     //   I n i t i a l i z i n g   M o d e l s
 
-    private void initModel() {
-//        spaceExplorerModel = SpaceExplorerModel.getInstance();
+    @Override
+    protected void initModel() {
     }
 
     //   I n i t i a l i z i n g   U I
 
-    private void initUI() {
+    @Override
+    protected void initUI() {
         DSDSSEAppBuilder dsdsseAppBuilder = new DSDSSEAppBuilder();
         dsdsseAppBuilder.build(dsdsseMainFrame);
-        showMainFrame();
+    }
+
+    //   I n i t i a l i z i n g   C o n t r o l l e r s
+
+    @Override
+    protected void initController() {
     }
 
     //  I n i t i a l i z i n g   C o m p o n e n t   R e l a t i o n s
 
-    private final void initRelations() {
+    @Override
+    protected final void initRelations() {
     }
 
-    private final void showWelcomePanel() {
+    //   S h o w   M a i n   F r a m e
+
+    @Override
+    public void showMainFrame() {
+        AdfEnv.getMainFrame().setVisible(true);
         if (DsdsseUserPreference.isWelcomePopupOn()) {
             WelcomePanel.showWelcomePanel(dsdsseMainFrame);
         }
@@ -302,9 +286,7 @@ public class DSDSSEApp extends AdfApp {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                String lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
-                UIManager.setLookAndFeel(lookAndFeel);
-                DSDSSEApp app = new DSDSSEApp();
+                DSDSSEApp.createDSDSSEApp();
             } catch (Throwable e) {
                 System.out.println("DSDSSEApp.main: Throwable cought ! " + e.toString());
                 System.out.println("DSDSSEApp.main: See Error Log for details.");

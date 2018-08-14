@@ -15,6 +15,8 @@ import java.awt.event.MouseEvent;
  */
 public final class MclnControllerHolderPanel extends JPanel {
 
+    private static final Dimension PANEL_DEFAULT_AND_MINIMUM_SIZE = new Dimension(250, 0);
+
     private static final MclnControllerHolderPanel mclnGraphViewHolderPanel = new MclnControllerHolderPanel();
 
     public static final MclnControllerHolderPanel getSingleton() {
@@ -67,8 +69,8 @@ public final class MclnControllerHolderPanel extends JPanel {
         super(new GridBagLayout());
         setOpaque(true);
         setBackground(Color.BLACK);
-        setPreferredSize(new Dimension(450, 0));
-        setMinimumSize(new Dimension(450, 0));
+        setPreferredSize(PANEL_DEFAULT_AND_MINIMUM_SIZE);
+        setMinimumSize(PANEL_DEFAULT_AND_MINIMUM_SIZE);
         Border outsideBorder = BorderFactory.createEmptyBorder(1, 2, 0, 2);
         Border insideBorder = BorderFactory.createEtchedBorder(Color.LIGHT_GRAY, Color.GRAY);
         Border border = BorderFactory.createCompoundBorder(outsideBorder, insideBorder);
@@ -78,6 +80,9 @@ public final class MclnControllerHolderPanel extends JPanel {
 
     public void setMclnGraphView(MclnGraphView mclnGraphView) {
         this.mclnGraphView = mclnGraphView;
+//        JPanel panel = new JPanel();
+//        panel.setOpaque(true);
+//        panel.setBackground(Color.YELLOW);
         add(mclnGraphView, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(7, 0, 7, 0), 0, 0));
         mclnGraphView.addMouseListener(mouseAdapter);

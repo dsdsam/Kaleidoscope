@@ -22,23 +22,52 @@ public class FileIOUtils {
        absDirPath - the absolute directory where the file is located
        absFilePath - absolute path that includes fileDir/fileName
 
-       dirClassPath - the relative path to the location of the file e.g. /package.package
+       dirClassPath - the relative path to the location of the file e.g. /dir/dir
        fileClassPath - the relative path to a file e.g. /package/.../package/fileName
     */
 
+    public static final List<String> loadTxtFileFromUserDirAsList(String fileClassPath) {
+        String dirPath = System.getProperty("user.dir");
+        String absFilePath = dirPath + fileClassPath;
+        List<String> fileAslist = loadTxtFileAsListOfStrings(absFilePath);
+        return fileAslist;
+    }
+
     /**
+     * Loads specified text file from file system as list of Strings
      *
+     * @return
+     */
+    public static final List<String> loadTxtFileAsListOfStrings(String absFilePath) {
+        String fileName = absFilePath.substring(0, absFilePath.lastIndexOf("/"));
+        File file = new File(absFilePath.substring(0, absFilePath.lastIndexOf("/")));
+        if (!file.exists()) {
+            return null;
+        }
+        List<String> loadedFile = new ArrayList();
+        try (BufferedReader reader = new BufferedReader(new FileReader(absFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null && !line.trim().isEmpty()) {
+//                System.out.println("line: " + line);
+                loadedFile.add(line);
+            }
+        } catch (FileNotFoundException e) {
+        } catch (IOException ioe) {
+        }
+        return loadedFile;
+    }
+
+    /**
      * @param fileClassPath
      * @return
      */
     public static final String loadTxtFileFromClassPathAsString(String fileClassPath) {
         List<String> listOfLines = loadTxtFileAsListOfStringsFromClassPath(fileClassPath);
-        String file = ListOfLinesToString(  listOfLines);
+        String file = ListOfLinesToString(listOfLines);
         return file;
     }
 
     /**
-     *
      * @param fileClassPath
      * @return
      */
@@ -55,24 +84,6 @@ public class FileIOUtils {
         return loadedFile;
     }
 
-    /**
-     * Loads specified text file from file system as list of Strings
-     *
-     * @return
-     */
-    public static final List<String> loadTxtFileAsListOfStrings(String absFilePath) {
-        List<String> loadedFile = new ArrayList();
-        try (BufferedReader reader = new BufferedReader(new FileReader(absFilePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println("line: " + line);
-                loadedFile.add(line);
-            }
-        } catch (FileNotFoundException e) {
-        } catch (IOException ioe) {
-        }
-        return loadedFile;
-    }
 
     /**
      * When writing to classpath the classpath should exist, otherwise it will not be found

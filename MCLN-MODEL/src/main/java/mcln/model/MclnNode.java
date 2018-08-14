@@ -35,6 +35,10 @@ public abstract class MclnNode<ThisNodeType, OtherNodeType> extends MclnEntity {
         cSysPoint = cSysLocation.clone();
     }
 
+    boolean hasOutputArcs() {
+        return !outArcs.isEmpty();
+    }
+
     public abstract double[] getCSysLocation();
 
     public abstract void setCSysLocation(double[] cSysPnt);

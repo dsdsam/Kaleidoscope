@@ -4,14 +4,17 @@ import adf.ui.components.dialogs.undecorated.AdfDialogClosingCallback;
 import adf.ui.components.dialogs.undecorated.AdfUndecoratedDialog;
 import dsdsse.app.*;
 import dsdsse.designspace.DesignSpaceView;
+import dsdsse.graphview.DesignerArcView;
+import dsdsse.graphview.McLnGraphDesignerPropertyView;
+import dsdsse.graphview.MclnGraphDesignerView;
 import dsdsse.preferences.DsdsseUserPreference;
-import dsdsse.graphview.MclnArcView;
-import dsdsse.graphview.MclnPropertyView;
 import dsdsse.designspace.DesignSpaceContentManager;
 import mcln.model.*;
 import mcln.palette.MclnPaletteFactory;
 import mcln.palette.MclnState;
 import mcln.palette.MclnStatesNewPalette;
+import mclnview.graphview.MclnArcView;
+import mclnview.graphview.MclnPropertyView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,8 +49,8 @@ public final class ModelInitializationAssistant extends JPanel {
     private final InitAssistantTitleBar initAssistantTitleBar;
 
     private JFrame mainFrame;
-    private MclnPropertyView mclnPropertyView;
-    private MclnArcView mclnArcView;
+    private MclnPropertyView mcLnPropertyView;
+    private DesignerArcView mclnArcView;
     private final InitAssistantDataModel initAssistantDataModel;
     private InitAssistantController initAssistantController;
     private AdfUndecoratedDialog adfUndecoratedDialog;
@@ -118,7 +121,7 @@ public final class ModelInitializationAssistant extends JPanel {
      *
      */
     ModelInitializationAssistant() {
-        mclnPropertyView = null;
+        mcLnPropertyView = null;
         mclnArcView = null;
         initAssistantDataModel = new InitAssistantDataModel();
         initAssistantTitleBar = DsdsseUserPreference.isInitAssistantEmbedded() ? null : new InitAssistantTitleBar();
@@ -128,7 +131,7 @@ public final class ModelInitializationAssistant extends JPanel {
      *
      */
     void initWelcomeView() {
-        mclnPropertyView = null;
+        mcLnPropertyView = null;
         mclnArcView = null;
 
         // creating InitAssistantDataModel and InitAssistantController
@@ -157,18 +160,18 @@ public final class ModelInitializationAssistant extends JPanel {
     }
 
     /**
-     * @param mclnPropertyView
+     * @param mcLnPropertyView
      */
-    void initPropertyView(MclnPropertyView mclnPropertyView) {
-        this.mclnPropertyView = mclnPropertyView;
+    void initPropertyView(MclnPropertyView mcLnPropertyView) {
+        this.mcLnPropertyView = mcLnPropertyView;
         mclnArcView = null;
-        MclnStatement mclnProperty = mclnPropertyView.getTheElementModel();
+        MclnStatement mclnProperty = mcLnPropertyView.getTheElementModel();
         String mclnStatesPaletteName = mclnProperty.getMclnStatesPaletteName();
         MclnStatesNewPalette mclnStatesPalette = MclnPaletteFactory.getPaletteByName(mclnStatesPaletteName);
 
         // creating InitAssistantDataModel and InitAssistantController
         PropertyDataHolder propertyDataHolder =
-                PropertyDataHolder.createPropertyDataHolder(mclnStatesPalette, mclnPropertyView);
+                PropertyDataHolder.createPropertyDataHolder(mclnStatesPalette, mcLnPropertyView);
         initAssistantDataModel.resetDataHolder(propertyDataHolder);// = new InitAssistantDataModel(propertyDataHolder);
         initAssistantController = new InitAssistantController(initAssistantDataModel);
         initAssistantController.addListener(endInitializationRequestListener);
@@ -178,16 +181,16 @@ public final class ModelInitializationAssistant extends JPanel {
     }
 
     /**
-     * @param mclnPropertyView
+     * @param mcLnPropertyView
      */
-    public void resetToInitializePropertyView(MclnPropertyView mclnPropertyView) {
-        initPropertyView(mclnPropertyView);
+    public void resetToInitializePropertyView(MclnPropertyView mcLnPropertyView) {
+        initPropertyView(mcLnPropertyView);
         // Updating Title
         if (DsdsseUserPreference.isInitAssistantEmbedded()) {
             EmbeddedAssistantHolderPanel embeddedAssistantHolderPanel = EmbeddedAssistantHolderPanel.getInstance();
-            embeddedAssistantHolderPanel.extendTitle("Property", mclnPropertyView.getUID());
+            embeddedAssistantHolderPanel.extendTitle("Property", mcLnPropertyView.getUID());
         } else {
-            initAssistantTitleBar.extendHeaderText("Property", mclnPropertyView.getUID());
+            initAssistantTitleBar.extendHeaderText("Property", mcLnPropertyView.getUID());
         }
     }
 
@@ -195,8 +198,8 @@ public final class ModelInitializationAssistant extends JPanel {
     /**
      * @param mclnArcView
      */
-    void initArcView(MclnArcView mclnArcView) {
-        mclnPropertyView = null;
+    void initArcView(DesignerArcView mclnArcView) {
+        mcLnPropertyView = null;
         this.mclnArcView = mclnArcView;
         MclnStatement mclnProperty;
         if (mclnArcView.getInpNode() instanceof MclnPropertyView) {
@@ -222,7 +225,7 @@ public final class ModelInitializationAssistant extends JPanel {
     /**
      * @param mclnArcView
      */
-    void resetToInitializeArcView(MclnArcView mclnArcView) {
+    void resetToInitializeArcView(DesignerArcView mclnArcView) {
         initArcView(mclnArcView);
         // Updating Title
         if (DsdsseUserPreference.isInitAssistantEmbedded()) {
@@ -385,7 +388,7 @@ public final class ModelInitializationAssistant extends JPanel {
         if (!propertyHasProgram) {
             MclnProject.removeInputGeneratingProgram(mclnStatement);
             // repainting Property view
-            mclnPropertyView.repaintPropertyUponInitialization();
+            ((McLnGraphDesignerPropertyView)mcLnPropertyView).repaintPropertyUponInitialization();
             return true;
         }
 
@@ -400,7 +403,7 @@ public final class ModelInitializationAssistant extends JPanel {
                 initAssistantDataModel.isSelectedProgramTimeDrivenProgram(), programStepData);
 
         // repainting Property view
-        mclnPropertyView.repaintPropertyUponInitialization();
+        ((McLnGraphDesignerPropertyView)mcLnPropertyView).repaintPropertyUponInitialization();
         return true;
     }
 
@@ -540,7 +543,7 @@ In reverse: When initialization is started all dev operations are disabled
     //   M o d i f i c a t i o n   c h e c k
 
     private boolean isInitAssistantInitializingAndEntityIsModified() {
-        return (mclnPropertyView != null || mclnArcView != null) && isEntityModified();
+        return (mcLnPropertyView != null || mclnArcView != null) && isEntityModified();
     }
 
     private boolean isEntityModified() {

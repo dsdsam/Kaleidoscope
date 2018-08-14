@@ -10,13 +10,12 @@ import java.awt.*;
  */
 public class CSysPolyLineEntity2 extends BasicCSysEntity {
 
-    // rectangle model coordinates.
+    // model rectangle coordinates.
     private double[] modelUpperLeftCorner = new double[3];
     private double[] modelLowerRightCorner = new double[3];
 
-    // rectangle cSys coordinates
+    // cSys rectangle coordinates
     // these are transformed model coordinates
-    // SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
     private double[] cSysUpperLeftCorner = {0, 0, 0};
     private double[] cSysLowerRightCorner = {0, 0, 0};
 

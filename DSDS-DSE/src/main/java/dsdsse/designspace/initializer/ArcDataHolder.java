@@ -1,10 +1,11 @@
 package dsdsse.designspace.initializer;
 
-import dsdsse.graphview.MclnArcView;
-import dsdsse.graphview.MclnPropertyView;
+import dsdsse.graphview.DesignerArcView;
 import mcln.model.*;
 import mcln.palette.MclnState;
 import mcln.palette.MclnStatesNewPalette;
+import mclnview.graphview.MclnArcView;
+import mclnview.graphview.MclnPropertyView;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
 class ArcDataHolder extends DataHolder {
 
     static ArcDataHolder createArcDataHolder(MclnStatesNewPalette mclnStatesPalette, MclnStatement mclnProperty,
-                                             MclnArcView mclnArcView) {
+                                             DesignerArcView mclnArcView) {
         return new ArcDataHolder(mclnStatesPalette, mclnArcView);
     }
 
@@ -24,7 +25,7 @@ class ArcDataHolder extends DataHolder {
     private final List<MclnState> mclnStatesPaletteAsList = new ArrayList();
     private String componentName = "";
     private String propertyName = "";
-    private final MclnArcView mclnArcView;
+    private final DesignerArcView mclnArcView;
     private final MclnArc mclnArc;
 
     // Property Attributes
@@ -39,12 +40,12 @@ class ArcDataHolder extends DataHolder {
      * @param mclnStatesPalette
      * @param mclnArcView
      */
-    ArcDataHolder(MclnStatesNewPalette mclnStatesPalette, MclnArcView mclnArcView) {
+    ArcDataHolder(MclnStatesNewPalette mclnStatesPalette, DesignerArcView mclnArcView) {
         assert mclnArcView != null : "mclnArcView must not be null";
 
         this.mclnStatesPalette = mclnStatesPalette;
         this.mclnArcView = mclnArcView;
-        this.mclnArc = mclnArcView.getMclnArc();
+        this.mclnArc = mclnArcView.getTheElementModel();
 
         MclnStatement mclnProperty;
         if (mclnArcView.getInpNode() instanceof MclnPropertyView) {
@@ -163,20 +164,20 @@ class ArcDataHolder extends DataHolder {
 
     // Finalization
 
-    private boolean isPropertyAllowedStatesListModified() {
-        return true;
-    }
-
-    boolean isInitializationComplete() {
-        boolean initialized = false;
-
-        return initialized;
-    }
-
-
-    private boolean isStateChanged() {
-        return false;
-//        (originalInitialMclnStatementState == null && selectedInitialMclnStatementState != null) ||
-//                (selectedInitialMclnStatementState != originalInitialMclnStatementState);
-    }
+//    private boolean isPropertyAllowedStatesListModified() {
+//        return true;
+//    }
+//
+//    boolean isInitializationComplete() {
+//        boolean initialized = false;
+//
+//        return initialized;
+//    }
+//
+//
+//    private boolean isStateChanged() {
+//        return false;
+////        (originalInitialMclnStatementState == null && selectedInitialMclnStatementState != null) ||
+////                (selectedInitialMclnStatementState != originalInitialMclnStatementState);
+//    }
 }

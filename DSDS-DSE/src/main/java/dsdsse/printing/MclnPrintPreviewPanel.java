@@ -1,6 +1,6 @@
 package dsdsse.printing;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import dsdsse.designspace.DesignSpaceModel;
 import dsdsse.graphview.MclnGraphDesignerView;
 
@@ -34,7 +34,7 @@ public final class MclnPrintPreviewPanel extends JPanel {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy   HH:mm");
 
     private final DesignSpaceModel designSpaceModel;
-    private final MclnGraphDesignerView mclnGraphDesignerView;
+    private final JComponent mclnGraphDesignerView;
 
     private int pageWidth = SHORT_EDGE_LENGTH;
     private int pageHeight = LONG_EDGE_LENGTH;
@@ -54,7 +54,7 @@ public final class MclnPrintPreviewPanel extends JPanel {
      * @param designSpaceModel
      * @param mclnGraphDesignerView
      */
-    public MclnPrintPreviewPanel(DesignSpaceModel designSpaceModel, MclnGraphDesignerView mclnGraphDesignerView) {
+    public MclnPrintPreviewPanel(DesignSpaceModel designSpaceModel, JComponent mclnGraphDesignerView) {
         super(new BorderLayout());
         this.designSpaceModel = designSpaceModel;
         this.mclnGraphDesignerView = mclnGraphDesignerView;

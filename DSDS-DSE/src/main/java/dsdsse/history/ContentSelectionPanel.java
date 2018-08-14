@@ -1,12 +1,12 @@
 package dsdsse.history;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import dsdsse.designspace.DesignSpaceContentManager;
 import dsdsse.designspace.DesignSpaceModel;
 import dsdsse.designspace.DesignSpaceView;
 import dsdsse.graphview.MclnGraphDesignerView;
-import dsdsse.graphview.MclnPropertyView;
 import mcln.model.MclnProject;
+import mclnview.graphview.MclnPropertyView;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -56,7 +56,6 @@ public class ContentSelectionPanel extends JPanel {
     private final TraceLogTitlePanel traceLogTitlePanel = new TraceLogTitlePanel(titleText);
 
     /**
-     *
      * @param executionHistoryPanel
      * @param designSpaceView
      */
@@ -64,7 +63,7 @@ public class ContentSelectionPanel extends JPanel {
 
         super(new BorderLayout());
 
-        setBorder(new MatteBorder(0,0,0,1, Color.LIGHT_GRAY));
+        setBorder(new MatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
 
         this.executionHistoryPanel = executionHistoryPanel;
 
@@ -84,7 +83,7 @@ public class ContentSelectionPanel extends JPanel {
 //        JScrollBar scrollBar = scrollPane.getVerticalScrollBar();
 //        scrollBar.setPreferredSize(new Dimension(14, 0));
 
-        scrollPane.setBorder(new MatteBorder(0,0,0,1, Color.WHITE));
+        scrollPane.setBorder(new MatteBorder(0, 0, 0, 1, Color.WHITE));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
@@ -98,7 +97,7 @@ public class ContentSelectionPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    BoundedRangeModel getScrollBarModel(){
+    BoundedRangeModel getScrollBarModel() {
         return scrollPane.getVerticalScrollBar().getModel();
     }
 
@@ -128,8 +127,8 @@ public class ContentSelectionPanel extends JPanel {
         currentNOfRows = nOfAllRows;
 
         for (int i = 0; i < nOfAllRows; i++) {
-            MclnPropertyView mclnPropertyView = allPropertyList.get(i);
-            PropertyRow propertyRow = new PropertyRow(mclnPropertyView);
+            MclnPropertyView mcLnPropertyView = allPropertyList.get(i);
+            PropertyRow propertyRow = new PropertyRow(mcLnPropertyView);
             propertyRowList.add(propertyRow);
             listPanel.add(propertyRow, new GridBagConstraints(0, i, 1, 1, 1.0, 0.0,
                     GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
@@ -143,7 +142,7 @@ public class ContentSelectionPanel extends JPanel {
         }
     }
 
-    public int getViewPreferredHeight(){
+    public int getViewPreferredHeight() {
         int traceLogHeight = calculateHistoryPanelHeight(currentNOfRows);
         return traceLogHeight;
     }
@@ -157,23 +156,18 @@ public class ContentSelectionPanel extends JPanel {
         int size = propertyRowList.size();
 
 
-
         for (int i = 0; i < size; i++) {
             PropertyRow propertyRow = propertyRowList.get(i);
-            presentedPropertyList.add(propertyRow.getMclnPropertyView());
+            presentedPropertyList.add(propertyRow.getMcLnPropertyView());
             propertyRow.setCurrentlyVisible(i);
         }
         validate();
         executionHistoryPanel.setContents(presentedPropertyList);
-        if(size <= 0){
-//            DesignSpaceContentManager.setSimulationStatusViewPanelHeight(93);
-//            DesignSpaceContentManager.setDesignStatusViewPanelHeight(-1);
+        if (size <= 0) {
             return;
         }
         int simulationStatusViewPanelHeight;
-
-            simulationStatusViewPanelHeight = calculateHistoryPanelHeight(size);
-
+        simulationStatusViewPanelHeight = calculateHistoryPanelHeight(size);
         DesignSpaceContentManager.setSimulationStatusViewPanelHeight(simulationStatusViewPanelHeight);
     }
 
@@ -186,7 +180,7 @@ public class ContentSelectionPanel extends JPanel {
         presentedPropertyList.clear();
         for (PropertyRow propertyRow : propertyRowList) {
             if (propertyRow.isSelected()) {
-                presentedPropertyList.add(propertyRow.getMclnPropertyView());
+                presentedPropertyList.add(propertyRow.getMcLnPropertyView());
                 propertyRow.setCurrentlyVisible(rowIndex);
                 rowIndex++;
             } else {
@@ -207,24 +201,22 @@ public class ContentSelectionPanel extends JPanel {
      * @return
      */
     private int calculateHistoryPanelHeight(int numberOfPropertiesToShow) {
-        if(numberOfPropertiesToShow <= 0){
+        if (numberOfPropertiesToShow <= 0) {
             return EMPTY_TRACE_LOG_HEIGHT;
         }
         int traceLogHeight = TraceLogTitlePanel.TITLE_HEIGHT +
-                numberOfPropertiesToShow * ExecutionHistoryPanel.ROW_HEIGHT ;
-//                ExecutionHistoryPanel.ROW_HEIGHT ;
-//                ExecutionHistoryPanel.ROW_HEIGHT / 2;
+                numberOfPropertiesToShow * ExecutionHistoryPanel.ROW_HEIGHT;
 
         int actualTraceLogHeight = traceLogHeight;
         if (traceLogHeight < TRACE_LOG_MIN_HEIGHT) {
             actualTraceLogHeight = TRACE_LOG_MIN_HEIGHT;
         } else if (traceLogHeight > TRACE_LOG_MAX_HEIGHT) {
-            actualTraceLogHeight = TRACE_LOG_MAX_HEIGHT ;
+            actualTraceLogHeight = TRACE_LOG_MAX_HEIGHT;
         }
         // This check added to prevent Design Space to
         // change its height when switching from
         // Development to Simulation mode back and forth
-        if(!MclnProject.getInstance().isDemoProject()){
+        if (!MclnProject.getInstance().isDemoProject()) {
             return EMPTY_TRACE_LOG_HEIGHT;
         }
         return actualTraceLogHeight + ExecutionHistoryPanel.ROW_HEIGHT;
@@ -255,22 +247,22 @@ public class ContentSelectionPanel extends JPanel {
 
         private int rowIndex;
         private boolean selected;
-        private final MclnPropertyView mclnPropertyView;
+        private final MclnPropertyView mcLnPropertyView;
         private final String uID;
         private final String fullSubject;
         private String currentStatementState;
 
-        PropertyRow(MclnPropertyView mclnPropertyView) {
+        PropertyRow(MclnPropertyView mcLnPropertyView) {
             super(new GridBagLayout());
             setBorder(new MatteBorder(0, 0, 1, 0, ExecutionHistoryPanel.LINE_SEPARATOR_COLOR));
             setPreferredSize(ExecutionHistoryPanel.ROW_SIZE);
             setMinimumSize(ExecutionHistoryPanel.ROW_SIZE);
             setMaximumSize(ExecutionHistoryPanel.ROW_SIZE);
 
-            this.mclnPropertyView = mclnPropertyView;
-            uID = mclnPropertyView.getUID();
-            fullSubject = mclnPropertyView.getFullSubject();
-            currentStatementState = mclnPropertyView.getPropertyStatement();
+            this.mcLnPropertyView = mcLnPropertyView;
+            uID = mcLnPropertyView.getUID();
+            fullSubject = mcLnPropertyView.getFullSubject();
+            currentStatementState = mcLnPropertyView.getPropertyStatement();
 
             checkBox = new JCheckBox();
             checkBox.setPreferredSize(CHECKBOX_SIZE);
@@ -313,7 +305,7 @@ public class ContentSelectionPanel extends JPanel {
          *
          */
         private void updatePropertyStateUponSimulationStepExecuted() {
-            String currentStatementState = mclnPropertyView.getPropertyStatement();
+            String currentStatementState = mcLnPropertyView.getPropertyStatement();
             stateLabel.setText(currentStatementState);
         }
 
@@ -321,8 +313,8 @@ public class ContentSelectionPanel extends JPanel {
             return selected;
         }
 
-        private MclnPropertyView getMclnPropertyView() {
-            return mclnPropertyView;
+        private MclnPropertyView getMcLnPropertyView() {
+            return mcLnPropertyView;
         }
 
         void setCurrentlyVisible(int rowIndex) {

@@ -19,27 +19,11 @@ final class ArcStateSetupPanel extends JPanel {
     private static final String INIT_RECOGNIZING_ARC = "Recognizing Arc RGB:";
     private static final String INIT_GENERATING_ARC = "Generating Arc RGB:";
 
-    private final InitAssistantController initAssistantController;
-    private final InitAssistantDataModel initAssistantDataModel;
-
     private Color arrowColor = Color.WHITE;
     private final JLabel initialStateLabel = new JLabel("", JLabel.LEFT);
     private final JLabel rgbStateDisplay = new JLabel("", JLabel.CENTER);
 
     private final ArcViewPanel arcViewPanel;
-
-//    private final ControllerRequestListener controllerRequestListener =
-//            (InitAssistantController initAssistantController, InitAssistantDataModel initAssistantDataModel,
-//             InitAssistantController.PageNavigationRequest operation,
-//             InitAssistantController.InitializationPage page) -> {
-//                switch (operation) {
-//                    case InitialPage:
-//                        if (page == InitAssistantController.InitializationPage.InitArcStatePage) {
-//
-//                        }
-//                        break;
-//                }
-//            };
 
     private final InitAssistantDataModelListener initAssistantDataModelListener =
             (InitAssistantDataModel initAssistantDataModel,
@@ -48,10 +32,6 @@ final class ArcStateSetupPanel extends JPanel {
                     case ArcState:
                         MclnState arcSelectedMclnState = initAssistantDataModel.getArcSelectedMclnState();
                         setArcSelectedMclnState(arcSelectedMclnState);
-//                        MclnStatementState initialMclnStatementState = initAssistantDataModel.getInitialMclnStatementState();
-//                        System.out.println("NameAndStateSetupPanel - initialMclnState = " + initialMclnStatementState.toString());
-//                        stateColorDisplayPanel.setBackground(new Color(initialMclnStatementState.getRGB()));
-//                        rgbStateDisplay.setText(initialMclnStatementState.getHexColor());
                         break;
                 }
             };
@@ -62,9 +42,6 @@ final class ArcStateSetupPanel extends JPanel {
 
     ArcStateSetupPanel(InitAssistantController initAssistantController, InitAssistantDataModel initAssistantDataModel) {
         super(new BorderLayout());
-        this.initAssistantController = initAssistantController;
-        this.initAssistantDataModel = initAssistantDataModel;
-
         setOpaque(true);
         setBackground(InitAssistantUIColorScheme.CONTAINER_PANEL_BACKGROUND);
         Border border = BorderFactory.createCompoundBorder(
@@ -74,8 +51,8 @@ final class ArcStateSetupPanel extends JPanel {
 
         Polygon arcArrowPoints = initAssistantDataModel.getArcArrowPoints();
         arcViewPanel = new ArcViewPanel(arcArrowPoints);
-        MclnState originalArcMclnState = initAssistantDataModel.getArcSelectedMclnState();
-        setArcSelectedMclnState(originalArcMclnState);
+        MclnState arcSelectedMclnState = initAssistantDataModel.getArcSelectedMclnState();
+        setArcSelectedMclnState(arcSelectedMclnState);
 
         if (initAssistantDataModel.isRecognizingArc()) {
             initialStateLabel.setText(INIT_RECOGNIZING_ARC);
@@ -87,6 +64,9 @@ final class ArcStateSetupPanel extends JPanel {
         initAssistantDataModel.addListener(initAssistantDataModelListener);
     }
 
+    /**
+     * @param mclnState
+     */
     private void setArcSelectedMclnState(MclnState mclnState) {
         if (mclnState == null) {
             rgbStateDisplay.setText("0xFFFFFF");

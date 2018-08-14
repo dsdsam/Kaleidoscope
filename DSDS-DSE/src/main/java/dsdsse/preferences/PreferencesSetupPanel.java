@@ -1,6 +1,6 @@
 package dsdsse.preferences;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import dsdsse.app.AppController;
 
 import javax.swing.*;

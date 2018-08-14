@@ -27,20 +27,19 @@ import java.util.Properties;
  */
 public class SEMApp extends AdfApp {
 
-    private static final double OCCUPANCY_PERCENT = 0.80;
-    private static final double LOCATION_PERCENT = 0.40;
+    private static final Dimension DEFAULT_FRAME_SIZE = new Dimension(1100, 740);
+    private static final Dimension FRAME_MINIMUM_SIZE = new Dimension(960, 700);
 
-    private static final String CONFIG_FILE_DIR_CLASS_PATH = "/sem-resources/config/";
+    private static final String CONFIG_FILE_LOCATION = "/sem-resources/config/";
     private static final String CONFIG_FILE_NAME = "config.properties";
     private static final String FILE_SEPARATOR = System.getProperty("file.separator");
     public static String ICONS_DIR_CLASS_PATH = "/sem-resources/images/app-icons/";
     public static String SPLASH_DIR_CLASS_PATH = "/sem-resources/images/splash/";
 
-
     //    private static Color SE_APP_BACKGROUND = new Color(236, 233, 216);
     private static Color SE_APP_BACKGROUND = new Color(236, 233, 216);
 
-    private static SEMainFrame seMainFrame;
+    private static SEMainFrame semMainFrame;
 
     //   I n s t a n c e
 
@@ -53,7 +52,7 @@ public class SEMApp extends AdfApp {
          * Invoked when the component's size changes.
          */
         public void componentResized(ComponentEvent e) {
-            if (seMainFrame != null && seMainFrame.isVisible() && splash != null) {
+            if (semMainFrame != null && semMainFrame.isVisible() && splash != null) {
 //                splash.frameBoundsChanged(e.getComponent().getBounds());
             }
         }
@@ -62,7 +61,7 @@ public class SEMApp extends AdfApp {
          * Invoked when the component's position changes.
          */
         public void componentMoved(ComponentEvent e) {
-            if (seMainFrame != null && seMainFrame.isVisible() && splash != null) {
+            if (semMainFrame != null && semMainFrame.isVisible() && splash != null) {
 //                splash.frameBoundsChanged(e.getComponent().getBounds());
             }
         }
@@ -117,50 +116,63 @@ public class SEMApp extends AdfApp {
 
 
     };
-    private Object lock;
 
     //
     //   C o n s t r u c t i n g
     //
 
-    // made public to be accessible from Super Module
-    public SEMApp() {
-        super(false); // false means SE does not use ADF config properties
+    private static SEMApp semApp;
+
+    public static final synchronized void createSEMApp() {
+        assert semApp == null : "SEMApp is a singleton and already created";
+        semApp = new SEMApp();
+    }
+
+    private SEMApp() {
     }
 
     @Override
     protected void appInitialization() {
 
+        System.out.println(System.lineSeparator() + "Initializing Space Exploration Mission instance.");
+
         // Initializing application version from jar's manifest
         AppManifestAttributes.initialize();
 
-        try {
+        super.appInitialization();
 
-            Properties seConfigProperties = ConfigProperties.initConfigProperties(CONFIG_FILE_DIR_CLASS_PATH, CONFIG_FILE_NAME);
-            ConfigProperties.logConfigProperties("Space Exploration Mission config properties", seConfigProperties);
-
-            // application creation steps
-            initUIManager();
-            createMainFrame();
-            showSplash();
-            initController();
-            initModel();
-            initUI();
-
-            ControllersBuilder.buildMclnProject();
-
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
     }
 
     //
-    //   C r e a t i o n   s t e p s
+    //    C r e a t i o n   s t e p s
     //
+    //    initConfig();
+    //    initLocale();
+    //    initFonts();
+    //    initUIManager();
+    //    createMainFrame();
+    //    showSplash();
+    //    initModel();
+    //    initUI();
+    //    initController();
+    //    initRelations();
+    //    showMainFrame();
 
-    protected void initUIManager() {
-        String header = ConfigProperties.getStrConfigProperty(ConfigProperties.APP_TITLE_KEY, "SE");
-        System.getProperties().put(ConfigProperties.APP_TITLE_KEY, header);
+    @Override
+    protected void initConfig() {
+        Properties semConfigProperties = ConfigProperties.initConfigProperties(CONFIG_FILE_LOCATION, CONFIG_FILE_NAME);
+        ConfigProperties.logConfigProperties("Space Exploration Mission config properties", semConfigProperties);
+
+    }
+
+    @Override
+    protected void initUIManager() throws Exception {
+
+        String lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
+        UIManager.setLookAndFeel(lookAndFeel);
+
+        String appTitle = ConfigProperties.getStrConfigProperty(ConfigProperties.APP_TITLE_KEY) + " - " + AppManifestAttributes.getAppVersion();
+        System.getProperties().put(ConfigProperties.APP_TITLE_KEY, appTitle);
 
         UIManager.put(MAIN_PANEL_BACKGROUND, SE_APP_BACKGROUND);
 
@@ -169,10 +181,6 @@ public class SEMApp extends AdfApp {
         UIManager.put("Slider.darkShadow", Color.BLACK);
         UIManager.put("Slider.shadow", Color.BLACK);
         UIManager.put("Slider.highlight", Color.BLACK);
-        // UIManager.put("Slider.foreground", Color.BLACK );
-
-//        UIManager.put("Slider.foreground", Color.BLUE );
-//        Slider.majorTickLength
 
         UIManager.put("Slider.horizontalThumbIcon", new SEHorizontalSliderThumbIcon());
         UIManager.put("Slider.verticalThumbIcon", new SEVerticalSliderThumbIcon());
@@ -184,26 +192,8 @@ public class SEMApp extends AdfApp {
 
         }
         */
-/*
-        trackWidth = ((Integer)UIManager.get( "Slider.trackWidth" )).intValue();
-        tickLength = ((Integer)UIManager.get( "Slider.majorTickLength" )).intValue();
-        horizThumbIcon = UIManager.getIcon( "Slider.horizontalThumbIcon" );
-        vertThumbIcon = UIManager.getIcon( "Slider.verticalThumbIcon" );
 
-    super.installUI( c );
-
-        thumbColor = UIManager.getColor("Slider.thumb");
-        highlightColor = UIManager.getColor("Slider.highlight");
-        darkShadowColor = UIManager.getColor("Slider.darkShadow");
-
-         highlightColor = UIManager.getColor("Slider.highlight");
-
-        shadowColor = UIManager.getColor("Slider.shadow");
-        focusColor = UIManager.getColor("Slider.focus");
-
-*/
-//      ToolTip
-//        Color tooltipBackground = new Color(0xFFFFDD);
+        //  ToolTip
         Color tooltipBackground = new Color(0xAAFFFF);
         UIManager.put("ToolTip.background", tooltipBackground);
 
@@ -224,32 +214,6 @@ public class SEMApp extends AdfApp {
 
         );
 
-        /*
-        UIManager.put( "RootPane.frameBorder",
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createLoweredBevelBorder(),
-                        BorderFactory.createRaisedBevelBorder()
-
-                )
-
-        );
-        */
-        /*
-        UIManager.put( "RootPane.frameBorder",
-                BorderFactory.createCompoundBorder(
-                        BorderFactory.createCompoundBorder(
-                                BorderFactory.createLineBorder( Color.BLACK, 1 ),
-                                BorderFactory.createLineBorder( Color.ORANGE, 1 )
-                                ),
-                        BorderFactory.createCompoundBorder(
-                                BorderFactory.createLineBorder( Color.WHITE, 1 ),
-                                BorderFactory.createLineBorder( Color.ORANGE, 1 )
-                                )
-                )
-
-                );
-        */
-
         // activeBackground
         UIManager.put("adfActiveCaption", Color.RED);
         // activeForeground
@@ -265,17 +229,43 @@ public class SEMApp extends AdfApp {
 
     //   C r e a t i n g   M a i n   F r a m e
 
-    private final void createMainFrame() {
-        seMainFrame = SEMainFrame.createMainFrame();
-        AdfEnv.putMainFrame(seMainFrame);
-        seMainFrame.addWindowListener(windowAdapter);
+    @Override
+    protected final void createMainFrame() {
+        semMainFrame = SEMainFrame.createMainFrame();
+        AdfEnv.putMainFrame(semMainFrame);
+
+        String initialTitle = (String) System.getProperties().get(ConfigProperties.APP_TITLE_KEY);
+        semMainFrame.setTitle(initialTitle);
+        ImageIcon imageIcon = BuildUtils.getImageIcon(ICONS_DIR_CLASS_PATH + "title-logo.png");
+        if (imageIcon != null) {
+            Image image = imageIcon.getImage();
+            semMainFrame.setIconImage(image);
+        }
+
+        semMainFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        semMainFrame.addWindowListener(windowAdapter);
+
+        // Setting Frame size and location
+
+        int occupancyPercent = ConfigProperties.geIntProperty(ConfigProperties.OCCUPANCY_PERCENT_KEY, 0);
+        boolean useOccupancyPercent = occupancyPercent != 0;
+        if (useOccupancyPercent) {
+            semMainFrame.initFrameSize(((double) occupancyPercent) / 100);
+        } else {
+            semMainFrame.setSize(DEFAULT_FRAME_SIZE);
+            semMainFrame.setPreferredSize(DEFAULT_FRAME_SIZE);
+        }
+        semMainFrame.setMinimumSize(FRAME_MINIMUM_SIZE);
+//        semMainFrame.setLocationRelativeTo(null);
+        semMainFrame.setLocation(50,50);
     }
 
     //   S h o w i n g   s p l a s h
 
+    @Override
     protected void showSplash() {
-        seMainFrame = SEMainFrame.getInstance();
-        Dimension restOfScreen = seMainFrame.initMainFrame(OCCUPANCY_PERCENT);
+        semMainFrame = SEMainFrame.getInstance();
+
         String splashProperty = ConfigProperties.getStrConfigProperty("ui.splash", "false");
         if (splashProperty.equalsIgnoreCase("true")) {
             ImageIcon backgroundImageIcon = BuildUtils.getImageIcon(SPLASH_DIR_CLASS_PATH + "darck splash.png");
@@ -285,7 +275,7 @@ public class SEMApp extends AdfApp {
             appVersionProperty = "Version:  " + appVersionProperty;
             String appBuiltDateProperty = AppManifestAttributes.getAppBuiltDate();
             appBuiltDateProperty = "Built on:  " + appBuiltDateProperty;
-            splash = new sem.appui.splash.Splash(seMainFrame, appVersionProperty, appBuiltDateProperty, backgroundImageIcon,
+            splash = new sem.appui.splash.Splash(semMainFrame, appVersionProperty, appBuiltDateProperty, backgroundImageIcon,
                     darkcloseButtonIcon, brightcloseButtonIcon);
             splash.setVisible(true);
             splash.toFront();
@@ -293,19 +283,18 @@ public class SEMApp extends AdfApp {
         AdfEnv.put(AdfEnv.SPLASH_WINDOW_KEY, splash);
     }
 
-    public void initController() {
-    }
-
-    public void initModel() {
+    @Override
+    protected void initModel() {
         spaceExplorerModel = SpaceExplorerModel.getInstance();
     }
 
-    public void initUI() {
+    @Override
+    protected void initUI() {
         ModelController.createSingleInstance(spaceExplorerModel);
         AppUIController.initialize();
         seMainPanel = new SEMainPanel();
 
-        seMainFrame.init(seMainPanel);
+        semMainFrame.setSemMainPanel(seMainPanel);
         seMainPanel.buildModelRepresentation(spaceExplorerModel);
 
         // new stuff
@@ -314,14 +303,29 @@ public class SEMApp extends AdfApp {
         seMainPanel.addComponentListener(frameComponentListener);
     }
 
+    @Override
+    protected void initController() {
+        ControllersBuilder.buildMclnProject();
+    }
+
+    @Override
+    protected final void initRelations() {
+    }
+
+    //   S h o w   M a i n   F r a m e
+
+    @Override
+    public void showMainFrame() {
+        AdfEnv.getMainFrame().setVisible(true);
+    }
+
+
     //   S t a r t i n g   T h e   A p p l i c a t i o n
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                String lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
-                UIManager.setLookAndFeel(lookAndFeel);
-                SEMApp app = new SEMApp();
+                SEMApp.createSEMApp();
             } catch (Throwable e) {
                 System.out.println("SEApp.main: Throwable cought ! " + e.toString());
                 System.out.println("SEApp.main: See Error Log for details.");

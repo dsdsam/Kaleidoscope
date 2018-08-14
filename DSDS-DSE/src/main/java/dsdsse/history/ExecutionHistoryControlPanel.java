@@ -1,6 +1,6 @@
 package dsdsse.history;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import dsdsse.app.AppController;
 
 import javax.swing.*;
@@ -91,7 +91,7 @@ public class ExecutionHistoryControlPanel extends JPanel {
 
     ExecutionHistoryControlPanel(ExecutionHistoryPanel executionHistoryPanel) {
         super(new BorderLayout());
-        setBorder(new MatteBorder(1, 0, 0, 0, new Color(0x7A8A99)));
+//        setBorder(new MatteBorder(1, 0, 0, 0, new Color(0x7A8A99)));
         this.executionHistoryPanel = executionHistoryPanel;
 
         setBackground(BACKGROUND_COLOR);
@@ -133,6 +133,7 @@ public class ExecutionHistoryControlPanel extends JPanel {
 
     private void initLayout() {
         add(traceLogTitlePanel, BorderLayout.NORTH);
+        traceLogTitlePanel.setBorder(new MatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
 
         JPanel panel = new JPanel();
         panel.setBorder(new EmptyBorder(0, 1, 0, 0));

@@ -4,18 +4,12 @@ import adf.menu.*;
 import adf.preferences.GroupChangeListener;
 import adf.utils.BuildUtils;
 import dsdsse.animation.*;
-import dsdsse.designspace.DesignOrSimulationStatusPanelCardView;
-import dsdsse.designspace.DesignSpaceContentManager;
-import dsdsse.designspace.DesignSpaceModel;
-import dsdsse.designspace.DesignSpaceView;
+import dsdsse.designspace.*;
 import dsdsse.designspace.controller.DesignSpaceController;
 import dsdsse.designspace.executor.MclnSimulationController;
-import dsdsse.designspace.history.LogPanel;
 import dsdsse.designspace.initializer.InitAssistantInterface;
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
-import dsdsse.graphview.MclnArcView;
+import dsdsse.graphview.DesignerArcView;
 import dsdsse.graphview.MclnGraphViewEditor;
-import dsdsse.graphview.MclnPropertyView;
 import dsdsse.help.HelpPanelHolder;
 import dsdsse.preferences.DsdsseUserPreference;
 import dsdsse.preferences.GroupID;
@@ -25,6 +19,9 @@ import dsdsse.welcome.WelcomePanel;
 import mcln.model.MclnModel;
 import mcln.model.MclnProject;
 import mcln.model.ProjectAttributes;
+import mclnview.graphview.MclnArcView;
+import mclnview.graphview.MclnGraphModel;
+import mclnview.graphview.MclnPropertyView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,6 +67,11 @@ public class AppController {
     public static final String MENU_ITEM_HIDE_PRINT_CONTENT = "Hide Print Content";
     public static final String MENU_ITEM_EXIT = "Exit";
 
+    // Project View Menu
+    public static final String MENU_PROJECT_VIEW = "  View  ";
+    public static final String MENU_ITEM_GRAPH_VIEW = "Graph View";
+    public static final String MENU_ITEM_MATRIX_VIEW = "Matrix View";
+
     // Examples Menu
     public static final String MENU_ITEM_EXAMPLES = "  Examples  ";
     public static final String MENU_BASIC_BLOCK = DEMO_PROJECT_BASIC_BLOCK;
@@ -86,13 +88,15 @@ public class AppController {
     public static final String MENU_ITEM_DEVELOPMENT_MODE = "  Development  ";
     public static final String MENU_ITEM_SET_DEVELOPMENT_MODE = "Set Development Mode";
     public static final String MENU_ITEM_CREATION_MODE = "  Creation  ";
-    public static final String MENU_ITEM_CREATE_PROPERTIES = "Create Property Nodes";
-    public static final String MENU_ITEM_CREATE_CONDITIONS = "Create Condition Nodes";
-    public static final String MENU_ITEM_CREATE_ARCS = "Create Arcs";
-    public static final String MENU_ITEM_CREATE_FRAGMENTS = "Create Simple Fragments";
+    public static final String MENU_ITEM_CREATE_PROPERTIES = "Property Nodes";
+    public static final String MENU_ITEM_CREATE_CONDITIONS = "Condition Nodes";
+    public static final String MENU_ITEM_CREATE_POLYLINE_ARCS = "Polyline Arcs";
+    public static final String MENU_ITEM_CREATE_SPLINE_ARCS = "Spline Arcs";
+    public static final String MENU_ITEM_CREATE_FRAGMENTS = "Simple Fragments";
 
     // Modify Menu
     public static final String MENU_ITEM_MODIFICATION = "  Modification  ";
+    public static final String MENU_ITEM_MOVE_ELEMENTS = "Move Model Elements";
     public static final String MENU_ITEM_MOVE_FRAGMENT = "Move Model Fragments";
     public static final String MENU_ITEM_MOVE_MODEL = "Move Entire Model";
     public static final String MENU_ITEM_DELETE_ELEMENT = "Delete Model Elements";
@@ -196,14 +200,13 @@ public class AppController {
     /**
      *
      */
-    static final void initInstance(AdfMenuBar menuBar) {
+    static final void createInstance(AdfMenuBar menuBar) {
         if (appController.menuBar != null) {
             logger.severe("AppController instance already initialized !!!");
             return;
         }
         appController.menuBar = menuBar;
         appController.appStateModel = AppStateModel.getInstance();
-        appController.mclnGraphModel = DsdsseEnvironment.getMclnGraphModel();
         appController.mclnGraphViewEditor = DsdsseEnvironment.getMclnGraphViewEditor();
         appController.designSpaceView = DsdsseEnvironment.getDesignSpaceView();
 
@@ -211,6 +214,10 @@ public class AppController {
         appController.setDevelopmentMode();
 //        appController.setSimulationMode();
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(appController.keyEventDispatcher);
+    }
+
+    public static AppController getInstanceToGetMenuListener() {
+        return appController;
     }
 
     public static AppController getInstance() {
@@ -229,7 +236,7 @@ public class AppController {
      */
     public static JButton createIconButton(String iconName, boolean enabled, String tipText,
                                            ActionListener menuActionListener) {
-        JButton button = BuildUtils.createIconButton(DsdsseMainPanel.PREFIX + iconName, enabled, tipText,
+        JButton button = BuildUtils.createIconButton(DsdsDseDesignSpaceHolderPanel.PREFIX + iconName, enabled, tipText,
                 menuActionListener);
         return button;
     }
@@ -244,8 +251,8 @@ public class AppController {
      */
     public static JToggleButton createToggleIconButton(String defaultIconName, String selectedIconName,
                                                        boolean selected, boolean enabled, ItemListener itemListener) {
-        JToggleButton toggleButton = BuildUtils.createToggleIconButton(DsdsseMainPanel.PREFIX + defaultIconName,
-                DsdsseMainPanel.PREFIX + selectedIconName, selected, enabled, itemListener);
+        JToggleButton toggleButton = BuildUtils.createToggleIconButton(DsdsDseDesignSpaceHolderPanel.PREFIX + defaultIconName,
+                DsdsDseDesignSpaceHolderPanel.PREFIX + selectedIconName, selected, enabled, itemListener);
         return toggleButton;
     }
 
@@ -273,7 +280,6 @@ public class AppController {
 
     private AdfMenuBar menuBar;
     private AppStateModel appStateModel;
-    private MclnGraphModel mclnGraphModel;
     private DesignSpaceView designSpaceView;
     private MclnGraphViewEditor mclnGraphViewEditor;
 
@@ -524,6 +530,9 @@ public class AppController {
 
             userClosesApplication();
 
+        } else if (MENU_ITEM_GRAPH_VIEW.equals(cmd) || MENU_ITEM_MATRIX_VIEW.equals(cmd)) {
+            switchToSelectedView(cmd);
+//            switchToSelectedApplicationView(cmd);
         } else
 
             //
@@ -577,8 +586,8 @@ public class AppController {
                     return false;
 
                 } else if (MENU_ITEM_CREATE_PROPERTIES.equals(cmd)) {
-                    if (!isRequestedOperationAlreadySet(AppStateModel.Operation.CREATE_NODES)) {
-                        appStateModel.setNewEditingOperation(AppStateModel.Operation.CREATE_NODES,
+                    if (!isRequestedOperationAlreadySet(AppStateModel.Operation.CREATE_PROPERTIES)) {
+                        appStateModel.setNewEditingOperation(AppStateModel.Operation.CREATE_PROPERTIES,
                                 AppStateModel.OperationStep.PLACE_NODE);
                     } else {
                         AppStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE);
@@ -592,14 +601,20 @@ public class AppController {
                         appStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE);
                     }
 
-                } else if (MENU_ITEM_CREATE_ARCS.equals(cmd)) {
-                    // Called twice when icon clicked to select and unselect.
+                } else if (MENU_ITEM_CREATE_POLYLINE_ARCS.equals(cmd)) {
+                    // Called twice when icon clicked to select or unselect.
                     // But it is not called when another icon of the group is clicked.
                     // Also is not called when icon is unselected via action.
-                    toggleArcCreation();
+                    setCreatingPolylineArcs();
+
+                } else if (MENU_ITEM_CREATE_SPLINE_ARCS.equals(cmd)) {
+                    // Called twice when icon clicked to select or unselect.
+                    // But it is not called when another icon of the group is clicked.
+                    // Also is not called when icon is unselected via action.
+                    setCreatingSplineArcs();
 
                 } else if (MENU_ITEM_CREATE_FRAGMENTS.equals(cmd)) {
-                    // Called twice when icon clicked to select and unselect.
+                    // Called twice when icon clicked to select or unselect.
                     // But it is not called when another icon of the group is clicked.
                     // Also is not called when icon is unselected via action.
                     toggleFragmentCreation();
@@ -608,42 +623,22 @@ public class AppController {
 
                     //  M o v e   M o d e l   O p e r a t i o n s
 
-                    if (MENU_ITEM_MOVE_FRAGMENT.equals(cmd)) {
+                    if (MENU_ITEM_MOVE_ELEMENTS.equals(cmd)) {
+                        toggleMoveElements();
+
+                    } else if (MENU_ITEM_MOVE_FRAGMENT.equals(cmd)) {
                         toggleMoveFragment();
-//                        if (isRequestedOperationAlreadySet(AppStateModel.Operation.MOVE_FRAGMENT)) {
-//                            return false;
-//                        }
-//                        // Condition: Current editing operation must be canceled and
-//                        // Initialization Assistant must be Shutdown
-//                        if (!canCurrentEditingBeCanceledWhileInitAssistantBeIdle()) {
-//                            return false;
-//                        }
-//                        appStateModel.setNewEditingOperation(AppStateModel.Operation.MOVE_FRAGMENT,
-//                                AppStateModel.OperationStep.START_SELECTING_NODES_TO_BE_MOVED);
 
                     } else if (MENU_ITEM_MOVE_MODEL.equals(cmd)) {
-
                         if (!isRequestedOperationAlreadySet(AppStateModel.Operation.MOVE_MODEL)) {
-
                             appStateModel.setNewEditingOperation(AppStateModel.Operation.MOVE_MODEL,
                                     AppStateModel.OperationStep.CLICK_ON_THE_MODEL_OR_PRES_AND_START_DRAGGING);
-
                         } else {
                             appStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE);
                         }
 
                     } else if (MENU_ITEM_DELETE_ELEMENT.equals(cmd)) {
                         toggleDeleteElementOperation();
-//            if (isRequestedOperationAlreadySet(AppStateModel.Operation.DELETE_ELEMENT)) {
-//                return false;
-//            }
-//            // Condition: Current editing operation must be canceled and
-//            // Initialization Assistant is not initializing but may be running
-//            if (!canCurrentEditingBeCanceledWhileInitAssistantBeIdle()) {
-//                return false;
-//            }
-//            appStateModel.setNewEditingOperation(AppStateModel.Operation.DELETE_ELEMENT,
-//                    AppStateModel.OperationStep.PICK_UP_ELEMENT_TO_BE_DELETED, true);
                     } else if (MENU_ITEM_LAUNCH_IA.equals(cmd)) {
                         // Called twice when icon clicked to select and unselect.
                         // But it is not called when another icon of the group is clicked.
@@ -728,8 +723,7 @@ public class AppController {
                                 } else if (MENU_ITEM_HOW_TO_RUN_MODEL_SIMULATION.equals(cmd)) {
                                     return startPresentationShow(HowToUseSimulationOperationsScript.SCRIPT_NAME);
 
-                                }
-                                else if (MENU_ITEM_WHAT_IS_DSDS_DSE.equals(cmd)) {
+                                } else if (MENU_ITEM_WHAT_IS_DSDS_DSE.equals(cmd)) {
                                     return onOpenHelpPanelButtonClicked();
                                 } else if (MENU_ITEM_RUNNING_EXAMPLES.equals(cmd)) {
                                     onHelpRunningModelExamples();
@@ -756,7 +750,7 @@ public class AppController {
         userClosesApplication();
     }
 
-    private void userClosesApplication() {
+    public void userClosesApplication() {
         // Embedded and Running Init Assistant must be interrupted if possible
         // TODO
         // Currently "Exit" is disabled when IA is initializing.
@@ -775,11 +769,39 @@ public class AppController {
         System.exit(0);
     }
 
+    /**
+     * This method is preserved for possible use when menu "View" is used to
+     * switch from one application main panel to another back and forth.
+     * Currently menu bar "View" menu is used top switch Design Space content.
+     *
+     * @param selectedView
+     */
+    private void switchToSelectedApplicationView(String selectedView) {
+        if (!selectedView.equals(MENU_ITEM_MATRIX_VIEW)) {
+            return;
+        }
+        DsdsseMainFrame mainFrame = DsdsseMainFrame.getInstance();
+        DsdsDseMatrixSpaceHolderPanel dsdsDseMatrixSpaceHolderPanel = DsdsDseMatrixSpaceHolderPanel.getInstance();
+        mainFrame.setDsdsDseMatrixViewHolderPanel(dsdsDseMatrixSpaceHolderPanel);
+    }
+
+    /**
+     *
+     * @param selectedView
+     */
+    private void switchToSelectedView(String selectedView) {
+        if (selectedView.equals(MENU_ITEM_GRAPH_VIEW)) {
+            DesignSpaceGraphOrMatrixViewCardPanel.getInstance().switchToMclnGraphDesignerView();
+        } else if(selectedView.equals(MENU_ITEM_MATRIX_VIEW)){
+            DesignSpaceGraphOrMatrixViewCardPanel.getInstance().switchToMclnGraphMatrixView();
+        }
+    }
+
     //
     // Methods called from Menu Listener when it processes request to start operation
     //
 
-    private void unselectCreationOperation() {
+    public void unselectCreationOperation() {
         AppStateModel.Operation currentOperation = appStateModel.getCurrentOperation();
         if (currentOperation.isCreationOperation()) {
             String menuItem = appStateModel.getCurrentOperation().getMenuItem();
@@ -881,17 +903,31 @@ public class AppController {
         }
     }
 
-
     /**
-     * C r e a t i n g   A r c s
+     * C r e a t i n g   P o l y l i n e   A r c s
      * <p>
      * Called when menu item clicked
      */
-    private final void toggleArcCreation() {
-        if (!isRequestedOperationAlreadySet(AppStateModel.Operation.CREATE_ARCS)) {
-            appStateModel.setNewEditingOperation(AppStateModel.Operation.CREATE_ARCS,
+    private final void setCreatingPolylineArcs() {
+        if (!isRequestedOperationAlreadySet(AppStateModel.Operation.CREATING_POLYLINE_ARCS)) {
+            appStateModel.setNewEditingOperation(AppStateModel.Operation.CREATING_POLYLINE_ARCS,
                     AppStateModel.OperationStep.PICK_UP_ARC_INPUT_NODE);
-            enableOperation(MENU_ITEM_CREATE_ARCS);
+            enableOperation(MENU_ITEM_CREATE_POLYLINE_ARCS);
+        } else {
+            appStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE);
+        }
+    }
+
+    /**
+     * C r e a t i n g   S p l i n e   A r c s
+     * <p>
+     * Called when menu item clicked
+     */
+    private final void setCreatingSplineArcs() {
+        if (!isRequestedOperationAlreadySet(AppStateModel.Operation.CREATING_SPLINE_ARCS)) {
+            appStateModel.setNewEditingOperation(AppStateModel.Operation.CREATING_SPLINE_ARCS,
+                    AppStateModel.OperationStep.PICK_UP_ARC_INPUT_NODE);
+            enableOperation(MENU_ITEM_CREATE_SPLINE_ARCS);
         } else {
             appStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE);
         }
@@ -916,6 +952,15 @@ public class AppController {
         if (!isRequestedOperationAlreadySet(AppStateModel.Operation.MOVE_FRAGMENT)) {
             appStateModel.setNewEditingOperation(AppStateModel.Operation.MOVE_FRAGMENT,
                     AppStateModel.OperationStep.START_SELECTING_NODES_TO_BE_MOVED);
+        } else {
+            appStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE);
+        }
+    }
+
+    private final void toggleMoveElements() {
+        if (!isRequestedOperationAlreadySet(AppStateModel.Operation.MOVE_ELEMENTS)) {
+            appStateModel.setNewEditingOperation(AppStateModel.Operation.MOVE_ELEMENTS,
+                    AppStateModel.OperationStep.SELECT_ELEMENT_TO_BE_MOVED);
         } else {
             appStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE);
         }
@@ -1021,17 +1066,21 @@ public class AppController {
         actionToEnableDisable.setEnabled(enable);
         actionToEnableDisable = getUIAction(MENU_ITEM_CREATE_CONDITIONS);
         actionToEnableDisable.setEnabled(enable);
-        actionToEnableDisable = getUIAction(MENU_ITEM_CREATE_ARCS);
+        actionToEnableDisable = getUIAction(MENU_ITEM_CREATE_SPLINE_ARCS);
+        actionToEnableDisable.setEnabled(enable);
+        actionToEnableDisable = getUIAction(MENU_ITEM_CREATE_POLYLINE_ARCS);
         actionToEnableDisable.setEnabled(enable);
         actionToEnableDisable = getUIAction(MENU_ITEM_CREATE_FRAGMENTS);
         actionToEnableDisable.setEnabled(enable);
 
 
-        actionToEnableDisable = getUIAction(MENU_ITEM_DELETE_ELEMENT);
+        actionToEnableDisable = getUIAction(MENU_ITEM_MOVE_ELEMENTS);
         actionToEnableDisable.setEnabled(enable);
         actionToEnableDisable = getUIAction(MENU_ITEM_MOVE_FRAGMENT);
         actionToEnableDisable.setEnabled(enable);
         actionToEnableDisable = getUIAction(MENU_ITEM_MOVE_MODEL);
+        actionToEnableDisable.setEnabled(enable);
+        actionToEnableDisable = getUIAction(MENU_ITEM_DELETE_ELEMENT);
         actionToEnableDisable.setEnabled(enable);
 
         DseMenuMediator.enableOrDisableInitAssistantOnCreationStartedOrStopped(enable);
@@ -1092,20 +1141,26 @@ public class AppController {
         // enable creation mode buttons
         AdfBasicAction createStatementsAction = getUIAction(MENU_ITEM_CREATE_PROPERTIES);
         AdfBasicAction createConditionsAction = getUIAction(MENU_ITEM_CREATE_CONDITIONS);
-        AdfBasicAction createArcsAction = getUIAction(MENU_ITEM_CREATE_ARCS);
+        AdfBasicAction createSplineArcsAction = getUIAction(MENU_ITEM_CREATE_SPLINE_ARCS);
+        AdfBasicAction createPolylineArcsAction = getUIAction(MENU_ITEM_CREATE_POLYLINE_ARCS);
         AdfBasicAction createFragmentAction = getUIAction(MENU_ITEM_CREATE_FRAGMENTS);
-        AdfBasicAction deleteAction = getUIAction(MENU_ITEM_DELETE_ELEMENT);
+
+        AdfBasicAction moveElementsAction = getUIAction(MENU_ITEM_MOVE_ELEMENTS);
         AdfBasicAction moveFragmentAction = getUIAction(MENU_ITEM_MOVE_FRAGMENT);
         AdfBasicAction moveModelAction = getUIAction(MENU_ITEM_MOVE_MODEL);
-        AdfBasicAction launchInitializationAssistantAction = getUIAction(MENU_ITEM_LAUNCH_IA);
+        AdfBasicAction deleteAction = getUIAction(MENU_ITEM_DELETE_ELEMENT);
 
         createStatementsAction.setEnabled(true);
         createFragmentAction.setEnabled(true);
         createConditionsAction.setEnabled(true);
-        createArcsAction.setEnabled(true);
-        deleteAction.setEnabled(true);
+        createSplineArcsAction.setEnabled(true);
+        createPolylineArcsAction.setEnabled(true);
+
+        moveElementsAction.setEnabled(true);
         moveFragmentAction.setEnabled(true);
         moveModelAction.setEnabled(true);
+        deleteAction.setEnabled(true);
+
         DseMenuMediator.enableInitAssistant();
 
         // disable simulation mode items
@@ -1118,6 +1173,7 @@ public class AppController {
         AppStateModel.setCurrentSimulationOperation(AppStateModel.Operation.NONE);
         AppStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE);
 
+        DesignSpaceGraphOrMatrixViewCardPanel.getInstance().switchToMclnGraphDesignerView();
         DesignOrSimulationStatusPanelCardView.getInstance().switchToDesignStatusViewPanel();
     }
 
@@ -1138,20 +1194,27 @@ public class AppController {
         // disable creation mode items
         AdfBasicAction createStatementsAction = getUIAction(MENU_ITEM_CREATE_PROPERTIES);
         AdfBasicAction createConditionsAction = getUIAction(MENU_ITEM_CREATE_CONDITIONS);
-        AdfBasicAction createArcsAction = getUIAction(MENU_ITEM_CREATE_ARCS);
+        AdfBasicAction createSplineArcsAction = getUIAction(MENU_ITEM_CREATE_SPLINE_ARCS);
+        AdfBasicAction createPolylineArcsAction = getUIAction(MENU_ITEM_CREATE_POLYLINE_ARCS);
         AdfBasicAction createFragmentAction = getUIAction(MENU_ITEM_CREATE_FRAGMENTS);
-        AdfBasicAction deleteAction = getUIAction(MENU_ITEM_DELETE_ELEMENT);
+
+        AdfBasicAction moveElementsAction = getUIAction(MENU_ITEM_MOVE_ELEMENTS);
         AdfBasicAction moveFragmentAction = getUIAction(MENU_ITEM_MOVE_FRAGMENT);
         AdfBasicAction moveModelAction = getUIAction(MENU_ITEM_MOVE_MODEL);
+        AdfBasicAction deleteAction = getUIAction(MENU_ITEM_DELETE_ELEMENT);
         AdfBasicAction launchInitializationAssistantAction = getUIAction(MENU_ITEM_LAUNCH_IA);
 
         createStatementsAction.setEnabled(false);
         createConditionsAction.setEnabled(false);
-        createArcsAction.setEnabled(false);
+        createSplineArcsAction.setEnabled(false);
+        createPolylineArcsAction.setEnabled(false);
         createFragmentAction.setEnabled(false);
-        deleteAction.setEnabled(false);
+
+        moveElementsAction.setEnabled(false);
         moveFragmentAction.setEnabled(false);
         moveModelAction.setEnabled(false);
+        deleteAction.setEnabled(false);
+
         launchInitializationAssistantAction.setEnabled(false);
         launchInitializationAssistantAction.setExcludedFromGroup(true);
 
@@ -1205,7 +1268,7 @@ public class AppController {
      * R e s e t   S i m u l a t i o n
      */
     private void onResetSimulation() {
-        LogPanel.getInstance().clearLog();
+//        LogPanel.getInstance().clearLog();
         MclnSimulationController.getInstance().setSimulationReset();
 
         Action startSimulationAction = getUIAction(MENU_ITEM_START_SIMULATION);
@@ -1354,7 +1417,7 @@ public class AppController {
      *
      */
     private void stopSimulationProcessAndClearSimulationPresentation() {
-        LogPanel.getInstance().clearLog();
+//        LogPanel.getInstance().clearLog();
         // setSimulationReset will set model to initial state
 //        onResetSimulation();
         MclnSimulationController.getInstance().setSimulationReset();
@@ -1537,7 +1600,6 @@ public class AppController {
     }
 
     /**
-     *
      * @param title
      * @param projectModified
      * @return
@@ -1637,13 +1699,13 @@ public class AppController {
      * Called from Edit Popup Menu to place Property into Init Assistant
      *
      * @param mainFrame
-     * @param mclnPropertyView
+     * @param mcLnPropertyView
      */
-    public final void setInitAssistantToInitializeProperty(JFrame mainFrame, MclnPropertyView mclnPropertyView) {
+    public final void setInitAssistantToInitializeProperty(JFrame mainFrame, MclnPropertyView mcLnPropertyView) {
         if (!InitAssistantInterface.isInitAssistantUpAndRunning()) {
             DseMenuMediator.disableInitAssistantOnMenuItemClicked();
         }
-        InitAssistantInterface.setInitAssistantToInitializeProperty(mainFrame, mclnPropertyView);
+        InitAssistantInterface.setInitAssistantToInitializeProperty(mainFrame, mcLnPropertyView);
         appStateModel.setNewEditingOperation(AppStateModel.Operation.INITIALIZATION,
                 AppStateModel.OperationStep.INITIALIZING_PROPERTY_NODE);
     }
@@ -1657,7 +1719,7 @@ public class AppController {
      */
     public final void setInitAssistantToInitializeArc(JFrame mainFrame, MclnArcView mclnArcView) {
 
-        InitAssistantInterface.setInitAssistantToInitializeArc(mainFrame, mclnArcView);
+        InitAssistantInterface.setInitAssistantToInitializeArc(mainFrame, (DesignerArcView) mclnArcView);
 
         AppStateModel.OperationStep arcInitializationStep;
         if (mclnArcView.isRecognizingArc()) {

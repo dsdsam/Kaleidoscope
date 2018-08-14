@@ -29,6 +29,7 @@ final class MclnSimulatingEngine {
     static final int DEDS_EXEC = 3;
 
     private int execMode = DEDS_EXEC;
+
     private MclnModel mclnModel;
 
     private StringBuilder tickResponseStringBuilder = new StringBuilder();
@@ -119,14 +120,17 @@ final class MclnSimulatingEngine {
         mclnStatement.setCurrentMclnState(userProvidedMclnState);
         MclnModelEvent userInputMclnModelEvent = new MclnModelEvent(mclnStatement.getUID(),
                 MclnModelEvent.EventType.PGM_INPUT, mclnStatement.getCurrentMclnState());
+
         System.out.println("U s e r   I n p u t : putting user event into queue "
                 + userInputMclnModelEvent.toString() + "\n");
-        try {
-            linkedBlockingEventQueue.put(userInputMclnModelEvent);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        if (mclnModel.isSimulationRunning()) {
+            try {
+                linkedBlockingEventQueue.put(userInputMclnModelEvent);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-//        fireSimulatedPropertyStateChanged(mclnStatement);
         mclnModel.fireModelStateChanged();
     }
 
@@ -328,6 +332,7 @@ final class MclnSimulatingEngine {
             e.printStackTrace();
         }
 
+        mclnModel.fireSimulationStepExecuted();
         // unloading event queue
         do {
             MclnModelEvent mclnModelEvent = linkedBlockingEventQueue.poll();
@@ -339,11 +344,16 @@ final class MclnSimulatingEngine {
                 //  System.out.println("Engine.execute One Step Divider found - Stop cycle\n");
                 break;
             }
+
             //  System.out.println("Engine.execute One Step queue processing event" + mclnModelEvent.toString() + "\n");
             processStateChangeEvent(mclnModelEvent);
 
+            // this call will go to MclnGraphView
+//            mclnModel.fireModelStateChanged(); // this will make Model View regenerated
+//            mclnModel.fireSimulationStepExecuted(); // this will make Execution State and Log panels to be called
+
         } while (true);
-        // this call will go to MclnGraphView
+//        // this call will go to MclnGraphView
         mclnModel.fireModelStateChanged(); // this will make Model View regenerated
         mclnModel.fireSimulationStepExecuted(); // this will make Execution State and Log panels to be called
     }
@@ -523,28 +533,31 @@ final class MclnSimulatingEngine {
                 }
 
 //                calculateStatementConditionStates(affectedMclnStatement);
-
-                MclnModelEvent mclnModelEvent = new MclnModelEvent(affectedMclnStatement.getUID(),
-                        MclnModelEvent.EventType.INFERENCE, affectedMclnStatement.getCurrentMclnState());
-//                System.out.println("I n f e r e n c e putting new event into queue " + mclnModelEvent.toString() + "\n");
-
                 int iCnt = 0;
                 for (Iterator<MclnModelEvent> iterator = linkedBlockingEventQueue.iterator(); iterator.hasNext(); ) {
                     MclnModelEvent queuedMclnModelEvent = iterator.next();
 //                    System.out.println("Queue Entry before one added " + iCnt++ + "  " + queuedMclnModelEvent.toString());
                 }
-                try {
-                    linkedBlockingEventQueue.put(mclnModelEvent);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+
+                if (affectedMclnStatement.hasOutputArcs()) {
+                    MclnModelEvent mclnModelEvent = new MclnModelEvent(affectedMclnStatement.getUID(),
+                            MclnModelEvent.EventType.INFERENCE, affectedMclnStatement.getCurrentMclnState());
+//                    System.out.println("I n f e r e n c e putting new event into queue " + mclnModelEvent.toString() + "\n");
+                    try {
+                        linkedBlockingEventQueue.put(mclnModelEvent);
+                        added++;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+
 //                System.out.println("\n");
                 for (Iterator<MclnModelEvent> iterator = linkedBlockingEventQueue.iterator(); iterator.hasNext(); ) {
                     MclnModelEvent queuedMclnModelEvent = iterator.next();
 //                    System.out.println("Queue Entry after one added " + iCnt++ + "  " + queuedMclnModelEvent.toString());
                 }
 
-                added++;
+
             }
         }
 

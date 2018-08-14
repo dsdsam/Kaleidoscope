@@ -271,7 +271,6 @@ public class MclnProject {
     }
 
     /**
-     *
      * @param mclnStatement
      * @param theProgramHasPhase
      * @param timeDrivenProgram
@@ -321,9 +320,21 @@ public class MclnProject {
      *
      * @return MclnArc instance
      */
-    public final MclnArc createIncompleteMclnArc(ArrowTipLocationPolicy arrowTipLocationPolicy, MclnNode inpNode) {
+    public final MclnArc createIncompleteMclnSplineArc(ArrowTipLocationPolicy arrowTipLocationPolicy, MclnNode inpNode) {
         List<double[]> cSysKnots = new ArrayList();
-        MclnArc<MclnNode, MclnNode> mclnArc = new MclnArc(arrowTipLocationPolicy, getArcUID(), cSysKnots,
+        MclnArc<MclnNode, MclnNode> mclnArc = new MclnSplineArc(arrowTipLocationPolicy, getArcUID(), cSysKnots,
+                CreationStatePalette.CREATION_STATE, inpNode);
+        return mclnArc;
+    }
+
+    /**
+     * Called when new Mcln Arc is being created by Editor
+     *
+     * @return MclnPolylineArc instance
+     */
+    public final MclnPolylineArc createIncompleteMclnPolylineArc(ArrowTipLocationPolicy arrowTipLocationPolicy, MclnNode inpNode) {
+        List<double[]> cSysKnots = new ArrayList();
+        MclnPolylineArc<MclnNode, MclnNode> mclnArc = new MclnPolylineArc(arrowTipLocationPolicy, getArcUID(), cSysKnots,
                 CreationStatePalette.CREATION_STATE, inpNode);
         return mclnArc;
     }
@@ -343,7 +354,7 @@ public class MclnProject {
         List<double[]> cSysKnots = new ArrayList();
         cSysKnots.add(inpNode.getCSysLocation());
         cSysKnots.add(outNode.getCSysLocation());
-        MclnArc<MclnNode, MclnNode> mclnArc = new MclnArc(arrowTipLocationPolicy, getArcUID(), cSysKnots,
+        MclnArc<MclnNode, MclnNode> mclnArc = new MclnSplineArc(arrowTipLocationPolicy, getArcUID(), cSysKnots,
                 arcMclnState, inpNode, outNode);
         return mclnArc;
     }
@@ -366,7 +377,7 @@ public class MclnProject {
     public synchronized final <InpNodeType, OutNodeType> MclnArc createMclnArc(
             ArrowTipLocationPolicy arrowTipLocationPolicy, List<double[]> cSysKnots, MclnState arcMclnState,
             InpNodeType inpNode, OutNodeType outNode) {
-        MclnArc<InpNodeType, OutNodeType> mclnArc = new MclnArc(arrowTipLocationPolicy, getArcUID(), cSysKnots,
+        MclnArc<InpNodeType, OutNodeType> mclnArc = new MclnSplineArc(arrowTipLocationPolicy, getArcUID(), cSysKnots,
                 arcMclnState, inpNode, outNode);
         return mclnArc;
     }
@@ -401,9 +412,6 @@ public class MclnProject {
         MclnArc inpArc =
                 createMclnArc(arrowTipLocationPolicy, knotCSysLocations01, inpArcState, inpStatement, mclnCondition);
         // arc from statement to condition
-//        inpStatement.addOutArc(inpArc);
-//        mclnCondition.addInpArc(inpArc);
-//        mclnCondition.addInpArc(inpArc);
 
         List<double[]> knotCSysLocations02 = new ArrayList();
         knotCSysLocations02.add(mclnCondition.getCSysLocation());
@@ -411,9 +419,6 @@ public class MclnProject {
         MclnArc outArc =
                 createMclnArc(arrowTipLocationPolicy, knotCSysLocations02, outArcState, mclnCondition, outStatement);
         // arc from condition to statement
-//        mclnCondition.addOutArc(outArc);
-//        outStatement.addInpArc(outArc);
-//        outStatement.addInpArc(outArc);
 
         /* Creating the fragment
 
@@ -428,16 +433,6 @@ public class MclnProject {
         inpArcList[i]   OutputNode <--/  outNodeList[i]
 
         */
-//        inpStatement.outNodeList.addElement(tranNode);
-//        inpStatement.outArcList.addElement(inpArc);
-//
-//        mclnCondition.inpArcList.addElement(inpArc);
-//        mclnCondition.outArcList.addElement(outArc);
-//        mclnCondition.outNodeList.addElement(outNode);
-//
-//        outStatement.inpArcList.addElement(outArc);
-//        setProjModified();
-//        nTrans++;
         return mclnCondition;
     }
 
@@ -474,17 +469,6 @@ public class MclnProject {
     private String lastSavedOrRetrievedProjectFileName;
 
     /**
-     * Called to create project upon retrieval, when parsing XML
-     * Models are added as part of retrieval when parsed
-     *
-     * @param projectName
-     * @return
-     */
-    private MclnProject(String projectName) {
-        this(null, false, false, projectName, null);
-    }
-
-    /**
      * @param projectName
      * @param mclnModel
      */
@@ -506,21 +490,10 @@ public class MclnProject {
         return projectName;
     }
 
-    /**
-     * user can change initially given project name
-     *
-     * @param projectName
-     */
-    public final void resetProjectName(String projectName) {
-        this.projectName = projectName;
-        lastSavedOrRetrievedProjectFileName = null;
-    }
-
     public final void resetProjectAttributes(ProjectAttributes projectAttributes) {
         this.projectName = projectAttributes.getProjectName();
         projectSpaceRectangle = projectAttributes.getMclnDoubleRectangle();
         this.projectAttributes = projectAttributes;
-        lastSavedOrRetrievedProjectFileName = null;
     }
 
     public boolean wasProjectSavedOrRetrieved() {
@@ -533,6 +506,10 @@ public class MclnProject {
 
     public void setLastAbsoluteModelStorageDirectory(String lastAbsoluteModelStorageDirectory) {
         this.lastAbsoluteModelStorageDirectory = lastAbsoluteModelStorageDirectory;
+    }
+
+    public String getLastSavedOrRetrievedProjectFileNameAsIs() {
+        return lastSavedOrRetrievedProjectFileName;
     }
 
     public String getLastSavedOrRetrievedProjectFileName() {
@@ -584,20 +561,6 @@ public class MclnProject {
         if (currentMclnModel == null) {
             this.currentMclnModel = mclnModel;
         }
-    }
-
-    public MclnModel setCurrentMclnModel(String modelName) {
-        this.currentMclnModel = models.get(modelName);
-        return currentMclnModel;
-    }
-
-    public void clearMclnProject() {
-
-    }
-
-    public void clearCurrentMclnModel() {
-        currentMclnModel.clearMclnModel();
-        currentMclnModel = null;
     }
 
     @Override

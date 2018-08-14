@@ -22,7 +22,7 @@ class OneLineMessagePanel extends JPanel {
     private static final Color DEFAULT_WARNING_FOREGROUND = new Color(0xFF, 0x00, 0x00);
     private static final Color DEFAULT_WARNING_BACKGROUND = new Color(0xFF, 0xFF, 0xF0);
 
-    private static final Color DEFAULT_FOREGROUND = new Color(0x00, 0x00, 0x44);
+    private static final Color DEFAULT_FOREGROUND = new Color(0x00, 0x00, 0x80);
     private static final Color DEFAULT_BACKGROUND = new Color(0xFF, 0xFF, 0xF0);
 
     //

@@ -1,63 +1,46 @@
 package mclnview.graphview;
 
-import adf.csys.view.CSysView;
 import mcln.model.MclnCondition;
 import mcln.palette.MclnState;
 
 import java.awt.*;
 
 /**
- * Created by Admin on 11/14/2017.
+ * Created by IntelliJ IDEA.
+ * User: XP Admin
+ * Date: May 23, 2013
+ * Time: 8:49:25 PM
+ * To change this template use File | Settings | File Templates.
  */
-public class MclnConditionView extends MclnGraphViewNode {
+public class MclnConditionView extends MclnGraphNodeView {
 
-    public static final int SCREEN_RADIUS = 4;
+    public static final int SCREEN_RADIUS = 5;
 
     private static final Color DEFAULT_DRAWING_COLOR = Color.LIGHT_GRAY.brighter();
     private static final Color DEFAULT_BORDER_COLOR = Color.GRAY;
 
-    private double scrCenter[] = {0, 0, 0};
-
-    private double clPole[] = {0, 0, 0};
-    private double crPole[] = {0, 0, 0};
-    private double ctPole[] = {0, 0, 0};
-    private double cbPole[] = {0, 0, 0};
-
-    private double leftSide[] = {0, 0, 0};
-    private double rightSide[] = {0, 0, 0};
-
-    private double scrBase[] = {0, 0, 0};
-
-    // Graph properties
-    MclnPropertyView inpFact;
-    MclnPropertyView outFact;
-
-
     private Rectangle stateRect = new Rectangle();
 
-    private Color stateColor = new Color(0xEEEEEE);
-
     private MclnCondition mclnCondition;
-    private CSysView parentCSys;
+    private MclnGraphView parentCSys;
 
     /**
      * @param parentCSys
      * @param mclnCondition
      */
-    public MclnConditionView(CSysView parentCSys, MclnCondition mclnCondition) {
+    public MclnConditionView(MclnGraphView parentCSys, MclnCondition mclnCondition) {
         super(parentCSys, mclnCondition, DEFAULT_DRAWING_COLOR);
         this.parentCSys = parentCSys;
         this.mclnCondition = mclnCondition;
-        stateColor = getMclnConditionStateColor(mclnCondition);
     }
 
-    MclnState getCurrentState(){
+    MclnState getCurrentState() {
         MclnState mclnState = mclnCondition.getCurrentMclnState();
         return mclnState;
     }
 
     @Override
-    public String getEntityTypeAsString(){
+    public String getEntityTypeAsString() {
         return "Condition";
     }
 
@@ -65,7 +48,7 @@ public class MclnConditionView extends MclnGraphViewNode {
     Rectangle findOutline(int screenRadius, int scrX, int scrY) {
         Rectangle outline = super.findOutline(SCREEN_RADIUS, scrX, scrY);
         stateRect = new Rectangle(outline);
-        stateRect.grow(-2, -2);
+        stateRect.grow(-3, -3);
         return outline;
     }
 
@@ -95,7 +78,7 @@ public class MclnConditionView extends MclnGraphViewNode {
 
     @Override
     public void updateViewOnModelChanged() {
-        stateColor = getMclnConditionStateColor(mclnCondition);
+
     }
 
     /**
@@ -108,17 +91,33 @@ public class MclnConditionView extends MclnGraphViewNode {
     }
 
 
-
     //
     //   D r a w i n g   C o n d i t i o n
     //
+
+    /**
+     * The method draws all the Node's input and output arcs
+     * where arcs draw their self and the Nodes attached to
+     * thr arcs opposite end. THen the method draws the Node
+     * itself, and finally draws extras (highlighted selection).
+     *
+     * @param g
+     * @param scr0
+     * @param scale
+     */
+    @Override
+    public void drawSpriteEntity(Graphics g, int[] scr0, double scale) {
+        drawTheNodesAllInputAndOutputArcsWithConnectedNodes(g);
+        drawPlainEntity(g);
+        paintExtras(g);
+    }
 
     @Override
     public void drawPlainEntity(Graphics g) {
         if (hidden || parentCSys == null) {
             return;
         }
-        paintPlaneCondition(g, scrX, scrY);
+        paintPlainCondition(g, scrX, scrY);
     }
 
     @Override
@@ -126,21 +125,20 @@ public class MclnConditionView extends MclnGraphViewNode {
         // draw arc first (ToDo the other arc end might have to be repainted as well)
         drawConnectedEntities(g);
         // draw Statement on the top
-        paintPlaneCondition(g, scrX, scrY);
+        paintPlainCondition(g, scrX, scrY);
     }
 
     @Override
     public void drawEntityOnlyAtInterimLocation(Graphics g) {
-        paintPlaneCondition(g, scaledTranslatedInterimScrPnt[0], scaledTranslatedInterimScrPnt[1]);
+        paintPlainCondition(g, scaledTranslatedInterimScrPnt[0], scaledTranslatedInterimScrPnt[1]);
     }
 
     /**
-     *
      * @param g
      * @param scrX
      * @param scrY
      */
-    private void paintPlaneCondition(Graphics g, int scrX, int scrY) {
+    private void paintPlainCondition(Graphics g, int scrX, int scrY) {
 
         if (hidden || parentCSys == null) {
             return;
@@ -150,14 +148,14 @@ public class MclnConditionView extends MclnGraphViewNode {
         g.setColor(conditionColor);
         g.fillRect(stateRect.x + 1, stateRect.y + 1, stateRect.width - 1, stateRect.height - 1);
 
-        Color conditionBorderColor = getBorderColor();
-        parentCSys.csysDrawScrCircle(g, conditionBorderColor, scrX, scrY, 4);
+        Color conditionBorderColor = Color.GRAY;//getBorderColor();
+        parentCSys.csysDrawScrCircle(g, conditionBorderColor, scrX, scrY, SCREEN_RADIUS-1);
     }
 
     /**
      * @param g
      */
-    private void drawConnectedEntities(Graphics g ) {
+    private void drawConnectedEntities(Graphics g) {
 
     }
 
@@ -174,7 +172,6 @@ public class MclnConditionView extends MclnGraphViewNode {
     }
 
     /**
-     *
      * @param g
      * @param outline
      */
@@ -184,7 +181,7 @@ public class MclnConditionView extends MclnGraphViewNode {
             return;
         }
 
-        if (!(isPreSelected() || isSelected())) {
+        if (!(isPreSelected() || isSelected() || isMouseHover())) {
             return;
         }
 
@@ -194,6 +191,14 @@ public class MclnConditionView extends MclnGraphViewNode {
 
         Stroke currentStroke = g2D.getStroke();
         g2D.setStroke(new BasicStroke(1));
+
+         /*
+           Mouse Hover highlighting will be overridden
+           by selection colors
+         */
+        if (isMouseHover()) {
+            g2D.setColor(getMouseHoverColor());
+        }
 
         if (isPreSelected() && !isSelected()) {
             g2D.setColor(getPreSelectedColor());
@@ -216,16 +221,19 @@ public class MclnConditionView extends MclnGraphViewNode {
      * @return
      */
     private Color getConditionColor() {
-        Color color = stateColor;
+        Color color = getMclnConditionStateColor(mclnCondition);;
         if (isWatermarked()) {
             color = Color.WHITE;
-            return color;
         }
         return color;
     }
 
+    @Override
+    public Color getMouseHoverColor() {
+        return new Color(0xFF9000);
+    }
+
     /**
-     *
      * @return
      */
     private Color getBorderColor() {
@@ -247,7 +255,7 @@ public class MclnConditionView extends MclnGraphViewNode {
     }
 
 
-    public void drawKnob(Graphics g, int x, int y, Color drawColor, Color fillColor) {
+    private void drawKnob(Graphics g, int x, int y, Color drawColor, Color fillColor) {
         g.setColor(drawColor);
         g.drawLine(x - 1, y - 3, x + 1, y - 3);
         g.drawLine(x - 2, y - 2, x + 2, y - 2);
@@ -259,7 +267,7 @@ public class MclnConditionView extends MclnGraphViewNode {
         drawKnot(g, x, y, fillColor);
     }
 
-    public void drawKnot(Graphics g, int x, int y, Color fillColor) {
+    private void drawKnot(Graphics g, int x, int y, Color fillColor) {
         g.setColor(fillColor);
         g.drawLine(x - 1, y - 2, x + 1, y - 2);
         g.drawLine(x - 2, y - 1, x + 2, y - 1);

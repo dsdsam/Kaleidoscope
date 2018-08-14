@@ -14,20 +14,22 @@ public interface CSysEntity {
     //
     // The interface defines groups of methods
     //
-    // 1. Creation methods
-    // 2. Entity attribute setters and getters
-    // 3. Updates
-    // 4. CSys related transformations
-    // 5. Drawing methods
+    // 1. Entity attribute setters and getters
     //
 
-    //
-    //  C r e a t i o n   m e t h o d s
+
+    // 5. Methods used to update entity
+    // 6. Methods used for CSys related transformations
+    // 7. Drawing methods
     //
 
     //
     //  E n t i t y   a t t r i b u t e   s e t t e r s   a n d   g e t t e r s
     //
+
+    public default Color getCurrentColor() {
+        return getDrawColor();
+    }
 
     public Color getDrawColor();
 
@@ -50,6 +52,10 @@ public interface CSysEntity {
     //
 
     public void doCSysToScreenTransformation(int[] scr0, double scale);
+
+    default int[] doCSysToScreenTransformation(int[] scr0, double scale, double[] cSysPnt) {
+        return new int[]{0, 0, 0};
+    }
 
     default void doTransformation(double[][] mat43) {
     }
@@ -83,6 +89,10 @@ public interface CSysEntity {
     //
     //  D r a w i n g   m e t h o d s
     //
+
+    default void drawSpriteEntity(Graphics g, int[] scr0, double scale) {
+
+    }
 
     default void drawPlainEntity(Graphics g) {
 

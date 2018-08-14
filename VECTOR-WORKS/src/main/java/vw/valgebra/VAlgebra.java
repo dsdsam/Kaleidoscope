@@ -426,6 +426,10 @@ public final class VAlgebra {
         return initIntVec3(null, 0, 0, 0);
     }
 
+    public static int[] initIntVec3(int x, int y, int z) {
+        return initIntVec3(null, x, y, z);
+    }
+
     public static int[] initIntVec3(int[] vec, int x, int y, int z) {
         if (vec == null) {
             vec = new int[3];
@@ -510,6 +514,30 @@ public final class VAlgebra {
         if (toVec == null) {
 //            new Exception("Result Vector Not Provided").printStackTrace();
             toVec = new double[3];
+        }
+        toVec[0] = fromVec[0];
+        toVec[1] = fromVec[1];
+        toVec[2] = fromVec[2];
+        return toVec;
+    }
+
+    public static int[] copyIntVec3(int[] fromVec) {
+        if (fromVec == null) {
+            new Exception("From Vector Not Provided").printStackTrace();
+            fromVec = new int[3];
+        }
+        return copyIntVec3(null, fromVec);
+    }
+
+    /**
+     * @param toVec
+     * @param fromVec
+     * @return toVec if it is not null otherwise new 3-D vector
+     */
+    public static int[] copyIntVec3(int[] toVec, int[] fromVec) {
+        if (toVec == null) {
+//            new Exception("Result Vector Not Provided").printStackTrace();
+            toVec = new int[3];
         }
         toVec[0] = fromVec[0];
         toVec[1] = fromVec[1];
@@ -721,6 +749,14 @@ public final class VAlgebra {
         return vec1;
     }
 
+    public static double[] translateToNewVec(double[] vec1, double[] vec2) {
+        double[] translatedVec = new double[3];
+        translatedVec[0] = vec1[0] + vec2[0];
+        translatedVec[1] = vec1[1] + vec2[1];
+        translatedVec[2] = vec1[2] + vec2[2];
+        return translatedVec;
+    }
+
     /**
      * @param vec
      * @param angle
@@ -734,7 +770,7 @@ public final class VAlgebra {
     }
 
     public static double[] linCom3(double scale01, double[] vec1,
-                                double scale02, double[] vec2) {
+                                   double scale02, double[] vec2) {
         return LinCom3(null, scale01, vec1, scale02, vec2);
     }
 

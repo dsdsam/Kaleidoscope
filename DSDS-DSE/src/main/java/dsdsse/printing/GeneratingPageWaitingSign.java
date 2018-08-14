@@ -1,6 +1,6 @@
 package dsdsse.printing;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import adf.utils.BuildUtils;
 
 import javax.swing.*;
@@ -44,7 +44,7 @@ final class GeneratingPageWaitingSign {
         window.getContentPane().add(titleLabel, BorderLayout.NORTH);
 
         try {
-            ImageIcon imageIcon = BuildUtils.getImageIcon("/images/waiting-sign.gif");
+            ImageIcon imageIcon = BuildUtils.getAdfImageIconFromClassPath("waiting-sign.gif");
             JLabel imageLabel = new JLabel(imageIcon);
             imageLabel.setBorder(new MatteBorder(0, 3, 3, 3, TITLE_BACKGROUND));
             imageLabel.setOpaque(true);

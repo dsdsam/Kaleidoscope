@@ -4,6 +4,8 @@ import dsdsse.designspace.executor.MclnSimulationController;
 import mcln.model.MclnStatement;
 import mcln.model.MclnStatementState;
 import mcln.palette.MclnState;
+import mclnview.graphview.MclnArcView;
+import mclnview.graphview.MclnPropertyView;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicMenuItemUI;
@@ -21,7 +23,7 @@ public class SimulatorPopupMenu extends MclnGraphViewPopupMenu {
     //   I n s t a n c e
     //
 
-    private MclnPropertyView mclnPropertyView;
+    private MclnPropertyView mcLnPropertyView;
     private MclnArcView mclnArcView;
 
     ActionListener propertyPopupMenuItemActionListener = (ActionEvent e) -> {
@@ -30,15 +32,15 @@ public class SimulatorPopupMenu extends MclnGraphViewPopupMenu {
         ColoredSquare coloredSquare = (ColoredSquare) menuItem.getIcon();
         MclnStatementState mclnStatementState = coloredSquare.getMclnStatementState();
 
-        MclnStatement mclnStatement = mclnPropertyView.getTheElementModel();
+        MclnStatement mclnStatement = mcLnPropertyView.getTheElementModel();
         String uid = mclnStatement.getUID();
         MclnState mclnState = mclnStatementState.getMclnState();
         MclnSimulationController.processRMBPopupMenuUserInput(uid, mclnState);
     };
 
-    SimulatorPopupMenu(MclnPropertyView mclnPropertyView) {
-        this.mclnPropertyView = mclnPropertyView;
-        List<MclnStatementState> allowedStatesList = mclnPropertyView.getAllowedStatesList();
+    SimulatorPopupMenu(MclnPropertyView mcLnPropertyView) {
+        this.mcLnPropertyView = mcLnPropertyView;
+        List<MclnStatementState> allowedStatesList = mcLnPropertyView.getAllowedStatesList();
         initSimulatorPopupMenu(allowedStatesList, propertyPopupMenuItemActionListener);
     }
 

@@ -2,8 +2,8 @@ package dsdsse.designspace;
 
 
 
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import dsdsse.graphview.MclnGraphDesignerView;
+import mclnview.graphview.MclnGraphModel;
 
 import javax.swing.*;
 import java.awt.*;

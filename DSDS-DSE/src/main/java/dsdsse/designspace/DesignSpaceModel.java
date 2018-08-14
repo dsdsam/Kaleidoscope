@@ -5,12 +5,12 @@ import dsdsse.app.DsdsDseMessagesAndDialogs;
 import dsdsse.app.DsdsseEnvironment;
 import dsdsse.app.DsdsseMainFrame;
 import dsdsse.designspace.executor.MclnSimulationController;
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import dsdsse.dialogs.creation.project.ProjectAttributesSetupMainPanel;
 import mcln.model.MclnDoubleRectangle;
 import mcln.model.MclnModel;
 import mcln.model.MclnProject;
 import mcln.model.ProjectAttributes;
+import mclnview.graphview.MclnGraphModel;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -257,13 +257,6 @@ public class DesignSpaceModel {
         }
     }
 
-    public void onRenameMclnProject() {
-        projectName = DsdsDseMessagesAndDialogs.textEntryDialog(DsdsseMainFrame.getInstance(),
-                "Project Name Entry Dialog", "Please type in the project name:", projectName);
-        mclnProject.resetProjectName(projectName);
-        updateFrameTitleProjectName(mclnProject);
-    }
-
     /**
      * currently not used
      */
@@ -298,14 +291,25 @@ public class DesignSpaceModel {
      *
      */
     public boolean saveProject() {
-        return ProjectStorage.getInstance().saveProject(DesignSpaceView.getInstance().getMclnGraphDesignerView(), mclnProject);
+        boolean success = ProjectStorage.getInstance().saveProject(DesignSpaceView.getInstance().
+                getMclnGraphDesignerView(), mclnProject);
+        if (success) {
+            updateFrameTitleProjectName(mclnProject);
+        }
+        return success;
     }
 
     /**
      *
      */
     public boolean saveProjectAs() {
-        return ProjectStorage.getInstance().saveProjectAs(DesignSpaceView.getInstance().getMclnGraphDesignerView(), mclnProject);
+        boolean success = ProjectStorage.getInstance().saveProjectAs(DesignSpaceView.getInstance().
+                getMclnGraphDesignerView(), mclnProject);
+        if (success) {
+            updateFrameTitleProjectName(mclnProject);
+        }
+        return success;
+
     }
 
     /**
@@ -313,11 +317,15 @@ public class DesignSpaceModel {
      */
     private void updateFrameTitleProjectName(MclnProject mclnProject) {
 
+        String projectFileName = mclnProject.getLastSavedOrRetrievedProjectFileNameAsIs();
         String projectName = mclnProject.getProjectName();
         String modelMame = mclnProject.getCurrentMclnModel().getModelName();
         String initialTitle = DsdsseEnvironment.getAppInitialFrameTitle();
-        String newTitle = initialTitle +
-                " |  Current project: \"" + projectName + "\" / Current model: \"" + modelMame + "\"";
+        String newTitle = initialTitle;
+        if (projectFileName != null && projectFileName.trim().length() != 0) {
+            newTitle += "  |  File: \"" + projectFileName + "\"";
+        }
+        newTitle += "  |  Project: \"" + projectName + "\" / Model: \"" + modelMame + "\"";
         JFrame frame = DsdsseEnvironment.getMainFrame();
         frame.setTitle(newTitle);
         AppStateModel.getInstance().updateModelName(modelMame);

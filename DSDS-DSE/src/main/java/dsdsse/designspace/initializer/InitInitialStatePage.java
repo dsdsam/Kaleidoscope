@@ -1,9 +1,9 @@
 package dsdsse.designspace.initializer;
 
 import dsdsse.app.DsdsseEnvironment;
-import dsdsse.graphview.PropertyViewBall;
 import dsdsse.preferences.DsdsseUserPreference;
 import mcln.model.MclnStatementState;
+import mclnview.graphview.PropertyViewBall;
 
 import javax.swing.*;
 import javax.swing.border.Border;

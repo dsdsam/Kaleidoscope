@@ -3,8 +3,12 @@ package dsdsse.graphview;
 import dsdsse.app.AppStateModel;
 import dsdsse.app.AppStateModelListener;
 import dsdsse.designspace.DesignSpaceView;
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import mcln.model.ArrowTipLocationPolicy;
+import mcln.model.MclnArc;
+import mclnview.graphview.MclnGraphEntityView;
+import mclnview.graphview.MclnGraphModel;
+import mclnview.graphview.MclnGraphNodeView;
+import mclnview.graphview.MclnPolylineArcView;
 import vw.valgebra.VAlgebra;
 
 import java.awt.event.MouseEvent;
@@ -23,8 +27,8 @@ public class PolylineArcCreator {
     AppStateModel.OperationStep currentOperationStep;
 
     // Arc stuff
-    private MclnGraphViewNode currentArcInputNode;
-    private MclnGraphViewNode currentArcOutputNode;
+    private MclnGraphNodeView currentArcInputNode;
+    private MclnGraphNodeView currentArcOutputNode;
     private MclnPolylineArcView mclnPolylineArcView;
     private boolean userSelectsArrowLocation = true;
 
@@ -63,6 +67,14 @@ public class PolylineArcCreator {
         mclnGraphDesignerView = DesignSpaceView.getInstance().getMclnGraphDesignerView();
     }
 
+    boolean isArcInputNodeAProperty() {
+        return currentArcInputNode != null && currentArcInputNode.isPropertyNode();
+    }
+
+    boolean isArcInputNodeACondition() {
+        return currentArcInputNode != null && currentArcInputNode.isConditionNode();
+    }
+
     /**
      * @param me
      * @param operation
@@ -98,28 +110,23 @@ public class PolylineArcCreator {
                     findArrowTipIndexOnThePolyline(me, userSelectsArrowLocation);
                     break;
             }
+            me.consume();
         } else if (mouseEventType == MouseEvent.MOUSE_RELEASED) {
 
         }
     }
 
-    private void createPolylineArcInstance(MclnGraphViewNode currentArcInputNode) {
+    private void createPolylineArcInstance(MclnGraphNodeView currentArcInputNode) {
 
         // Statement or Condition was selected - make one-Node arc
         mclnPolylineArcView = MclnGraphModel.getInstance().createIncompleteMclnPolylineArcAndUpdateView(
                 ArrowTipLocationPolicy.DETERMINED_BY_USER, currentArcInputNode);
 
-//        mclnPolylineArcView.setUnderConstruction(true);
-//        mclnPolylineArcView.setUnderConstruction(false);
+        mclnPolylineArcView.setUnderConstruction(true);
 
         currentArcInputNode.setSelected(true);
         mclnGraphDesignerView.setArcInputNodeWhileCreatingArc(currentArcInputNode);
-
-        // resetting arc presentation
-//        mclnPolylineArcView.setSelected(true);
-        mclnPolylineArcView.setThreadSelected(true);
-        mclnPolylineArcView.setDrawKnots(true);
-        mclnPolylineArcView.setAllKnotsSelected(false);
+        mclnGraphDesignerView.makeGraphEntityToBeASpritePaintedOnTheScreenOnly(mclnPolylineArcView);
 
         currentArcOutputNode = null;
         if (currentArcInputNode.isPropertyNode()) {
@@ -137,40 +144,52 @@ public class PolylineArcCreator {
      * @param me
      */
     private void moveArcActivePoint(MouseEvent me) {
-//        if (polylineCreated) {
-//            return;
+
+        double[] screenPoint = VAlgebra.initVec3(me.getX(), me.getY(), 0);
+
+        /**
+         * This section places mouse right in the middle of potential output node
+         * when mouse hovers a node of type other than input node
+         */
+        MclnGraphEntityView mclnGraphEntityView = mclnGraphDesignerView.getGraphEntityAtCoordinates(me.getX(), me.getY());
+        if (mclnGraphEntityView != null) {
+            if (currentArcInputNode != null && ((currentArcInputNode.isPropertyNode() && mclnGraphEntityView.isConditionNode())
+                    || (currentArcInputNode.isConditionNode() && mclnGraphEntityView.isPropertyNode()))) {
+                screenPoint = mclnGraphEntityView.toMclnGraphNodeView().getScrPnt();
+                mclnGraphEntityView.setMouseHover(true);
+                mclnGraphDesignerView.setMouseHoveredEntity(mclnGraphEntityView);
+            } else {
+                mclnGraphDesignerView.setMouseHoveredEntity(null);
+            }
+        }
+//        if (mclnGraphEntityView != null && mclnGraphEntityView.isMouseHover()) {
+//            if (currentArcInputNode != null && ((currentArcInputNode.isPropertyNode() && mclnGraphEntityView.isConditionNode())
+//                    || (currentArcInputNode.isConditionNode() && mclnGraphEntityView.isPropertyNode() )) ) {
+//                screenPoint = mclnGraphEntityView.toMclnGraphNodeView().getScrPnt();
+//            }
 //        }
-//        setCrossHairs(me);
-//        if (polylinePointCounter < 2) {
-//            return;
-//        }
-        mclnGraphDesignerView.regenerateGraphView();
-        int scrX = me.getX();
-        int scrY = me.getY();
-        int scrZ = 0;
-        double[] screenPoint = VAlgebra.initVec3(scrX, scrY, scrZ);
-//        System.out.println("scrX = " + scrX + ", scrY = " + scrY);
+
         double[] cSysPoint = mclnGraphDesignerView.screenPointToCSysPoint(screenPoint);
-//        MclnPolylineArcView mclnPolylineArcView =   mclnPolylineArcView;
         boolean updated = mclnPolylineArcView.updateLastPoint(cSysPoint);
-        //  System.out.println("cSysPoint X = " + cSysPoint[0] + ", cSysPoint Y = " + cSysPoint[1] + "   " + updated);
-//        mclnGraphView.repaint();
-//        if (!updated) {
-//            return;
-//        }
-        mclnGraphDesignerView.paintMclnArcViewWhileCreatingKnotsOnTheScreenAtPoint(scrX, scrY, mclnPolylineArcView);
-//        mclnGraphDesignerView.regenerateGraphView();
-//        mclnGraphDesignerView.repaint();
+        mclnGraphDesignerView.repaint();
     }
 
     private void pickupArcNextJointOrOutputNode(MouseEvent me) {
 
+        //   U n d o i n g
+
         if (isRMBPressed(me)) {
-            removeLastSegment();
-            mclnGraphDesignerView.repaint();
+            boolean hasMoreSegments = removeLastSegment();
+            if (hasMoreSegments) {
+                mclnGraphDesignerView.repaint();
+            } else {
+                cancelArcCreation();
+            }
             me.consume();
             return;
         }
+
+        // Adding next knot
 
         int scrX = me.getX();
         int scrY = me.getY();
@@ -181,24 +200,23 @@ public class PolylineArcCreator {
         }
 
         mclnGraphDesignerView.repaint();
-//        regenerateView();
+    }
 
-        //            if (me.isControlDown()) {
-//
-//                cSysRoundedPolylineEntity.creationCompleted();
-//                mclnGraphView.regenerateGraphView();
-//                mclnGraphView.repaint();
-//                me.consume();
-//                return;
-//            }
+    private void cancelArcCreation() {
 
-//            if (isRMBPressed(me)) {
-//                removeLastSegment();
-//                mclnGraphView.regenerateGraphView();
-//                mclnGraphView.repaint();
-//                me.consume();
-//                return;
-//            }
+        mclnGraphDesignerView.makeGraphEntityToBeASpritePaintedOnTheScreenOnly(null);
+
+        MclnArc mclnArc = mclnPolylineArcView.getTheElementModel();
+        MclnGraphModel.getInstance().removeMclnArcAndUpdateView(mclnArc);
+
+        currentArcInputNode.setSelected(false);
+
+        currentArcInputNode = null;
+        currentArcOutputNode = null;
+        mclnPolylineArcView = null;
+
+        currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_INPUT_NODE;
+        AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.PICK_UP_ARC_INPUT_NODE);
     }
 
     private void addNextJoint(int scrX, int scrY) {
@@ -210,7 +228,6 @@ public class PolylineArcCreator {
     }
 
     /**
-     *
      * @param scrX
      * @param scrY
      * @return
@@ -228,27 +245,16 @@ public class PolylineArcCreator {
         // second node was piked
 
         // setting arc presentation
-//        mclnPolylineArcView.setSelected(true);
-//        mclnPolylineArcView.setDrawKnots(true);
-//        mclnPolylineArcView.setAllKnotsSelected(false);
 
         currentArcOutputNode = currentArcInputNode.isPropertyNode() ?
                 mclnGraphEntityView.toConditionView() : mclnGraphEntityView.toPropertyView();
         mclnPolylineArcView.setOutputNode(currentArcOutputNode);
+        mclnGraphDesignerView.setMouseHoveredEntity(null);
+        currentArcInputNode.setSelected(true);
         currentArcOutputNode.setSelected(true);
 
-        // I commented this out because I found in one case the Condition node
-        // was not placed on the vertical line precisely.
-//        double[] cSysPoint = currentArcOutputNode.getCSysPnt();
-//        boolean updated = mclnPolylineArcView.updateLastPoint(cSysPoint);
-//        System.out.println("cSysPoint X = " + cSysPoint[0] + ", cSysPoint Y = " + cSysPoint[1] + "   " + updated);
-
-
-        mclnGraphDesignerView.paintArcAndConnectedEntityOnScreen(mclnPolylineArcView);
-        // regenerateView();
-//        currentOperationStep = PICK_UP_POLYLINE_ARC_ARROW_TIP_LOCATION;
-//        AppStateModel.getInstance().setCurrentOperationStep(PICK_UP_POLYLINE_ARC_ARROW_TIP_LOCATION);
-//        System.out.println("MclnGraphViewEditor: second node was piked");
+        mclnPolylineArcView.setSelectingArrowTipLocation(true);
+        mclnGraphDesignerView.repaint();
 
         previousArcCreationOperationStep = AppStateModel.getInstance().getCurrentOperationStep();
         currentOperationStep = AppStateModel.OperationStep.PICK_UP_POLYLINE_ARC_ARROW_TIP_LOCATION;
@@ -265,24 +271,46 @@ public class PolylineArcCreator {
         int x = me.getX();
         int y = me.getY();
         boolean arrowLocationFound = mclnPolylineArcView.findArrowTipIndexOnThePolyline(x, y, userSelectsArrowLocation);
-        mclnGraphDesignerView.paintArcArrowWhileIsBeingCreatedOnScreen(mclnPolylineArcView);
+        mclnGraphDesignerView.repaint();
         return arrowLocationFound;
     }
 
     /**
+     * Method is called after arc output node is selected
+     *
      * @param me
      * @param userSelectsArrowLocation
      */
     private void checkRMBOrUpdateArrowLocationAndFinishArcCreation(MouseEvent me, boolean userSelectsArrowLocation) {
 
-        //
-        //   RMB check should be here
-        //
+        if (isRMBPressed(me)) {
+            // cancel placing arrow, unselect selected output node and go
+            // back to creating knots or selecting another output node
 
-        // This call is needed as user may click on just created knot
-        // without moving the mose
+            mclnPolylineArcView.unselectSelectedOutputNode();
+            double[] scrPoint = {me.getX(), me.getY(), 0};
+            double[] cSysPoint = mclnGraphDesignerView.screenPointToCSysPoint(scrPoint);
+            boolean updated = mclnPolylineArcView.updateLastPoint(cSysPoint);
+
+            currentArcOutputNode.setSelected(false);
+            mclnPolylineArcView.setSelectingArrowTipLocation(false);
+
+            currentArcOutputNode = null;
+            if (currentArcInputNode.isPropertyNode()) {
+                currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_CONDITION;
+            } else {
+                currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_PROPERTY;
+            }
+            AppStateModel.getInstance().setCurrentOperationStep(currentOperationStep);
+            me.consume();
+            mclnGraphDesignerView.repaint();
+            return;
+        }
+
+        // This call is needed as user may click on just created knot or output node
+        // without moving the mose. In this case arrowTipSplineScrIndex is not found
+        // and arrow is not shown
         boolean arrowLocationFound = findArrowTipIndexOnThePolyline(me, userSelectsArrowLocation);
-
         // checking if user selects Arrow location
         if (!(userSelectsArrowLocation && arrowLocationFound)) {
             // Wrong selection - ignore the pick
@@ -296,9 +324,6 @@ public class PolylineArcCreator {
      */
     private void finishArcCreationAndAddItToMclnModel() {
 
-        //  mclnPolylineArcView.setSelectingArrowTipLocation(false);
-        //mclnPolylineArcView.setHighlightArcKnotsForArrowTipSelection(false);
-
         // reset nodes
         currentArcInputNode.setSelected(false);
         currentArcOutputNode.setSelected(false);
@@ -310,20 +335,14 @@ public class PolylineArcCreator {
         mclnPolylineArcView.setAllKnotsSelected(false);
         mclnPolylineArcView.setSelectedKnotInd(-1);
 
-        mclnPolylineArcView.finishArcCreation();
-
-        // updating MclnArc (model)
-//        MclnArc mclnArc = currentArc.getMclnArc();
-//        MclnGraphModel.getInstance().addMclnArc(mclnArc);
+        mclnPolylineArcView.arcInteractiveCreationFinished();
 
         currentArcInputNode.outArcList.add(mclnPolylineArcView);
         currentArcOutputNode.inpArcList.add(mclnPolylineArcView);
 
         mclnPolylineArcView.setUnderConstruction(false);
 
-//        mclnGraphModel.registerCompletedMclnArcAndUpdateView(currentArc);
-        // remove temporary arc from graph image and paint complete arc (with arrow) on the graph image
-        mclnGraphDesignerView.eraseAndPaintArcViewWithConnectedEntities(mclnPolylineArcView);
+        mclnGraphDesignerView.makeGraphEntityToBeASpritePaintedOnTheScreenOnly(null);
 
         currentArcInputNode = null;
         currentArcOutputNode = null;
@@ -333,11 +352,6 @@ public class PolylineArcCreator {
         AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.PICK_UP_ARC_INPUT_NODE);
     }
 
-//    private void regenerateView() {
-//        mclnGraphDesignerView.regenerateGraphView();
-//        mclnGraphDesignerView.repaint();
-//    }
-
     private final boolean isRMBPressed(MouseEvent me) {
         boolean rightMouseButtonPressed = (me.getModifiers() & MouseEvent.BUTTON3_MASK) != 0;
         return rightMouseButtonPressed;
@@ -345,15 +359,6 @@ public class PolylineArcCreator {
 
     private boolean removeLastSegment() {
         boolean hasMoreSegments = mclnPolylineArcView.removeLastSegment();
-//        polylinePointCounter = hasMoreSegments ? --polylinePointCounter : 0;
-        return true;
-    }
-
-    /**
-     * @param arrowTipSplineScrIndex
-     */
-    private void setUserSelectedArrowTipSplineScrIndex(int arrowTipSplineScrIndex) {
-//        mclnPolylineArcView.setKnobIndex(arrowTipSplineScrIndex);
-//        mclnPolylineArcView.setSelectedKnotInd(-1);
+        return hasMoreSegments;
     }
 }

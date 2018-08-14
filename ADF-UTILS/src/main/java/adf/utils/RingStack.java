@@ -43,6 +43,11 @@ public class RingStack {
         return buffSize;
     }
 
+    public int getCurrentSize() {
+        return size;
+    }
+
+
     /**
      * @param element
      */

@@ -1,6 +1,6 @@
 package adf.ui.components.dialogs.undecorated;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import adf.utils.BuildUtils;
 
 import javax.swing.*;

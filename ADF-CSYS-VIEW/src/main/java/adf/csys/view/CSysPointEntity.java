@@ -14,6 +14,7 @@ public class CSysPointEntity extends BasicCSysEntity {
 
     protected double[] scrPnt = {0, 0, 0};
     protected int scrX, scrY;
+    private boolean drawAsDot;
 
     /**
      * @param parentCSys
@@ -28,10 +29,11 @@ public class CSysPointEntity extends BasicCSysEntity {
      * @param parentCSys
      * @param drawColor
      */
-    public CSysPointEntity(CSysView parentCSys, double[] origPnt, Color drawColor) {
+    public CSysPointEntity(CSysView parentCSys, double[] origPnt, Color drawColor, boolean drawAsDot) {
         super(parentCSys, drawColor);
         modelPnt = origPnt;
         VAlgebra.copyVec3(cSysPnt, origPnt);
+        this.drawAsDot = drawAsDot;
     }
 
     //
@@ -53,9 +55,13 @@ public class CSysPointEntity extends BasicCSysEntity {
     }
 
     @Override
+    public void moveEntityActivePointTo(double[] cSysPnt) {
+        this.cSysPnt = VAlgebra.copyVec3(cSysPnt);
+    }
+
+    @Override
     public void moveEntity(int x, int y) {
         cSysPnt = parentCSys.screenPointToCSysPoint(x, y);
-//        System.out.println("move Entity: " + this.getClass().getSimpleName() + " " + cSysPnt[0]);
     }
 
     /**
@@ -73,33 +79,21 @@ public class CSysPointEntity extends BasicCSysEntity {
         return scrPnt;
     }
 
+    public boolean isDot() {
+        return drawAsDot;
+    }
 
     @Override
     public void doCSysToScreenTransformation(int[] scr0, double scale) {
+        doCSysToScreenTransformation(scr0, scale, cSysPnt);
+    }
 
-        switch (parentCSys.getProjection()) {
-
-            case CSysView.ZOXProjection:
-                scrX = scr0[0] + (int) (cSysPnt[0] * scale);
-                scrY = scr0[2] + (int) (-cSysPnt[2] * scale);
-                break;
-
-            case CSysView.ZOYProjection:
-                scrX = scr0[0] + (int) (cSysPnt[1] * scale);
-                scrY = scr0[2] + (int) (-cSysPnt[2] * scale);
-                break;
-
-            default:
-//                scrPnt[0] = scr0[0] + (int) (cSysPnt[0] * scale);
-//                scrPnt[1] = scr0[1] + (int) (-cSysPnt[1] * scale);
-//                scrX = (int) scrPnt[0];
-//                scrY = (int) scrPnt[1];
-                scrX = scr0[0] + (int) Math.rint(cSysPnt[0] * scale);
-                scrY = scr0[1] + (int) Math.rint(-cSysPnt[1] * scale);
-                scrPnt[0] = scrX;
-                scrPnt[1] = scrY;
-                break;
-        }
+    @Override
+    public int[] doCSysToScreenTransformation(int[] scr0, double scale, double[] cSysPnt) {
+        int[] scrPoint = super.doCSysToScreenTransformation(scr0, scale, cSysPnt);
+        scrX = scrPoint[0];
+        scrY = scrPoint[1];
+        return scrPoint;
     }
 
     /**
@@ -117,12 +111,25 @@ public class CSysPointEntity extends BasicCSysEntity {
         VAlgebra.Mat43XPnt3(cSysPnt, mat43, cSysPnt);
     }
 
+    @Override
+    public void drawPlainEntity(Graphics g) {
+        draw(g);
+    }
 
     @Override
     public void draw(Graphics g) {
         if (hidden || clippedOff || parentCSys == null) {
             return;
         }
-        g.drawLine(scrX, scrY, scrX, scrY);
+
+        g.setColor(getDrawColor());
+
+        if (isDot()) {
+            g.drawLine(scrX - 1, scrY + 1, scrX + 1, scrY + 1);
+            g.drawLine(scrX - 1, scrY, scrX, scrY + 1);
+            g.drawLine(scrX - 1, scrY - 1, scrX + 1, scrY - 1);
+        } else {
+            g.drawLine(scrX, scrY, scrX, scrY);
+        }
     }
 }

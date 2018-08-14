@@ -16,6 +16,7 @@ public class ConfigProperties {
 
     // Config file keys
     public static final String APP_TITLE_KEY = "app.title";
+    public static final String OCCUPANCY_PERCENT_KEY = "occupancy.percent";
 
     private static Properties appConfigProps = new Properties();
 
@@ -89,12 +90,22 @@ public class ConfigProperties {
         return appConfigProps.getProperty(key, def);
     }
 
+    public static String getStrProperty(String key, String def) {
+        return appConfigProps.getProperty(key, def);
+    }
+
     /**
      *
      */
-    public static int getIntConfigProperty(String key) {
-        String value = getStrConfigProperty(key);
-        return Integer.parseInt(value);
+    public static int geIntProperty(String key, int defaultValue) {
+        int value;
+        try {
+            String srrValue = getStrConfigProperty(key);
+            value = Integer.parseInt(srrValue);
+        } catch (Exception e) {
+            value = defaultValue;
+        }
+        return value;
     }
 
 }

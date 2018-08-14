@@ -3,7 +3,9 @@ package dsdsse.graphview;
 import dsdsse.app.AppController;
 import dsdsse.app.AppStateModel;
 import dsdsse.app.DsdsseMainFrame;
-import dsdsse.designspace.initializer.InitAssistantInterface;
+import mclnview.graphview.MclnArcView;
+import mclnview.graphview.MclnConditionView;
+import mclnview.graphview.MclnPropertyView;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicMenuItemUI;
@@ -29,7 +31,7 @@ public class EditorPopupMenu extends MclnGraphViewPopupMenu {
     private static final String MENU_ITEM_MOVE_CONDITION = "Move The Condition";
 
     private static final String MENU_ITEM_DELETE_ARC = "Delete The Arc";
-    private static final String MENU_ITEM_MOVE_ARC = "Move The Arc";
+    private static final String MENU_ITEM_MOVE_ARC_KNOTS = "Move The Arc Knots";
     private static final String MENU_ITEM_INIT_ARC = "Initialize The Arc";
 
     private static List<String> propertyMenuItems = new ArrayList();
@@ -51,6 +53,7 @@ public class EditorPopupMenu extends MclnGraphViewPopupMenu {
     static {
         arcMenuItems.add("-");
         arcMenuItems.add(MENU_ITEM_INIT_ARC);
+//        arcMenuItems.add(MENU_ITEM_MOVE_ARC_KNOTS);
         arcMenuItems.add("-");
         arcMenuItems.add(MENU_ITEM_DELETE_ARC);
     }
@@ -59,20 +62,19 @@ public class EditorPopupMenu extends MclnGraphViewPopupMenu {
     //   I n s t a n c e
     //
 
-    private MclnPropertyView mclnPropertyView;
-    private MclnConditionView mclnConditionView;
+    private MclnPropertyView mcLnPropertyView;
+    private MclnConditionView mcLnConditionView;
     private MclnArcView mclnArcView;
 
 
     private ActionListener propertyPopupMenuItemActionListener = (ActionEvent e) -> {
-//        System.out.println("Item selected " + e.getActionCommand());
         if (MENU_ITEM_DELETE_PROPERTY.equalsIgnoreCase(e.getActionCommand())) {
-            MclnGraphViewEditor.getInstance().processUserDeletesElementViaPopup(mclnPropertyView);
+            MclnGraphViewEditor.getInstance().processUserDeletesElementViaPopup(mcLnPropertyView);
 
         } else if (MENU_ITEM_INIT_PROPERTY.equalsIgnoreCase(e.getActionCommand())) {
             DsdsseMainFrame mainFrame = DsdsseMainFrame.getInstance();
             AppController.getInstance().setInitAssistantToInitializeProperty(mainFrame,
-                    EditorPopupMenu.this.mclnPropertyView);
+                    EditorPopupMenu.this.mcLnPropertyView);
         }
 
     };
@@ -80,9 +82,8 @@ public class EditorPopupMenu extends MclnGraphViewPopupMenu {
     private ActionListener conditionPopupMenuItemActionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-//            System.out.println("Item selected " + e.getActionCommand());
             if (MENU_ITEM_DELETE_CONDITION.equalsIgnoreCase(e.getActionCommand())) {
-                MclnGraphViewEditor.getInstance().processUserDeletesElementViaPopup(mclnConditionView);
+                MclnGraphViewEditor.getInstance().processUserDeletesElementViaPopup(mcLnConditionView);
             }
         }
     };
@@ -90,8 +91,9 @@ public class EditorPopupMenu extends MclnGraphViewPopupMenu {
     private ActionListener arcPopupMenuItemActionListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-//            System.out.println("Item selected " + e.getActionCommand());
-            if (MENU_ITEM_DELETE_ARC.equalsIgnoreCase(e.getActionCommand())) {
+            if(MENU_ITEM_MOVE_ARC_KNOTS.equalsIgnoreCase(e.getActionCommand())) {
+
+            } else if (MENU_ITEM_DELETE_ARC.equalsIgnoreCase(e.getActionCommand())) {
                 MclnGraphViewEditor.getInstance().processUserDeletesElementViaPopup(mclnArcView);
 
             } else if (MENU_ITEM_INIT_ARC.equalsIgnoreCase(e.getActionCommand())) {
@@ -106,15 +108,15 @@ public class EditorPopupMenu extends MclnGraphViewPopupMenu {
     /**
      * C o n s t r u c t i n g
      *
-     * @param mclnPropertyView
+     * @param mcLnPropertyView
      */
-    EditorPopupMenu(MclnPropertyView mclnPropertyView) {
-        this.mclnPropertyView = mclnPropertyView;
+    EditorPopupMenu(MclnPropertyView mcLnPropertyView) {
+        this.mcLnPropertyView = mcLnPropertyView;
         initPopupMenu(propertyMenuItems, propertyPopupMenuItemActionListener);
     }
 
-    EditorPopupMenu(MclnConditionView mclnConditionView) {
-        this.mclnConditionView = mclnConditionView;
+    EditorPopupMenu(MclnConditionView mcLnConditionView) {
+        this.mcLnConditionView = mcLnConditionView;
         initPopupMenu(conditionMenuItems, conditionPopupMenuItemActionListener);
     }
 
@@ -149,10 +151,11 @@ public class EditorPopupMenu extends MclnGraphViewPopupMenu {
                  * Create Conditions are ON or none of Creation operations is ON
                  */
                 boolean creationOperationIsON = AppStateModel.isCreationOperationOn();
-//                System.out.println("EditorPopupMenu: Creation operation is On: " + creationOperationIsON);
+                boolean creatingArcs = AppStateModel.getCurrentOperation().isCreatingArcs();
                 if (!printToolIsActive && (AppStateModel.getCurrentOperation().isCreatingProperties() ||
-                        AppStateModel.getCurrentOperation().isCreatingConditions() ||
-                        !creationOperationIsON) && (MENU_ITEM_DELETE_PROPERTY.equals(itemText)
+                        AppStateModel.getCurrentOperation().isCreatingConditions() ||  creatingArcs ||
+                        !creationOperationIsON) &&
+                        (MENU_ITEM_MOVE_ARC_KNOTS.equals(itemText) || MENU_ITEM_DELETE_PROPERTY.equals(itemText)
                         || MENU_ITEM_DELETE_CONDITION.equals(itemText) || MENU_ITEM_DELETE_ARC.equals(itemText))) {
                     menuItem.setEnabled(true);
                 }
@@ -161,11 +164,8 @@ public class EditorPopupMenu extends MclnGraphViewPopupMenu {
               The Initialize menu item is enabled when Init Assistant is either closed or open and idling
             */
                 boolean initAssistantCanBeInitialised = AppStateModel.canInitAssistantBeInitialized();
-//                System.out.println("EditorPopupMenu: initAssistant Can Be Initialised: " + initAssistantCanBeInitialised);
-                boolean operationCanBeInterrupted = AppStateModel.canOperationBeInterrupted();
-//                System.out.println("EditorPopupMenu: initAssistant Can Be Interrupted: " + operationCanBeInterrupted);
-                boolean initAssistantUpAndRunning = InitAssistantInterface.isInitAssistantUpAndRunning();
-//                System.out.println("EditorPopupMenu: initAssistant ia Up An dRunning: " + initAssistantUpAndRunning);
+//                boolean operationCanBeInterrupted = AppStateModel.canOperationBeInterrupted();
+//                boolean initAssistantUpAndRunning = InitAssistantInterface.isInitAssistantUpAndRunning();
                 if (!printToolIsActive && initAssistantCanBeInitialised &&
                         (MENU_ITEM_INIT_PROPERTY.equals(itemText) || MENU_ITEM_INIT_ARC.equals(itemText))) {
                     menuItem.setEnabled(true);

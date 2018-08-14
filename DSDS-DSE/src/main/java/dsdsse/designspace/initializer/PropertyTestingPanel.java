@@ -1,8 +1,8 @@
 package dsdsse.designspace.initializer;
 
-import dsdsse.graphview.PropertyViewBall;
 import dsdsse.preferences.DsdsseUserPreference;
 import mcln.model.MclnStatement;
+import mclnview.graphview.PropertyViewBall;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,12 +25,6 @@ class PropertyTestingPanel extends JPanel {
     private final InitAssistantDataModel initAssistantDataModel;
     // 3D representation
     private final PropertyViewBall propertyViewBall;
-
-//    private final GroupChangeListener groupChangeListener = () -> {
-//        boolean status = DsdsseUserPreferences.isPropertyView3D();
-//        MclnGraphViewStatement.setDisplayMclnPropertyViewAs3DCircle(status);
-//        PropertyTestingPanel.this.repaint();
-//    };
 
     private MouseAdapter mouseAdapter = new MouseAdapter() {
         @Override
@@ -57,8 +51,6 @@ class PropertyTestingPanel extends JPanel {
         setBackground(Color.WHITE);
 
         propertyViewBall = PropertyViewBall.createInstance(DEFAULT_BALL_COLOR);
-//        DsdsseUserPreferences.getInstance().addGroupChangeListener(
-//                DsdsseUserPreferences.PREF_VIEW_STYLE_KEY, GroupID.GROUP1, groupChangeListener);
         addMouseListener(mouseAdapter);
     }
 
@@ -66,7 +58,6 @@ class PropertyTestingPanel extends JPanel {
      *
      */
     void destroyContents() {
-//        DsdsseUserPreferences.getInstance().removeGroupChangeListener(GroupID.GROUP1, groupChangeListener);
         removeMouseListener(mouseAdapter);
     }
 

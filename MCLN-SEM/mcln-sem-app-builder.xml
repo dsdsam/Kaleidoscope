@@ -1,13 +1,4 @@
-<project name="mcln-sem-app-builder" basedir="." default="create-deployment-zip-files">
-
-    <!--  src directories -->
-    <!--<property name="adf.src.dir" value="..\ADF\src"/>-->
-    <!--<property name="adf-csys-view.src.dir" value="..\ADF-CSYS-VIEW\src"/>-->
-    <!--<property name="vw.src.dir" value="..\VECTOR-WORKS\src"/>-->
-    <!--<property name="mathematica.src.dir" value="..\MATHEMATICA\src"/>-->
-    <!--<property name="mcln.model.src.dir" value="..\MCLN-MODEL\src"/>-->
-    <!--<property name="mcln.view.src.dir" value="..\MCLN-VIEW\src"/>-->
-    <!--<property name="sem-mcln.src.dir" value="src"/>-->
+<project name="mcln-sem-app-builder" basedir="." default="create-release-zip-files">
 
     <!-- class directories -->
     <property name="adf.classes.dir" value="..\ADF\classes"/>

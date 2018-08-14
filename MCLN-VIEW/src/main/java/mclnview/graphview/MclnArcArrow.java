@@ -6,9 +6,13 @@ import vw.valgebra.VAlgebra;
 import java.awt.*;
 
 /**
- * Created by Admin on 11/14/2017.
+ * Created with IntelliJ IDEA.
+ * User: XP Admin
+ * Date: 10/22/13
+ * Time: 7:29 PM
+ * To change this template use File | Settings | File Templates.
  */
-public class MclnArcArrow {
+public final class MclnArcArrow {
 
     protected static final Color DEFAULT_WATERMARK_COLOR = new Color(0xDDDDDD);
     protected static final Color DEFAULT_WATERMARK_BORDER_COLOR = new Color(0xBBBBBB);
@@ -16,14 +20,16 @@ public class MclnArcArrow {
     private static final Color ARROW_CREATION_FILL_COLOR = new Color(0xBBBBBB);
     private static final Color ARROW_BORDER_COLOR = Color.GRAY;//new Color(0x777777);
 
-    private static final Color ARROW_SELECTED_FILLING_COLOR = new Color(0xEEEEEE);//new Color(0xE0E0E0);
+    private static final Color ARROW_MOUSE_HOVER_COLOR = new Color(0xFF6000);
+
+    private static final Color ARROW_SELECTED_FILLING_COLOR = new Color(0xEEEEEE);//EE == 238  new Color(0xE0E0E0);
     private static final Color ARROW_SELECTED_BORDER_COLOR = Color.MAGENTA;//Color.BLACK;//new Color(0xFF00FF);
 
     private static final Color ARROW_HIGHLIGHTED_FILLING_COLOR = new Color(0xEEEEEE);
     private static final Color ARROW_HIGHLIGHTED_BORDER_COLOR = Color.RED;
 
-    public static final int DEFAULT_ARROW_LENGTH = 11;
-    public static final int DEFAULT_ARROW_WIDTH = 4;
+    public static final int DEFAULT_ARROW_LENGTH = 14;
+    public static final int DEFAULT_ARROW_WIDTH = 5;
 
     public static final int MEDIUM_ARROW_LENGTH = 10;
     public static final int MEDIUM_ARROW_WIDTH = 4;
@@ -111,14 +117,14 @@ public class MclnArcArrow {
     private int scrOutlineMaxX;
     private int scrOutlineMaxY;
 
+    private boolean mouseHover;
     private boolean arrowHighlighted;
-    private boolean arrowPreSelected;
     private boolean arrowSelected;
 
     private Polygon arcKnob;
     private double[] directionVector;
-    private final double[] arrowTipScrLocation;
-    private final double[] arrowTipCSysLocation;
+    private double[] arrowTipScrLocation;
+    private double[] arrowTipCSysLocation;
 
     private Color stateColor;
 
@@ -261,8 +267,17 @@ public class MclnArcArrow {
     //   d r a w i n g   a t t r i b u t e   s e t t i n g s
     //
 
-    public void setPreSelected(boolean preSelected) {
-        this.arrowPreSelected = preSelected;
+
+    public boolean isMouseHover() {
+        return mouseHover;
+    }
+
+    public void setMouseHover(boolean mouseHover) {
+        this.mouseHover = mouseHover;
+    }
+
+    public boolean isArrowSelected() {
+        return arrowSelected;
     }
 
     public void setSelected(boolean arrowSelected) {
@@ -296,6 +311,20 @@ public class MclnArcArrow {
     }
 
     /**
+     * The method is used to update Arrow location and angle when polyline arc knots are moved
+     *
+     * @param directionVector
+     * @param arrowTipScrLocation
+     */
+    public void repositionArrowLocation(double[] directionVector, double[] arrowTipScrLocation) {
+        this.directionVector = directionVector;
+        this.arrowTipScrLocation = arrowTipScrLocation;
+        parentCSys.screenPointToCSysPoint(arrowTipCSysLocation, arrowTipScrLocation);
+        arcKnob = initTriangleArrow(arrowLength, arrowWidth, directionVector, arrowTipScrLocation);
+        cSysPoints = arrowScrPointsToCSysPoints(scrPoints);
+    }
+
+    /**
      * @param g
      */
 
@@ -303,6 +332,18 @@ public class MclnArcArrow {
         Graphics2D g2D = (Graphics2D) g;
         Object currentSetting = g2D.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        //
+        //   Fill the Arrow
+        //
+
+        g2D.setColor(stateColor);
+
+        // this color may be replaced if some of the following
+        // condition is true
+        if (isMouseHover()) {
+            g2D.setColor(Color.WHITE);
+        }
 
         if (watermarked) {
             g2D.setColor(DEFAULT_WATERMARK_COLOR);
@@ -313,10 +354,20 @@ public class MclnArcArrow {
             g2D.setColor(ARROW_SELECTED_FILLING_COLOR);
         } else if (arrowHighlighted) {
             g2D.setColor(ARROW_HIGHLIGHTED_FILLING_COLOR);
-        } else {
-            g2D.setColor(stateColor);
         }
         g2D.fill(arcKnob);
+
+        //
+        //   Draw the Arrow border
+        //
+
+        g.setColor(ARROW_BORDER_COLOR);
+
+        // this color may be replaced if some of the following
+        // condition is true
+        if (isMouseHover()) {
+            g2D.setColor(ARROW_MOUSE_HOVER_COLOR);
+        }
 
         if (watermarked) {
             g2D.setColor(DEFAULT_WATERMARK_BORDER_COLOR);
@@ -324,10 +375,7 @@ public class MclnArcArrow {
             g.setColor(ARROW_SELECTED_BORDER_COLOR);
         } else if (arrowHighlighted) {
             g.setColor(ARROW_HIGHLIGHTED_BORDER_COLOR);
-        } else {
-            g.setColor(ARROW_BORDER_COLOR);
         }
-        g2D.setColor(Color.LIGHT_GRAY);
         g2D.draw(arcKnob);
 
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, currentSetting);
@@ -349,25 +397,7 @@ public class MclnArcArrow {
      * @param scale
      */
     public void doCSysToScreenTransformation(int[] scr0, double scale) {
-
         parentCSys.cSysPointToScreenPoint(arrowTipScrLocation, arrowTipCSysLocation);
-
-
-//        for (int i = 0; i < cSysPoints.length; i++) {
-//            double[] currentSCysPoint = cSysPoints[i];
-//            double[] currentScrPoint = scrPoints[i];
-//            currentScrPoint[0] = scr0[0] + (int) (currentSCysPoint[0] * scale);
-//            currentScrPoint[1] = scr0[1] + (int) (-currentSCysPoint[1] * scale);
-//            currentScrPoint[2] = 0;
-//        }
-
-//        int[][] scrKnobLocations = parentCSys.doubleMatX3ToIntMatX3(scrPoints);
-
-        // calculate Outline();
-//        arcKnob = scrPointsMatrixToPolygon(scrPoints);
-//        arcKnob.addPoint(scrKnobLocations[0][0], scrKnobLocations[0][1]);
-//        arcKnob.addPoint(scrKnobLocations[1][0], scrKnobLocations[1][1]);
-//        arcKnob.addPoint(scrKnobLocations[2][0], scrKnobLocations[2][1]);
         arcKnob = initTriangleArrow(arrowLength, arrowWidth, directionVector, arrowTipScrLocation);
     }
 

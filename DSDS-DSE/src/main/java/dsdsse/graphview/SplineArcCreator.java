@@ -4,9 +4,9 @@ import dsdsse.app.AppStateModel;
 import dsdsse.app.AppStateModelListener;
 import dsdsse.app.DsdsDseMessagesAndDialogs;
 import dsdsse.designspace.DesignSpaceView;
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import mcln.model.ArrowTipLocationPolicy;
 import mcln.model.MclnArc;
+import mclnview.graphview.*;
 import vw.valgebra.VAlgebra;
 
 import java.awt.event.MouseEvent;
@@ -14,8 +14,33 @@ import java.awt.event.MouseEvent;
 public class SplineArcCreator {
 
     //
+    //                            T h e   C r e a t i o n   o f   t h e   A r c s
     //
-    //
+    /*
+                                     +----------------------------------------+
+                                     |        PICK_UP_ARC_INPUT_NODE          |
+                                     +----------------------------------------+
+                                                       |
+                                                       |
+                                     +----------------------------------------+
+                        +------------| PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_NODE  |---------+
+                        |            +----------------------------------------+         |
+                        |                                                               |
+                        |                                                               |
+          +----------------------------+                        +----------------------------------------+
+          | PICK_UP_ARC_ONLY_KNOT      |--------+      +--------|  PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE  |
+          +----------------------------+        |      |        +----------------------------------------+
+                                                |      |
+                                                |      |
+                                                |      |        +----------------------------------------+
+                                                |      |   +----|  PICK_UP_MULTI_KNOT_ARC_ARROW_TIP_LOCATION  |
+                                                |      |   |    +----------------------------------------+
+                                                |      |   |
+                                 +------------------------------------------------+
+                                 |  finish Arc Creation And Add It To Mcln Model  |
+                                 +------------------------------------------------+
+
+     */
 
     private MclnGraphDesignerView mclnGraphDesignerView;
     private final MclnGraphViewEditor mclnGraphViewEditor;
@@ -25,8 +50,8 @@ public class SplineArcCreator {
     AppStateModel.OperationStep currentOperationStep;
 
     // Arc stuff
-    private MclnGraphViewNode currentArcInputNode;
-    private MclnGraphViewNode currentArcOutputNode;
+    private MclnGraphNodeView currentArcInputNode;
+    private MclnGraphNodeView currentArcOutputNode;
     private MclnSplineArcView mclnSplineArcView;
     private boolean userSelectsArrowLocation = true;
     private int arrowTipSplineScrIndex;
@@ -44,6 +69,14 @@ public class SplineArcCreator {
         mclnGraphDesignerView = DesignSpaceView.getInstance().getMclnGraphDesignerView();
     }
 
+    boolean isArcInputNodeAProperty(){
+        return currentArcInputNode != null && currentArcInputNode.isPropertyNode();
+    }
+
+    boolean isArcInputNodeACondition(){
+        return currentArcInputNode != null && currentArcInputNode.isConditionNode();
+    }
+
     /**
      * Called from App Model State when model state has changed
      *
@@ -51,13 +84,9 @@ public class SplineArcCreator {
      * @param operationStep
      */
     private void setEditorOperationAndStep(AppStateModel.Operation operation, AppStateModel.OperationStep operationStep) {
-
         if (this.currentOperation == operation && this.currentOperationStep == operationStep) {
             return;
         }
-
-//        setModelMoved(false);
-//        clearLocalGraphFragmentMovingCollections();
         this.currentOperation = operation;
         this.currentOperationStep = operationStep;
     }
@@ -70,8 +99,6 @@ public class SplineArcCreator {
     final void processArcCreation(MouseEvent me, AppStateModel.Operation operation, int mouseEventType) {
 
         if (mouseEventType == MouseEvent.MOUSE_PRESSED) {
-            System.out.println("Process Polyline Arc Creation: " + operation);
-            System.out.println("Process Polyline Arc Creation: " + currentOperationStep);
             switch (currentOperationStep) {
                 case PICK_UP_ARC_INPUT_NODE:
                     currentArcInputNode = mclnGraphViewEditor.pickUpArcInputNode(me);
@@ -90,12 +117,17 @@ public class SplineArcCreator {
                     pickUpArcNextKnotOrOutputNode(me);
                     break;
                 case PICK_UP_THREE_KNOT_ARC_ARROW_TIP_LOCATION:
-                    // This call is needed as user may click on just created knot
-                    // without moving the mose
-                    arrowTipSplineScrIndex = findArrowTipIndexOnTheSpline(me, true);
+                    // This call is needed as user may click on just created knot or output node
+                    // without moving the mose. In this case arrowTipSplineScrIndex is not found
+                    // and arrow is not shown
+                    arrowTipSplineScrIndex = findArrowTipIndexOnTheSplineForJustCreatedArc(me, true);
                     takeThreeKnotArcArrowTipIndexAndFinishArcCreation(me);
                     break;
                 case PICK_UP_MULTI_KNOT_ARC_ARROW_TIP_LOCATION:
+                    // This call is needed as user may click on just created knot or output node
+                    // without moving the mose. In this case arrowTipSplineScrIndex is not found
+                    // and arrow is not shown
+                    arrowTipSplineScrIndex = findArrowTipIndexOnTheSplineForJustCreatedArc(me, true);
                     takeMultiKnotArcArrowTipIndexAndFinishArcCreation(me);
                     break;
             }
@@ -106,14 +138,13 @@ public class SplineArcCreator {
                 case PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_CONDITION:
                 case PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE:
                 case PICK_UP_ARC_ONLY_KNOT:
-//                    System.out.println("Mouse moving x = " + me.getX() + ",  y = " + me.getY());
                     moveArcActivePoint(me);
                     break;
                 case PICK_UP_THREE_KNOT_ARC_ARROW_TIP_LOCATION:
-                    arrowTipSplineScrIndex = findArrowTipIndexOnTheSpline(me, true);
+                    arrowTipSplineScrIndex = findArrowTipIndexOnTheSplineForJustCreatedArc(me, true);
                     break;
                 case PICK_UP_MULTI_KNOT_ARC_ARROW_TIP_LOCATION:
-                    arrowTipSplineScrIndex = findArrowTipIndexOnTheSpline(me, true);
+                    arrowTipSplineScrIndex = findArrowTipIndexOnTheSplineForJustCreatedArc(me, true);
                     break;
             }
         }
@@ -122,7 +153,7 @@ public class SplineArcCreator {
     /**
      * @param currentArcInputNode
      */
-    private void createSplineArcInstance(MclnGraphViewNode currentArcInputNode) {
+    private void createSplineArcInstance(MclnGraphNodeView currentArcInputNode) {
 
         // Statement or Condition was selected - make one-Node arc
         mclnSplineArcView = MclnGraphModel.getInstance().createIncompleteMclnSplineArcAndUpdateView(
@@ -139,7 +170,7 @@ public class SplineArcCreator {
         mclnSplineArcView.setSelected(true);
         mclnSplineArcView.setThreadSelected(true);
         mclnSplineArcView.setDrawKnots(true);
-        mclnSplineArcView.setAllKnotsSelected(false);
+        mclnSplineArcView.setAllKnotsSelected(true);
 
         currentArcOutputNode = null;
         if (currentArcInputNode.isPropertyNode()) {
@@ -151,14 +182,31 @@ public class SplineArcCreator {
         return;
     }
 
-    /**
-     * @param me
-     */
     private void moveArcActivePoint(MouseEvent me) {
+
         int x = me.getX();
         int y = me.getY();
+
+        /**
+         * This section places mouse right in the middle of potential output node
+         * when mouse hovers a node of type other than input node
+         */
+        MclnGraphEntityView mclnGraphEntityView = mclnGraphDesignerView.getGraphEntityAtCoordinates(me.getX(), me.getY());
+        if (mclnGraphEntityView != null) {
+            if (currentArcInputNode != null && ((currentArcInputNode.isPropertyNode() && mclnGraphEntityView.isConditionNode())
+                    || (currentArcInputNode.isConditionNode() && mclnGraphEntityView.isPropertyNode()))) {
+                double[] screenPoint = mclnGraphEntityView.toMclnGraphNodeView().getScrPnt();
+                mclnGraphEntityView.setMouseHover(true);
+                mclnGraphDesignerView.setMouseHoveredEntity(mclnGraphEntityView);
+                int[] scrIntPoint = mclnGraphDesignerView.doubleVec3ToInt(screenPoint);
+//                System.out.println("B " + me.getX() + "  " + me.getY());
+                x = scrIntPoint[0];
+                y = scrIntPoint[1];
+            } else {
+                mclnGraphDesignerView.setMouseHoveredEntity(null);
+            }
+        }
         mclnGraphDesignerView.paintMclnArcViewWhileCreatingKnotsOnTheScreenAtPoint(x, y, mclnSplineArcView);
-//        System.out.println("moveArcActivePoint");
     }
 
     /**
@@ -174,9 +222,10 @@ public class SplineArcCreator {
             // Undo first step - unselect first node
 
             currentArcInputNode.setSelected(false);
+
             mclnGraphDesignerView.paintEntityOnly(currentArcInputNode);
 
-            MclnArc mclnArc = mclnSplineArcView.getMclnArc();
+            MclnArc mclnArc = mclnSplineArcView.getTheElementModel();
             MclnGraphModel.getInstance().removeMclnArcAndUpdateView(mclnArc);
 
             currentArcInputNode = null;
@@ -296,7 +345,7 @@ public class SplineArcCreator {
 
             double[] middleKnotScrLocation = calculateKnobScrLocation(currentArcInputNode, currentArcOutputNode, true);
             mclnSplineArcView.makeThreePointArc(middleKnotScrLocation);
-            boolean arrowTipFound =  checkIfArrowTipCanBeFound();
+            boolean arrowTipFound = checkIfArrowTipCanBeFound();
             if (!arrowTipFound) {
                 DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Creating Connecting Arcs",
                         DsdsDseMessagesAndDialogs.MESSAGE_STRAIGHT_3POINT_ARC_UNDO);
@@ -304,7 +353,7 @@ public class SplineArcCreator {
                 return;
             }
         } else {
-            boolean arrowTipFound =  checkIfArrowTipCanBeFound();
+            boolean arrowTipFound = checkIfArrowTipCanBeFound();
             if (!arrowTipFound) {
                 DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Creating Connecting Arcs",
                         DsdsDseMessagesAndDialogs.MESSAGE_3POINT_ARC_UNDO);
@@ -340,7 +389,7 @@ public class SplineArcCreator {
      * @param drawKnobAsArrow
      * @return
      */
-    private static double[] calculateKnobScrLocation(MclnGraphViewNode inpNode, MclnGraphViewNode outNode,
+    private static double[] calculateKnobScrLocation(MclnGraphNodeView inpNode, MclnGraphNodeView outNode,
                                                      boolean drawKnobAsArrow) {
 
         double inpNodeRadius = (inpNode instanceof MclnPropertyView) ?
@@ -407,6 +456,7 @@ public class SplineArcCreator {
         //
 
         MclnGraphEntityView mclnGraphEntityView = mclnGraphViewEditor.getSomethingSelected(x, y);
+        System.out.println("getSomethingSelected mclnGraphEntityView "+mclnGraphEntityView);
         // try if node or condition picked
         if (mclnGraphEntityView == null) {
 
@@ -415,7 +465,6 @@ public class SplineArcCreator {
             //
 
             mclnSplineArcView.setThreadSelected(true);
-//            System.out.println(" Knot location piked  ");
             mclnSplineArcView.addNextScrKnotAndMakeItActive(x, y);
             mclnGraphDesignerView.paintArcAndConnectedEntityOnScreen(mclnSplineArcView);
             return;
@@ -435,9 +484,13 @@ public class SplineArcCreator {
         currentArcOutputNode.setSelected(true);
         mclnSplineArcView.setOutputNode(currentArcOutputNode);
 
-        int nPnts = mclnSplineArcView.getNumberOfKnots();
+        // setting output node cSys point as the arc last knot location
+        double[] nodeCSysLocation = currentArcOutputNode.getCSysPnt();
+        mclnSplineArcView.updateLastKnotLocation(nodeCSysLocation);
+        mclnGraphDesignerView.repaint();
 
-        boolean arrowTipFound =  checkIfArrowTipCanBeFound();
+        boolean arrowTipFound = checkIfArrowTipCanBeFound();
+        int nPnts = mclnSplineArcView.getNumberOfKnots();
         if (!arrowTipFound) {
             String message = nPnts == 3 ?
                     DsdsDseMessagesAndDialogs.MESSAGE_3POINT_ARC_UNDO :
@@ -494,13 +547,16 @@ public class SplineArcCreator {
     }
 
     /**
+     * Called at the end of Arc creation steps to let user to select the Arc Arrow location on the spline
+     *
      * @param me
      * @return
      */
-    private int findArrowTipIndexOnTheSpline(MouseEvent me, boolean userSelectsArrowLocation) {
+    private int findArrowTipIndexOnTheSplineForJustCreatedArc(MouseEvent me, boolean userSelectsArrowLocation) {
         int x = me.getX();
         int y = me.getY();
-        int arrowTipSplineScrIndex = mclnSplineArcView.findArrowTipIndexOnTheSpline(x, y, userSelectsArrowLocation);
+        int arrowTipSplineScrIndex =
+                mclnSplineArcView.findArrowTipIndexOnTheSplineForJustCreatedArc(x, y, userSelectsArrowLocation);
         mclnGraphDesignerView.paintArcArrowWhileIsBeingCreatedOnScreen(mclnSplineArcView);
         return arrowTipSplineScrIndex;
     }
@@ -532,7 +588,7 @@ public class SplineArcCreator {
             currentOperationStep = previousArcCreationOperationStep;
             AppStateModel.getInstance().setCurrentOperationStep(previousArcCreationOperationStep);
 
-            mclnSplineArcView.setDrawKnotBoxesFlag(false);
+            mclnSplineArcView.setDrawKnotBoxes(false);
             mclnGraphDesignerView.eraseArcOnlyFromImageAndCallRepaint(mclnSplineArcView);
 
             // resetting arc presentation
@@ -561,7 +617,7 @@ public class SplineArcCreator {
         }
 
         mclnSplineArcView.setSelectedKnotInd(-1);
-        finishArcCreationAndAddItToMclnModel();
+        finishDesignedArcCreationAndAddItToMclnModel();
     }
 
     /**
@@ -586,7 +642,7 @@ public class SplineArcCreator {
 
             mclnSplineArcView.removeOutputNode();
             currentArcOutputNode = null;
-            mclnSplineArcView.setDrawKnotBoxesFlag(false);
+            mclnSplineArcView.setDrawKnotBoxes(false);
             mclnGraphDesignerView.eraseArcOnlyFromImageAndCallRepaint(mclnSplineArcView);
 
             // resetting arc presentation
@@ -616,7 +672,7 @@ public class SplineArcCreator {
 
         // user selected Arrow location
         setUserSelectedArrowTipSplineScrIndex(arrowTipSplineScrIndex);
-        finishArcCreationAndAddItToMclnModel();
+        finishDesignedArcCreationAndAddItToMclnModel();
     }
 
     /**
@@ -635,7 +691,7 @@ public class SplineArcCreator {
      * c) input node picked - nly knot (knob) location picked - output node picked
      * 2) after multi-knot arc designed and knob location selected
      */
-    private void finishArcCreationAndAddItToMclnModel() {
+    private void finishDesignedArcCreationAndAddItToMclnModel() {
 
         mclnSplineArcView.setSelectingArrowTipLocation(false);
         mclnSplineArcView.setHighlightArcKnotsForArrowTipSelection(false);
@@ -652,11 +708,7 @@ public class SplineArcCreator {
         mclnSplineArcView.setAllKnotsSelected(false);
         mclnSplineArcView.setSelectedKnotInd(-1);
 
-        mclnSplineArcView.finishArcCreation();
-
-        // updating MclnArc (model)
-//        MclnArc mclnArc = currentArc.getMclnArc();
-//        MclnGraphModel.getInstance().addMclnArc(mclnArc);
+        mclnSplineArcView.arcInteractiveCreationFinished();
 
         currentArcInputNode.outArcList.add(mclnSplineArcView);
         currentArcOutputNode.inpArcList.add(mclnSplineArcView);
@@ -675,12 +727,13 @@ public class SplineArcCreator {
     }
 
     /**
+     * The method is used during Arc creation to check if the Arc
+     * thread length or shape allows to place the Arc Arrow on it.
+     *
      * @return
      */
     boolean checkIfArrowTipCanBeFound() {
         boolean arrowTipFound = mclnSplineArcView.checkIfArrowTipCanBeFound();
         return arrowTipFound;
     }
-
-
 }

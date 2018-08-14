@@ -3,30 +3,45 @@ package adf.csys.view;
 import vw.valgebra.VAlgebra;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class CSysRoundedPolylineEntity extends BasicCSysEntity {
 
-    private static final Color POLY_LINE_LONGEST_SEGMENT_DRAWING_COLOR = new Color(0xDD0000);
+    private static final Color POLY_LINE_LONGEST_SEGMENT_DRAWING_COLOR = new Color(0xFF00FF);
 
     private static final double BISECTOR_SCALE = 1;
     private static final double STRAIGHT_SEGMENT_LENGTH = 1; // was 3
     private static final double TWO_STRAIGHT_SEGMENT_LENGTH = 2;  // was 5
 
     private final List<RoundedJoint> cSysPolyJoints = new ArrayList();
+    private final List<double[]> backupJointCSysPoints = new ArrayList();
     private final List<int[][]> screenSegmentPoints = new ArrayList();
+    // Attributes
     private boolean creationComplete;
-    private boolean paintLongestSegment = true;
     private int longestSegmentIndex;
+    private boolean highlightLongestSegment;
+    private boolean drawKnots;
+    // thread
+    protected boolean threadSelected;
 
     /**
      * @param parentCSysView
      */
     public CSysRoundedPolylineEntity(CSysView parentCSysView, Color lineColor) {
         super(parentCSysView, lineColor);
+    }
+
+    public void setHighlightLongestSegment(boolean highlightLongestSegment) {
+        this.highlightLongestSegment = highlightLongestSegment;
+        if (highlightLongestSegment) {
+            findAndHighlightLongestSegment();
+        }
+    }
+
+    protected void setDrawKnots(boolean drawKnots) {
+        this.drawKnots = drawKnots;
     }
 
     public int getJointsSize() {
@@ -39,7 +54,11 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
         addPoint(cSysPnt);
     }
 
-    public void creationCompleted() {
+    protected List<int[][]> getScreenSegmentPoints() {
+        return screenSegmentPoints;
+    }
+
+    public void polylineCreationCompleted() {
         if (cSysPolyJoints.size() >= 2) {
             RoundedJoint prevRoundedJoint = cSysPolyJoints.get(cSysPolyJoints.size() - 2);
             double[] prevSegmentJointCSysPoint = prevRoundedJoint.getCSysPnt();
@@ -127,8 +146,8 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
 
 
     /**
-     * This method update last point after it was moved
-     * The last pont could be the second, the third and so on.
+     * This method updates last point after it was moved
+     * The last point could be the second, the third and so on.
      *
      * @param jointPoint
      * @return
@@ -203,6 +222,14 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
         }
     }
 
+    /**
+     * @param index
+     * @return
+     */
+    protected int[][] getSegmentPoints(int index) {
+        return screenSegmentPoints.get(index);
+    }
+
     public RoundedJoint getJointUnderMouse(Point p) {
         int size = cSysPolyJoints.size();
         for (int i = 0; i < size; i++) {
@@ -218,11 +245,111 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
         return cSysPolyJoints.get(i).getCSysPnt();
     }
 
+    protected List<double[]> getJointPoints() {
+        List<double[]> jointPoints = new ArrayList();
+        int size = cSysPolyJoints.size();
+        for (int i = 0; i < size; i++) {
+            RoundedJoint currRoundedJoint = cSysPolyJoints.get(i);
+            double[] cSysPoint = currRoundedJoint.getCSysPnt();
+            jointPoints.add(cSysPoint);
+        }
+        return jointPoints;
+    }
+
+    /**
+     *
+     */
+    protected void backupJointPoints() {
+        //       printJointPoints("Before");
+        backupJointCSysPoints.clear();
+        backupJointCSysPoints.addAll(getJointPoints());
+    }
+
+    /**
+     * Is used to recreate Joints upon retrieval
+     *
+     * @param knotCSysLocations
+     */
+    protected void recreateJointPoints(List<double[]> knotCSysLocations) {
+        if (knotCSysLocations.isEmpty()) {
+            return;
+        }
+        int size = knotCSysLocations.size();
+        RoundedJoint prevRoundedJoint = null;
+        for (int i = 0; i < size; i++) {
+            boolean straightSegment = false;
+            boolean drawAsDot = false;
+            double[] cSysPoint = knotCSysLocations.get(i);
+            RoundedJoint currRoundedJoint = createJoint(parentCSys, prevRoundedJoint, cSysPoint, getDrawColor(),
+                    straightSegment, drawAsDot);
+            cSysPolyJoints.add(currRoundedJoint);
+            prevRoundedJoint = currRoundedJoint;
+        }
+
+        if (cSysPolyJoints.size() >= 3) {
+            recalculateAllJoints();
+            doCSysToScreenTransformation(parentCSys.scr0, parentCSys.minScale);
+        }
+        creationComplete = true;
+        doCSysToScreenTransformation(parentCSys.getScr0(), parentCSys.getMinScale());
+    }
+
+    private static RoundedJoint createJoint(CSysView parentCSys, RoundedJoint prevRoundedJoint,
+                                            double[] cSysPoint, Color drawColor, boolean straightSegment, boolean drawAsDot) {
+        boolean prevSegmentIsSemiShortWithStartingRounded = false;
+        RoundedJoint roundedJoint =
+                new RoundedJoint(parentCSys, prevRoundedJoint, cSysPoint, drawColor, straightSegment, drawAsDot);
+        roundedJoint.setPrevSegmentIsSemiShortWithStartingRounded(prevSegmentIsSemiShortWithStartingRounded);
+        return roundedJoint;
+    }
+
+    /**
+     *
+     */
+    protected void restoreJointPoints() {
+        if (backupJointCSysPoints.isEmpty()) {
+            return;
+        }
+        int size = cSysPolyJoints.size();
+        for (int i = 0; i < size; i++) {
+            RoundedJoint currRoundedJoint = cSysPolyJoints.get(i);
+            double[] cSysPoint = backupJointCSysPoints.get(i);
+            currRoundedJoint.updateLastPoint(cSysPoint);
+        }
+        if (cSysPolyJoints.size() >= 3) {
+            recalculateAllJoints();
+        }
+        backupJointCSysPoints.clear();
+        doCSysToScreenTransformation(parentCSys.getScr0(), parentCSys.getMinScale());
+    }
+
+
     public void updatePolylineOnJointDragged(RoundedJoint roundedJoint, Point p) {
         roundedJoint.updateJointPointOnJointMoved(p);
         if (cSysPolyJoints.size() >= 3) {
             recalculateAllJoints();
         }
+        doCSysToScreenTransformation(parentCSys.getScr0(), parentCSys.getMinScale());
+        findAndHighlightLongestSegment();
+    }
+
+    public void updateFirstPolylineJoint(double[] cSysPnt) {
+        RoundedJoint roundedJoint = cSysPolyJoints.get(0);
+        roundedJoint.translateJointToGivenPoint(cSysPnt);
+        if (cSysPolyJoints.size() >= 3) {
+            recalculateAllJoints();
+        }
+        doCSysToScreenTransformation(parentCSys.getScr0(), parentCSys.getMinScale());
+        findAndHighlightLongestSegment();
+    }
+
+    public void updateLastPolylineJoint(double[] cSysPnt) {
+        RoundedJoint roundedJoint = cSysPolyJoints.get(cSysPolyJoints.size() - 1);
+        roundedJoint.translateJointToGivenPoint(cSysPnt);
+        if (cSysPolyJoints.size() >= 3) {
+            recalculateAllJoints();
+        }
+        doCSysToScreenTransformation(parentCSys.getScr0(), parentCSys.getMinScale());
         findAndHighlightLongestSegment();
     }
 
@@ -238,28 +365,116 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
     }
 
     //
+    //   P o l y l i n e   T r a n s l a t i o n
+    //
+
+    void resetBackupJointPoints() {
+        if (backupJointCSysPoints.isEmpty()) {
+            return;
+        }
+        int size = cSysPolyJoints.size();
+        for (int i = 0; i < size; i++) {
+            RoundedJoint currRoundedJoint = cSysPolyJoints.get(i);
+            double[] cSysPoint = backupJointCSysPoints.get(i);
+            currRoundedJoint.updateLastPoint(cSysPoint);
+        }
+        if (cSysPolyJoints.size() >= 3) {
+            recalculateAllJoints();
+        }
+    }
+
+    protected void printJointPoints(String header) {
+        int size = cSysPolyJoints.size();
+        System.out.println(header + ":  CSys Points " + size);
+        for (int i = 0; i < size; i++) {
+            double[] cSysPoint = cSysPolyJoints.get(i).getCSysPnt();
+            System.out.println("CSys Point " + i + "   x = " + cSysPoint[0] + "   y = " + cSysPoint[1]);
+        }
+
+    }
+
+    public void doTranslationStep(double[] translationCSysVector) {
+        resetBackupJointPoints();
+        for (RoundedJoint currRoundedJoint : cSysPolyJoints) {
+            double[] polylineCSysKnot = currRoundedJoint.getCSysPnt();
+            double[] translatedPolylineCSysKnot = VAlgebra.translateToNewVec(polylineCSysKnot, translationCSysVector);
+            currRoundedJoint.translateJointToGivenPoint(translatedPolylineCSysKnot);
+        }
+        recalculateAllJoints();
+        doCSysToScreenTransformation(parentCSys.scr0, parentCSys.minScale);
+    }
+
+    /**
+     * @param cSysTranslationVector
+     * @param inpCSysPnt
+     * @param outCSysPnt
+     */
+    public void takeFinalLocation(double[] cSysTranslationVector, double[] inpCSysPnt, double[] outCSysPnt) {
+        resetBackupJointPoints();
+//        printJointPoints("Reset");
+        int size = cSysPolyJoints.size();
+        for (int i = 0; i < size; i++) {
+            RoundedJoint currRoundedJoint = cSysPolyJoints.get(i);
+            double[] polylineCSysKnot;
+            if (i == 0) {
+                polylineCSysKnot = inpCSysPnt;
+            } else if (i == (size - 1)) {
+                polylineCSysKnot = outCSysPnt;
+            } else {
+                polylineCSysKnot = currRoundedJoint.getCSysPnt();
+            }
+            double[] translatedPolylineCSysKnot = VAlgebra.translateToNewVec(polylineCSysKnot, cSysTranslationVector);
+            currRoundedJoint.translateJointToGivenPoint(translatedPolylineCSysKnot);
+        }
+//        printJointPoints("Final");
+        recalculateAllJoints();
+        doCSysToScreenTransformation(parentCSys.scr0, parentCSys.minScale);
+    }
+
+    //
     //
     //   T r a n s f o r m a t i o n s
     //
 
     @Override
     public void doCSysToScreenTransformation(int[] scr0, double scale) {
+        updateScreenRepresentation(scr0, scale);
+    }
+
+    /**
+     * The Joint Point is the point where user clicks to start or end segment.
+     * First Joint Point is the starting point of the first segment.
+     * Second Joint Point is the ending of the first segment and the starting point of the second segment.
+     * Last Joint Point is the ending of last segment.
+     * So, starting from the third Joint Point each Joint Point "knows" how to make
+     * rounding at the point of its previous Joint Point.
+     * <p>
+     * The method creates screenSegmentPoints where each element represents a segment as three point.
+     * First point of a segment is its starting point.
+     * Second point is segment's ending point.
+     * Third point is the Joint Point
+     *
+     * @param scr0
+     * @param scale
+     */
+    private void updateScreenRepresentation(int[] scr0, double scale) {
         screenSegmentPoints.clear();
         int size = cSysPolyJoints.size();
         if (size == 0) {
             return;
         }
 
-        for (int i = 2; i < size; i++) {
+        for (int i = 1; i < size; i++) {
             RoundedJoint roundedJoint = cSysPolyJoints.get(i);
-            roundedJoint.calculateRounding();
-            roundedJoint.calculateRoundingScreenPoints();
+            if (i > 1) {
+                roundedJoint.calculateRounding();
+            }
+            roundedJoint.doCSysToScreenTransformation(scr0, scale);
         }
 
         RoundedJoint prevRoundedJoint = cSysPolyJoints.get(0);
         for (int i = 1; i < size; i++) {
             RoundedJoint currRoundedJoint = cSysPolyJoints.get(i);
-            prevRoundedJoint.calculateRoundingScreenPoints();
             double[] prevSegmentJointCSysPoint = prevRoundedJoint.getCSysPnt();
             double[] currSegmentJointCSysPoint = currRoundedJoint.getCSysPnt();
 
@@ -348,20 +563,21 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
         Object oldRenderingKey = graphics2D.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
         // setting antialias
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//        Stroke stroke = new BasicStroke(1f);
-//        graphics2D.setStroke(stroke);
 
-        Color roundColor = getCurrentColor();
-        g.setColor(roundColor);
 
         // drawing segments
+        Color currentColor = getThreadColor();
+        g.setColor(currentColor);
+
         int[][] prevSegmentScrPoints = screenSegmentPoints.get(0);
-        for (int i = 0; i < screenSegmentPoints.size(); i++) {
+        int size = screenSegmentPoints.size();
+        for (int i = 0; i < size; i++) {
             int[][] currentSegmentScrPoints = screenSegmentPoints.get(i);
             RoundedJoint currentRoundedJoint = cSysPolyJoints.get(i);
 
             // highlighting last short segment while creating
-            if (!isSelected() && !creationComplete) {
+            if (!creationComplete) {
+//                if (!isSelected() && !creationComplete) {
                 if (cSysPolyJoints.size() >= 2 && i == (screenSegmentPoints.size() - 1)) {
                     RoundedJoint lastRoundedJoint = cSysPolyJoints.get(cSysPolyJoints.size() - 1);
                     if (lastRoundedJoint.isStraightSegment()) {
@@ -372,32 +588,33 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
                     }
                 }
             }
-            if (paintLongestSegment && creationComplete && longestSegmentIndex == i) {
+            if (highlightLongestSegment && creationComplete && longestSegmentIndex == i) {
                 g.setColor(POLY_LINE_LONGEST_SEGMENT_DRAWING_COLOR);
             }
 
             // drawing segment in specified drawing color or length indicating color (green/reg)
             g.drawLine(currentSegmentScrPoints[0][0], currentSegmentScrPoints[0][1],
                     currentSegmentScrPoints[1][0], currentSegmentScrPoints[1][1]);
-//            Shape segment = new Line2D.Double(currentSegmentScrPoints[0][0], currentSegmentScrPoints[0][1],
-//                    currentSegmentScrPoints[1][0], currentSegmentScrPoints[1][1]);
-//            graphics2D.draw(segment);
 
-            // drawing lines from tangent to joint points
-//            if (isSelected() && creationComplete) {
-//                drawHiddenLines(graphics2D, prevSegmentScrPoints, currentSegmentScrPoints);
-//                graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, oldRenderingKey);
-//                boolean selected = currentRoundedJoint.isSelected();
-//                Color dotColor = selected ? Color.MAGENTA : Color.BLUE;
-//                drawKnot(g, prevSegmentScrPoints[2][0], prevSegmentScrPoints[2][1], dotColor);
-//                graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//            }
+            // drawing knots and lines from tangent to joint points
+            if (drawKnots && creationComplete) {
+                if (i == 0) {
+                    drawHiddenLines(graphics2D, null, currentSegmentScrPoints);
+                } else {
+                    drawHiddenLines(graphics2D, prevSegmentScrPoints, currentSegmentScrPoints);
+                }
+                graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, oldRenderingKey);
+                boolean selected = currentRoundedJoint.isSelected();
+                Color dotColor = selected ? Color.MAGENTA : Color.BLUE;
+                drawKnot(g, prevSegmentScrPoints[2][0], prevSegmentScrPoints[2][1], dotColor);
+                graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            }
 
             prevSegmentScrPoints = currentSegmentScrPoints;
-            g.setColor(roundColor);
+            g.setColor(currentColor);
         }
         // Draw rounding
-//        g.setColor(Color.GRAY);
+        g.setColor(currentColor);
         for (RoundedJoint roundedJoint : cSysPolyJoints) {
             if ((!(roundedJoint.prevRoundedJoint != null &&
                     roundedJoint.prevRoundedJoint.isShortSegmentBothEndsAreNotRounded())) &&
@@ -417,10 +634,14 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
      */
     private void drawHiddenLines(Graphics2D g, int[][] prevSegment, int[][] segment) {
         g.setColor(Color.LIGHT_GRAY);
-        g.drawLine(segment[1][0], segment[1][1], segment[2][0], segment[2][1]);
         if (prevSegment != null) {
+            // this line belongs to currently drawn segment and goes from its
+            // starting point to the joint point of the previous segment
             g.drawLine(segment[0][0], segment[0][1], prevSegment[2][0], prevSegment[2][1]);
         }
+        // this line also belongs to currently drawn segment and goes from its
+        // end point to its joint point
+        g.drawLine(segment[1][0], segment[1][1], segment[2][0], segment[2][1]);
     }
 
     private void drawKnot(Graphics g, int x, int y, Color fillColor) {
@@ -432,6 +653,13 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
         g.drawLine(x - 1, y + 2, x + 1, y + 2);
     }
 
+    /**
+     * @return
+     */
+    protected Color getThreadColor() {
+        return DEFAULT_DRAWING_COLOR;
+    }
+
     // ----------------------------------------------------------------------
     //                        R o u n d e d   J o i n t
     //   This class makes poly line to have segment connection rounded points
@@ -440,7 +668,7 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
     public static class RoundedJoint extends CSysPointEntity {
 
         private static final double TWO_PI = Math.PI + Math.PI;
-        private static final int SCREEN_OUTLINE_HALF_SIZE = 6;
+        private static final int SCREEN_OUTLINE_HALF_SIZE = 8;
 
         private final RoundedJoint prevRoundedJoint;
 
@@ -542,6 +770,13 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
             scrOutline = calculateScreenOutline(scrPoint);
         }
 
+        private void translateJointToGivenPoint(double[] translatedJointCSysPoint) {
+            moveEntityActivePointTo(translatedJointCSysPoint);
+            double[] translatedJointScrPoint = parentCSys.cSysPointToScreenPoint(translatedJointCSysPoint);
+            int[] scrPoint = parentCSys.doubleVec3ToInt(translatedJointScrPoint);
+            scrOutline = calculateScreenOutline(scrPoint);
+        }
+
         private void updateJointPointOnJointMoved(Point p) {
             int[] scrPoint = {p.x, p.y, 0};
             double[] cSysPoint = parentCSys.screenPointToCSysPoint(p.x, p.y);
@@ -580,7 +815,7 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
             // calculating outline
             double[] cSysPoint = getCSysPnt();
             int[] scrPoint = super.doCSysToScreenTransformation(scr0, scale, cSysPoint);
-            calculateScreenOutline(scrPoint);
+            scrOutline = calculateScreenOutline(scrPoint);
         }
 
         @Override
@@ -609,8 +844,8 @@ public class CSysRoundedPolylineEntity extends BasicCSysEntity {
             //  draw rounding
             //
 
-            Color roundColor = getCurrentColor();
-            g.setColor(roundColor);
+//            Color roundColor = getDrawColor();
+//            g.setColor(roundColor);
             int[] prevPoint = roundingScrPointsList.get(0);
             for (int i = 1; i < roundingScrPointsList.size(); i++) {
                 int[] currentPoint = roundingScrPointsList.get(i);

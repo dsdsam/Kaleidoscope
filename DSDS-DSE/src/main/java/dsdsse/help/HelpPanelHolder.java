@@ -1,6 +1,6 @@
 package dsdsse.help;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import adf.ui.laf.button.Adf3DButton;
 import dsdsse.animation.HowToUseCreateOperationsScript;
 import dsdsse.animation.HowToUseModificationOperationsScript;

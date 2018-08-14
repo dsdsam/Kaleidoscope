@@ -3,14 +3,13 @@ package dsdsse.splash;
 import adf.app.AppManifestAttributes;
 import adf.ui.components.panels.ImagePanel;
 import adf.utils.BuildUtils;
-import dsdsse.app.DsdsseMainPanel;
+import dsdsse.app.DsdsDseDesignSpaceHolderPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Admin on 9/11/2016.
@@ -46,10 +45,10 @@ public class DsdsseSplash extends JDialog {
         String appVersion = AppManifestAttributes.getAppVersion();
         String buildDate = AppManifestAttributes.getAppBuiltDate();
 
-        ImageIcon backgroundImageIcon = BuildUtils.getImageIcon(DsdsseMainPanel.HELP_PREFIX + SPLASH_IMAGE_PATH);
-        ImageIcon initialCloseButtonIcon = BuildUtils.getImageIcon(DsdsseMainPanel.HELP_PREFIX +
+        ImageIcon backgroundImageIcon = BuildUtils.getImageIcon(DsdsDseDesignSpaceHolderPanel.HELP_PREFIX + SPLASH_IMAGE_PATH);
+        ImageIcon initialCloseButtonIcon = BuildUtils.getImageIcon(DsdsDseDesignSpaceHolderPanel.HELP_PREFIX +
                 SPLASH_CLOSE_HIDDEN_BUTTON_PATH);
-        ImageIcon activeCloseButtonIcon = BuildUtils.getImageIcon(DsdsseMainPanel.HELP_PREFIX +
+        ImageIcon activeCloseButtonIcon = BuildUtils.getImageIcon(DsdsDseDesignSpaceHolderPanel.HELP_PREFIX +
                 SPLASH_CLOSE_ACTIVE_BUTTON_PATH);
         DsdsseSplash dsdsseSplash = new DsdsseSplash(frame, appVersion, buildDate, backgroundImageIcon,
                 initialCloseButtonIcon, activeCloseButtonIcon);

@@ -1,18 +1,15 @@
 package dsdsse.graphview;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import adf.csys.view.*;
 import dsdsse.history.ExecutionHistoryPanel;
 import dsdsse.preferences.DsdsseUserPreference;
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
-import dsdsse.designspace.mcln.model.mcln.MclnModeChangedListener;
-import dsdsse.designspace.mcln.model.mcln.MclnModelStructureChangedListener;
 import mcln.model.*;
+import mclnview.graphview.*;
 
-import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
 
@@ -24,7 +21,7 @@ import java.util.List;
  * Time: 9:35:15 PM
  * To change this template use File | Settings | File Templates.
  */
-public class MclnGraphDesignerView extends BasicEntityCSysView {
+public class MclnGraphDesignerView extends MclnGraphView {
 
     private final Color[] axesColors =
             {
@@ -32,235 +29,31 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
                     (new Color(0xFF0000)), (new Color(0xFF0000)), (new Color(0xFF0000)),
             };
 
-    private static final Color GRID_COLOR = Color.LIGHT_GRAY;
-    private MclnGraphModel mclnGraphModel;
-    private DsdsseWorldScalableCSysGrid dsdsseCSysGridEntity;
-
-    private final List<MclnPropertyView> statementViews = new ArrayList();
-    private final List<MclnConditionView> conditionViews = new ArrayList();
-    private final List<MclnArcView> arcViews = new ArrayList();
-
-    private final List<MclnGraphViewNode> graphModelViewNodeEntityList = new ArrayList();
-    private final List<MclnArcView> graphModelViewArcEntityList = new ArrayList();
-
-    private final Map<String, MclnGraphViewNode> uidToMclnGraphNodeView = new HashMap();
-    private final Map<String, MclnArcView> uidToMclnGraphArcView = new HashMap();
-
     // Creating Arc.
-    private MclnGraphViewNode arcInputNodeView;
+    private MclnGraphNodeView createdArcInputNodeView;
     // This is Arc View sprite;
     private MclnArcView mclnArcViewSprite;
+
+    private MclnGraphEntityView mclnGraphSpriteEntity;
 
     // Creating fragment
     private MclnPropertyView curFragmentInpNode;
     private MclnPropertyView curFragmentOutNode;
 
     // Moving fragment
-    private final Set<MclnGraphViewNode> nodesInInterimLocation = new HashSet();
+    private final Set<MclnGraphNodeView> nodesInInterimLocation = new HashSet();
     private final Set<MclnArcView> arcsInInterimLocation = new HashSet();
     private final Set<MclnArcView> selectedFragmentConnectingArcs = new HashSet();
 
     // Moving entire model
-    private final List<MclnGraphViewNode> spriteNodesAreBeingMovedList = new ArrayList();
+    private final List<MclnGraphNodeView> spriteNodesAreBeingMovedList = new ArrayList();
 
     // Deleting model entity
     private MclnGraphEntityView modelEntityToBeDeleted;
 
-
-    // images for grid and model view
-    private Image offScreenImage;
-    private Graphics offScreenImageGraphics;
-    boolean offScreenImagePrepared;
-    boolean recreateScreenImage;
-
-    /*
-       This class is responsible for presenting and updating McLN model view on the screen.
-       In order to accomplish this it has several groups of operation.
-       a)method called
-
-     */
-
+    private MclnGraphEntityView mouseHoveredEntityView;
 
     //=================================================================================================================
-
-    //
-    //  Mcln Model Structure Changed Listener
-    //
-
-    // Called ether when Editor added newly created entity to McLN Model
-    // or Demo Creator animate Mcln Model creation
-    //
-    private MclnModelStructureChangedListener mclnModelStructureChangedListener = new MclnModelStructureChangedListener() {
-
-        @Override
-        public void mclnModelViewRectangleUpdated(MclnGraphModel mclnGraphModel) {
-
-            MclnDoubleRectangle modelRectangle = mclnGraphModel.getViewRectangle();
-            DoubleRectangle projectCSysRectangle = new DoubleRectangle(modelRectangle.getX(), modelRectangle.getY(),
-                    modelRectangle.getWidth(), modelRectangle.getHeight());
-
-            MclnGraphDesignerView.this.updateViewRectangle(projectCSysRectangle);
-            createScreenImageAndDrawMclnGraphOnIt();
-//            repaint();
-        }
-
-        @Override
-        public MclnPropertyView mclnStatementAdded(MclnStatement mclnStatement) {
-            MclnPropertyView mclnPropertyView = createMclnStatementView(mclnStatement);
-            return mclnPropertyView;
-        }
-
-        @Override
-        public void mclnStatementRemoved(MclnStatement mclnStatement) {
-            MclnGraphViewNode mclnGraphStatementView = uidToMclnGraphNodeView.remove(mclnStatement.getUID());
-            mclnGraphStatementView.disconnectFromAllArc();
-            statementViews.remove(mclnGraphStatementView);
-            graphModelViewNodeEntityList.remove(mclnGraphStatementView);
-            eraseEntityViewUpOnDeletion();
-        }
-
-        @Override
-        public MclnConditionView mclnConditionAdded(MclnCondition mclnCondition) {
-            MclnConditionView mclnConditionView = createMclnConditionView(mclnCondition);
-            return mclnConditionView;
-        }
-
-        @Override
-        public void mclnConditionRemoved(MclnCondition mclnCondition) {
-            MclnGraphViewNode mclnGraphConditionView = uidToMclnGraphNodeView.remove(mclnCondition.getUID());
-            mclnGraphConditionView.disconnectFromAllArc();
-            conditionViews.remove(mclnGraphConditionView);
-            graphModelViewNodeEntityList.remove(mclnGraphConditionView);
-            eraseEntityViewUpOnDeletion();
-        }
-
-        @Override
-        public MclnArcView incompleteMclnArcAdded(MclnArc<MclnNode, MclnNode> mclnArc) {
-            MclnArcView mclnArcView = createIncompleteMclnArcView(mclnArc);
-            return mclnArcView;
-        }
-
-        @Override
-        public MclnArcView mclnArcAdded(MclnArc<MclnNode, MclnNode> mclnArc) {
-            MclnArcView mclnArcView = createMclnArcView(mclnArc);
-            return mclnArcView;
-        }
-
-        @Override
-        public void mclnArcRemoved(MclnArc mclnArc) {
-            MclnArcView mclnGraphArcView = uidToMclnGraphArcView.remove(mclnArc.getUID());
-            mclnGraphArcView.disconnectFromInputAndOutputNodes();
-            arcViews.remove(mclnGraphArcView);
-            graphModelViewArcEntityList.remove(mclnGraphArcView);
-            // set this variable null in case not yet finished arc is removed
-            mclnArcViewSprite = null;
-            // set any being deleted entity to null
-            eraseEntityViewUpOnDeletion();
-        }
-
-        @Override
-        public int hashCode() {
-            return super.hashCode();
-        }
-    };
-
-    //=================================================================================================================
-
-    //
-    //  Mcln Graph Mode Listener
-    //
-
-    private MclnModeChangedListener mclnModeChangedListener = new MclnModeChangedListener() {
-
-        @Override
-        public void mclnModelCleared() {
-//            System.out.println("\nMcln M o d e l   C l e a r e d ");
-
-            /*
-              We call removeListener to ask mclnGraphModel to remove listener from destroyed Mcln Model.
-              It is removed when model is cleared
-             */
-            mclnGraphModel.removeMclnModelSimulationListener(mclnModelSimulationListener);
-            statementViews.clear();
-            conditionViews.clear();
-            arcViews.clear();
-
-            graphModelViewNodeEntityList.clear();
-            graphModelViewArcEntityList.clear();
-//            mclnGraphEntityArray = new CSysEntity[0];
-
-            uidToMclnGraphNodeView.clear();
-            uidToMclnGraphArcView.clear();
-
-            clearInterimEntityCollections();
-
-            createAndDisplayNewOffScreenImage();
-
-            ExecutionHistoryPanel.getInstance().clearUpOnModelErased();
-        }
-
-        @Override
-        public void mclnModelUpdated(MclnModel mclnModel) {
-            createAndDisplayNewOffScreenImage();
-        }
-
-        /**
-         * called when new project is retrieved or when the project model changed
-         *
-         * Creates MCLN Graph view for each Mcln Model element
-         * Creates Screen image and initializes it.
-         *
-         * @param newCurrentMclnModel
-         */
-        @Override
-        public void onCurrentMclnModelReplaced(MclnModel newCurrentMclnModel) {
-
-//            System.out.println("building Model View");
-
-            MclnDoubleRectangle modelRectangle = mclnGraphModel.getViewRectangle();
-            DoubleRectangle projectCSysRectangle = new DoubleRectangle(modelRectangle.getX(), modelRectangle.getY(),
-                    modelRectangle.getWidth(), modelRectangle.getHeight());
-            updateViewRectangle(projectCSysRectangle);
-
-            List<MclnStatement> mclnStatements = mclnGraphModel.getMclnStatements();
-            for (MclnStatement mclnStatement : mclnStatements) {
-                createMclnStatementView(mclnStatement);
-            }
-
-            List<MclnCondition> mclnConditions = mclnGraphModel.getMclnConditions();
-            for (MclnCondition mclnCondition : mclnConditions) {
-                createMclnConditionView(mclnCondition);
-            }
-
-            List<MclnArc> mclnArcs = mclnGraphModel.getMclnArcs();
-            for (MclnArc mclnArc : mclnArcs) {
-                createMclnArcView(mclnArc);
-            }
-
-            // this commented out because it is not needed.
-            // Listener is removed from model when the model is destroyed
-//            mclnGraphModel.removeMclnModelSimulationListener(mclnModelSimulationListener);
-            /*
-               We call addListener to ask mclnGraphModel to add listener to new Mcln Model.
-               It is removed when model is cleared
-             */
-            mclnGraphModel.addMclnModelSimulationListener(mclnModelSimulationListener);
-
-             /*
-               In case creating Demo projects this method is called before the McLN model is created.
-               Hence, there is nothing to put on the image and show on the screen.
-               This repaint is needed for to shoe retrieved project only.
-             */
-            if (mclnStatements.size() != 0 || mclnConditions.size() != 0 || mclnArcs.size() != 0) {
-                createAndDisplayNewOffScreenImage();
-            }
-        }
-
-        @Override
-        public void demoProjectComplete(MclnModel newMclnModel) {
-            createAndDisplayNewOffScreenImage();
-        }
-    };
 
     //
     //   Methods to create McLN Graph elements
@@ -269,44 +62,47 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
     /**
      * @param mclnStatement
      */
-    private MclnPropertyView createMclnStatementView(MclnStatement mclnStatement) {
-        MclnPropertyView mclnPropertyView = MclnGraphVewFactory.createMclnGraphViewStatement(this,
-                mclnStatement);
+    @Override
+    public MclnPropertyView createMclnStatementView(MclnStatement mclnStatement) {
+        McLnGraphDesignerPropertyView mcLnPropertyView = MclnGraphDesignerViewFactory.
+                createMclnGraphDesignerPropertyView(this, mclnStatement);
         // adding Statement view to the Graph
-        statementViews.add(mclnPropertyView);
-        graphModelViewNodeEntityList.add(mclnPropertyView);
-        uidToMclnGraphNodeView.put(mclnPropertyView.getUID(), mclnPropertyView);
-        CSysEntity[] mclnGraphEntityArray =
-                graphModelViewNodeEntityList.toArray(new BasicCSysEntity[graphModelViewNodeEntityList.size()]);
-        updateModelEntList(combinedRotatingMatrix, mclnGraphEntityArray);
-        return mclnPropertyView;
+        statementViews.add(mcLnPropertyView);
+        graphModelViewNodeEntityList.add(mcLnPropertyView);
+        uidToMclnGraphNodeView.put(mcLnPropertyView.getUID(), mcLnPropertyView);
+        return mcLnPropertyView;
     }
 
     /**
      * @param mclnCondition
      */
-    private MclnConditionView createMclnConditionView(MclnCondition mclnCondition) {
-        MclnConditionView mclnConditionView = MclnGraphVewFactory.createMclnGraphViewCondition(this,
-                mclnCondition);
+    @Override
+    public MclnConditionView createMclnConditionView(MclnCondition mclnCondition) {
+        MclnGraphDesignerConditionView mcLnConditionView = MclnGraphDesignerViewFactory.createMclnGraphDesignerConditionView(
+                this, mclnCondition);
         // adding Condition view to the Graph
-        conditionViews.add(mclnConditionView);
-        graphModelViewNodeEntityList.add(mclnConditionView);
-        uidToMclnGraphNodeView.put(mclnConditionView.getUID(), mclnConditionView);
-        CSysEntity[] mclnGraphEntityArray =
-                graphModelViewNodeEntityList.toArray(new BasicCSysEntity[graphModelViewNodeEntityList.size()]);
-        updateModelEntList(combinedRotatingMatrix, mclnGraphEntityArray);
-        return mclnConditionView;
+        conditionViews.add(mcLnConditionView);
+        graphModelViewNodeEntityList.add(mcLnConditionView);
+        uidToMclnGraphNodeView.put(mcLnConditionView.getUID(), mcLnConditionView);
+        return mcLnConditionView;
     }
 
     /**
      * @param mclnArc
      * @return
      */
-    private MclnArcView createIncompleteMclnArcView(MclnArc mclnArc) {
+    @Override
+    public MclnArcView createIncompleteMclnArcView(MclnArc mclnArc) {
         String inpNodeUID = mclnArc.getInpNodeUID();
-        MclnGraphViewNode inpNodeView = uidToMclnGraphNodeView.get(inpNodeUID);
-        MclnArcView mclnArcView = MclnGraphVewFactory.createNewIncompleteMclnGraphArcViewForEditor(this,
-                mclnArc, inpNodeView);
+        MclnGraphNodeView inpNodeView = uidToMclnGraphNodeView.get(inpNodeUID);
+        MclnArcView mclnArcView = null;
+        if (mclnArc instanceof MclnPolylineArc) {
+            mclnArcView = MclnGraphDesignerViewFactory.createIncompleteMclnGraphDesignerPolylineArcView(
+                    this, mclnArc, inpNodeView);
+        } else if (mclnArc instanceof MclnSplineArc) {
+            mclnArcView = MclnGraphDesignerViewFactory.createIncompleteMclnGraphDesignerSplineArcView(
+                    this, mclnArc, inpNodeView);
+        }
         addMclnGraphArcView(mclnArcView);
         return mclnArcView;
     }
@@ -314,101 +110,56 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
     /**
      * @param mclnArc
      */
-    private MclnArcView createMclnArcView(MclnArc mclnArc) {
+    @Override
+    public MclnArcView createMclnArcView(MclnArc mclnArc) {
         String inpNodeUID = mclnArc.getInpNodeUID();
         String outNodeUID = mclnArc.getOutNodeUID();
-        MclnGraphViewNode inpNode = uidToMclnGraphNodeView.get(inpNodeUID);
-        MclnGraphViewNode outNode = uidToMclnGraphNodeView.get(outNodeUID);
-        MclnArcView mclnArcView = MclnGraphVewFactory.createMclnGraphViewArc(this, mclnArc, inpNode, outNode);
-
+        MclnGraphNodeView inpNode = uidToMclnGraphNodeView.get(inpNodeUID);
+        MclnGraphNodeView outNode = uidToMclnGraphNodeView.get(outNodeUID);
+        MclnArcView mclnArcView = MclnGraphDesignerViewFactory.createMclnGraphDesignerArcView(
+                this, mclnArc, inpNode, outNode);
         inpNode.addOutputArc(mclnArcView);
         outNode.addInputArc(mclnArcView);
 
+        // adding Arc view to the Graph
         addMclnGraphArcView(mclnArcView);
         return mclnArcView;
     }
 
-    /**
-     * @param mclnGraphArcView
-     */
-    private final void addMclnGraphArcView(MclnArcView mclnGraphArcView) {
-        arcViews.add(mclnGraphArcView);
-        graphModelViewArcEntityList.add(mclnGraphArcView);
-        uidToMclnGraphArcView.put(mclnGraphArcView.getUID(), mclnGraphArcView);
-        updateGraphArcList(combinedRotatingMatrix);
+    @Override
+    protected void onMclnModelCleared() {
+        //            System.out.println("\nMcln M o d e l   C l e a r e d ");
+
+            /*
+              We call removeListener to ask mclnGraphModel to remove listener from destroyed Mcln Model.
+              It is removed when model is cleared
+             */
+        clearInterimEntityCollections();
+        super.onMclnModelCleared();
+        ExecutionHistoryPanel.getInstance().clearUpOnModelErased();
     }
 
-    //=================================================================================================================
-
-    //
-    //  Mcln Model Simulation Listener
-    //
-
-    private MclnModelSimulationListener mclnModelSimulationListener = new MclnModelSimulationListener() {
-
-        @Override
-        public void simulationStepExecuted() {
-            if (SwingUtilities.isEventDispatchThread()) {
-                onSimulationStepExecutedRunnable.run();
-            } else {
-                try {
-                    SwingUtilities.invokeAndWait(onSimulationStepExecutedRunnable);
-                } catch (InterruptedException ie) {
-                    ie.printStackTrace();
-                } catch (InvocationTargetException ite) {
-                    ite.printStackTrace();
-                }
-            }
+    @Override
+    protected void onSimulationStepExecuted() {
+        int historySize = 0;
+        for (MclnPropertyView mcLnPropertyView : statementViews) {
+            historySize =mcLnPropertyView.recordHistory();
         }
+        ExecutionHistoryPanel.getInstance().simulationStepExecuted(historySize);
+    }
 
-        @Override
-        public void mclnModelStateChanged() {
-            if (SwingUtilities.isEventDispatchThread()) {
-                onSimulationStateChangeRunnable.run();
-            } else {
-                try {
-                    SwingUtilities.invokeAndWait(onSimulationStateChangeRunnable);
-                } catch (InterruptedException ie) {
-                    ie.printStackTrace();
-                } catch (InvocationTargetException ite) {
-                    ite.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void mclnModelStateReset() {
-            if (SwingUtilities.isEventDispatchThread()) {
-                onSimulationStateResetRunnable.run();
-            } else {
-                try {
-                    SwingUtilities.invokeAndWait(onSimulationStateResetRunnable);
-                } catch (InterruptedException ie) {
-                    ie.printStackTrace();
-                } catch (InvocationTargetException ite) {
-                    ite.printStackTrace();
-                }
-            }
-        }
-    };
-
-    private Runnable onSimulationStepExecutedRunnable = () -> {
-        for (MclnPropertyView mclnPropertyView : statementViews) {
-            mclnPropertyView.recordHistory();
-        }
-        ExecutionHistoryPanel.getInstance().simulationStepExecuted();
-    };
-
-    private Runnable onSimulationStateChangeRunnable = () -> {
+    @Override
+    protected void onSimulationStateChange() {
         regenerateGraphView();
         repaintAllModelNodesOnOffScreenImage();
-    };
+    }
 
-    private Runnable onSimulationStateResetRunnable = () -> {
+    @Override
+    protected void onSimulationStateReset() {
         ExecutionHistoryPanel.getInstance().simulationExecutionReset();
-    };
+    }
 
-    //=================================================================================================================
+//    //=================================================================================================================
 
     //
     //   C o n s t r u c t i n g   M c l n   G r a p h   V i e w
@@ -418,22 +169,10 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
      * @param mclnGraphModel
      * @param options
      */
-    public MclnGraphDesignerView(MclnGraphModel mclnGraphModel, int viewPadding, int options) {
-        super(mclnGraphModel.getViewRectangle().getX(), mclnGraphModel.getViewRectangle().getY(),
-                mclnGraphModel.getViewRectangle().getWidth(), mclnGraphModel.getViewRectangle().getHeight(),
-                viewPadding, options);
-        setBorder(null);
-        this.setFocusable(false);
-        this.mclnGraphModel = mclnGraphModel;
-        setName("MclnGraphView");
-        createAxis(axesColors);
-        this.setOpaque(true);
-        setBackground(Color.WHITE);
-        mclnGraphModel.addMclnModelBuildingListener(mclnModelStructureChangedListener);
-        mclnGraphModel.addMclnModeChangedListener(mclnModeChangedListener);
-        mclnGraphModel.addMclnModelSimulationListener(mclnModelSimulationListener);
-
-        initGridAndModelRectangle();
+    public MclnGraphDesignerView(MclnGraphModel mclnGraphModel, int viewPadding, int options,
+                                 MclnGraphViewDefaultProperties mclnGraphViewDefaultProperties) {
+        super(mclnGraphModel, viewPadding, options, mclnGraphViewDefaultProperties);
+         setBorder(new LineBorder(Color.GRAY));
     }
 
     //
@@ -443,20 +182,10 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
     /**
      * called to initialize this instance upon creation
      */
-    public void initGridAndModelRectangle() {
-
-        // World is a design grid and cSys axes
-        List<CSysRectangleEntity> viewWorldEntityList = new ArrayList();
-
-        dsdsseCSysGridEntity = new DsdsseWorldScalableCSysGrid(this,
-                DsdsseWorldScalableCSysGrid.DEFAULT_GRID_STEP, DsdsseWorldScalableCSysGrid.DEFAULT_GRID_MARGIN,
-                DsdsseWorldScalableCSysGrid.DEFAULT_GRID_COLOR);
-
-        dsdsseCSysGridEntity.doCSysToScreenTransformation(scr0, minScale);
-        viewWorldEntityList.add(dsdsseCSysGridEntity);
-
-        // this World Entity array contains design space grid only
-        viewWorldEntityArray = viewWorldEntityList.toArray(new CSysRectangleEntity[viewWorldEntityList.size()]);
+    @Override
+    protected void initGridAndModelRectangle() {
+        super.initGridAndModelRectangle();
+        // add what you need below this line
     }
 
     //=================================================================================================================
@@ -486,97 +215,11 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
 
 
     //=================================================================================================================
-
-    //
     //   W o r k i n g    w i t h    o f f    S c r e e    I m a g e
-    //
-
-    @Override
-    protected void updatePresentationUponViewResized() {
-        createScreenImageAndDrawMclnGraphOnIt();
-    }
+    //=================================================================================================================
 
     public void repaintImageAndSpriteEntities() {
         repaint();
-    }
-
-    /**
-     * Called from other components when layout or state of the model changed
-     * Created new image paints grid and paints graph
-     * Does not displays image
-     */
-    public void regenerateGraphView() {
-        createScreenImageAndDrawMclnGraphOnIt();
-    }
-
-    /**
-     * The method is called from many other methods each time
-     * when the entire model  has to be  redrawn on the image
-     */
-    private synchronized void createScreenImageAndDrawMclnGraphOnIt() {
-        offScreenImagePrepared = false;
-        if (!createEmptyScreenImage()) {
-            return;
-        }
-
-        int nElements = graphModelViewArcEntityList.size();
-        for (int i = 0; i < nElements; i++) {
-            MclnArcView mclnArcView = graphModelViewArcEntityList.get(i);
-            if (mclnArcView.isUnderConstruction()) {
-                continue;
-            }
-            mclnArcView.drawPlainEntity(offScreenImageGraphics);
-        }
-
-        nElements = graphModelViewNodeEntityList.size();
-        for (int i = 0; i < nElements; i++) {
-            MclnGraphViewNode mclnGraphViewEntity = graphModelViewNodeEntityList.get(i);
-            mclnGraphViewEntity.drawPlainEntity(offScreenImageGraphics);
-        }
-
-        offScreenImagePrepared = true;
-    }
-
-    /**
-     * This is the method that creates screen image
-     * filled with:
-     * a) grid
-     * b) axes
-     * c) arcs
-     * d) nodes
-     */
-    private synchronized boolean createEmptyScreenImage() {
-        offScreenImagePrepared = false;
-        Dimension currentSize = getSize();
-        if (currentSize.width <= 0) {
-            return false;
-        }
-
-        //
-        // image creation
-        //
-
-        if (offScreenImage != null) {
-//            offScreenImage.flush();
-            offScreenImageGraphics.dispose();
-        }
-
-        offScreenImage = createImage(currentSize.width, currentSize.height);
-        offScreenImageGraphics = offScreenImage.getGraphics();
-
-        offScreenImageGraphics.setFont(getFont());
-        offScreenImageGraphics.setColor(Color.WHITE);
-        offScreenImageGraphics.fillRect(0, 0, currentSize.width, currentSize.height);
-
-        Graphics2D g2 = (Graphics2D) offScreenImageGraphics;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-
-        paintWorld(offScreenImageGraphics);
-        paintAxes(offScreenImageGraphics);
-        drawProjectRectangle(g2);
-        drawProjectSpaceCoordinates(g2);
-        offScreenImagePrepared = true;
-        return offScreenImagePrepared;
     }
 
     //=================================================================================================================
@@ -586,6 +229,21 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
     //
 
     //=================================================================================================================
+
+    @Override
+    protected boolean isWorldVisible() {
+        return true;
+    }
+
+    @Override
+    protected boolean areAxesVisible() {
+        return true;
+    }
+
+    @Override
+    protected boolean isProjectSpaceRectangleVisible() {
+        return DsdsseUserPreference.isProjectSpaceRectangleVisible();
+    }
 
     /**
      * This method paints Design Space Grid
@@ -618,33 +276,34 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
         super.paintAxes(g);
     }
 
-    /**
-     * @param g
-     */
-    private void drawProjectRectangle(Graphics g) {
 
-        if (!DsdsseUserPreference.isProjectSpaceRectangleVisible()) {
-            return;
-        }
-
-        g.setColor(Color.RED);
-        // h
-        g.drawLine(
-                projectSpaceViewXMin, projectSpaceViewYMin,
-                projectSpaceViewXMin, projectSpaceViewYMax);
-
-        g.drawLine(
-                projectSpaceViewXMax, projectSpaceViewYMin,
-                projectSpaceViewXMax, projectSpaceViewYMax);
-
-        // v
-        g.drawLine(
-                projectSpaceViewXMin, projectSpaceViewYMin,
-                projectSpaceViewXMax, projectSpaceViewYMin);
-        g.drawLine(
-                projectSpaceViewXMin, projectSpaceViewYMax,
-                projectSpaceViewXMax, projectSpaceViewYMax);
-    }
+//    /**
+//     * @param g
+//     */
+//    private void drawProjectRectangle(Graphics g) {
+//
+//        if (!DsdsseUserPreference.isProjectSpaceRectangleVisible()) {
+//            return;
+//        }
+//
+//        g.setColor(Color.RED);
+//        // h
+//        g.drawLine(
+//                projectSpaceViewXMin, projectSpaceViewYMin,
+//                projectSpaceViewXMin, projectSpaceViewYMax);
+//
+//        g.drawLine(
+//                projectSpaceViewXMax, projectSpaceViewYMin,
+//                projectSpaceViewXMax, projectSpaceViewYMax);
+//
+//        // v
+//        g.drawLine(
+//                projectSpaceViewXMin, projectSpaceViewYMin,
+//                projectSpaceViewXMax, projectSpaceViewYMin);
+//        g.drawLine(
+//                projectSpaceViewXMin, projectSpaceViewYMax,
+//                projectSpaceViewXMax, projectSpaceViewYMax);
+//    }
 
     /**
      * @param g
@@ -720,16 +379,9 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
     //   S c a l i n g   a n d   t r a n s f o r m a t i o n s
     //
 
-    public void updateModelEntList(double[][] mat43, CSysEntity[] mclnGraphEntityArray) {
-        scaleEntArray(mclnGraphEntityArray);
-    }
-
-    public void updateGraphArcList(double[][] mat43) {
-        updateCSysWorldEntList(mat43, graphModelViewArcEntityList);
-    }
-
     /**
-     * The method updates entity view coordinates after:
+     * The method updates entire model entity view screen
+     * coordinates after cSys coordinates are changed
      * 1) model created or changed
      * 2) view changed: re-sized, rotated, or distorted
      *
@@ -737,19 +389,7 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
      */
     @Override
     public final void updateCSysEntList(double[][] mat43) {
-
-        // scale Grid
-        super.scaleEntArray(viewWorldEntityArray); // this is just a grid
-
-        // scale axes
-        super.scaleEntityCollection(super.getWorldAxesList()); // these are axes
-
-        // scale Nodes
-        super.scaleEntityCollection(graphModelViewNodeEntityList);
-
-        // scale Arcs
-        super.scaleEntityCollection(graphModelViewArcEntityList); // this updates arc arrows and some how all entities
-
+        super.updateCSysEntList(mat43);
         // scale interim Arcs
         super.scaleEntityCollection(arcsInInterimLocation);
     }
@@ -760,8 +400,24 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
     //   S e l e c t i o n
     //
 
+    public MclnGraphEntityView getOtherThanThisEntityAtCoordinates(MclnGraphEntityView thisEntity, int x, int y) {
+        for (MclnGraphNodeView mclnGraphViewNode : graphModelViewNodeEntityList) {
+
+            if (mclnGraphViewNode != thisEntity && mclnGraphViewNode.isMouseHover(x, y)) {
+                return mclnGraphViewNode;
+            }
+        }
+        for (MclnArcView mclnArcView : arcViews) {
+            if (mclnArcView != thisEntity && mclnArcView.isMouseHover(x, y)) {
+                return mclnArcView;
+            }
+        }
+        return null;
+    }
+
+
     public MclnGraphEntityView getGraphEntityAtCoordinates(int x, int y) {
-        MclnGraphViewNode mclnGraphViewNode = getGraphNodeAtCoordinates(x, y);
+        MclnGraphNodeView mclnGraphViewNode = getGraphNodeAtCoordinates(x, y);
         if (mclnGraphViewNode != null) {
             return mclnGraphViewNode;
         }
@@ -772,8 +428,8 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
         return null;
     }
 
-    public MclnGraphViewNode getGraphNodeAtCoordinates(int x, int y) {
-        for (MclnGraphViewNode mclnGraphViewNode : graphModelViewNodeEntityList) {
+    public MclnGraphNodeView getGraphNodeAtCoordinates(int x, int y) {
+        for (MclnGraphNodeView mclnGraphViewNode : graphModelViewNodeEntityList) {
             if (mclnGraphViewNode.isMouseHover(x, y)) {
                 return mclnGraphViewNode;
             }
@@ -782,18 +438,18 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
     }
 
     public MclnPropertyView getPropertyNodeAtCoordinates(int x, int y) {
-        for (MclnPropertyView mclnPropertyView : statementViews) {
-            if (mclnPropertyView.isMouseHover(x, y)) {
-                return mclnPropertyView;
+        for (MclnPropertyView mcLnPropertyView : statementViews) {
+            if (mcLnPropertyView.isMouseHover(x, y)) {
+                return mcLnPropertyView;
             }
         }
         return null;
     }
 
     public MclnConditionView getConditionAtCoordinates(int x, int y) {
-        for (MclnConditionView mclnConditionView : conditionViews) {
-            if (mclnConditionView.isMouseHover(x, y)) {
-                return mclnConditionView;
+        for (MclnConditionView mcLnConditionView : conditionViews) {
+            if (mcLnConditionView.isMouseHover(x, y)) {
+                return mcLnConditionView;
             }
         }
         return null;
@@ -819,7 +475,7 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
     //   S e r c h   f o r   m o d e l   e l e m e n t s
     //
 
-    public MclnGraphViewNode getMclnNodeByID(String propertyNodeID) {
+    public MclnGraphNodeView getMclnNodeByID(String propertyNodeID) {
         return uidToMclnGraphNodeView.get(propertyNodeID);
     }
 
@@ -840,17 +496,18 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
     //   P a i n t i n g   A r c   w h i l e   i t   i s   b e i n g   c r e a t e d
     //
 
-    void setArcInputNodeWhileCreatingArc(MclnGraphViewNode arcInputNodeView) {
-        // this arcInputNodeView will be used for very short time
+    void setArcInputNodeWhileCreatingArc(MclnGraphNodeView arcInputNodeView) {
+        // this createdArcInputNodeView will be used for very short time
         // after the Arc input node clicked only. As soon as user
         // start moving the arc's active point the arc input node
         // will be repainted as part of the arc dependent nodes
-        this.arcInputNodeView = arcInputNodeView;
+        this.createdArcInputNodeView = arcInputNodeView;
         repaint();
     }
 
     /**
-     * is used to paint Arc thread is being dragged
+     * is used to paint Arc thread is being dragged during Arc creation
+     * Currently is used for Spline arc only 05-13-2018
      * xxxxxxx
      *
      * @param x
@@ -858,7 +515,7 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
      * @param mclnArcView
      */
     public void paintMclnArcViewWhileCreatingKnotsOnTheScreenAtPoint(int x, int y, MclnArcView mclnArcView) {
-        arcInputNodeView = null;
+        createdArcInputNodeView = null;
         mclnArcView.moveEntityActivePointTo(x, y);
         mclnArcView.placeEntity(scr0, minScale);
         this.mclnArcViewSprite = mclnArcView;
@@ -962,7 +619,7 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
      * @param selectedMclnArcsToBeMoved
      * @param selectedFragmentConnectingArcs
      */
-    public void paintTheModelFragmentOnTheScreen(Set<MclnGraphViewNode> selectedMclnNodesToBeMoved,
+    public void paintTheModelFragmentOnTheScreen(Set<MclnGraphNodeView> selectedMclnNodesToBeMoved,
                                                  Set<MclnArcView> selectedMclnArcsToBeMoved,
                                                  Set<MclnArcView> selectedFragmentConnectingArcs) {
         createScreenImageAndDrawMclnGraphOnIt();
@@ -981,7 +638,7 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
      * @param selectedMclnArcsToBeMoved
      * @param selectedFragmentConnectingArcs
      */
-    private void updateInterimEntitiesToBePaintedAsModelExtras(Set<MclnGraphViewNode> selectedMclnNodesToBeMoved,
+    private void updateInterimEntitiesToBePaintedAsModelExtras(Set<MclnGraphNodeView> selectedMclnNodesToBeMoved,
                                                                Set<MclnArcView> selectedMclnArcsToBeMoved,
                                                                Set<MclnArcView> selectedFragmentConnectingArcs) {
         if (selectedMclnNodesToBeMoved != null) {
@@ -1006,7 +663,7 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
      * @param selectedMclnArcsToBeMoved
      */
     void translateGraphFragmentBeingMovedAndPaintOnTheScreen(double[] translationVector,
-                                                             Set<MclnGraphViewNode> selectedMclnNodesToBeMoved,
+                                                             Set<MclnGraphNodeView> selectedMclnNodesToBeMoved,
                                                              Set<MclnArcView> selectedMclnArcsToBeMoved,
                                                              Set<MclnArcView> selectedFragmentConnectingArcs) {
         Graphics g = redisplayOffScreenImage();
@@ -1023,7 +680,7 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
             mclnGraphEntityView.drawPlainEntity(g);
         }
 
-        for (MclnGraphViewNode mclnGraphViewNode : selectedMclnNodesToBeMoved) {
+        for (MclnGraphNodeView mclnGraphViewNode : selectedMclnNodesToBeMoved) {
             mclnGraphViewNode.translateAndPaintEntityAtInterimLocation(g, translationVector);
         }
 
@@ -1035,8 +692,8 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
      * @param arcUIDs
      * @param translationVector
      */
-    void takeFinalLocationAndPaintTheGraphOnTheScreen(List<String> nodeUIDs, List<String> arcUIDs,
-                                                      double[] translationVector) {
+    void takeFinalLocationThenRecreateImageAndRepaintItOnTheScreen(List<String> nodeUIDs, List<String> arcUIDs,
+                                                                   double[] translationVector) {
 
         for (String arcUID : arcUIDs) {
             MclnArcView mclnArcView = uidToMclnGraphArcView.get(arcUID);
@@ -1044,7 +701,7 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
         }
 
         for (String nodeUID : nodeUIDs) {
-            MclnGraphViewNode mclnGraphViewNode = uidToMclnGraphNodeView.get(nodeUID);
+            MclnGraphNodeView mclnGraphViewNode = uidToMclnGraphNodeView.get(nodeUID);
             mclnGraphViewNode.takeFinalLocation(translationVector);
         }
 
@@ -1097,7 +754,7 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
     }
 
     /**
-     * Painting while McLN Model dragged
+     * Painting while McLN Model is dragged
      *
      * @param translationVector
      */
@@ -1144,10 +801,12 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
         repaint();
     }
 
-    private void eraseEntityViewUpOnDeletion() {
-        createScreenImageAndDrawMclnGraphOnIt();
+    @Override
+    protected void eraseEntityViewUpOnDeletion() {
+        // set this variable null in case not yet finished arc is removed
+        mclnArcViewSprite = null;
         modelEntityToBeDeleted = null;
-        repaint();
+        super.eraseEntityViewUpOnDeletion();
     }
 
     //
@@ -1191,6 +850,7 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
         super.repaint();
     }
 
+
     /**
      * @param g
      */
@@ -1201,14 +861,20 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
         }
         g.drawImage(offScreenImage, 0, 0, null);
 
-        if (arcInputNodeView != null) {
-            arcInputNodeView.paintExtras(g);
+        if (isCrossHairsDisplayOn()) {
+            paintCrossHairs(g);
         }
 
+        if (createdArcInputNodeView != null) {
+            createdArcInputNodeView.paintExtras(g);
+        }
+
+        // this is used when arc thread is created
         if (mclnArcViewSprite != null) {
             this.mclnArcViewSprite.newDrawEntityAndConnectedEntity(g, true);
         }
 
+        // This painting is needed for moving entire model to prevent flickering
         if (graphModelViewNodeEntityList.size() != 0) {
             for (MclnGraphEntityView mclnGraphEntityView : graphModelViewNodeEntityList) {
                 mclnGraphEntityView.drawPlainEntity(g);
@@ -1228,71 +894,73 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
 
         paintEditedEntityExtras(g, nodesInInterimLocation);
 
-        if(isCrossHairsDisplayOn()) {
-            paintCrossHairs(g);
+        // this is used when moving nodes or arc knots
+        if (mclnGraphSpriteEntity != null) {
+            mclnGraphSpriteEntity.drawSpriteEntity(g, scr0, minScale);
         }
+
+        if (mouseHoveredEntityView != null) {
+            if (mouseHoveredEntityView.isMouseHover()) {
+                mouseHoveredEntityView.paintExtras(g);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param mouseHoveredEntityView
+     */
+    void setMouseHoveredEntity(MclnGraphEntityView mouseHoveredEntityView) {
+        if (mouseHoveredEntityView != null) {
+            this.mouseHoveredEntityView = mouseHoveredEntityView;
+            repaint();
+        } else {
+            if (this.mouseHoveredEntityView != null) {
+                this.mouseHoveredEntityView.setMouseHover(false);
+                this.mouseHoveredEntityView = null;
+                repaint();
+            }
+        }
+    }
+
+    /**
+     * This method sets the entity to be a sprite.
+     * Sprite entity exists on the screen only, so method
+     * recreates image that excludes sprite entity.
+     * <p>
+     * When called with argument as null method removes
+     * makes entity not a sprite and recreates image to make
+     * entity drawn on it.
+     * <p>
+     * It is mandatory to calle the method for each entity twice:
+     * First time to make entity sprite, and
+     * second time to remove the attribute.
+     *
+     * @param mclnGraphSpriteEntity
+     */
+    void makeGraphEntityToBeASpritePaintedOnTheScreenOnly(MclnGraphEntityView mclnGraphSpriteEntity) {
+        if (mclnGraphSpriteEntity != null) {
+            mclnGraphSpriteEntity.setSprite(true);  // this will make it drawn directly on the screen
+            createScreenImageAndDrawMclnGraphOnIt();
+            System.out.println("makeGraphEntityToBeASpritePaintedOnTheScreenOnly " + mclnGraphSpriteEntity.isArc());
+        } else {
+            assert this.mclnGraphSpriteEntity != null : "this.mclnGraphSpriteEntity is null";
+            this.mclnGraphSpriteEntity.setSprite(false); // this will make it drawn on the image
+            createScreenImageAndDrawMclnGraphOnIt();
+            System.out.println("makeGraphEntityToBeASpritePaintedOnTheScreenOnly REM " + this.mclnGraphSpriteEntity.isArc());
+        }
+        this.mclnGraphSpriteEntity = mclnGraphSpriteEntity;
+        repaint();
     }
 
     /**
      * @param g
      * @param selectedMclnNodesToBeMoved
      */
-    private void paintEditedEntityExtras(Graphics g, Set<MclnGraphViewNode> selectedMclnNodesToBeMoved) {
-        for (MclnGraphViewNode mclnGraphViewNode : selectedMclnNodesToBeMoved) {
+    private void paintEditedEntityExtras(Graphics g, Set<MclnGraphNodeView> selectedMclnNodesToBeMoved) {
+        for (MclnGraphNodeView mclnGraphViewNode : selectedMclnNodesToBeMoved) {
             mclnGraphViewNode.repaintEntityAtInterimScrLocation(g);
         }
-    }
-
-    //=================================================================================================================
-
-    //
-    //   Methods   to   recreate   and   to   re-display   off   screen   image
-    //
-
-    //=================================================================================================================
-
-    /**
-     * Called from Move Fragment and Move Entire Model operations
-     * when moving finished and moved entities should be painted
-     * on final location
-     *
-     * @return
-     */
-    private void createAndDisplayNewOffScreenImage() {
-        // The image will be painted by paintComponent method.
-        // This approach eliminate flickering on the screen.
-        createScreenImageAndDrawMclnGraphOnIt();
-        repaint();
-    }
-
-    //  re-displaying   without   recreating
-
-    public Graphics redisplayOffScreenImage() {
-        Graphics g = super.getGraphics();
-        g.drawImage(offScreenImage, 0, 0, null);
-        return g;
-    }
-
-    /**
-     * called from Model Simulation Listener on Mcln Model state change event
-     */
-    private void repaintAllModelNodesOnOffScreenImage() {
-
-        System.out.println("\n\n***********************************************************");
-        System.out.println(" Simulation State Change         Repainting Mcln Graph View");
-        System.out.println("**************************************************************\n");
-
-        for (MclnPropertyView mclnPropertyView : statementViews) {
-            mclnPropertyView.updateViewOnModelChanged();
-            mclnPropertyView.drawPlainEntity(offScreenImageGraphics);
-        }
-
-        for (MclnConditionView mclnConditionView : conditionViews) {
-            mclnConditionView.updateViewOnModelChanged();
-            mclnConditionView.drawPlainEntity(offScreenImageGraphics);
-        }
-
-        repaint();
     }
 
     //=================================================================================================================
@@ -1304,8 +972,8 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
     //=================================================================================================================
 
     /**
-     *  The need for this method has to be investigated
-     *
+     * The need for this method has to be investigated
+     * <p>
      * called when:
      * 1) entity created.
      * 2) mouse hover or just left the entity
@@ -1323,26 +991,6 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
         mclnGraphViewEntity.paintExtras(g);
     }
 
-    //=================================================================================================================
-
-    /**
-     * is used to paint any Graph View entity only
-     * <p>
-     * called when:
-     * 1) entity dragged.
-     * 2) when dragging stopped
-     *
-     * @param basicCSysEntity
-     */
-    public void paintEntityOnlyOnTheScreenAtPoint(int x, int y, BasicCSysEntity basicCSysEntity) {
-        basicCSysEntity.moveEntityActivePointTo(x, y);
-        basicCSysEntity.placeEntity(scr0, minScale);
-
-        Graphics g = super.getGraphics();
-        g.drawImage(offScreenImage, 0, 0, null);
-        basicCSysEntity.drawPlainEntity(g);
-    }
-
     //   ==============================================================================================================
     //       C l e a n u p   a f t e r   D e m o   P r e s e n t a t i o n   c a n c e l l e d
     //   ==============================================================================================================
@@ -1356,11 +1004,11 @@ public class MclnGraphDesignerView extends BasicEntityCSysView {
         curFragmentOutNode = null;
         // Deleting model entity
         modelEntityToBeDeleted = null;
+        // moving arc
+        mclnGraphSpriteEntity = null;
         // Moving fragment
         clearInterimEntityCollections();
         // Moving entire model
         spriteNodesAreBeingMovedList.clear();
     }
-
-    //=================================================================================================================
 }

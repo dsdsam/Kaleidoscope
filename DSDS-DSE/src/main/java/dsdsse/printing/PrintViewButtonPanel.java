@@ -1,6 +1,6 @@
 package dsdsse.printing;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import adf.ui.laf.button.Adf3DButton;
 import adf.utils.BuildUtils;
 import dsdsse.app.AppController;

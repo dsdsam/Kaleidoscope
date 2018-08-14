@@ -1,9 +1,9 @@
 package dsdsse.demo;
 
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import mcln.model.*;
 import mcln.palette.TwoShadesConfettiPalette;
 import mcln.palette.MclnState;
+import mclnview.graphview.MclnGraphModel;
 import vw.valgebra.VAlgebra;
 
 import java.util.ArrayList;

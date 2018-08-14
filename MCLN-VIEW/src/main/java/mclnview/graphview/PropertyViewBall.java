@@ -7,11 +7,9 @@ import java.awt.image.MemoryImageSource;
 /**
  * Created by Admin on 11/14/2017.
  */
-public class PropertyViewBall {
+public final class PropertyViewBall {
 
     private static final Color DEFAULT_DRAWING_COLOR = Color.GRAY;
-//    private static final Color DEFAULT_BALL_COLOR = new Color(0xF0F0F0); //Color.LIGHT_GRAY;
-
 
     private static int preferenceRadius = 0;
     private static boolean displayMclnPropertyViewAs3DCircle;
@@ -99,7 +97,6 @@ public class PropertyViewBall {
      */
     private PropertyViewBall(Color ballColor) {
         setState(ballColor);
-//        setState(new Color(0x909090));
     }
 
     /**

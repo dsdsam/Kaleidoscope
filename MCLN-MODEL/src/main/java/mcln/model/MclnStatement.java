@@ -450,8 +450,8 @@ public class MclnStatement extends MclnNode<MclnStatement, MclnCondition> {
     }
 
 
-    boolean hasOutputArcs() {
-        return true;
+    public boolean hasOutputArcs() {
+        return super.hasOutputArcs();
     }
 
     public String toString() {

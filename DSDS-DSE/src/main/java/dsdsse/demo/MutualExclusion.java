@@ -1,10 +1,10 @@
 package dsdsse.demo;
 
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import adf.csys.view.DoubleRectangle;
 import mcln.model.*;
 import mcln.palette.MclnState;
 import mcln.palette.ThreeShadesConfettiPalette;
+import mclnview.graphview.MclnGraphModel;
 import vw.valgebra.VAlgebra;
 
 import java.util.ArrayList;

@@ -5,11 +5,10 @@ import adf.preferences.GroupChangeListener;
 import dsdsse.app.AppStateModel;
 import dsdsse.app.AppStatusPanel;
 import dsdsse.app.DsdsseEnvironment;
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import dsdsse.graphview.MclnGraphDesignerView;
 import dsdsse.graphview.MclnGraphViewEditor;
-import dsdsse.graphview.MclnPropertyView;
 import dsdsse.graphview.MclnViewEditorMouseListener;
+import dsdsse.matrixview.MclnGraphMatrixDesignerView;
 import dsdsse.preferences.DsdsseUserPreference;
 import dsdsse.preferences.GroupID;
 import dsdsse.printing.MclnPrintPreviewPanel;
@@ -17,6 +16,9 @@ import dsdsse.printing.PrintViewButtonPanel;
 import mcln.model.MclnDoubleRectangle;
 import mcln.model.MclnModel;
 import mcln.model.MclnProject;
+import mclnview.graphview.MclnGraphModel;
+import mclnview.graphview.MclnGraphViewDefaultProperties;
+import mclnview.graphview.MclnPropertyView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -131,7 +133,11 @@ public class DesignSpaceView extends JPanel {
         DesignSpaceModel.createInstance(mclnGraphModel, mclnProject);
         designSpaceModel = DesignSpaceModel.getInstance();
 
-        mclnGraphDesignerView = new MclnGraphDesignerView(mclnGraphModel, 25, CSysView.DRAW_AXIS);
+        MclnGraphViewDefaultProperties mclnGraphViewDefaultProperties =
+                new MclnGraphViewDefaultProperties(Color.WHITE, Color.WHITE, new Color(0xEEEEEE),
+                        Color.RED, Color.RED);
+        mclnGraphDesignerView = new MclnGraphDesignerView(mclnGraphModel, 25, CSysView.DRAW_AXIS,
+                mclnGraphViewDefaultProperties);
 
 
         mclnGraphModel.addMclnModeChangedListener(DesignStatusView.getInstance().getMclnModeChangedListener());
@@ -152,7 +158,10 @@ public class DesignSpaceView extends JPanel {
 
         DesignOrSimulationStatusPanelCardView designOrSimulationVisualizationCardView =
                 DesignOrSimulationStatusPanelCardView.createInstance(this);
-        DesignSpaceContentManager.createInstance(this, mclnGraphDesignerView, designOrSimulationVisualizationCardView);
+
+        MclnGraphMatrixDesignerView mcLnGraphMatrixDesignerView = MclnGraphMatrixDesignerView.createInstance();
+        DesignSpaceContentManager.createInstance(this, mclnGraphDesignerView,
+                mcLnGraphMatrixDesignerView, designOrSimulationVisualizationCardView);
         this.revalidate();
     }
 
@@ -168,9 +177,7 @@ public class DesignSpaceView extends JPanel {
      * P r i n t   P r e v i e w   L a y o u t
      */
     private void initPrintPreviewContent() {
-        MclnPrintPreviewPanel mclnPrintPreviewPanel = new MclnPrintPreviewPanel(designSpaceModel, mclnGraphDesignerView);
-        PrintViewButtonPanel printViewButtonPanel = new PrintViewButtonPanel(mclnPrintPreviewPanel);
-        DesignSpaceContentManager.initMcLNPrintPreviewContent(printViewButtonPanel, mclnPrintPreviewPanel);
+        DesignSpaceContentManager.initMcLNPrintPreviewContent();
         AppStateModel.getInstance().setPrintToolIsActive(true);
         this.validate();
         repaint();

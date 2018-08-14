@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 /**
  * The Coordinate System class. This class is a part of
- * Application Development Framework and intended to represent
+ * Application Development Framefork and intended to represent
  * the coordinate system and a set of drawn in the system
  * graphical entities on the screen.
  * <p>
@@ -97,8 +97,8 @@ public abstract class CSysView extends JComponent {
     private double gridStep;
 
     // world representation
-    private List<CSysEntity> worldEntityList = new ArrayList();
-    private List<BasicCSysEntity> worldAxesList = new ArrayList();
+    protected List<CSysEntity> worldEntityList = new ArrayList();
+    protected List<BasicCSysEntity> worldAxesList = new ArrayList();
 
     // R o t a t i o n
     private double xRotationAngle;
@@ -302,6 +302,14 @@ public abstract class CSysView extends JComponent {
         updateCSysEntList(combinedRotatingMatrix);
     }
 
+    public double getMinScale() {
+        return minScale;
+    }
+
+    public int[] getScr0() {
+        return scr0;
+    }
+
     public boolean isPointInsideProjectRectangle(int x, int y) {
         boolean projectSpaceScrRectangleContainsPoint = projectSpaceScrRectangle.contains(x, y);
         return projectSpaceScrRectangleContainsPoint;
@@ -397,6 +405,36 @@ public abstract class CSysView extends JComponent {
         }
         screenPoint[0] = cSysPoint[0] * minScale;
         screenPoint[1] = cSysPoint[1] * minScale;
+        screenPoint[2] = 0d;
+        return screenPoint;
+    }
+
+    //   S c a l e   r i g h t l y
+
+    public double[] scaleScrPntToCSysPntRightly(double[] screenPoint) {
+        return scaleScrPntToCSysPntRightly(null, screenPoint);
+    }
+
+    public double[] scaleScrPntToCSysPntRightly(double[] cSysPoint, double[] screenPoint) {
+        if (cSysPoint == null) {
+            cSysPoint = new double[3];
+        }
+        cSysPoint[0] = screenPoint[0] / minScale;
+        cSysPoint[1] = -screenPoint[1] / minScale;
+        cSysPoint[2] = 0d;
+        return cSysPoint;
+    }
+
+    public double[] scaleCSysPntToScrPntRightly(double[] cSysPoint) {
+        return scaleCSysPntToScrPntRightly(null, cSysPoint);
+    }
+
+    public double[] scaleCSysPntToScrPntRightly(double[] screenPoint, double[] cSysPoint) {
+        if (screenPoint == null) {
+            screenPoint = new double[3];
+        }
+        screenPoint[0] = cSysPoint[0] * minScale;
+        screenPoint[1] = -cSysPoint[1] * minScale;
         screenPoint[2] = 0d;
         return screenPoint;
     }
@@ -559,7 +597,6 @@ public abstract class CSysView extends JComponent {
 
     }
 
-
     //    P A I N T I N G
 
     /**
@@ -641,7 +678,6 @@ public abstract class CSysView extends JComponent {
     }
 
     // A X I S
-
     public void createAxis(Color[] axesColors) {
         if (axesColors == null) {
             return;
@@ -860,6 +896,10 @@ public abstract class CSysView extends JComponent {
         }
     }
 
+    protected void scaleEntity(BasicCSysEntity basicCSysEntity) {
+        basicCSysEntity.doCSysToScreenTransformation(scr0, minScale);
+    }
+
     /**
      * @param entityCollection
      */
@@ -972,9 +1012,9 @@ public abstract class CSysView extends JComponent {
         dy = r;
         d = 5 / 4 - r;
         if (fill) {
-            fillPoints(x0, y0, dx, dy, g);
+            fillCirclePoints(x0, y0, dx, dy, g);
         } else {
-            plotPoints(x0, y0, dx, dy, g);
+            plotCirclePoints(x0, y0, dx, dy, g);
         }
         while (dy > dx) {
             if (d < 0) {
@@ -985,9 +1025,9 @@ public abstract class CSysView extends JComponent {
             }
             dx++;
             if (fill) {
-                fillPoints(x0, y0, dx, dy, g);
+                fillCirclePoints(x0, y0, dx, dy, g);
             } else {
-                plotPoints(x0, y0, dx, dy, g);
+                plotCirclePoints(x0, y0, dx, dy, g);
             }
         }
     }
@@ -999,7 +1039,7 @@ public abstract class CSysView extends JComponent {
      * @param dy
      * @param g
      */
-    private void plotPoints(int x0, int y0, int dx, int dy, Graphics g) {
+    private void plotCirclePoints(int x0, int y0, int dx, int dy, Graphics g) {
         g.drawLine(x0 + dx, y0 + dy, x0 + dx, y0 + dy);
         g.drawLine(x0 + dy, y0 + dx, x0 + dy, y0 + dx);
         g.drawLine(x0 + dy, y0 - dx, x0 + dy, y0 - dx);
@@ -1010,7 +1050,7 @@ public abstract class CSysView extends JComponent {
         g.drawLine(x0 - dx, y0 + dy, x0 - dx, y0 + dy);
     }
 
-    private void fillPoints(int x0, int y0, int dx, int dy, Graphics g) {
+    private void fillCirclePoints(int x0, int y0, int dx, int dy, Graphics g) {
         int x1 = x0 + dx;
         int y1 = y0 + dy;
 
@@ -1111,12 +1151,12 @@ public abstract class CSysView extends JComponent {
     }
 
     /**
-     * This method is used for runtime vectot painting on screen
+     * THis method is used for debugging
      */
-    public void paintVector(double[] scrStart, double[] acrEnd) {
+    public void paintVector(double[] start, double[] end) {
         Graphics g = getGraphics();
-        int[] intStart = VAlgebra.doubleVec3ToInt(scrStart);
-        int[] intEnd = VAlgebra.doubleVec3ToInt(acrEnd);
+        int[] intStart = VAlgebra.doubleVec3ToInt(start);
+        int[] intEnd = VAlgebra.doubleVec3ToInt(end);
         g.setColor(Color.RED);
         g.drawLine(intStart[0], intStart[1], intEnd[0], intEnd[1]);
     }

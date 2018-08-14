@@ -5,12 +5,14 @@ import dsdsse.app.AppStateModel;
 import dsdsse.app.AppStateModelListener;
 import dsdsse.app.DsdsDseMessagesAndDialogs;
 import dsdsse.designspace.DesignSpaceModel;
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import mcln.model.*;
+import mclnview.graphview.*;
 import vw.valgebra.VAlgebra;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,9 +22,6 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public final class MclnGraphViewEditor {
-
-    public static final int CREATE_STATE = 0xC0C0C0;
-    public static final int NO_THRESHOLD = 0;
 
     private static MclnGraphViewEditor mclnGraphViewEditor;
 
@@ -60,7 +59,6 @@ public final class MclnGraphViewEditor {
 
     private final MclnGraphModel mclnGraphModel;
     private final MclnGraphDesignerView mclnGraphDesignerView;
-    AppStateModel.OperationStep previousArcCreationOperationStep;
     AppStateModel.Operation currentOperation = AppStateModel.Operation.NONE;
     AppStateModel.OperationStep currentOperationStep;
 
@@ -69,24 +67,23 @@ public final class MclnGraphViewEditor {
     // fragment creation data
     private MclnPropertyView curFragmentInpNode;
     private MclnPropertyView curFragmentOutNode;
-    private MclnConditionView mclnConditionView;
+    private MclnConditionView mcLnConditionView;
     private MclnArcView conditionInpArcView;
     private MclnArcView conditionOutArcView;
 
     // arc creation data
-    private MclnGraphViewNode currentArcInputNode;
-    private MclnGraphViewNode currentArcOutputNode;
-    private MclnArcView currentArc;
+    private MclnGraphNodeView currentArcInputNode;
+    private MclnGraphNodeView currentArcOutputNode;
+    private MclnSplineArcView currentSplineArc;
 
     // Dragging Operations data
     boolean dragging;
-    MclnGraphViewNode selectedMclnGraphViewNode;
-    MclnGraphEntityView currentlyHighlightedMclnGraphEntity;
+    MclnGraphNodeView selectedMclnGraphViewNode;
 
     // moving graph fragment
-    MclnGraphViewNode mclnGraphViewNodeToBeMoved;
-    final Set<MclnGraphViewNode> selectedMclnNodesToBeMoved = new LinkedHashSet();
-    private final Stack<MclnGraphViewNode> selectedMclnNodesToBeMovedStack = new Stack();
+    MclnGraphNodeView mclnGraphViewNodeToBeMoved;
+    final Set<MclnGraphNodeView> selectedMclnNodesToBeMoved = new LinkedHashSet();
+    private final Stack<MclnGraphNodeView> selectedMclnNodesToBeMovedStack = new Stack();
     private final Set<MclnArcView> selectedMclnArcsToBeMoved = new HashSet<>();
     private final Set<MclnArcView> selectedMclnArcsToBeMovedCloned = new HashSet<>();
     private final Set<MclnArcView> selectedArcsThatWillBeDiscarded = new HashSet<>();
@@ -110,9 +107,6 @@ public final class MclnGraphViewEditor {
 
     private MclnProject mclnProject;
 
-    private boolean userSelectsArrowLocation = true;
-    private int arrowTipSplineScrIndex;
-
     private final AppStateModelListener appStateModelListener = () -> {
         setEditorOperationAndStep(AppStateModel.getCurrentOperation(), AppStateModel.getCurrentOperationStep());
     };
@@ -135,24 +129,15 @@ public final class MclnGraphViewEditor {
     }
 
     /**
-     * @param state
-     */
-    private void setEditingLocked(boolean state) {
-        editingLocked = state;
-    }
-
-    /**
      * Called from App Model State when model state has changed
      *
      * @param operation
      * @param operationStep
      */
     private void setEditorOperationAndStep(AppStateModel.Operation operation, AppStateModel.OperationStep operationStep) {
-
         if (this.currentOperation == operation && this.currentOperationStep == operationStep) {
             return;
         }
-
         setModelMoved(false);
         clearLocalGraphFragmentMovingCollections();
         this.currentOperation = operation;
@@ -164,109 +149,112 @@ public final class MclnGraphViewEditor {
     //
 
     /**
+     * Currently menu blocking mechanism is used to allow any started
+     * operation to be finished. Left for possible future usage
+     *
      * @param currentOperation
      * @param currentOperationStep
      * @return
      */
-    public void terminateCurrentOperation(AppStateModel.Operation currentOperation,
-                                          AppStateModel.OperationStep currentOperationStep) {
-
-        if (currentOperation.isCreatingArcs()) {
-            switch (currentOperationStep) {
-                case PICK_UP_ARC_INPUT_NODE:
-                case PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_PROPERTY:
-                case PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_CONDITION:
-                case PICK_UP_ARC_ONLY_KNOT:
-                case PICK_UP_THREE_KNOT_ARC_ARROW_TIP_LOCATION:
-                case PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE:
-                case PICK_UP_MULTI_KNOT_ARC_ARROW_TIP_LOCATION:
-                    terminateArcCreation();
-                    break;
-            }
-        } else if (currentOperation.isCreatingFragments()) {
-            switch (currentOperationStep) {
-                case PICK_UP_FIRST_PROPERTY:
-                case PICK_UP_SECOND_PROPERTY:
-                case PLACE_CONDITION:
-                    terminateFragmentCreation();
-                    break;
-            }
-        } else if (currentOperation == AppStateModel.Operation.MOVE_FRAGMENT) {
-            for (MclnGraphEntityView mclnGraphEntityView : selectedMclnNodesToBeMoved) {
-                mclnGraphEntityView.setSelected(false);
-                mclnGraphDesignerView.repaintImageAndSpriteEntities();
-            }
-        }
-    }
+//    public void terminateCurrentOperation(AppStateModel.Operation currentOperation,
+//                                          AppStateModel.OperationStep currentOperationStep) {
+//
+//        if (currentOperation.isCreatingArcs()) {
+//            switch (currentOperationStep) {
+//                case PICK_UP_ARC_INPUT_NODE:
+//                case PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_PROPERTY:
+//                case PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_CONDITION:
+//                case PICK_UP_ARC_ONLY_KNOT:
+//                case PICK_UP_THREE_KNOT_ARC_ARROW_TIP_LOCATION:
+//                case PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE:
+//                case PICK_UP_MULTI_KNOT_ARC_ARROW_TIP_LOCATION:
+//                    terminateArcCreation();
+//                    break;
+//            }
+//        } else if (currentOperation.isCreatingFragments()) {
+//            switch (currentOperationStep) {
+//                case PICK_UP_FIRST_PROPERTY:
+//                case PICK_UP_SECOND_PROPERTY:
+//                case PLACE_CONDITION:
+//                    terminateFragmentCreation();
+//                    break;
+//            }
+//        } else if (currentOperation == AppStateModel.Operation.MOVE_FRAGMENT) {
+//            for (MclnGraphEntityView mclnGraphEntityView : selectedMclnNodesToBeMoved) {
+//                mclnGraphEntityView.setSelected(false);
+//                mclnGraphDesignerView.repaintImageAndSpriteEntities();
+//            }
+//        }
+//    }
 
     /**
      * Terminating Arc creation operation
      */
-    private void terminateArcCreation() {
-        if (currentArcInputNode != null) {
-            currentArcInputNode.setSelected(false);
-        }
-        if (currentArcOutputNode != null) {
-            currentArcOutputNode.setSelected(false);
-        }
-
-        // removing arc from model and graph view
-        if (currentArc != null) {
-            MclnArc mclnArc = currentArc.getMclnArc();
-            mclnGraphModel.removeMclnArcAndUpdateView(mclnArc);
-        }
-
-        currentArcInputNode = null;
-        currentArcOutputNode = null;
-        currentArc = null;
-
-        currentOperationStep = AppStateModel.OperationStep.CANCELED;
-        AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.CANCELED);
-    }
+//    private void terminateArcCreation() {
+//        if (currentArcInputNode != null) {
+//            currentArcInputNode.setSelected(false);
+//        }
+//        if (currentArcOutputNode != null) {
+//            currentArcOutputNode.setSelected(false);
+//        }
+//
+//        // removing arc from model and graph view
+//        if (currentSplineArc != null) {
+//            MclnArc mclnArc = currentSplineArc.getTheElementModel();
+//            mclnGraphModel.removeMclnArcAndUpdateView(mclnArc);
+//        }
+//
+//        currentArcInputNode = null;
+//        currentArcOutputNode = null;
+//        currentSplineArc = null;
+//
+//        currentOperationStep = AppStateModel.OperationStep.CANCELED;
+//        AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.CANCELED);
+//    }
 
     /**
      * Terminating Fragment creation operation
      */
-    private void terminateFragmentCreation() {
-
-
-        if (curFragmentInpNode != null) {
-            curFragmentInpNode.setSelected(false);
-            mclnGraphDesignerView.paintEntityOnly(curFragmentInpNode);
-        }
-        if (curFragmentOutNode != null) {
-            curFragmentOutNode.setSelected(false);
-            mclnGraphDesignerView.paintEntityOnly(curFragmentOutNode);
-        }
-
-        // removing arcs from model and graph view
-        if (conditionInpArcView != null) {
-            MclnArc mclnArc = conditionInpArcView.getMclnArc();
-            mclnGraphModel.removeMclnArcAndUpdateView(mclnArc);
-        }
-
-        if (conditionOutArcView != null) {
-            MclnArc mclnArc = conditionOutArcView.getMclnArc();
-            mclnGraphModel.removeMclnArcAndUpdateView(mclnArc);
-        }
-
-        if (mclnConditionView != null) {
-            MclnCondition mclnCondition = mclnConditionView.getMclnCondition();
-            mclnGraphModel.removeMclnConditionAndUpdateView(mclnCondition);
-        }
-
-        curFragmentInpNode = null;
-        curFragmentOutNode = null;
-        mclnConditionView = null;
-        conditionInpArcView = null;
-        conditionOutArcView = null;
-    }
+//    private void terminateFragmentCreation() {
+//
+//
+//        if (curFragmentInpNode != null) {
+//            curFragmentInpNode.setSelected(false);
+//            mclnGraphDesignerView.paintEntityOnly(curFragmentInpNode);
+//        }
+//        if (curFragmentOutNode != null) {
+//            curFragmentOutNode.setSelected(false);
+//            mclnGraphDesignerView.paintEntityOnly(curFragmentOutNode);
+//        }
+//
+//        // removing arcs from model and graph view
+//        if (conditionInpArcView != null) {
+//            MclnArc mclnArc = conditionInpArcView.getTheElementModel();
+//            mclnGraphModel.removeMclnArcAndUpdateView(mclnArc);
+//        }
+//
+//        if (conditionOutArcView != null) {
+//            MclnArc mclnArc = conditionOutArcView.getTheElementModel();
+//            mclnGraphModel.removeMclnArcAndUpdateView(mclnArc);
+//        }
+//
+//        if (mclnConditionView != null) {
+//            MclnCondition mclnCondition = mclnConditionView.getMclnCondition();
+//            mclnGraphModel.removeMclnConditionAndUpdateView(mclnCondition);
+//        }
+//
+//        curFragmentInpNode = null;
+//        curFragmentOutNode = null;
+//        mclnConditionView = null;
+//        conditionInpArcView = null;
+//        conditionOutArcView = null;
+//    }
 
     /**
      * @param me
      * @return
      */
-    private final boolean isRMBPressed(MouseEvent me) {
+    final boolean isRMBPressed(MouseEvent me) {
         boolean rightMouseButtonPressed = (me.getModifiers() & MouseEvent.BUTTON3_MASK) != 0;
         return rightMouseButtonPressed;
     }
@@ -274,50 +262,124 @@ public final class MclnGraphViewEditor {
     //
     //   P r o c e s s i n g    C r e a t i o n    O p e r a t i o n s
     //
-
-    /**
-     * @param me
-     * @return
-     */
-    final void createMclnStatement(MouseEvent me) {
-
-        int x = me.getX();
-        int y = me.getY();
-
-        // create Node if empty place was picked
-        MclnGraphEntityView mclnGraphEntityView = getSomethingSelected(x, y);
-        if (mclnGraphEntityView != null) {
-            DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Creating Property Nodes",
-                    "The Property node cannot be placed on the top of other entity \"" +
-                            mclnGraphEntityView.getEntityTypeAsString() + "\" !");
-            return;
-        }
-
-        double[] cSysPoint = mclnGraphDesignerView.screenPointToCSysPoint(x, y);
-        createNewStatement(cSysPoint);
-    }
+    MclnGraphEntityView mclnGraphEntityViewToBeDragged;
+    DesignerNodeView designerNodeViewToBeDragged;
 
     /**
      * @param me
      * @param operation
      */
-    final void createMclnGraphCondition(MouseEvent me, AppStateModel.Operation operation) {
+    final void createMclnGraphPropertyOrCondition(MouseEvent me, AppStateModel.Operation operation) {
 
-        int x = me.getX();
-        int y = me.getY();
-
-        // create Node if empty place was picked
-        MclnGraphEntityView mclnGraphEntityView = getSomethingSelected(x, y);
-        if (mclnGraphEntityView != null) {
-            DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Creating Condition Nodes",
-                    "The Condition node cannot be placed on the top of other entity \"" +
-                            mclnGraphEntityView.getEntityTypeAsString() + "\" !");
+        if (isRMBPressed(me)) {
+            if (mclnGraphEntityViewToBeDragged == null) {
+                return;
+            }
+            // There is a node selected to be dragged. This code cancels moving
+            // by returning node to its original location, and un-selects it.
+            mclnGraphEntityViewToBeDragged.toMclnGraphNodeView().restoreBackupCSysLocation();
+            mclnGraphEntityViewToBeDragged.toMclnGraphNodeView().movingNodeCompleted();
+            mclnGraphDesignerView.setMouseHoveredEntity(null);
+            mclnGraphEntityViewToBeDragged = null;
+            mclnGraphDesignerView.makeGraphEntityToBeASpritePaintedOnTheScreenOnly(null);
             return;
         }
 
-        double[] cSysPoint = mclnGraphDesignerView.screenPointToCSysPoint(x, y);
-        createNewCondition(cSysPoint);
+        // create Node if empty place was picked
+        int x = me.getX();
+        int y = me.getY();
+        MclnGraphEntityView mclnGraphEntityView = getSomethingSelected(x, y);
+
+        if (mclnGraphEntityViewToBeDragged == null) {
+            // As selected for dragging entity is null, new Node should be created if empty space clicked
+            if (mclnGraphEntityView == null) {
+                mclnGraphDesignerView.snapToGridLine(me);
+                double[] cSysPoint = mclnGraphDesignerView.screenPointToCSysPoint(me.getX(), me.getY());
+                if (operation == AppStateModel.Operation.CREATE_PROPERTIES) {
+                    createNewStatement(cSysPoint);
+                } else {
+                    createNewCondition(cSysPoint);
+                }
+            } else {
+                // a node was clicked for dragging
+                if (me.isControlDown() && mclnGraphEntityView.isMclnGraphNode()) {
+                    mclnGraphEntityView.toMclnGraphNodeView().startMoving();
+                    mclnGraphEntityViewToBeDragged = mclnGraphEntityView;
+                    mclnGraphDesignerView.makeGraphEntityToBeASpritePaintedOnTheScreenOnly(mclnGraphEntityView);
+                } else {
+                    if (me.isControlDown()) {
+                        // An Arc entity was clicked to be moved. Show warning.
+                        DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Operation: " + operation,
+                                "The Arcs cannot be moved while executing operation: \"" +
+                                        operation + "\" !");
+                    } else {
+                        // Existing entity was clicked as a point for node creation. Show warning
+                        String nodeType = (operation == AppStateModel.Operation.CREATE_PROPERTIES) ? "Property: " : "Condition";
+                        DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Operation " + operation,
+                                "The " + nodeType + " node cannot be placed on the top of other entity \"" +
+                                        mclnGraphEntityView.getEntityTypeAsString() + "\" !");
+                    }
+                }
+            }
+            return;
+        } else {
+            // There exist a node selected for dragging
+            if (mclnGraphEntityView == null) {
+                // empty space clicked -> cancel dragging
+                mclnGraphEntityViewToBeDragged.toMclnGraphNodeView().movingNodeCompleted();
+                mclnGraphEntityViewToBeDragged = null;
+                mclnGraphDesignerView.makeGraphEntityToBeASpritePaintedOnTheScreenOnly(null);
+            } else {
+                if (mclnGraphEntityView == mclnGraphEntityViewToBeDragged) {
+                    // When moving Node, it is OK to click on selected node again.
+                    // This means use selected Node and then pressed it to start dragging it.
+                    // Do nothing.
+                    System.out.println();
+                } else {
+                    // Another node selected -> unselect previously selected node
+                    // and set newly selected for dragging
+
+                    mclnGraphEntityViewToBeDragged.toMclnGraphNodeView().movingNodeCompleted();
+                    mclnGraphEntityViewToBeDragged = null;
+                    mclnGraphDesignerView.makeGraphEntityToBeASpritePaintedOnTheScreenOnly(null);
+
+                    if (mclnGraphEntityView.isMclnGraphNode()) {
+                        mclnGraphEntityView.toMclnGraphNodeView().startMoving();
+                        mclnGraphEntityViewToBeDragged = mclnGraphEntityView;
+                        mclnGraphDesignerView.makeGraphEntityToBeASpritePaintedOnTheScreenOnly(mclnGraphEntityView);
+                    } else {
+//                        if (me.isControlDown()) {
+                        //  An Arc entity was clicked to be moved. Show warning.
+                        DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Operation: " + operation,
+                                "The Arcs cannot be moved while executing operation: \"" +
+                                        operation + "\" !");
+                        System.out.println();
+//                        } else {
+//                            Existing entity was clicked as a point for node creation. Show warning
+//                            String nodeType = (operation == AppStateModel.Operation.CREATE_PROPERTIES) ? "Property: " : "Condition";
+//                            DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Operation " + operation,
+//                                    "The " + nodeType + " node cannot be placed on the top of other entity \"" +
+//                                            mclnGraphEntityView.getEntityTypeAsString() + "\" !");
+//                        }
+                    }
+                }
+            }
+        }
+
     }
+
+    final void dragMclnGraphPropertyOrConditionDuringCreation(MouseEvent me, AppStateModel.Operation operation) {
+        if (mclnGraphViewEditor.mclnGraphEntityViewToBeDragged != null) {
+            MclnGraphNodeView mclnGraphViewNode = mclnGraphEntityViewToBeDragged.toMclnGraphNodeView();
+            mclnGraphDesignerView.snapToGridLine(me);
+            mclnGraphViewNode.druggingSelectedNode(me.getX(), me.getY());
+            mclnGraphDesignerView.repaint();
+        }
+    }
+
+    //
+    //   Creating   Node - Arc - Node   fragment
+    //
 
      /* Creating the fragment
 
@@ -437,28 +499,28 @@ public final class MclnGraphViewEditor {
             }
 
             double[] cSysPoint = mclnGraphDesignerView.screenPointToCSysPoint(x, y);
-            mclnConditionView = createNewCondition(cSysPoint);
+            mcLnConditionView = createNewCondition(cSysPoint);
 
             // creating the fragment's arcs models and views
 
             conditionInpArcView = mclnGraphModel.createCompleteMclnArcAndUpdateView(
                     ArrowTipLocationPolicy.DETERMINED_BY_KNOB_LOCATION_PLUS_AUTO_DETECTION,
-                    curFragmentInpNode, mclnConditionView);
+                    curFragmentInpNode, mcLnConditionView);
 
             conditionOutArcView = mclnGraphModel.createCompleteMclnArcAndUpdateView(
                     ArrowTipLocationPolicy.DETERMINED_BY_KNOB_LOCATION_PLUS_AUTO_DETECTION,
-                    mclnConditionView, curFragmentOutNode);
+                    mcLnConditionView, curFragmentOutNode);
 
             currentOperationStep = AppStateModel.OperationStep.PICK_UP_FIRST_PROPERTY;
             AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.PICK_UP_FIRST_PROPERTY);
 
             curFragmentInpNode.setSelected(false);
             curFragmentOutNode.setSelected(false);
-            mclnConditionView.setMouseHover(false);
+            mcLnConditionView.setMouseHover(false);
 
             curFragmentInpNode = null;
             curFragmentOutNode = null;
-            mclnConditionView = null;
+            mcLnConditionView = null;
             conditionInpArcView = null;
             conditionOutArcView = null;
 
@@ -471,18 +533,18 @@ public final class MclnGraphViewEditor {
         return mclnGraphEntityView != null;
     }
 
-    private MclnGraphEntityView getSomethingSelected(int x, int y) {
+    MclnGraphEntityView getSomethingSelected(int x, int y) {
         MclnGraphEntityView mclnGraphEntityView = mclnGraphDesignerView.getGraphEntityAtCoordinates(x, y);
         return mclnGraphEntityView;
     }
 
-    private MclnGraphViewNode getNodeSelected(int x, int y) {
-        MclnGraphViewNode mclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(x, y);
+    private MclnGraphNodeView getNodeSelected(int x, int y) {
+        MclnGraphNodeView mclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(x, y);
         return mclnGraphViewNode;
     }
 
     private boolean isNodeSelected(int x, int y) {
-        MclnGraphViewNode mclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(x, y);
+        MclnGraphNodeView mclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(x, y);
         return mclnGraphViewNode != null;
     }
 
@@ -497,654 +559,39 @@ public final class MclnGraphViewEditor {
     }
 
     private MclnPropertyView isPropertyNodeSelected(int x, int y) {
-        MclnPropertyView mclnPropertyView = mclnGraphDesignerView.getPropertyNodeAtCoordinates(x, y);
-        return mclnPropertyView;
+        MclnPropertyView mcLnPropertyView = mclnGraphDesignerView.getPropertyNodeAtCoordinates(x, y);
+        return mcLnPropertyView;
     }
 
-    //
-    //                            T h e   C r e a t i o n   o f   t h e   A r c s
-    //
-    /*
-                                     +----------------------------------------+
-                                     |        PICK_UP_ARC_INPUT_NODE          |
-                                     +----------------------------------------+
-                                                       |
-                                                       |
-                                     +----------------------------------------+
-                        +------------| PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_NODE  |---------+
-                        |            +----------------------------------------+         |
-                        |                                                               |
-                        |                                                               |
-          +----------------------------+                        +----------------------------------------+
-          | PICK_UP_ARC_ONLY_KNOT      |--------+      +--------|  PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE  |
-          +----------------------------+        |      |        +----------------------------------------+
-                                                |      |
-                                                |      |
-                                                |      |        +----------------------------------------+
-                                                |      |   +----|  PICK_UP_MULTI_KNOT_ARC_ARROW_TIP_LOCATION  |
-                                                |      |   |    +----------------------------------------+
-                                                |      |   |
-                                 +------------------------------------------------+
-                                 |  finish Arc Creation And Add It To Mcln Model  |
-                                 +------------------------------------------------+
 
-     */
-
-    /**
-     * @param me
-     * @param operation
-     * @param mouseEventType
-     */
-    final void processArcCreation(MouseEvent me, AppStateModel.Operation operation, int mouseEventType) {
-
-        if (mouseEventType == MouseEvent.MOUSE_PRESSED) {
-//            System.out.println("processArcCreation: " + currentOperationStep);
-            switch (currentOperationStep) {
-                case PICK_UP_ARC_INPUT_NODE:
-                    pickUpArcInputNode(me);
-                    break;
-                case PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_PROPERTY:
-                case PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_CONDITION:
-                    pickUpArcFirstKnotOrOutputNode(me);
-                    break;
-                case PICK_UP_ARC_ONLY_KNOT:
-                    pickUpArcOnlyKnotOrOutputNodeAgain(me);
-                    break;
-                case PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE:
-                    pickUpArcNextKnotOrOutputNode(me);
-                    break;
-                case PICK_UP_THREE_KNOT_ARC_ARROW_TIP_LOCATION:
-                    // This call is needed as user may click on just created knot
-                    // without moving the mose
-                    arrowTipSplineScrIndex = findArrowTipIndexOnTheSpline(me, true);
-                    takeThreeKnotArcArrowTipIndexAndFinishArcCreation(me);
-                    break;
-                case PICK_UP_MULTI_KNOT_ARC_ARROW_TIP_LOCATION:
-                    takeMultiKnotArcArrowTipIndexAndFinishArcCreation(me);
-                    break;
-            }
-        } else if (mouseEventType == MouseEvent.MOUSE_MOVED) {
-//            System.out.println("Mouse moving x = " + me.getX() + ",  y = " + me.getY());
-            switch (currentOperationStep) {
-                case PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_PROPERTY:
-                case PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_CONDITION:
-                case PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE:
-                case PICK_UP_ARC_ONLY_KNOT:
-//                    System.out.println("Mouse moving x = " + me.getX() + ",  y = " + me.getY());
-                    moveArcActivePoint(me);
-                    break;
-                case PICK_UP_THREE_KNOT_ARC_ARROW_TIP_LOCATION:
-                    arrowTipSplineScrIndex = findArrowTipIndexOnTheSpline(me, true);
-                    break;
-                case PICK_UP_MULTI_KNOT_ARC_ARROW_TIP_LOCATION:
-                    arrowTipSplineScrIndex = findArrowTipIndexOnTheSpline(me, true);
-                    break;
-            }
-        }
-    }
-
-    /**
-     * @param me
-     */
-    private void moveArcActivePoint(MouseEvent me) {
-        int x = me.getX();
-        int y = me.getY();
-        mclnGraphDesignerView.paintMclnArcViewWhileCreatingKnotsOnTheScreenAtPoint(x, y, currentArc);
-//        System.out.println("moveArcActivePoint");
-    }
-
-    /**
-     * @param me
-     */
-    private void pickUpArcInputNode(MouseEvent me) {
-
-        int x = me.getX();
-        int y = me.getY();
-        if (((currentArcInputNode = getNodeSelected(x, y)) == null)) {
-            return;
-        }
-
-        // Statement or Condition was selected - make one-Node arc
-        currentArc = mclnGraphModel.createIncompleteMclnArcAndUpdateView(arrowTipLocationPolicy, currentArcInputNode);
-
-        currentArc.setUnderConstruction(true);
-
-        currentArc.setHighlightFlatSegments(false);
-
-        currentArcInputNode.setSelected(true);
-        mclnGraphDesignerView.setArcInputNodeWhileCreatingArc(currentArcInputNode);
-
-        // resetting arc presentation
-        currentArc.setSelected(true);
-        currentArc.setSplineThreadSelected(true);
-        currentArc.setDrawKnots(true);
-        currentArc.setAllKnotsSelected(false);
-
-        currentArcOutputNode = null;
-        if (currentArcInputNode.isPropertyNode()) {
-            currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_CONDITION;
-        } else {
-            currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_PROPERTY;
-        }
-        AppStateModel.getInstance().setCurrentOperationStep(currentOperationStep);
-        return;
-    }
-
-//    private boolean canKnotBeCreated(MclnGraphEntityView mclnGraphEntityView) {
-//        if (mclnGraphEntityView != null) {
-//            AdfEnv.messageDlg(mclnGraphView, 'M', "Creation connecting Arc knots",
-//                    "Arc knot can not be placed on the top of another knot or any other graph entity. Please, select another location. ");
-//            return false;
-//        }
-//        return true;
+//    /**
+//     * @param me
+//     */
+//    private void moveArcActivePoint(MouseEvent me) {
+//        int x = me.getX();
+//        int y = me.getY();
+//        mclnGraphDesignerView.paintMclnArcViewWhileCreatingKnotsOnTheScreenAtPoint(x, y, currentArc);
+////        System.out.println("moveArcActivePoint");
 //    }
 
     /**
      * @param me
      */
-    private void pickUpArcFirstKnotOrOutputNode(MouseEvent me) {
+    MclnGraphNodeView pickUpArcInputNode(MouseEvent me) {
 
         int x = me.getX();
         int y = me.getY();
-
-        if (isRMBPressed(me)) { // done
-
-            // Undo first step - unselect first node
-
-            currentArcInputNode.setSelected(false);
-            mclnGraphDesignerView.paintEntityOnly(currentArcInputNode);
-
-            MclnArc mclnArc = currentArc.getMclnArc();
-            mclnGraphModel.removeMclnArcAndUpdateView(mclnArc);
-
-            currentArcInputNode = null;
-            currentArcOutputNode = null;
-            currentArc = null;
-
-            currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_INPUT_NODE;
-            AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.PICK_UP_ARC_INPUT_NODE);
-            return;
+        if (((currentArcInputNode = getNodeSelected(x, y)) == null)) {
+            return null;
         }
-
-        MclnGraphEntityView mclnGraphEntityView = getSomethingSelected(x, y);
-        // try if node or condition picked
-        if (mclnGraphEntityView != null) {
-            if (!isSelectedOutputNodeAllowed(mclnGraphEntityView)) {
-                return;
-            }
-            // setting arc presentation
-            currentArc.setSelected(true);
-            currentArc.setSplineThreadSelected(true);
-            currentArc.setDrawKnots(true);
-            currentArc.setAllKnotsSelected(false);
-            currentArc.setSelectedKnotInd(-1);
-
-            // second node was piked
-            currentArcOutputNode = currentArcInputNode.isPropertyNode() ?
-                    mclnGraphEntityView.toConditionView() : mclnGraphEntityView.toPropertyView();
-            currentArcOutputNode.setSelected(true);
-            currentArc.setOutputNode(currentArcOutputNode);
-
-            //
-            // intermediate knot will be moved
-            //
-
-            double[] outNodeScrPoint = currentArcOutputNode.getScrPnt();
-            currentArc.addNextScrKnotAndMakePreviousKnotActive(outNodeScrPoint[0], outNodeScrPoint[1]);
-
-            mclnGraphDesignerView.paintArcAndConnectedEntityOnScreen(currentArc);
-
-            currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_ONLY_KNOT;
-            AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.PICK_UP_ARC_ONLY_KNOT);
-            System.out.println("MclnGraphViewEditor: second node was piked");
-
-        } else {
-
-            // the arc first knot location piked
-
-            // setting arc presentation
-            currentArc.setSelected(true);
-            currentArc.setSplineThreadSelected(true);
-            currentArc.setDrawKnots(true);
-            currentArc.setAllKnotsSelected(false);
-            currentArc.setSelectedKnotInd(-1);
-
-            currentArc.addNextScrKnotAndMakeItActive(x, y);
-            mclnGraphDesignerView.paintArcAndConnectedEntityOnScreen(currentArc);
-
-            currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE;
-            AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE);
-            System.out.println("MclnGraphViewEditor: first knot was piked");
-        }
-    }
-
-    /**
-     * @param me
-     */
-    private void pickUpArcOnlyKnotOrOutputNodeAgain(MouseEvent me) {
-
-        int x = me.getX();
-        int y = me.getY();
-
-        if (isRMBPressed(me)) {  // done
-
-            // Undo operation if RMB pressed
-
-            currentArc.resetArcSpline();
-
-            // resetting arc presentation
-            currentArc.removeOutputNode();
-            currentArc.setSelected(true);
-            currentArc.setSplineThreadSelected(true);
-            currentArc.setDrawKnots(true);
-            currentArc.setAllKnotsSelected(false);
-
-            // unselect output node
-            currentArcOutputNode.setSelected(false);
-            currentArcOutputNode = null;
-
-            mclnGraphDesignerView.repaintImageAndSpriteEntities();
-//
-            if (currentArcInputNode.isPropertyNode()) {
-                currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_CONDITION;
-            } else {
-                currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_PROPERTY;
-            }
-            AppStateModel.getInstance().setCurrentOperationStep(currentOperationStep);
-
-            mclnGraphDesignerView.paintMclnArcViewWhileCreatingKnotsOnTheScreenAtPoint(x, y, currentArc);
-            return;
-        }
-
-        // check if the graph node is picked
-        MclnGraphEntityView mclnGraphEntityView = getSomethingSelected(x, y);
-        // try if node or condition picked
-        if (mclnGraphEntityView != null) {
-
-            // ignore selection if other than output node picked
-            if (mclnGraphEntityView != currentArcOutputNode) {
-                DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Creating Connecting Arcs",
-                        "At this step either an empty space to create arc knot or already selected output node can be clicked. Selection ignored. ");
-                return;
-            }
-
-            //
-            // other node picked again -> make straight three point arc
-            //
-
-            double[] middleKnotScrLocation = calculateKnobScrLocation(currentArcInputNode, currentArcOutputNode, true);
-            currentArc.makeThreePointArc(middleKnotScrLocation);
-            boolean arrowTipFound = checkIfArrowTipCanBeFound();
-            if (!arrowTipFound) {
-                DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Creating Connecting Arcs",
-                        DsdsDseMessagesAndDialogs.MESSAGE_STRAIGHT_3POINT_ARC_UNDO);
-//                threePointArcUnDoStraightChoice(me, mclnGraphView, currentArc, currentArcInputNode, currentArcOutputNode);
-                return;
-            }
-        } else {
-            boolean arrowTipFound = checkIfArrowTipCanBeFound();
-            if (!arrowTipFound) {
-                DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Creating Connecting Arcs",
-                        DsdsDseMessagesAndDialogs.MESSAGE_3POINT_ARC_UNDO);
-                return;
-            }
-        }
-        //
-        // Three knots arc created. User selects arrow tip location
-        // Creation schema:
-        // a) Click on Input Arc
-        // b) Click on Output Arc
-        // c) Click on location of only knot
-        // d) Creation completed
-
-        // resetting arc presentation
-        currentArc.setSelected(true);
-        currentArc.setSplineThreadSelected(true);
-        currentArc.setDrawKnots(true);
-        currentArc.setAllKnotsSelected(false);
-
-        currentArc.setHighlightFlatSegments(true);
-        currentArc.setSelectingArrowTipLocation(true);
-        currentArc.setHighlightArcKnotsForArrowTipSelection(true);
-
-        previousArcCreationOperationStep = AppStateModel.getInstance().getCurrentOperationStep();
-        currentOperationStep = AppStateModel.OperationStep.PICK_UP_THREE_KNOT_ARC_ARROW_TIP_LOCATION;
-        AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.PICK_UP_THREE_KNOT_ARC_ARROW_TIP_LOCATION);
-    }
-
-
-    /**
-     * @param me
-     */
-    private void pickUpArcNextKnotOrOutputNode(MouseEvent me) {
-
-        int x = me.getX();
-        int y = me.getY();
-        boolean rightMouseButtonPressed = (me.getModifiers() & MouseEvent.BUTTON3_MASK) != 0;
-
-        //
-        // Undo operation if RMB pressed
-        //
-        if (rightMouseButtonPressed) {  // done
-
-            int nPnts = currentArc.deleteLastPoint();
-            if (nPnts == 2) {
-                if (currentArcInputNode.isPropertyNode()) {
-                    currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_CONDITION;
-                } else {
-                    currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_PROPERTY;
-                }
-                AppStateModel.getInstance().setCurrentOperationStep(currentOperationStep);
-            }
-            currentArc.setSplineThreadSelected(true);
-            mclnGraphDesignerView.paintMclnArcViewWhileCreatingKnotsOnTheScreenAtPoint(x, y, currentArc);
-            return;
-        }
-
-        //
-        //  do the step
-        //
-
-        MclnGraphEntityView mclnGraphEntityView = getSomethingSelected(x, y);
-        // try if node or condition picked
-        if (mclnGraphEntityView == null) {
-
-            //
-            // Knot location piked
-            //
-
-            currentArc.setSplineThreadSelected(true);
-//            System.out.println(" Knot location piked  ");
-            currentArc.addNextScrKnotAndMakeItActive(x, y);
-            mclnGraphDesignerView.paintArcAndConnectedEntityOnScreen(currentArc);
-            return;
-        }
-
-        // wrong node selected
-        if (!isSelectedOutputNodeAllowed(mclnGraphEntityView)) {
-            return;
-        }
-
-        //
-        // The Node was selected - take the arc Knob location
-        //
-
-        currentArcOutputNode = currentArcInputNode.isPropertyNode() ?
-                mclnGraphEntityView.toConditionView() : mclnGraphEntityView.toPropertyView();
-        currentArcOutputNode.setSelected(true);
-        currentArc.setOutputNode(currentArcOutputNode);
-
-        int nPnts = currentArc.getNumberOfKnots();
-
-        boolean arrowTipFound = checkIfArrowTipCanBeFound();
-        if (!arrowTipFound) {
-            String message = nPnts == 3 ?
-                    DsdsDseMessagesAndDialogs.MESSAGE_3POINT_ARC_UNDO :
-                    DsdsDseMessagesAndDialogs.MESSAGE_MULTI_KNOT_ARC_UNDO;
-            DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Creating Connecting Arcs", message);
-
-            // remove just added output node
-            currentArcOutputNode.setSelected(false);
-            currentArc.removeOutputNode();
-            currentArcOutputNode = null;
-            return;
-        }
-
-        if (nPnts == 3) {
-
-            //
-            // Three knots arc created. Find arrow tip location
-            //
-
-            // resetting arc presentation
-            currentArc.setSelected(true);
-            currentArc.setSplineThreadSelected(false);
-            currentArc.setDrawKnots(true);
-            currentArc.setAllKnotsSelected(false);
-
-            currentArc.setSelectingArrowTipLocation(true);
-            currentArc.setHighlightArcKnotsForArrowTipSelection(true);
-            currentArc.setHighlightFlatSegments(true);
-
-            previousArcCreationOperationStep = AppStateModel.getInstance().getCurrentOperationStep();
-            currentOperationStep = AppStateModel.OperationStep.PICK_UP_THREE_KNOT_ARC_ARROW_TIP_LOCATION;
-            AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.PICK_UP_THREE_KNOT_ARC_ARROW_TIP_LOCATION);
-
-        } else {
-
-            //
-            // Multi knot arc created.
-            //
-
-            // resetting arc presentation
-            currentArc.setSelected(true);
-            currentArc.setSplineThreadSelected(false);
-            currentArc.setDrawKnots(true);
-            currentArc.setAllKnotsSelected(false);
-
-            currentArc.setSelectingArrowTipLocation(true);
-            currentArc.setHighlightArcKnotsForArrowTipSelection(true);
-            currentArc.setHighlightFlatSegments(true);
-
-            currentOperationStep = AppStateModel.OperationStep.PICK_UP_MULTI_KNOT_ARC_ARROW_TIP_LOCATION;
-            AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.PICK_UP_MULTI_KNOT_ARC_ARROW_TIP_LOCATION);
-        }
-
-    }
-
-    /**
-     * @param me
-     */
-    private void takeThreeKnotArcArrowTipIndexAndFinishArcCreation(MouseEvent me) {
-
-        int x = me.getX();
-        int y = me.getY();
-        boolean rightMouseButtonPressed = (me.getModifiers() & MouseEvent.BUTTON3_MASK) != 0;
-
-        //
-        // Undo operation if RMB pressed
-        //
-        if (rightMouseButtonPressed) {  // done
-
-            if (previousArcCreationOperationStep == AppStateModel.OperationStep.PICK_UP_ARC_ONLY_KNOT) {
-
-                // do nothing here
-
-            } else if (previousArcCreationOperationStep == AppStateModel.OperationStep.PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE) {
-                currentArcOutputNode.setSelected(false);
-                currentArc.removeOutputNode();
-                currentArcOutputNode = null;
-            }
-
-            currentOperationStep = previousArcCreationOperationStep;
-            AppStateModel.getInstance().setCurrentOperationStep(previousArcCreationOperationStep);
-
-            currentArc.setDrawKnotBoxesFlag(false);
-            mclnGraphDesignerView.eraseArcOnlyFromImageAndCallRepaint(currentArc);
-
-            // resetting arc presentation
-            currentArc.setDrawKnots(true);
-            currentArc.setSelected(true);
-            currentArc.setSplineThreadSelected(true);
-            currentArc.setAllKnotsSelected(false);
-
-            currentArc.setSelectingArrowTipLocation(false);
-            currentArc.setHighlightArcKnotsForArrowTipSelection(false);
-            currentArc.setHighlightFlatSegments(false);
-
-            currentArc.destroyArcArrowUpOnUndoingArrowTipSelection();
-            currentArc.setHighlightArcKnotsForArrowTipSelection(false);
-            mclnGraphDesignerView.paintMclnArcViewWhileCreatingKnotsOnTheScreenAtPoint(x, y, currentArc);
-            return;
-        }
-
-        // Analyzing where the pick was done
-
-        // checking if user selects Arrow location
-        // and mouse is at the user selected location
-        if (!userSelectsArrowLocation || arrowTipSplineScrIndex < 0) {
-            // Wrong selection - ignore the pick
-            return;
-        }
-
-        currentArc.setSelectedKnotInd(-1);
-        finishArcCreationAndAddItToMclnModel();
-    }
-
-    /**
-     * @return
-     */
-    private boolean checkIfArrowTipCanBeFound() {
-        boolean arrowTipFound = currentArc.checkIfArrowTipCanBeFound();
-        return arrowTipFound;
-    }
-
-
-    /**
-     * @param me
-     * @return
-     */
-    private int findArrowTipIndexOnTheSpline(MouseEvent me, boolean userSelectsArrowLocation) {
-        int x = me.getX();
-        int y = me.getY();
-        int arrowTipSplineScrIndex = currentArc.findArrowTipIndexOnTheSpline(x, y, userSelectsArrowLocation);
-        mclnGraphDesignerView.paintArcArrowWhileIsBeingCreatedOnScreen(currentArc);
-        return arrowTipSplineScrIndex;
-    }
-
-    /**
-     *
-     */
-    /**
-     * @param me
-     */
-    private void takeMultiKnotArcArrowTipIndexAndFinishArcCreation(MouseEvent me) {
-
-        int x = me.getX();
-        int y = me.getY();
-        boolean rightMouseButtonPressed = (me.getModifiers() & MouseEvent.BUTTON3_MASK) != 0;
-
-        //
-        // Undo operation if RMB pressed
-        //
-
-        if (rightMouseButtonPressed) {   // done
-
-            currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE;
-            AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.PICK_UP_ARC_NEXT_KNOT_OR_OUTPUT_NODE);
-
-            currentArcOutputNode.setSelected(false);
-
-            currentArc.removeOutputNode();
-            currentArcOutputNode = null;
-            currentArc.setDrawKnotBoxesFlag(false);
-            mclnGraphDesignerView.eraseArcOnlyFromImageAndCallRepaint(currentArc);
-
-            // resetting arc presentation
-            currentArc.setDrawKnots(true);
-            currentArc.setSelected(true);
-            currentArc.setSplineThreadSelected(false);
-            currentArc.setAllKnotsSelected(false);
-
-            currentArc.setSelectingArrowTipLocation(false);
-            currentArc.setHighlightArcKnotsForArrowTipSelection(false);
-            currentArc.setHighlightFlatSegments(false);
-
-            currentArc.destroyArcArrowUpOnUndoingArrowTipSelection();
-            currentArc.setHighlightArcKnotsForArrowTipSelection(false);
-            mclnGraphDesignerView.paintMclnArcViewWhileCreatingKnotsOnTheScreenAtPoint(x, y, currentArc);
-            return;
-        }
-
-        // Analyzing where the pick was done
-
-        // checking if user selects Arrow location
-        // and mouse is at the user selected location
-        if (!userSelectsArrowLocation || arrowTipSplineScrIndex < 0) {
-            // Wrong selection - ignore the pick
-            return;
-        }
-
-        // user selected Arrow location
-        setUserSelectedArrowTipSplineScrIndex(arrowTipSplineScrIndex);
-        finishArcCreationAndAddItToMclnModel();
-    }
-
-    /**
-     * @param autoSetKnob
-     */
-    private void takeKnobAndFinishArcCreation(boolean autoSetKnob) {
-        if (autoSetKnob) {
-            int nPnts = currentArc.getNumberOfKnots();
-            int knobInd = ((nPnts - 2) / 2) + 1;
-            currentArc.setKnobIndex(knobInd);
-        } else {
-            currentArc.setKnobIndex(currentArc.getSelectedKnotIndex());
-            currentArc.setSelectedKnotInd(-1);
-        }
-    }
-
-    /**
-     * @param arrowTipSplineScrIndex
-     */
-    private void setUserSelectedArrowTipSplineScrIndex(int arrowTipSplineScrIndex) {
-        currentArc.setKnobIndex(arrowTipSplineScrIndex);
-        currentArc.setSelectedKnotInd(-1);
-    }
-
-    /**
-     * Called:
-     * 1) when straight or curved arc with only one knot (knob) arc designed in steps:
-     * a) input node picked - output node picked - only knot (knob) location picked
-     * b) input node picked - output node picked - output node picked again (straight arc created)
-     * c) input node picked - nly knot (knob) location picked - output node picked
-     * 2) after multi-knot arc designed and knob location selected
-     */
-    private void finishArcCreationAndAddItToMclnModel() {
-
-        currentArc.setSelectingArrowTipLocation(false);
-        currentArc.setHighlightArcKnotsForArrowTipSelection(false);
-        currentArc.setHighlightFlatSegments(false);
-
-        // reset nodes
-        currentArcInputNode.setSelected(false);
-        currentArcOutputNode.setSelected(false);
-
-        // resetting arc presentation
-        currentArc.setDrawKnots(false);
-        currentArc.setSelected(false);
-        currentArc.setSplineThreadSelected(false);
-        currentArc.setAllKnotsSelected(false);
-        currentArc.setSelectedKnotInd(-1);
-
-        currentArc.finishArcCreation();
-
-        // updating MclnArc (model)
-//        MclnArc mclnArc = currentArc.getMclnArc();
-//        MclnGraphModel.getInstance().addMclnArc(mclnArc);
-
-        currentArcInputNode.outArcList.add(currentArc);
-        currentArcOutputNode.inpArcList.add(currentArc);
-
-        currentArc.setUnderConstruction(false);
-
-//        mclnGraphModel.registerCompletedMclnArcAndUpdateView(currentArc);
-        // remove temporary arc from graph image and paint complete arc (with arrow) on the graph image
-        mclnGraphDesignerView.eraseAndPaintArcViewWithConnectedEntities(currentArc);
-
-        currentArcInputNode = null;
-        currentArcOutputNode = null;
-        currentArc = null;
-        setEditingLocked(false);
-        currentOperationStep = AppStateModel.OperationStep.PICK_UP_ARC_INPUT_NODE;
-        AppStateModel.getInstance().setCurrentOperationStep(AppStateModel.OperationStep.PICK_UP_ARC_INPUT_NODE);
+        return currentArcInputNode;
     }
 
     /**
      * @param mclnGraphEntityView
      * @return
      */
-    private boolean isSelectedOutputNodeAllowed(MclnGraphEntityView mclnGraphEntityView) {
+    boolean isSelectedOutputNodeAllowed(MclnGraphEntityView mclnGraphEntityView) {
         if (mclnGraphEntityView.isArc()) {
             DsdsDseMessagesAndDialogs.showWarning(mclnGraphDesignerView, "Creating Connecting Arcs",
                     "Arc can not take another Arc as its input or output node. Selection ignored. ");
@@ -1165,58 +612,16 @@ public final class MclnGraphViewEditor {
     }
 
     /**
-     * @param inpNode
-     * @param outNode
-     * @param drawKnobAsArrow
-     * @return
-     */
-    private static double[] calculateKnobScrLocation(MclnGraphViewNode inpNode, MclnGraphViewNode outNode,
-                                                     boolean drawKnobAsArrow) {
-
-        double inpNodeRadius = (inpNode instanceof MclnPropertyView) ?
-                MclnPropertyView.RADIUS : MclnConditionView.SCREEN_RADIUS;
-        double outNodeRadius = (outNode instanceof MclnPropertyView) ?
-                MclnPropertyView.RADIUS : MclnConditionView.SCREEN_RADIUS;
-
-        double[] arcVec = new double[3];
-        double[] dirVec = new double[3];
-        double[] inpNodeRadVec = new double[3];
-        double[] outNodeRadVec = new double[3];
-        double[] newVec = new double[3];
-        double[] knobLocation = {0., 0., 0.};
-
-        double end1[] = inpNode.getScrPnt();
-        double end2[] = outNode.getScrPnt();
-        VAlgebra.subVec3(arcVec, end1, end2);
-        VAlgebra.normalizeVec3(arcVec, dirVec);
-
-        VAlgebra.scaleVec3(inpNodeRadVec, inpNodeRadius, dirVec);
-        VAlgebra.subVec3(arcVec, arcVec, inpNodeRadVec);
-        VAlgebra.scaleVec3(outNodeRadVec, outNodeRadius, dirVec);
-        VAlgebra.subVec3(arcVec, arcVec, outNodeRadVec);
-
-        VAlgebra.addVec3(newVec, end2, arcVec);
-        if (drawKnobAsArrow) {
-            VAlgebra.LinCom3(knobLocation, 0.25, end2, 0.75, newVec);
-        } else {
-            VAlgebra.LinCom3(knobLocation, 0.50, end2, 0.50, newVec);
-        }
-        return knobLocation;
-    }
-
-    /**
      * @param cSysPoint
      */
     private MclnPropertyView createNewStatement(double[] cSysPoint) {
-        MclnPropertyView mclnPropertyView = mclnGraphModel.createMclnStatementAndUpdateView(cSysPoint);
-//        mclnPropertyView.setMouseHover(true);
-        return mclnPropertyView;
+        MclnPropertyView mcLnPropertyView = mclnGraphModel.createMclnStatementAndUpdateView(cSysPoint);
+        return mcLnPropertyView;
     }
 
     private MclnConditionView createNewCondition(double[] cSysPoint) {
-        MclnConditionView mclnConditionView = mclnGraphModel.createMclnConditionAndUpdateView(cSysPoint);
-//        mclnConditionView.setMouseHover(true);
-        return mclnConditionView;
+        MclnConditionView mcLnConditionView = mclnGraphModel.createMclnConditionAndUpdateView(cSysPoint);
+        return mcLnConditionView;
     }
 
 
@@ -1229,7 +634,7 @@ public final class MclnGraphViewEditor {
         int mouseX = me.getX();
         int mouseY = me.getY();
 
-        MclnGraphViewNode tmpMclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(mouseX, mouseY);
+        MclnGraphNodeView tmpMclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(mouseX, mouseY);
         if (tmpMclnGraphViewNode == null) {
             return false;
         }
@@ -1246,7 +651,7 @@ public final class MclnGraphViewEditor {
 
         int mouseX = me.getX();
         int mouseY = me.getY();
-        MclnGraphViewNode tmpMclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(mouseX, mouseY);
+        MclnGraphNodeView tmpMclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(mouseX, mouseY);
         if (tmpMclnGraphViewNode == null) {
             return false;
         }
@@ -1254,7 +659,7 @@ public final class MclnGraphViewEditor {
         // selecting leading node
         if (selectedMclnNodesToBeMoved.contains(tmpMclnGraphViewNode)) {
 
-            for (MclnGraphViewNode mclnGraphViewNode : selectedMclnNodesToBeMoved) {
+            for (MclnGraphNodeView mclnGraphViewNode : selectedMclnNodesToBeMoved) {
                 mclnGraphViewNode.setSelected(false);
             }
 
@@ -1286,6 +691,7 @@ public final class MclnGraphViewEditor {
         if (selectedMclnArcsToBeMoved.size() > 0) {
             for (MclnArcView mclnArcView : selectedMclnArcsToBeMoved) {
                 MclnArcView clonedMclnArcView = mclnArcView.clone();
+                clonedMclnArcView.backupCurrentState();
                 selectedMclnArcsToBeMovedCloned.add(clonedMclnArcView);
             }
         }
@@ -1307,9 +713,9 @@ public final class MclnGraphViewEditor {
         }
         int mouseX = me.getX();
         int mouseY = me.getY();
-        MclnGraphViewNode tmpMclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(mouseX, mouseY);
+        MclnGraphNodeView tmpMclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(mouseX, mouseY);
 
-        MclnGraphViewNode mclnGraphViewNodeToUnselect;
+        MclnGraphNodeView mclnGraphViewNodeToUnselect;
         if (tmpMclnGraphViewNode != null && selectedMclnNodesToBeMoved.contains(tmpMclnGraphViewNode)) {
             boolean removed = selectedMclnNodesToBeMovedStack.remove(tmpMclnGraphViewNode);
             if (!removed) {
@@ -1354,15 +760,6 @@ public final class MclnGraphViewEditor {
     void undoFragmentMoved() {
 
         VAlgebra.initVec3(translationVec, 0, 0, 0);
-        System.out.println("takeTheGroupFinalLocation " + " selected nodes " + selectedMclnNodesToBeMoved.size());
-
-//        for (MclnGraphViewArc mclnGraphViewArc : selectedMclnArcsToBeMoved) {
-//            mclnGraphViewArc.setHighlighted(false);
-//            mclnGraphViewArc.setPreSelected(false);
-//            mclnGraphViewArc.setSelected(false);
-//            mclnGraphViewArc.setArrowHighlighted(false);
-//            mclnGraphViewArc.resetToOriginalLocation();
-//        }
 
         for (MclnArcView mclnArcView : selectedArcsThatWillBeDiscarded) {
             mclnArcView.setHighlighted(false);
@@ -1395,7 +792,7 @@ public final class MclnGraphViewEditor {
 //        modelMoved = false;
         int mouseX = me.getX();
         int mouseY = me.getY();
-        MclnGraphViewNode tmpMclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(mouseX, mouseY);
+        MclnGraphNodeView tmpMclnGraphViewNode = mclnGraphDesignerView.getGraphNodeAtCoordinates(mouseX, mouseY);
         if (tmpMclnGraphViewNode == null) {
             return false;
         }
@@ -1404,7 +801,7 @@ public final class MclnGraphViewEditor {
             return false;
         }
 
-        for (MclnGraphViewNode mclnGraphViewNode : selectedMclnNodesToBeMoved) {
+        for (MclnGraphNodeView mclnGraphViewNode : selectedMclnNodesToBeMoved) {
             mclnGraphViewNode.setSelected(false);
         }
         mclnGraphViewNodeToBeMoved = tmpMclnGraphViewNode;
@@ -1460,10 +857,7 @@ public final class MclnGraphViewEditor {
      * @param me
      */
     void pauseDraggingModelFragment(MouseEvent me) {
-//        for (MclnGraphViewArc mclnGraphViewArc : selectedMclnArcsToBeMoved) {
-//            mclnGraphViewArc.setSelected(false);
-//        }
-        for (MclnGraphViewNode mclnGraphViewNode : selectedMclnNodesToBeMoved) {
+        for (MclnGraphNodeView mclnGraphViewNode : selectedMclnNodesToBeMoved) {
             mclnGraphViewNode.setSelected(false);
         }
         mclnGraphViewNodeToBeMoved.setSelected(true);
@@ -1488,13 +882,13 @@ public final class MclnGraphViewEditor {
             mclnArcView.setArrowWatermarked(false);
 
             mclnArcView.disconnectFromInputAndOutputNodes();
-            MclnArc mclnArc = mclnArcView.getMclnArc();
+            MclnArc mclnArc = mclnArcView.getTheElementModel();
             mclnArc.disconnectFromInputAndOutputNodes();
             mclnGraphModel.removeMclnArcAndUpdateView(mclnArc); // the model will update view
         }
 
         List<String> nodeUIDs = new ArrayList();
-        for (MclnGraphViewNode mclnGraphViewNode : selectedMclnNodesToBeMoved) {
+        for (MclnGraphNodeView mclnGraphViewNode : selectedMclnNodesToBeMoved) {
             mclnGraphViewNode.setHighlighted(false);
             mclnGraphViewNode.setPreSelected(false);
             mclnGraphViewNode.setSelected(false);
@@ -1507,7 +901,7 @@ public final class MclnGraphViewEditor {
             arcUIDs.add(mclnArcView.getUID());
         }
         double[] finalLocationScaledCScrVector = mclnGraphViewNodeToBeMoved.getFinalLocationScaledScrVector();
-        mclnGraphDesignerView.takeFinalLocationAndPaintTheGraphOnTheScreen(nodeUIDs, arcUIDs, finalLocationScaledCScrVector);
+        mclnGraphDesignerView.takeFinalLocationThenRecreateImageAndRepaintItOnTheScreen(nodeUIDs, arcUIDs, finalLocationScaledCScrVector);
         System.out.println("takeTheGroupFinalLocation " + " selected nodes " + selectedMclnNodesToBeMoved.size());
 
         clearLocalGraphFragmentMovingCollections();
@@ -1587,23 +981,18 @@ public final class MclnGraphViewEditor {
 
     void processDeleteElement(MouseEvent me) {
 
-        System.out.println("Processing: Delete Element");
-//        DsdsseEnvironment.showMessagePopup(DsdsseEnvironment.TYPE_WARNING, "Operation: Delete Element", "Message");
         int mouseX = me.getX();
         int mouseY = me.getY();
 
         if (currentOperationStep == AppStateModel.OperationStep.PICK_UP_ELEMENT_TO_BE_DELETED) {
-            System.out.println("deleteElement: " + currentOperationStep);
             if (mclnGraphViewEntityToBeDeleted == null && isRMBPressed(me)) {
                 return;
             }
-
             mclnGraphViewEntityToBeDeleted = mclnGraphDesignerView.getGraphEntityAtCoordinates(mouseX, mouseY);
             if (mclnGraphViewEntityToBeDeleted == null) {
                 return;
             }
-            System.out.println("\"mclnGraphViewEntityToBeDeleted selected");
-            mclnGraphViewEntityToBeDeleted.setSelected(true);
+            mclnGraphViewEntityToBeDeleted.prepareForDeletion();
             mclnGraphDesignerView.highlightEntityViewToBeDeleted(mclnGraphViewEntityToBeDeleted);
 
             currentOperationStep = AppStateModel.OperationStep.REMOVE_SELECTED_ELEMENT;
@@ -1612,21 +1001,29 @@ public final class MclnGraphViewEditor {
         }
 
         if (currentOperationStep == AppStateModel.OperationStep.REMOVE_SELECTED_ELEMENT) {
-
-            System.out.println("deleteElement: " + currentOperationStep);
             // un-selecting selected element
-            if (mclnGraphViewEntityToBeDeleted != null && isRMBPressed(me)) {
-                mclnGraphViewEntityToBeDeleted.setSelected(false);
-                mclnGraphViewEntityToBeDeleted = null;
-                mclnGraphDesignerView.highlightEntityViewToBeDeleted(mclnGraphViewEntityToBeDeleted);
-                currentOperationStep = AppStateModel.OperationStep.PICK_UP_ELEMENT_TO_BE_DELETED;
-                AppStateModel.getInstance().setCurrentOperationStep(currentOperationStep);
+            if (isRMBPressed(me)) {
+                if (mclnGraphViewEntityToBeDeleted != null) {
+                    mclnGraphViewEntityToBeDeleted.cancelDeletion();
+                    mclnGraphViewEntityToBeDeleted = null;
+                    mclnGraphDesignerView.highlightEntityViewToBeDeleted(null);
+                    currentOperationStep = AppStateModel.OperationStep.PICK_UP_ELEMENT_TO_BE_DELETED;
+                    AppStateModel.getInstance().setCurrentOperationStep(currentOperationStep);
+                }
                 return;
             }
 
-            MclnGraphEntityView mclnGraphViewEntityToConfirmDeletion =
-                    mclnGraphDesignerView.getGraphEntityAtCoordinates(mouseX, mouseY);
-            if (mclnGraphViewEntityToBeDeleted != mclnGraphViewEntityToConfirmDeletion) {
+            MclnGraphEntityView anotherEntitySelectedToBeDeleted = mclnGraphDesignerView.getGraphEntityAtCoordinates(mouseX, mouseY);
+            if (anotherEntitySelectedToBeDeleted != null &&
+                    mclnGraphViewEntityToBeDeleted != anotherEntitySelectedToBeDeleted) {
+                // User selected another entity to be deleted, cancel
+                // previously selected and prepare newly selected
+                mclnGraphViewEntityToBeDeleted.cancelDeletion();
+                mclnGraphViewEntityToBeDeleted = null;
+                mclnGraphDesignerView.highlightEntityViewToBeDeleted(null);
+                mclnGraphViewEntityToBeDeleted = anotherEntitySelectedToBeDeleted;
+                mclnGraphViewEntityToBeDeleted.prepareForDeletion();
+                mclnGraphDesignerView.highlightEntityViewToBeDeleted(mclnGraphViewEntityToBeDeleted);
                 return;
             }
 
@@ -1634,52 +1031,49 @@ public final class MclnGraphViewEditor {
             MclnGraphModel mclnGraphModel = MclnGraphModel.getInstance();
 
             if (mclnGraphViewEntityToBeDeleted instanceof MclnPropertyView) {
-                MclnPropertyView mclnPropertyView = (MclnPropertyView) mclnGraphViewEntityToBeDeleted;
-                MclnStatement mclnStatement = mclnPropertyView.getTheElementModel();
+                MclnPropertyView mcLnPropertyView = mclnGraphViewEntityToBeDeleted.toPropertyView();
+                MclnStatement mclnStatement = mcLnPropertyView.getTheElementModel();
                 mclnGraphModel.removeMclnStatementAndUpdateView(mclnStatement);
 
             } else if (mclnGraphViewEntityToBeDeleted instanceof MclnConditionView) {
-                MclnConditionView mclnConditionView = (MclnConditionView) mclnGraphViewEntityToBeDeleted;
-                MclnCondition mclnCondition = mclnConditionView.getTheElementModel();
+                MclnConditionView mcLnConditionView = mclnGraphViewEntityToBeDeleted.toConditionView();
+                MclnCondition mclnCondition = mcLnConditionView.getTheElementModel();
                 mclnGraphModel.removeMclnConditionAndUpdateView(mclnCondition);
 
             } else if (mclnGraphViewEntityToBeDeleted instanceof MclnArcView) {
-                MclnArcView mclnArcView = (MclnArcView) mclnGraphViewEntityToBeDeleted;
-                MclnArc mclnArc = mclnArcView.getMclnArc();
+                MclnArcView mclnArcView = mclnGraphViewEntityToBeDeleted.toArcView();
+                MclnArc mclnArc = mclnArcView.getTheElementModel();
                 mclnGraphModel.removeMclnArcAndUpdateView(mclnArc);
             }
 
             mclnGraphViewEntityToBeDeleted = null;
             selectedMclnGraphViewNode = null;
-            currentlyHighlightedMclnGraphEntity = null;
 
             currentOperationStep = AppStateModel.OperationStep.PICK_UP_ELEMENT_TO_BE_DELETED;
             AppStateModel.getInstance().setCurrentOperationStep(currentOperationStep);
         }
     }
 
+    /**
+     * @param elementToBeDeleted
+     */
     void processUserDeletesElementViaPopup(MclnGraphEntityView elementToBeDeleted) {
-        processElementDeletion(elementToBeDeleted);
-    }
-
-
-    private void processElementDeletion(MclnGraphEntityView elementToBeDeleted) {
         elementToBeDeleted.setSelected(false);
         MclnGraphModel mclnGraphModel = MclnGraphModel.getInstance();
 
         if (elementToBeDeleted instanceof MclnPropertyView) {
-            MclnPropertyView mclnPropertyView = (MclnPropertyView) elementToBeDeleted;
-            MclnStatement mclnStatement = mclnPropertyView.getTheElementModel();
+            MclnPropertyView mcLnPropertyView = (MclnPropertyView) elementToBeDeleted;
+            MclnStatement mclnStatement = mcLnPropertyView.getTheElementModel();
             mclnGraphModel.removeMclnStatementAndUpdateView(mclnStatement);
 
         } else if (elementToBeDeleted instanceof MclnConditionView) {
-            MclnConditionView mclnConditionView = (MclnConditionView) elementToBeDeleted;
-            MclnCondition mclnCondition = mclnConditionView.getTheElementModel();
+            MclnConditionView mcLnConditionView = (MclnConditionView) elementToBeDeleted;
+            MclnCondition mclnCondition = mcLnConditionView.getTheElementModel();
             mclnGraphModel.removeMclnConditionAndUpdateView(mclnCondition);
 
         } else if (elementToBeDeleted instanceof MclnArcView) {
             MclnArcView mclnArcView = (MclnArcView) elementToBeDeleted;
-            MclnArc mclnArc = mclnArcView.getMclnArc();
+            MclnArc mclnArc = mclnArcView.getTheElementModel();
             mclnGraphModel.removeMclnArcAndUpdateView(mclnArc);
         }
     }
@@ -1695,12 +1089,11 @@ public final class MclnGraphViewEditor {
         // Arc creation data
         currentArcInputNode = null;
         currentArcOutputNode = null;
-        currentArc = null;
 
         // fragment creation data
         curFragmentInpNode = null;
         curFragmentOutNode = null;
-        mclnConditionView = null;
+        mcLnConditionView = null;
         conditionInpArcView = null;
         conditionOutArcView = null;
 

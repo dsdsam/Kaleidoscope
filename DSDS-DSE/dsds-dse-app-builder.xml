@@ -1,13 +1,5 @@
 <project name="dsds-dse-app-builder" basedir="." default="create-release-zip-files">
 
-    <!--  src directories -->
-    <!--<property name="adf.src.dir" value="..\ADF\src"/>-->
-    <!--<property name="adf-csys-view.src.dir" value="..\ADF-CSYS-VIEW\src"/>-->
-    <!--<property name="vw.src.dir" value="..\VECTOR-WORKS\src"/>-->
-    <!--<property name="mathematica.src.dir" value="..\MATHEMATICA\src"/>-->
-    <!--<property name="mcln-model.src.dir" value="..\MCLN-MODEL\src"/>-->
-    <!--<property name="dsdsse.src.dir" value="src"/>-->
-
     <!-- class directories -->
     <property name="adf.utils.classes.dir" value="..\ADF-UTILS\classes"/>
     <property name="adf.classes.dir" value="..\ADF\classes"/>
@@ -16,6 +8,7 @@
     <property name="vw.classes.dir" value="..\VECTOR-WORKS\classes"/>
     <property name="mathematics.classes.dir" value="..\MATHEMATICS\classes"/>
     <property name="mcln-model.classes.dir" value="..\MCLN-MODEL\classes"/>
+    <property name="mcln-view.classes.dir" value="..\MCLN-VIEW\classes"/>
     <property name="dsdsse.classes.dir" value="classes"/>
 
     <property name="main-class" value="dsdsse.app.DSDSSEApp"/>
@@ -82,6 +75,10 @@
 
         <copy todir="${dir.build.classes}">
             <fileset dir="${mcln-model.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${mcln-view.classes.dir}"/>
         </copy>
 
         <copy todir="${dir.build.classes}">

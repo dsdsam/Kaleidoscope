@@ -2,8 +2,10 @@ package dsdsse.app;
 
 import adf.app.AdfMessagesAndDialogs;
 import adf.mainframe.AdfMainFrame;
+import adf.menu.AdfMenuBar;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.logging.Logger;
 
 /**
@@ -17,44 +19,58 @@ public class DsdsseMainFrame extends AdfMainFrame {
 
     private static final Logger logger = Logger.getLogger(DsdsseMainFrame.class.getName());
 
-    public static final String MAIN_PANEL_DSDSSE = "MAIN_PANEL_DSDSSE";
-
     private static DsdsseMainFrame dsdsseMainFrame;
 
-    /**
-     *
-     * @return
-     */
-    public static DsdsseMainFrame createMainFrame(){
-        if(dsdsseMainFrame != null){
-            logger.severe("DsdsseMainFrame instance already created !!!");
-            return dsdsseMainFrame ;
-        }
-        return new DsdsseMainFrame();
+    public static final synchronized DsdsseMainFrame createMainFrame(){
+        assert dsdsseMainFrame == null : "Dsds Dse Dsdsse Main Frame is a singleton and already created";
+        return dsdsseMainFrame = new DsdsseMainFrame();
     }
 
-    /**
-     *
-     * @return
-     */
-    public static DsdsseMainFrame getInstance() {
+    public static final DsdsseMainFrame getInstance() {
+        assert dsdsseMainFrame != null : "Dsds Dse Dsdsse Main Frame is a singleton and not yet created";
         return dsdsseMainFrame;
     }
 
+    //
     //   I n s t a n c e
+    //
 
-//    private Map<String, JPanel> panelMap = new HashMap();
-
+    private DsdsDseMainPanel dsdsDseMainPanel;
+    private JPanel oneLineMessagePanel;
 
     private DsdsseMainFrame() {
-        dsdsseMainFrame = this;
         AdfMessagesAndDialogs.setMainFrame(dsdsseMainFrame);
         DsdsDseMessagesAndDialogs.setMainFrame(dsdsseMainFrame);
         ToolTipManager.sharedInstance().setLightWeightPopupEnabled(false);
         JPopupMenu.setDefaultLightWeightPopupEnabled(false);
     }
 
-//    public void addTopLevelPanel(String IdKey, JPanel unit) {
-//        panelMap.put(IdKey, unit);
-//    }
+    public final void setDsdsDseMainPanel(DsdsDseMainPanel dsdsDseMainPanel) {
+        this.dsdsDseMainPanel = dsdsDseMainPanel;
+        getContentPane().add(dsdsDseMainPanel);
+    }
+
+    public final void setOneLineMessagePanel(JPanel oneLineMessagePanel) {
+        this.oneLineMessagePanel = oneLineMessagePanel;
+    }
+
+    public final void setDsdsDseDesignerViewHolderPanel(DsdsDseDesignSpaceHolderPanel dsdsDseDesignSpaceHolderPanel){
+        dsdsDseMainPanel.removeAll();
+        AdfMenuBar menuBar = dsdsDseDesignSpaceHolderPanel.createAndReturnDsdsDseMenuBar();
+        setJMenuBar(menuBar);
+        dsdsDseMainPanel.add(dsdsDseDesignSpaceHolderPanel, BorderLayout.CENTER);
+        dsdsDseMainPanel.add(oneLineMessagePanel, BorderLayout.SOUTH);
+        revalidate();
+        repaint();
+    }
+
+    public final void setDsdsDseMatrixViewHolderPanel(DsdsDseMatrixSpaceHolderPanel dsdsDseMatrixSpaceHolderPanel){
+        dsdsDseMainPanel.removeAll();
+        AdfMenuBar menuBar = dsdsDseMatrixSpaceHolderPanel.createAndReturnDsdsDseMatrixViewMenuBar();
+        setJMenuBar(menuBar);
+        dsdsDseMainPanel.add(dsdsDseMatrixSpaceHolderPanel, BorderLayout.CENTER);
+        dsdsDseMainPanel.add(oneLineMessagePanel, BorderLayout.SOUTH);
+        revalidate();
+        repaint();
+    }
 }

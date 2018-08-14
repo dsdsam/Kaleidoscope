@@ -1,10 +1,10 @@
 package dsdsse.demo;
 
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import mcln.model.*;
 import mcln.palette.BasicColorPalette;
 import mcln.palette.MclnState;
 import mcln.palette.ThreeShadesConfettiPalette;
+import mclnview.graphview.MclnGraphModel;
 import vw.valgebra.VAlgebra;
 
 import java.util.ArrayList;
@@ -31,8 +31,8 @@ public class TernaryCounter {
 
     private final BasicColorPalette generatorMclnStatesPalette = BasicColorPalette.getInstance();
     private Object[][] generatorAvailableStatesData = {
-            {generatorMclnStatesPalette.getMclnState(BasicColorPalette.CREATION_STATE_ID), "$ tack"},
-            {generatorMclnStatesPalette.getMclnState(BasicColorPalette.YELLOW_STATE_ID), "$ tick"},
+            {generatorMclnStatesPalette.getMclnState(BasicColorPalette.CREATION_STATE_ID), "$ tick"},
+            {generatorMclnStatesPalette.getMclnState(BasicColorPalette.YELLOW_STATE_ID), "$ tack"},
     };
     private MclnState generatorInitialState = generatorMclnStatesPalette.getMclnState(BasicColorPalette.CREATION_STATE_ID);
 
@@ -42,7 +42,7 @@ public class TernaryCounter {
 
     // Time Driven Input Simulating ProgramData
     Object[][] timeDrivenInputSimulatingProgramData = {
-            {1, generatorAvailableStates.getMclnState(BasicColorPalette.YELLOW_STATE_ID)},
+            {4, generatorAvailableStates.getMclnState(BasicColorPalette.YELLOW_STATE_ID)},
             {1, generatorAvailableStates.getMclnState(BasicColorPalette.CREATION_STATE_ID)},
 //                {1, generatorAvailableStates.getMclnState(ThreeShadesConfettiPalette.YELLOW_STATE)},
 //                {1, generatorAvailableStates.getMclnState(ThreeShadesConfettiPalette.CREATION_STATE_ID)},

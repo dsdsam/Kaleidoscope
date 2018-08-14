@@ -1,7 +1,6 @@
 package adf.menu;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Map;
 
 public class AdfMenuBar extends JMenuBar {
@@ -14,8 +13,6 @@ public class AdfMenuBar extends JMenuBar {
     private final String iconClassPath;
     private final Map<String, AdfBasicAction> menuItemToActionMap;
     private AdfAppMenu lastlyAddedAdfAppMenu;
-    Color bgColor = Color.lightGray;
-    Color fgColor = Color.white;
 
     public AdfMenuBar() {
         this.adfMenuActionListener = null;
@@ -40,24 +37,10 @@ public class AdfMenuBar extends JMenuBar {
         return adfAppMenu;
     }
 
+
     public AdfAppMenu addAdfAppMenu(String menuLabel, boolean rightAlignment) {
-        AdfAppMenu adfAppMenu = addAdfAppMenu(menuLabel, rightAlignment, null);
-        return adfAppMenu;
-    }
-
-    public AdfAppMenu addAdfAppMenu(String menuLabel, boolean rightAlignment,
-                                    AdfAbstractActionGroup adfAbstractActionGroup) {
-        AdfAppMenu adfAppMenu = createAdfAppMenu(menuLabel, rightAlignment, adfAbstractActionGroup);
-        return adfAppMenu;
-    }
-
-    /**
-     * @param menuLabel
-     * @return
-     */
-    private AdfAppMenu createAdfAppMenu(String menuLabel, boolean rightAlignment, AdfAbstractActionGroup adfAbstractActionGroup) {
         AdfAppMenu adfAppMenu = AdfAppMenu.create(menuLabel, adfMenuActionListener, iconClassPath,
-                menuItemToActionMap, adfAbstractActionGroup);
+                menuItemToActionMap);
         lastlyAddedAdfAppMenu = adfAppMenu;
         if (rightAlignment) {
             add(Box.createHorizontalGlue());

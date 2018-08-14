@@ -7,18 +7,43 @@ import mcln.palette.CreationStatePalette;
 import mcln.palette.MclnState;
 
 import java.awt.*;
+import java.util.List;
 
 /**
- * Created by Admin on 11/14/2017.
+ * Created by IntelliJ IDEA.
+ * User: XP Admin
+ * User: XP Admin
+ * Date: May 19, 2013
+ * Time: 11:59:47 AM
+ * To change this template use File | Settings | File Templates.
+ * <p>
+ * <p>
+ * CSysEntity (interface)
+ * ^
+ * BasicCSysEntity
+ * ^
+ * MclnGraphEntityView
+ * ^
+ * MclnGraphNodeView
+ * ^
+ * MclnPropertyView
  */
-public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
+public class MclnPropertyView extends MclnGraphNodeView implements Cloneable {
+
+    /*
+       Ball Sizes
+       smal       -  7
+       medium     -  9
+       large      - 11
+       Extra Large - 13
+     */
 
     public static final int DEFAULT_TRACE_HISTORY_LENGTH = 200;
     public static int RADIUS = 0;
     public static int SELECTED_CIRCLE_RADIUS = RADIUS + 3;
 
-    private static final Color DEFAULT_DRAWING_COLOR = new Color(0xFFFFFF);
-    private static final Color DEFAULT_BALL_COLOR = new Color(CreationStatePalette.CREATION_STATE.getRGB());
+    private static final Color DEFAULT_DRAWING_COLOR = Color.GRAY;
+    public static final Color DEFAULT_BALL_COLOR = new Color(CreationStatePalette.CREATION_STATE.getRGB());
 
     static {
         int radius = 9;
@@ -43,7 +68,7 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
     private PropertyViewBall propertyViewBall;
 
     private MclnStatement mclnStatement;
-    private MclnGraphView mclnGraphView;
+    private MclnGraphView mclnGraphDesignerView;
     private Rectangle stateRect = new Rectangle();
 
     private final RingStack historyBuffer = new RingStack(DEFAULT_TRACE_HISTORY_LENGTH);
@@ -52,9 +77,9 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
      * @param mclnGraphView
      * @param mclnStatement
      */
-    MclnPropertyView(MclnGraphView mclnGraphView, MclnStatement mclnStatement) {
+    public MclnPropertyView(MclnGraphView mclnGraphView, MclnStatement mclnStatement) {
         super(mclnGraphView, mclnStatement, DEFAULT_DRAWING_COLOR);
-        this.mclnGraphView = mclnGraphView;
+        this.mclnGraphDesignerView = mclnGraphView;
         this.mclnStatement = mclnStatement;
         MclnState mclnState = mclnStatement.getInitialMclnState();
         Color currentStateColor = (mclnState != null) ? new Color(mclnState.getRGB()) : DEFAULT_BALL_COLOR;
@@ -70,6 +95,7 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
         return mclnStatement.hasInputGeneratingProgram();
     }
 
+    // three method below added to adopt property-Controller communication
     public String getSubject() {
         String subject = mclnStatement.getSubject();
         if (subject == null || subject.length() == 0) {
@@ -93,6 +119,7 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
         }
         return stateInterpretation;
     }
+    // ================================
 
     public String getFullSubject() {
         String subject = mclnStatement.getSubject();
@@ -108,21 +135,21 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
         return mclnStatement.getStatementText();
     }
 
-    java.util.List<MclnStatementState> getAllowedStatesList() {
-        java.util.List<MclnStatementState> allowedStatesList =
+    public List<MclnStatementState> getAllowedStatesList() {
+        List<MclnStatementState> allowedStatesList =
                 mclnStatement.getAvailableMclnStatementStates().getPropertyStatesAsList();
         return allowedStatesList;
     }
 
-    /**
-     * Called from Initialization Assistant to save the result of initialization
-     */
-    public void repaintPropertyUponInitialization() {
-        MclnState mclnState = mclnStatement.getInitialMclnState();
-        Color currentStateColor = (mclnState != null) ? new Color(mclnState.getRGB()) : DEFAULT_BALL_COLOR;
-        initMclnPropertyView(currentStateColor);
-        mclnGraphView.paintEntityOnly(this);
-    }
+//    /**
+//     * Called from Initialization Assistant to save the result of initialization
+//     */
+//    public void repaintPropertyUponInitialization() {
+//        MclnState mclnState = mclnStatement.getInitialMclnState();
+//        Color currentStateColor = (mclnState != null) ? new Color(mclnState.getRGB()) : DEFAULT_BALL_COLOR;
+//        initMclnPropertyView(currentStateColor);
+//        mclnGraphDesignerView.paintEntityOnly(this);
+//    }
 
     public String getMclnStatesPaletteName() {
         return mclnStatement.getMclnStatesPaletteName();
@@ -130,13 +157,13 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
 
     @Override
     public MclnPropertyView clone() {
-        MclnPropertyView clonedMclnPropertyView = null;
+        MclnPropertyView clonedMcLnPropertyView = null;
         try {
-            clonedMclnPropertyView = (MclnPropertyView) super.clone();
+            clonedMcLnPropertyView = (MclnPropertyView) super.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         } finally {
-            return clonedMclnPropertyView;
+            return clonedMcLnPropertyView;
         }
     }
 
@@ -165,11 +192,11 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
         initMclnPropertyView(currentStateColor);
     }
 
-    private void initMclnPropertyView(Color currentStateColor) {
+    public void initMclnPropertyView(Color currentStateColor) {
         propertyViewBall.setState(currentStateColor);
     }
 
-    boolean isInitialized() {
+    public boolean isInitialized() {
         return true;
     }
 
@@ -180,8 +207,25 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
 
 
     //
-    //   D r a w i n g   S t a t e m e n t
+    //   D r a w i n g   P r o p e r t y   V i e w
     //
+
+    /**
+     * The method draws all the Node's input and output arcs
+     * where arcs draw their self and the Nodes attached to
+     * thr arcs opposite end. THen the method draws the Node
+     * itself, and finally draws extras (highlighted selection).
+     *
+     * @param g
+     * @param scr0
+     * @param scale
+     */
+    @Override
+    public void drawSpriteEntity(Graphics g, int[] scr0, double scale) {
+        drawTheNodesAllInputAndOutputArcsWithConnectedNodes(g);
+        drawPlainEntity(g);
+        paintExtras(g);
+    }
 
     @Override
     public void drawPlainEntity(Graphics g) {
@@ -236,40 +280,40 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
      * @param scrY
      */
     private void paintExtrasAtGivenScreenLocation(Graphics g, int scrX, int scrY) {
-
         if (hidden || parentCSys == null) {
             return;
         }
-
-        // painting highlighting circle as node border
-        //     parentCSys.csysDrawScrCircle(g, getCircleColor(), scrX, scrY, RADIUS);
-
+        if (isMouseHover()) {
+            paintBorder(g, scrX, scrY);
+            return;
+        }
         if (!(isPreSelected() || isSelected())) {
             return;
         }
-
         paintBorder(g, scrX, scrY);
     }
 
     private void paintBorder(Graphics g, int scrX, int scrY) {
-
         if (hidden || parentCSys == null) {
             return;
         }
-
-        g.setColor(getCircleColor());
-        g.drawOval(scrX - RADIUS, scrY - RADIUS, 2 * RADIUS, 2 * RADIUS);
-
-        if (!(isPreSelected() || isSelected())) {
+        if (!(isPreSelected() || isSelected() || isMouseHover())) {
             return;
         }
-
         Graphics2D g2D = (Graphics2D) g;
         Object currentSetting = g2D.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         Stroke currentStroke = g2D.getStroke();
         g2D.setStroke(new BasicStroke(1));
+
+        /*
+           Mouse Hover highlighting will be overridden
+           by selection colors
+         */
+        if (isMouseHover()) {
+            g2D.setColor(getMouseHoverColor());
+        }
 
         if (isPreSelected() && !isSelected()) {
             g2D.setColor(getPreSelectedColor());
@@ -280,6 +324,7 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
         if (isPreSelected() && isSelected()) {
             g2D.setColor(getSelectedColor());
         }
+
         g.drawOval(scrX - SELECTED_CIRCLE_RADIUS, scrY - SELECTED_CIRCLE_RADIUS, 2 * SELECTED_CIRCLE_RADIUS,
                 2 * SELECTED_CIRCLE_RADIUS);
 
@@ -312,7 +357,7 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
         return mclnStatement.toTooltip();
     }
 
-    MclnState getCurrentState(){
+    MclnState getCurrentState() {
         MclnState mclnState = mclnStatement.getCurrentMclnState();
         return mclnState;
     }
@@ -325,7 +370,7 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
         MclnState calculatedSuggestedState = mclnStatement.getCalculatedSuggestedState();
         return mclnStatement.getOneLineInfoMessage() +
                 ", Suggested State = " + calculatedSuggestedState.getStateName() +
-                "   // pre selected = " + isPreSelected() +", selected = " + isSelected();
+                "   // pre selected = " + isPreSelected() + ", selected = " + isSelected();
     }
 
     //
@@ -337,10 +382,12 @@ public class MclnPropertyView extends MclnGraphViewNode implements Cloneable {
         historyBuffer.initBuffer(DEFAULT_TRACE_HISTORY_LENGTH);
     }
 
-    public void recordHistory() {
+    public int recordHistory() {
         MclnState mclnState = mclnStatement.getCurrentMclnState();
         MclnState clonedMclnState = mclnState.clone();
         historyBuffer.add(clonedMclnState);
+        historyBuffer.printStack();
+        return historyBuffer.getCurrentSize();
     }
 
     public RingStack getHistory() {

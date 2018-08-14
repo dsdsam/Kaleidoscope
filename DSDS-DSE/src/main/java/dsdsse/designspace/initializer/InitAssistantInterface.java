@@ -2,17 +2,13 @@ package dsdsse.designspace.initializer;
 
 import adf.preferences.GroupChangeListener;
 import dsdsse.app.AllMessages;
-import dsdsse.app.AppStateModel;
-import dsdsse.app.DsdsDseMessagesAndDialogs;
-import dsdsse.app.DsdsseEnvironment;
-import dsdsse.designspace.DesignSpaceView;
-import dsdsse.graphview.MclnArcView;
-import dsdsse.graphview.MclnPropertyView;
+import dsdsse.graphview.DesignerArcView;
 import dsdsse.preferences.DsdsseUserPreference;
 import dsdsse.preferences.GroupID;
+import mclnview.graphview.MclnArcView;
+import mclnview.graphview.MclnPropertyView;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Created by Admin on 6/26/2016.
@@ -71,33 +67,33 @@ public class InitAssistantInterface {
 
     /**
      * @param mainFrame
-     * @param mclnPropertyView
+     * @param mcLnPropertyView
      * @return true when Init Assistant was open, false whe it was reset
      */
-    public static final boolean setInitAssistantToInitializeProperty(JFrame mainFrame, MclnPropertyView mclnPropertyView) {
+    public static final boolean setInitAssistantToInitializeProperty(JFrame mainFrame, MclnPropertyView mcLnPropertyView) {
         if (!InitAssistantInterface.isInitAssistantUpAndRunning()) {
             initAssistant = new ModelInitializationAssistant();
-            initAssistant.initPropertyView(mclnPropertyView);
+            initAssistant.initPropertyView(mcLnPropertyView);
             initAssistant.showInitializationAssistant(mainFrame);
             return true;
         }
-        resetInitAssistantToInitializeProperty(mainFrame, mclnPropertyView);
+        resetInitAssistantToInitializeProperty(mainFrame, mcLnPropertyView);
         return false;
     }
 
     /**
      * The method resets Init Assistant to initialize Property
      *
-     * @param mclnPropertyView
+     * @param mcLnPropertyView
      */
-    public static void resetInitAssistantToInitializeProperty(JFrame mainFrame, MclnPropertyView mclnPropertyView) {
+    public static void resetInitAssistantToInitializeProperty(JFrame mainFrame, MclnPropertyView mcLnPropertyView) {
         if (!InitAssistantInterface.isInitAssistantUpAndRunning()) {
             return;
         }
         if (!canInitAssistantBeInterrupted(AllMessages.USER_WANTS_TO_REPLACE_COMPONENT_IN_INIT_ASSISTANT.getText())) {
             return;
         }
-        initAssistant.resetToInitializePropertyView(mclnPropertyView);
+        initAssistant.resetToInitializePropertyView(mcLnPropertyView);
     }
 
     /**
@@ -105,7 +101,7 @@ public class InitAssistantInterface {
      * @param mclnArcView
      * @return true when Init Assistant was open, false whe it was reset
      */
-    public static boolean setInitAssistantToInitializeArc(JFrame mainFrame, MclnArcView mclnArcView) {
+    public static boolean setInitAssistantToInitializeArc(JFrame mainFrame, DesignerArcView mclnArcView) {
         if (!InitAssistantInterface.isInitAssistantUpAndRunning()) {
             InitAssistantInterface.initAssistant = new ModelInitializationAssistant();
             initAssistant.initArcView(mclnArcView);
@@ -121,7 +117,7 @@ public class InitAssistantInterface {
      *
      * @param mclnArcView
      */
-    private static void resetInitAssistantToInitializeArc(JFrame mainFrame, MclnArcView mclnArcView) {
+    private static void resetInitAssistantToInitializeArc(JFrame mainFrame, DesignerArcView mclnArcView) {
         if (!InitAssistantInterface.isInitAssistantUpAndRunning()) {
             return;
         }

@@ -26,6 +26,13 @@ public class MclnModelRetriever {
      * Called when Mcln Statement is being created from XML with Input Simulating Program
      *
      * @param uid
+     * @param subject
+     * @param propertyName
+     * @param hasInputGenerator
+     * @param availableMclnStatementStates
+     * @param cSysLocation
+     * @param initialMclnStatementState
+     * @param inputSimulatingProgram
      * @return
      */
     private static final MclnStatement createMclnStatement(String uid, String subject, String propertyName,
@@ -59,21 +66,33 @@ public class MclnModelRetriever {
     //
 
     /**
-     * Called when Mcln Arc is being created from XML
+     * Called when Mcln Polyline Arc is being created from XML
      *
      * @param uid
      * @return
      */
-    private static synchronized final <InpNodeType, OutNodeType> MclnArc createMclnArc(
-            ArrowTipLocationPolicy arrowTipLocationPolicy, String uid, List<double[]> knotCSysLocations,
-            MclnState arcMclnState, InpNodeType inpNode, OutNodeType outNode) {
-
-        MclnArc<InpNodeType, OutNodeType> mclnArc = new MclnArc(arrowTipLocationPolicy, uid, knotCSysLocations,
-                arcMclnState, inpNode, outNode);
-
+    private static synchronized final <InpNodeType, OutNodeType> MclnArc createMclnPolylineArc(
+            ArrowTipLocationPolicy arrowTipLocationPolicy, String uid, List<double[]> cSysKnotsLocation,
+            int arrowSegmentIndex, double[] arrowTipCSysLocation, MclnState arcMclnState,
+            InpNodeType inpNode, OutNodeType outNode) {
+        MclnArc<InpNodeType, OutNodeType> mclnArc = new MclnPolylineArc(arrowTipLocationPolicy, uid, cSysKnotsLocation,
+                arrowSegmentIndex, arrowTipCSysLocation, arcMclnState, inpNode, outNode);
         return mclnArc;
     }
 
+    /**
+     * Called when Mcln Spline Arc is being created from XML
+     *
+     * @param uid
+     * @return
+     */
+    private static synchronized final <InpNodeType, OutNodeType> MclnArc createMclnSplineArc(
+            ArrowTipLocationPolicy arrowTipLocationPolicy, String uid, List<double[]> knotCSysLocations,
+            MclnState arcMclnState, InpNodeType inpNode, OutNodeType outNode) {
+        MclnArc<InpNodeType, OutNodeType> mclnArc = new MclnSplineArc(arrowTipLocationPolicy, uid, knotCSysLocations,
+                arcMclnState, inpNode, outNode);
+        return mclnArc;
+    }
 
     //
     //   M c l n   M o d e l   R e t r i e v a l
@@ -228,8 +247,22 @@ public class MclnModelRetriever {
                 System.out.println("Information on all Mcln Arcs, number is " + nOfArcs);
                 for (int j = 0; j < nOfArcs; j++) {
                     Element mclnArcElement = (Element) listOfMclnArcs.item(j);
-                    MclnArc mclnArc = domElementToMclnArc(mclnArcElement, statementIdToMclnStatementMap,
-                            conditionIdToMclnConditionMap);
+                    NamedNodeMap arcAttributeNodeMap = mclnArcElement.getAttributes();
+                    String arcType = "nonePolyline";
+                    Node arcTypeNode = arcAttributeNodeMap.getNamedItem("type");
+                    if(arcTypeNode != null) {
+                        arcType = arcTypeNode.getNodeValue();
+                        System.out.println("arcType =" + arcType);
+                    }
+                    MclnArc mclnArc;
+                    if (arcType != null && arcType.equalsIgnoreCase("polyline")) {
+                        mclnArc = domElementToMclnPolylineArc(mclnArcElement, statementIdToMclnStatementMap,
+                                conditionIdToMclnConditionMap);
+                    } else {
+                        mclnArc = domElementToMclnSplineArc(mclnArcElement, statementIdToMclnStatementMap,
+                                conditionIdToMclnConditionMap);
+                    }
+
                     System.out.println("Reconstructed  Mcln Arc, uid is " + mclnArc.getUID());
                     System.out.println("Reconstructed  Mcln Arc, xml: \n" + mclnArc.toXml());
                     System.out.println();
@@ -250,102 +283,6 @@ public class MclnModelRetriever {
     }
 
     /**
-     * @param mclnModelAsXmlDocument
-     * @return
-     */
-//    public static MclnModel buildMclnModelFromXmlDom(String sourceXml, Document mclnModelAsXmlDocument) {
-//
-//        Map<String, MclnStatement> nodeIdToMclnStatementMap = new HashMap();
-//        Map<String, MclnCondition> nodeIdToMclnConditionMap = new HashMap();
-//
-//        System.out.println("MclnModelFactory: buildMclnModel ");
-//
-//        DOMConfiguration docConfig = mclnModelAsXmlDocument.getDomConfig();
-//        docConfig.setParameter("infoset", Boolean.TRUE);
-//
-//        mclnModelAsXmlDocument.normalizeDocument();
-//
-//        mclnModelAsXmlDocument.getDocumentElement().normalize();
-//        Element rootElement = mclnModelAsXmlDocument.getDocumentElement();
-//        String rootNodeName = rootElement.getNodeName();
-//        System.out.println("Root name " + rootNodeName);
-//
-//        String MODEL_TAG_NAME = "Mcln-Model";
-//
-//        NodeList listOfMclnModels = mclnModelAsXmlDocument.getElementsByTagName(MODEL_TAG_NAME);
-//        int nOfModels = listOfMclnModels.getLength();
-//        System.out.println("Information on all Mcln Models, number is " + nOfModels);
-//
-//        Node node = listOfMclnModels.item(0);
-//        Element mclnModelElement = (Element) node;
-//
-//
-//        List<String[]> strRectangle = getXYLocationList(mclnModelElement,
-//                MclnModel.MCLN_MODEL_RECTANGLE_TAG, MclnModel.MCLN_MODEL_RECTANGLE_CORNER_TAG);
-//        if (strRectangle == null) {
-//            return null;
-//        }
-//
-//        int currentCorner = 0;
-//        double[][] outline = new double[2][];
-//        for (String[] strXYLocation : strRectangle) {
-//            double[] xyLocation = stringCSysLocationToDouble(strXYLocation[0], strXYLocation[1]);
-//            outline[currentCorner++] = xyLocation;
-//        }
-//        MclnModel mclnModel = MclnModel.createInstance(mclnModelElement.getTagName(), "M-0001",
-//                outline[0][0], outline[0][1], outline[1][0], outline[1][1]);
-////        MclnModel mclnModel = new MclnModel(sourceXml, mclnModelElement.getTagName(), "M-0001",
-////                outline[0][0], outline[0][1], outline[1][0], outline[1][1]);
-//
-//
-//        //
-//        //  C r e a t i n g   M c l n   E l e m e n t s
-//        //
-//
-//        NodeList listOfMclnStatements =
-//                mclnModelElement.getElementsByTagName(MclnStatement.MCLN_STATEMENT_XML_TAG);
-//        int nOfStatements = listOfMclnStatements.getLength();
-//        System.out.println("Information on all Mcln Statements, number is " + nOfStatements);
-//        for (int j = 0; j < nOfStatements; j++) {
-//            Element mclnStatementElement = (Element) listOfMclnStatements.item(j);
-//            MclnStatement mclnStatement = domElementToMclnStatement(mclnStatementElement);
-//            System.out.println("Reconstructed  Mcln Statements, uid is " + mclnStatement.getStatementUID());
-//            System.out.println("Reconstructed  Mcln Statements, xml: \n" + mclnStatement.toXml());
-//            System.out.println();
-//            mclnModel.addMclnStatement(mclnStatement);
-//            nodeIdToMclnStatementMap.put(mclnStatement.getUID(), mclnStatement);
-//        }
-//
-//        NodeList listOfMclnConditions =
-//                mclnModelElement.getElementsByTagName(MclnCondition.MCLN_CONDITION_XML_TAG);
-//        int nOfConditions = listOfMclnConditions.getLength();
-//        System.out.println("Information on all Mcln Conditions, number is " + nOfStatements);
-//        for (int j = 0; j < nOfConditions; j++) {
-//            Element mclnConditionElement = (Element) listOfMclnConditions.item(j);
-//            MclnCondition mclnCondition = domElementToMclnCondition(mclnConditionElement);
-//            System.out.println("Reconstructed  Mcln Condition, uid is " + mclnCondition.getConditionID());
-//            System.out.println("Reconstructed  Mcln Condition, xml: \n" + mclnCondition.toXml());
-//            System.out.println();
-//            mclnModel.addMclnCondition(mclnCondition);
-//            nodeIdToMclnConditionMap.put(mclnCondition.getUID(), mclnCondition);
-//        }
-//
-//        NodeList listOfMclnArcs = mclnModelElement.getElementsByTagName(MclnArc.MCLN_ARC_XML_TAG);
-//        int nOfArcs = listOfMclnArcs.getLength();
-//        System.out.println("Information on all Mcln Arcs, number is " + nOfArcs);
-//        for (int j = 0; j < nOfArcs; j++) {
-//            Element mclnArcElement = (Element) listOfMclnArcs.item(j);
-//            MclnArc mclnArc = domElementToMclnArc(mclnArcElement, nodeIdToMclnStatementMap, nodeIdToMclnConditionMap);
-//            System.out.println("Reconstructed  Mcln Arc, uid is " + mclnArc.getUID());
-//            System.out.println("Reconstructed  Mcln Arc, xml: \n" + mclnArc.toXml());
-//            System.out.println();
-//            mclnModel.addMclnArc(mclnArc);
-//        }
-//
-//        return mclnModel;
-//    }
-
-    /**
      * @param mclnStatementElement
      * @return
      */
@@ -360,8 +297,7 @@ public class MclnModelRetriever {
         Node mclnStateHasInputGeneratorNode = namedNodeMap.getNamedItem(MclnStatement.MCLN_GENERATOR_ATTRIBUTE_NAME);
         if (mclnStateHasInputGeneratorNode != null) {
             String mclnStatementHasInputGenerator = mclnStateHasInputGeneratorNode.getNodeValue();
-            hasInputGenerator = mclnStatementHasInputGenerator != null ?
-                    stringToBoolean(mclnStatementHasInputGenerator) : false;
+            hasInputGenerator = mclnStatementHasInputGenerator != null && stringToBoolean(mclnStatementHasInputGenerator);
         }
         String uid = getElementProperty(mclnStatementElement, MclnStatement.MCLN_STATEMENT_UID_TAG);
         System.out.println("Statement ID is: " + uid);
@@ -427,7 +363,7 @@ public class MclnModelRetriever {
 
         // this value is optional
         if (simulationLog != null && (simulationLog.equals("true") || simulationLog.equals("false"))) {
-            mclnStatement.setSimulationLog(simulationLog.equals("true") ? true : false);
+            mclnStatement.setSimulationLog(simulationLog.equals("true"));
         }
 
 //        mclnStatement.setSubject(subject);
@@ -734,8 +670,8 @@ public class MclnModelRetriever {
         Node generatorStepHasPhaseNode = namedNodeMap.getNamedItem(ProgramStep.MCLN_PROGRAM_ATTRIBUTE_IS_PHASE_KEY);
         if (generatorStepHasPhaseNode != null) {
             String generatorStepHasPhaseStrValue = generatorStepHasPhaseNode.getNodeValue();
-            generatorStepHasPhase = generatorStepHasPhaseStrValue != null ?
-                    stringToBoolean(generatorStepHasPhaseStrValue) : false;
+            generatorStepHasPhase = generatorStepHasPhaseStrValue != null &&
+                    stringToBoolean(generatorStepHasPhaseStrValue);
         }
 
         String strTicks = getElementProperty(programStepElement, ProgramStep.MCLN_TICKS_TAG);
@@ -795,12 +731,119 @@ public class MclnModelRetriever {
     }
 
     /**
+     * Parsing Polyline Arc
+     *
+     * @param mclnArcElement
+     * @param nodeIdToMclnStatementMap
+     * @param nodeIdToMclnConditionMap
+     * @return
+     */
+    private static MclnArc domElementToMclnPolylineArc(Element mclnArcElement,
+                                                       Map<String, MclnStatement> nodeIdToMclnStatementMap,
+                                                       Map<String, MclnCondition> nodeIdToMclnConditionMap) {
+        // Arc UID
+
+        String uid = getElementProperty(mclnArcElement, MclnArc.MCLN_ARC_UID_TAG);
+        System.out.println("Arc UID is: " + uid);
+        if (uid == null) {
+            return null;
+        }
+
+        String nodeUIDs = getElementProperty(mclnArcElement, MclnArc.MCLN_ARC_NODES_UID_TAG);
+        System.out.println("Arc node UIDs: " + nodeUIDs);
+        if (nodeUIDs == null) {
+            return null;
+        }
+
+        // Nodes UID
+
+        String nodeUID[] = nodeUIDs.split(":");
+        if (nodeUID[0] == null || nodeUID[1] == null) {
+            return null;
+        }
+
+        //   Creating nodes
+
+        MclnStatement mclnStatement;
+        MclnNode mclnNode = nodeIdToMclnStatementMap.get(nodeUID[0].trim());
+        if (mclnNode != null) {
+            // arc from statement to condition
+            mclnStatement = nodeIdToMclnStatementMap.get(nodeUID[0].trim());
+        } else {
+            // arc from condition to statement
+            mclnStatement = nodeIdToMclnStatementMap.get(nodeUID[1].trim());
+        }
+
+        //   Available states
+
+        AvailableMclnStatementStates availableMclnStatementStates = mclnStatement.getAvailableMclnStatementStates();
+
+        //   Mcln state
+
+        MclnState mclnState = null;
+        String stateProperties = (String) getElementProperty(mclnArcElement, MclnArc.MCLN_ARC_STATE_TAG);
+        if (stateProperties != null) {
+            mclnState = statePropertiesToState(stateProperties, availableMclnStatementStates);
+        }
+
+        //   Arc knots
+
+        List<String[]> strXYLocations = getXYLocationList(mclnArcElement, MclnArc.MCLN_ARC_KNOTS_TAG,
+                MclnArc.MCLN_ARC_KNOT_LOCATION_TAG);
+        System.out.println("Statement XY location is: " + strXYLocations);
+        if (strXYLocations == null || strXYLocations.size() == 0) {
+            return null;
+        }
+        int nKnots = strXYLocations.size();
+        List<double[]> knotLocations = new ArrayList();
+        for (String[] strXYLocation : strXYLocations) {
+            double[] xyLocation = stringCSysLocationToDouble(strXYLocation[0], strXYLocation[1]);
+            knotLocations.add(xyLocation);
+        }
+
+        //   Arrow tip location
+
+        String arrowSegmentIndexStr = getElementProperty(mclnArcElement, MclnArc.MCLN_POLYLINE_ARC_ARROW_TIP_SEGMENT_INDEX_TAG);
+        int arrowSegmentIndex = -1;
+        if (arrowSegmentIndexStr != null) {
+            arrowSegmentIndex = stringToInt(arrowSegmentIndexStr);
+        }
+
+        List<String[]> arrowTipCSysLocationList = getXYLocationList(mclnArcElement,
+                MclnArc.MCLN_POLYLINE_ARC_ARROW_TIP_LOCATION_TAG, MclnArc.MCLN_ARC_KNOT_LOCATION_TAG);
+        if (arrowTipCSysLocationList == null) {
+            return null;
+        }
+        String[] arrowTipCSysStr = arrowTipCSysLocationList.get(0);
+        double[] arrowTipCSysLocation = stringCSysLocationToDouble(arrowTipCSysStr[0], arrowTipCSysStr[1]);
+
+
+        ArrowTipLocationPolicy arrowTipLocationPolicy = getArrowTipLocationPolicy(-1, -1);
+
+        MclnArc mclnArc;
+        MclnState arcMclnState;
+        if (mclnNode != null) {
+            // arc from statement to condition
+            MclnCondition mclnCondition = nodeIdToMclnConditionMap.get(nodeUID[1].trim());
+            mclnArc = MclnModelRetriever.createMclnPolylineArc(arrowTipLocationPolicy, uid, knotLocations,
+                    arrowSegmentIndex, arrowTipCSysLocation, mclnState, mclnStatement, mclnCondition);
+        } else {
+            // arc from condition to statement
+            MclnCondition mclnCondition = nodeIdToMclnConditionMap.get(nodeUID[0].trim());
+            mclnArc = MclnModelRetriever.createMclnPolylineArc(arrowTipLocationPolicy, uid, knotLocations,
+                    arrowSegmentIndex, arrowTipCSysLocation, mclnState, mclnCondition, mclnStatement);
+        }
+
+        return mclnArc;
+    }
+
+    /**
      * @param mclnArcElement
      * @return
      */
-    private static MclnArc domElementToMclnArc(Element mclnArcElement,
-                                               Map<String, MclnStatement> nodeIdToMclnStatementMap,
-                                               Map<String, MclnCondition> nodeIdToMclnConditionMap) {
+    private static MclnArc domElementToMclnSplineArc(Element mclnArcElement,
+                                                     Map<String, MclnStatement> nodeIdToMclnStatementMap,
+                                                     Map<String, MclnCondition> nodeIdToMclnConditionMap) {
         String uid = getElementProperty(mclnArcElement, MclnArc.MCLN_ARC_UID_TAG);
         System.out.println("Arc UID is: " + uid);
         if (uid == null) {
@@ -829,10 +872,12 @@ public class MclnModelRetriever {
         }
         AvailableMclnStatementStates availableMclnStatementStates = mclnStatement.getAvailableMclnStatementStates();
         MclnState mclnState = null;
-        String stateProperties = (String) getElementProperty(mclnArcElement, MclnArc.MCLN_ARC_STATE_TAG);
+        String stateProperties = getElementProperty(mclnArcElement, MclnArc.MCLN_ARC_STATE_TAG);
         if (stateProperties != null) {
             mclnState = statePropertiesToState(stateProperties, availableMclnStatementStates);
         }
+
+        //   Arc knots
 
         List<String[]> strXYLocations = getXYLocationList(mclnArcElement, MclnArc.MCLN_ARC_KNOTS_TAG,
                 MclnArc.MCLN_ARC_KNOT_LOCATION_TAG);
@@ -869,7 +914,7 @@ public class MclnModelRetriever {
             // arc from statement to condition
 //              mclnStatement = nodeIdToMclnStatementMap.get(nodeUID[0].trim());
             MclnCondition mclnCondition = nodeIdToMclnConditionMap.get(nodeUID[1].trim());
-            mclnArc = MclnModelRetriever.createMclnArc(arrowTipLocationPolicy, uid, knotLocations, mclnState,
+            mclnArc = MclnModelRetriever.createMclnSplineArc(arrowTipLocationPolicy, uid, knotLocations, mclnState,
                     mclnStatement, mclnCondition);
 //            mclnStatement.addOutArc(mclnArc);
 //            mclnCondition.addInpArc(mclnArc);
@@ -877,7 +922,7 @@ public class MclnModelRetriever {
             // arc from condition to statement
             MclnCondition mclnCondition = nodeIdToMclnConditionMap.get(nodeUID[0].trim());
 //              mclnStatement = nodeIdToMclnStatementMap.get(nodeUID[1].trim());
-            mclnArc = MclnModelRetriever.createMclnArc(arrowTipLocationPolicy, uid, knotLocations, mclnState,
+            mclnArc = MclnModelRetriever.createMclnSplineArc(arrowTipLocationPolicy, uid, knotLocations, mclnState,
                     mclnCondition, mclnStatement);
 //            mclnCondition.addOutArc(mclnArc);
 //            mclnStatement.addInpArc(mclnArc);

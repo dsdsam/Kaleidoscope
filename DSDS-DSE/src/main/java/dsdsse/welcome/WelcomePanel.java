@@ -1,6 +1,6 @@
 package dsdsse.welcome;
 
-import adf.app.StandardFonts;
+import adf.utils.StandardFonts;
 import adf.utils.BuildUtils;
 import dsdsse.animation.PresentationRunner;
 import dsdsse.app.DsdsseEnvironment;

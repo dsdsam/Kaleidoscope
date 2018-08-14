@@ -15,6 +15,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.*;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,6 +25,7 @@ import java.io.*;
  * To change this template use File | Settings | File Templates.
  */
 public class ProjectStorage {
+
     public static final String FILE_SEPARATOR = System.getProperty("file.separator");
     public static final String APPLICATION_INSTALLATION_DIRECTORY = System.getProperty("user.dir");
 
@@ -33,6 +35,9 @@ public class ProjectStorage {
     private static final String RETRIEVE_MODEL_CHOOSER_TITLE = "Retrieve Project: Please Select File Name";
 
     private static final String MCLN_MODEL_XML_FILE_EXTENSION = "mcln";
+
+    private static final String TRACE_LOG_FILE_NAME = "Trace Log.txt";
+    private static final String TRACE_LOG_RELATIVE_DIR_PATH = FILE_SEPARATOR + "Mcln Trace Log Storage";
 
     private static ProjectStorage mclnModelStorage;
 
@@ -62,9 +67,6 @@ public class ProjectStorage {
 
     private String defaultAbsoluteModelStorageDirectory;
 
-//    private String lastAbsoluteModelStorageDirectory;
-//    private String lastUsedProjectFileName;
-
     /**
      * @param directoryName
      */
@@ -87,9 +89,6 @@ public class ProjectStorage {
      * Suggested file name in dialog set as MCLN project name.
      */
     MclnProject openMclnProject(Component parent) {
-//        if (true) {
-//            return DesignSpaceModel.getInstance().getMclnProject();
-//        }
         MclnProject mclnProject = MclnProject.getInstance();
         String absoluteModelStorageDirectory = defaultAbsoluteModelStorageDirectory;
         String suggestedProjectFileName = "";
@@ -97,14 +96,6 @@ public class ProjectStorage {
             absoluteModelStorageDirectory = mclnProject.getLastAbsoluteModelStorageDirectory();
             suggestedProjectFileName = mclnProject.getLastSavedOrRetrievedProjectFileName();
         }
-
-//        String suggestedProjectFileName = MclnProject.DEFAULT_PROJECT_NAME;
-//        if (lastAbsoluteModelStorageDirectory != null) {
-//            absoluteModelStorageDirectory = lastAbsoluteModelStorageDirectory;
-//        }
-//        if (lastUsedProjectFileName != null) {
-//            suggestedProjectFileName = lastUsedProjectFileName;
-//        }
 
         FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("MCLN Project", MCLN_MODEL_XML_FILE_EXTENSION);
         // asking user to chose directory & select file name
@@ -130,15 +121,6 @@ public class ProjectStorage {
             suggestedProjectFileName = selectedFileName;
         }
 
-
-//        lastAbsoluteModelStorageDirectory = selectedAbsoluteModelStorageDirectory;
-//        lastUsedProjectFileName = suggestedProjectFileName;
-
-        // log the selected file name
-//        String selectedFileName = selectedPathToMclnModelFile.getName();
-        System.out.println("DesignSpaceModel.openProject: opening from dir " +
-                absoluteModelStorageDirectory + "\n  file " + suggestedProjectFileName);
-
         Document mclnAsDocument = MclnModelRetriever.readMclnProjectXml(selectedPathToMclnModelFile);
 
         mclnProject = MclnModelRetriever.createMclnProjectFromXmlDom(mclnAsDocument);
@@ -146,7 +128,7 @@ public class ProjectStorage {
         mclnProject.setLastAbsoluteModelStorageDirectory(selectedAbsoluteModelStorageDirectory);
         mclnProject.setLastSavedOrRetrievedProjectFileName(suggestedProjectFileName);
 
-        String formattedXmlString = documentToFormattedString(mclnAsDocument);
+//        String formattedXmlString = documentToFormattedString(mclnAsDocument);
 //        System.out.println("DesignSpaceModel.openProject: " + formattedXmlString);
 //        System.out.println();
         return mclnProject;
@@ -156,11 +138,9 @@ public class ProjectStorage {
      * Saves MCLN project into File named as project
      */
     boolean saveProject(Component parent, MclnProject mclnProject) {
-
         if (!mclnProject.wasProjectSavedOrRetrieved()) {
             return saveProjectAs(parent, mclnProject);
         }
-
         String absoluteModelStorageDirectory = mclnProject.getLastAbsoluteModelStorageDirectory();
         String suggestedProjectFileName = mclnProject.getLastSavedOrRetrievedProjectFileName();
         return saveProject(mclnProject, absoluteModelStorageDirectory, suggestedProjectFileName);
@@ -203,11 +183,6 @@ public class ProjectStorage {
         }
         mclnProject.setLastAbsoluteModelStorageDirectory(selectedAbsoluteModelStorageDirectory);
         mclnProject.setLastSavedOrRetrievedProjectFileName(suggestedProjectFileName);
-//        lastAbsoluteModelStorageDirectory = selectedAbsoluteModelStorageDirectory;
-//        lastUsedProjectFileName = projectFileName;
-
-        System.out.println("DesignSpaceModel.saveProject: saved to dir " +
-                selectedAbsoluteModelStorageDirectory + "\n  file " + suggestedProjectFileName);
 
         return saveProject(mclnProject, selectedAbsoluteModelStorageDirectory, suggestedProjectFileName);
     }
@@ -236,8 +211,6 @@ public class ProjectStorage {
         String projectXml = mclnProject.toXml();
         System.out.println("XML=" + projectXml);
         projectXml = format(projectXml);
-//        System.out.println("Saved project XML:\n" + projectXml);
-//        System.out.println();
 
         // project file name stored with standard extension
         String absolutePathToProjectFile = absoluteModelStorageDirectory + FILE_SEPARATOR +
@@ -336,62 +309,11 @@ public class ProjectStorage {
         return currentDirectory;
     }
 
-    // ================================================================================================================
-
-//    private String toXml(String projectName) {
-//        DesignSpaceModel designSpaceModel = DesignSpaceModel.getInstance();
-//        return designSpaceModel.toXml(projectName);
-//    }
-
-
-//    private File getFileName(String title) {
-//        Properties properties = System.getProperties();
-//        String userHome = System.getProperty("user.home");
-//        String userDir = System.getProperty("user.dir");
-//        currentDirectory = new File(userDir);
-//        JFileChooser fileChooser = new JFileChooser(currentDirectory);
-//        fileChooser.setDialogTitle(title);
-//        //Add a custom file filter and disable the default
-//        fileChooser.addChoosableFileFilter(new XmlFileFilter());
-////        if (currentDirectory != null) {
-////            fileChooser.setCurrentDirectory(currentDirectory);
-////        }
-//
-////        int returnVal = fileChooser.showOpenDialog(new JFrame());
-//        int returnVal = fileChooser.showSaveDialog(new JFrame());
-//        File file = null;
-//        //Process the results.
-//        if (returnVal == JFileChooser.APPROVE_OPTION) {
-//            file = fileChooser.getSelectedFile();
-//        }
-//        currentDirectory = fileChooser.getCurrentDirectory();
-//        return file;
-//    }
-//
-
-
     public static final String format(String unformattedXml) {
         Document xmlDocument = xmlToDocument(unformattedXml);
         String formattedXmlString = documentToFormattedString(xmlDocument);
         return formattedXmlString;
     }
-
-//    public static final String format(String unformattedXml) {
-//        try {
-//            Document document = parseXmlFile(unformattedXml);
-//            OutputFormat format = new OutputFormat(document);
-//            format.setLineWidth(65);
-//            format.setIndenting(true);
-//            format.setIndent(2);
-//            Writer out = new StringWriter();
-//            XMLSerializer serializer = new XMLSerializer(out, format);
-//            serializer.serialize(document);
-//            return out.toString();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return "";
-//        }
-//    }
 
     /**
      * This function converts String XML to Document object
@@ -433,6 +355,58 @@ public class ProjectStorage {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public boolean saveTraceLog( List<String> traceLogList ) {
+
+        String modelName = MclnProject.getInstance().getCurrentMclnModel().getModelName();
+
+        String absoluteModelStorageDirectory = APPLICATION_INSTALLATION_DIRECTORY + TRACE_LOG_RELATIVE_DIR_PATH;
+        File traceLogStorageDirectory = new File(absoluteModelStorageDirectory);
+        boolean exists = traceLogStorageDirectory.exists();
+        if (!exists) {
+            try {
+                traceLogStorageDirectory.mkdir();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+//        System.out.println("DesignSpaceModel.saveTraceLog to location : save to dir " +
+//                absoluteModelStorageDirectory + "\n  file " + TRACE_LOG_FILE_NAME);
+
+        String absolutePathToTraceLogFile = absoluteModelStorageDirectory +
+                FILE_SEPARATOR + modelName + " " + TRACE_LOG_FILE_NAME;
+        File traceLogFile = new File(absolutePathToTraceLogFile);
+        if (traceLogFile.exists()) {
+            try {
+                traceLogFile.delete();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+
+        PrintWriter printWriter = null;
+        try {
+            printWriter = new PrintWriter(new FileWriter(absolutePathToTraceLogFile));
+            String modelNameHeader = "@MODEL-NAME : " + modelName;
+            printWriter.println(modelNameHeader);
+            for(String entry : traceLogList){
+                printWriter.println(entry);
+            }
+            return true;
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return false;
+        } finally {
+            if (printWriter != null) {
+                printWriter.close();
+            }
+        }
+
     }
 
     //

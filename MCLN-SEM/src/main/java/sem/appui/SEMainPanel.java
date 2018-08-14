@@ -39,7 +39,7 @@ public class SEMainPanel extends JPanel {
     private final String CONTROL_PANEL = "CONTROL_PANEL";
     private final String MODEL_TREE_PANEL = "MODEL_TREE_PANEL";
     private final String SWITCH_TO_CONTROL_PANEL = "Switch to Control Panel";
-    private final String SWITCH_TO_MODEL_TREE_PANEL = "Switch to Model Tree Panel";
+    private final String SWITCH_TO_MODEL_TREE_PANEL = "Switch to Model Tree";
 
     private Dimension MODEL_OPERATION_QUEUE_VIEW_SIZE = new Dimension(50, 0);
     private Color BACKGROUND = UIManager.getColor("sem.app.ui.main.panel.background");
@@ -205,7 +205,7 @@ public class SEMainPanel extends JPanel {
         panel.setBackground(Color.BLACK);
 //        JPanel panel = new ImagePanel(AdfEnv.getImageIcon( "12.png" ));
         panel.setLayout(new GridBagLayout());
-        Dimension size = new Dimension(500, 0);
+        Dimension size = new Dimension(330, 0);
         panel.setSize(size);
         panel.setPreferredSize(size);
         panel.setMaximumSize(size);

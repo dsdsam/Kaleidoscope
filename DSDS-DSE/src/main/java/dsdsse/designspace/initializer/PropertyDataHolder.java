@@ -1,9 +1,9 @@
 package dsdsse.designspace.initializer;
 
-import dsdsse.graphview.MclnPropertyView;
 import mcln.model.*;
 import mcln.palette.MclnState;
 import mcln.palette.MclnStatesNewPalette;
+import mclnview.graphview.MclnPropertyView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,12 +17,12 @@ class PropertyDataHolder extends DataHolder {
 
     /**
      * @param mclnStatesPalette
-     * @param mclnPropertyView
+     * @param mcLnPropertyView
      * @return
      */
     static PropertyDataHolder createPropertyDataHolder(MclnStatesNewPalette mclnStatesPalette,
-                                                       MclnPropertyView mclnPropertyView) {
-        return new PropertyDataHolder(mclnStatesPalette, mclnPropertyView);
+                                                       MclnPropertyView mcLnPropertyView) {
+        return new PropertyDataHolder(mclnStatesPalette, mcLnPropertyView);
     }
 
 
@@ -77,11 +77,11 @@ class PropertyDataHolder extends DataHolder {
 
     /**
      * @param mclnStatesPalette
-     * @param mclnPropertyView
+     * @param mcLnPropertyView
      */
     private PropertyDataHolder(MclnStatesNewPalette mclnStatesPalette,
-                               MclnPropertyView mclnPropertyView) {
-        assert mclnPropertyView != null : "mclnPropertyView must not be null";
+                               MclnPropertyView mcLnPropertyView) {
+        assert mcLnPropertyView != null : "mclnPropertyView must not be null";
 
         // palette
         this.mclnStatesPalette = mclnStatesPalette;
@@ -91,7 +91,7 @@ class PropertyDataHolder extends DataHolder {
         mclnStatesPaletteAsList.addAll(mclnStatesPalette.getPaletteAsList());
 
         // property
-        this.mclnStatement = mclnPropertyView.getTheElementModel();
+        this.mclnStatement = mcLnPropertyView.getTheElementModel();
 
         // property attributes
         originalAvailableMclnStatementStates = mclnStatement.getAvailableMclnStatementStates();
@@ -118,7 +118,6 @@ class PropertyDataHolder extends DataHolder {
             selectedProgramIsTimeDrivenProgram = true;
         }
 
-
         // preparing program steps
         if (originalPropertyHasProgram) {
             originalProgramHasPhase = false;
@@ -129,7 +128,6 @@ class PropertyDataHolder extends DataHolder {
                 }
             }
         }
-
 
         List<ProgramStepData> existingSteps = new ArrayList(originalProgramSteps);
         existingSteps.addAll(mclnStatement.getProgramData());
@@ -156,16 +154,6 @@ class PropertyDataHolder extends DataHolder {
             }
         }
 
-//        currentAllowedStatesList = new ArrayList( );
-//        for( int i = 0; i < originalAllowedStatesList.size(); i++){
-//            MclnStatementState originalMclnStatementState = originalAllowedStatesList.get(i);
-//            MclnStatementState clonedOriginalMclnStatementState = originalMclnStatementState.clone();
-//            currentAllowedStatesList.add(clonedOriginalMclnStatementState);
-//        }
-//
-//        for (MclnStatementState mclnStatementState : currentAllowedStatesList) {
-//            mclnStateIdToMclnStatementStatesMap.put(mclnStatementState.getStateID(), mclnStatementState);
-//        }
         selectedStates = preparePaletteSelectedStates();
     }
 
@@ -192,21 +180,17 @@ class PropertyDataHolder extends DataHolder {
                 MclnState mclnState = mclnStatesPaletteAsList.get(i);
                 selectedStates[i] = originalAllowedStatesList.contains(mclnState);
             }
-//            currentAllowedStatesList = new ArrayList(originalAllowedStatesList);
             currentAllowedStatesList = new ArrayList( );
             for( int i = 0; i < originalAllowedStatesList.size(); i++){
                 MclnStatementState originalMclnStatementState = originalAllowedStatesList.get(i);
                 MclnStatementState clonedOriginalMclnStatementState = originalMclnStatementState.clone();
                  currentAllowedStatesList.add(clonedOriginalMclnStatementState);
             }
-
             mclnStateIdToMclnStatementStatesMap.clear();
             for (MclnStatementState mclnStatementState : currentAllowedStatesList) {
                 mclnStateIdToMclnStatementStatesMap.put(mclnStatementState.getStateID(), mclnStatementState);
             }
-
             return selectedStates;
-
         }
 
         if (selectedMclnStatesPaletteName.equalsIgnoreCase(currentAllowedStatesPaletteName)) {
@@ -216,7 +200,6 @@ class PropertyDataHolder extends DataHolder {
             }
             return selectedStates;
         }
-
         return selectedStates;
     }
 
@@ -252,13 +235,11 @@ class PropertyDataHolder extends DataHolder {
 
         mclnStatesPaletteAsList.clear();
         mclnStatesPaletteAsList.addAll(mclnStatesPalette.getPaletteAsList());
-//        selectedStates = new boolean[mclnStatesPalette.getPaletteAsList().size()];
         selectedStates = preparePaletteSelectedStates();
 
         if (!isSelectedAllowedStatesListValid()) {
             currentAllowedStatesList.clear();
         }
-//        currentAllowedStatesList.clear();
     }
 
     @Override
@@ -291,11 +272,6 @@ class PropertyDataHolder extends DataHolder {
         this.currentAllowedStatesList = new ArrayList();
         mclnStateIdToMclnStatementStatesMap.clear();
         for (MclnState paletteMclnState : paletteSelectedAllowedStatesList) {
-//                MclnStatementState currentlySelectedMclnStatementState =
-//                        originalAvailableMclnStatementStates.getMclnStatementState(paletteMclnState.getStateID());
-//                if (currentlySelectedMclnStatementState != null) {
-//                    currentAllowedStatesList.add(currentlySelectedMclnStatementState);
-//                } else {
 
             if (!isPairsOfOppositeStatesPalette()) {
                 MclnStatementState mclnStatementState =
@@ -385,10 +361,6 @@ class PropertyDataHolder extends DataHolder {
     }
 
     public MclnStatementState getMclnStatementStateByIndex(int index) {
-//        if (index >= currentAllowedStatesList.size()) {
-//            showInfoMessage("Requested Mcln Statement State index exceeded list size ");
-//            return null;
-//        }
         return currentAllowedStatesList.get(index);
     }
 
@@ -402,7 +374,6 @@ class PropertyDataHolder extends DataHolder {
 
     final void setInitialMclnState(MclnStatementState updatedInitialMclnStatementState) {
         this.selectedInitialMclnStatementState = updatedInitialMclnStatementState;
-        System.out.println(" setInitialMclnState " + selectedInitialMclnStatementState.toString());
     }
 
     final boolean propertyHasProgram() {
@@ -477,7 +448,6 @@ class PropertyDataHolder extends DataHolder {
 
         // checking if initial state is element of Allowed States
 
-
         return initialized;
     }
 
@@ -551,22 +521,6 @@ class PropertyDataHolder extends DataHolder {
         return (originalInitialMclnStatementState == null && selectedInitialMclnStatementState != null) ||
                 (selectedInitialMclnStatementState != originalInitialMclnStatementState);
     }
-
-//
-//    private boolean originalPropertyHasProgram;
-//    private boolean selectedPropertyHasProgram;
-//    private boolean originalProgramIsTimeDrivenProgram;
-//    private boolean selectedProgramIsTimeDrivenProgram;
-//
-//    private final List<ProgramStepData> originalProgramSteps = new ArrayList();
-//    private List<ProgramStepData> selectedProgramSteps = new ArrayList();
-//    private List<ProgramStepData> selectedTimeDrivenProgramSteps = new ArrayList();
-//    private List<ProgramStepData> selectedRuleDrivenProgramSteps = new ArrayList();
-//
-//    private boolean originalProgramHasPhase;
-//    private boolean selectedProgramHasPhase;
-//    private boolean selectedTimeDrivenProgramHasPhase;
-//    private boolean selectedRuleDrivenProgramHasPhase;
 
     private boolean wasPropertyProgramChanged() {
         boolean programWasAddedToOrRemovedFromProperty = wasProgramAddedToOrRemovedFromProperty();

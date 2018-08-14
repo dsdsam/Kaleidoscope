@@ -86,15 +86,11 @@ public class CSysLineEntity extends BasicCSysEntity {
      * @param g
      */
     public void draw(Graphics g) {
-
         if (hidden || clippedOff || parentCSys == null) {
             return;
         }
         Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_OFF);
-//        System.out.println("parentCSys = " + parentCSys.getName() +
-//                " scrX1 = " + scrX1 + " scrY1 = " + scrY1 + " scrX2 = " + scrX2 + " scrY2 = " + scrY2);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         g.drawLine(scrX1, scrY1, scrX2, scrY2);
     }
 
@@ -218,8 +214,6 @@ public class CSysLineEntity extends BasicCSysEntity {
                 cSysPnt1[1] = (cSysPnt1[1] * (1 + ((cSysPnt1[2]) / 600)));
                 cSysPnt2[0] = (cSysPnt2[0] * ((1 + (cSysPnt2[2]) / 600)));
                 cSysPnt2[1] = (cSysPnt2[1] * ((1 + (cSysPnt2[2]) / 600)));
-//            cSysPnt1[0] = (cSysPnt1[0]/cSysPnt1[2])*640+320;
-//            cSysPnt1[1] = (cSysPnt1[1]/cSysPnt1[2])*480+240;
                 break;
 
             case CSysView.ZOXProjection:
@@ -230,8 +224,6 @@ public class CSysLineEntity extends BasicCSysEntity {
                 cSysPnt1[2] = (cSysPnt1[2] * (1 + ((cSysPnt1[0]) / 600)));
                 cSysPnt2[1] = (cSysPnt2[1] * ((1 + (cSysPnt2[0]) / 600)));
                 cSysPnt2[2] = (cSysPnt2[2] * ((1 + (cSysPnt2[0]) / 600)));
-                //        cSysPnt1[0] = (cSysPnt1[0]/cSysPnt1[2])*640+320;
-                //        cSysPnt1[1] = (cSysPnt1[1]/cSysPnt1[2])*480+240;
                 break;
         }
     }
@@ -245,7 +237,6 @@ public class CSysLineEntity extends BasicCSysEntity {
                 scrY1 = scr0[2] + (int) (-cSysPnt1[2] * scale);
                 scrX2 = scr0[0] + (int) (cSysPnt2[0] * scale);
                 scrY2 = scr0[2] + (int) (-cSysPnt2[2] * scale);
-//            System.out.println("XOZ: a1 = "+point1[0]+" a2 = "+point1[2]+" b1 = "+point2[0]+" b2 = "+point2[2]);
                 break;
 
             case CSysView.ZOYProjection:
@@ -260,8 +251,6 @@ public class CSysLineEntity extends BasicCSysEntity {
                 scrY1 = scr0[1] + (int) (-cSysPnt1[1] * scale);
                 scrX2 = scr0[0] + (int) (cSysPnt2[0] * scale);
                 scrY2 = scr0[1] + (int) (-cSysPnt2[1] * scale);
-//            System.out.println("a1 = "+cSysPnt1[0]+" a2 =" + ""+cSysPnt1[1]+" b1 = "+cSysPnt2[0]+" b2 = "+cSysPnt2[1]);
-//            System.out.println("s1 = "+scrX1+" s2 = "+scrY1+" b1 = "+scrX2+" b2 = "+scrY2);
                 break;
         }
     }

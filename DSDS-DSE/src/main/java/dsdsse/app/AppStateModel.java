@@ -1,5 +1,8 @@
 package dsdsse.app;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
  * Created by IntelliJ IDEA.
  * User: XP Admin
@@ -59,12 +62,15 @@ public class AppStateModel {
 
         //   creation operations
 
-        CREATE_NODES(AppController.MENU_ITEM_CREATE_PROPERTIES, "Creating Property nodes"),
-        CREATE_CONDITIONS(AppController.MENU_ITEM_CREATE_CONDITIONS, "Creating Condition nodes"),
+        CREATE_PROPERTIES(AppController.MENU_ITEM_CREATE_PROPERTIES, "Creating Property Nodes"),
+        CREATE_CONDITIONS(AppController.MENU_ITEM_CREATE_CONDITIONS, "Creating Condition Nodes"),
 
-        CREATE_ARCS(AppController.MENU_ITEM_CREATE_ARCS, "Creating Arcs"),
+        CREATING_POLYLINE_ARCS(AppController.MENU_ITEM_CREATE_POLYLINE_ARCS, "Creating Polyline Arcs"),
+        CREATING_SPLINE_ARCS(AppController.MENU_ITEM_CREATE_SPLINE_ARCS, "Creating Spline Arcs"),
+
         CREATE_FRAGMENTS(AppController.MENU_ITEM_CREATE_FRAGMENTS, "Creating Fragments"),
 
+        MOVE_ELEMENTS(AppController.MENU_ITEM_MOVE_ELEMENTS, "Moving elements"),
         MOVE_FRAGMENT(AppController.MENU_ITEM_MOVE_FRAGMENT, "Moving fragments"),
         MOVE_MODEL(AppController.MENU_ITEM_MOVE_MODEL, "Moving Entire Model"),
 
@@ -72,12 +78,9 @@ public class AppStateModel {
 
         INITIALIZATION(AppController.MENU_ITEM_LAUNCH_IA, "Initialization"),
 
-        //    simulation   operations
+        //    simulation operations
 
         SIMULATION_ENABLED(AppController.MENU_ITEM_SIMULATION_MODE, "Enabled"),
-
-//        SET_STATE("Create Nodes"),
-//        RUN_MODEL("Create Nodes"),
 
         SIMULATION_STARTED(AppController.MENU_ITEM_SIMULATION_MODE, "Started"),
         SIMULATION_STOPPED(AppController.MENU_ITEM_SIMULATION_MODE, "Stopped"),
@@ -103,9 +106,8 @@ public class AppStateModel {
             return this == NONE;
         }
 
-
         public boolean isCreatingProperties() {
-            return this == CREATE_NODES;
+            return this == CREATE_PROPERTIES;
         }
 
         public boolean isCreatingConditions() {
@@ -113,11 +115,23 @@ public class AppStateModel {
         }
 
         public boolean isCreatingArcs() {
-            return this == CREATE_ARCS;
+            return isCreatingSplineArcs() || isCreatingPolylineArcs();
+        }
+
+        public boolean isCreatingSplineArcs() {
+            return this == CREATING_SPLINE_ARCS;
+        }
+
+        public boolean isCreatingPolylineArcs() {
+            return this == CREATING_POLYLINE_ARCS;
         }
 
         public boolean isCreatingFragments() {
             return this == CREATE_FRAGMENTS;
+        }
+
+        public boolean isMovingElements() {
+            return this == MOVE_ELEMENTS;
         }
 
         public boolean isMovingFragment() {
@@ -135,7 +149,7 @@ public class AppStateModel {
         public boolean isCreationOperation() {
             return isCreatingProperties() || isCreatingConditions() ||
                     isCreatingArcs() || isCreatingFragments() ||
-                    isMovingFragment() || isMovingEntireModel() || isDeletingElements();
+                    isMovingElements() || isMovingFragment() || isMovingEntireModel() || isDeletingElements();
         }
 
         public boolean isInitialization() {
@@ -145,7 +159,7 @@ public class AppStateModel {
         public boolean isSettingNewEditingOperationBlocked() {
             boolean switchingToAnotherEditingOperationBlocked = isCreatingArcs() || isCreatingFragments() ||
                     isMovingFragment() || isMovingEntireModel() || isDeletingElements();
-            return isCreatingArcs() || isCreatingFragments() || isMovingFragment() ||
+            return isCreatingArcs() || isCreatingFragments() || isMovingElements() || isMovingFragment() ||
                     isMovingEntireModel() || isDeletingElements();
         }
 
@@ -166,11 +180,11 @@ public class AppStateModel {
         NONE("None"),
         CANCELED("Canceled"),
 
-        PLACE_NODE("Click on empty space to create and place there Property node."),
-        PLACE_CONDITION("Click on empty space to create and place there Condition node"),
+        PLACE_NODE("Click on empty space to create new Property node."),
+        PLACE_CONDITION("Click on empty space to create new Condition node"),
 
         // Arc steps
-        PICK_UP_ARC_INPUT_NODE("New Arc:  Click on existing Property or Condition node to pick up arc input node."),
+        PICK_UP_ARC_INPUT_NODE("New Arc:  Click on a Property or Condition node to pick up arc input node."),
         PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_PROPERTY(
                 "Click on empty space to pick up arc knot location or on a Property to make it Arc output node. Right mouse button to undo."),
         PICK_UP_ARC_FIRST_KNOT_OR_OUTPUT_CONDITION(
@@ -183,6 +197,8 @@ public class AppStateModel {
                 "Click to pick up arc next knot location or output node to finish.  Right mouse button to undo."),
         PICK_UP_MULTI_KNOT_ARC_ARROW_TIP_LOCATION("Move and click mouse to pick up arc arrow tip location. Right mouse button to undo."),
 
+        PICK_UP_POLYLINE_ARC_ARROW_TIP_LOCATION("Move and click mouse to pick up arc arrow tip location. Right mouse button to undo."),
+
         // creating fragment
         PICK_UP_FIRST_PROPERTY("New Fragment:  Click on existing Property node to pick up fragment's input Property."),
         PICK_UP_SECOND_PROPERTY("Click on another existing Property node to pick up fragment's output Property."),
@@ -191,6 +207,13 @@ public class AppStateModel {
         // deletion
         PICK_UP_ELEMENT_TO_BE_DELETED("Click to pick up element to be deleted."),
         REMOVE_SELECTED_ELEMENT("Click on selected element to delete, RMB to unselect it, or another element to select."),
+
+        // moving elements
+        SELECT_ELEMENT_TO_BE_MOVED("Click on a Node or Arc Arrow to start dragging the Node or the knots."),
+        ELEMENT_PROPERTY_SELECTED_START_DRAGGING("The Property node is selected. Start dragging it."),
+        ELEMENT_CONDITION_SELECTED_START_DRAGGING("The Condition node is selected. Start dragging it."),
+        ELEMENT_ARC_KNOT_SELECTION_AND_DRAGGING("The Arc is selected. Click on a knot to be moved and start dragging it."),
+        ELEMENT_ARC_DRAGGING_KNOT("The Arc knot selected. Drag it to new position."),
 
         // move the model fragment
         START_SELECTING_NODES_TO_BE_MOVED("Click on the first fragment node to be moved."),
@@ -229,6 +252,9 @@ public class AppStateModel {
             return this == PICK_UP_FIRST_PROPERTY;
         }
 
+        public boolean isSelectElementToBeMoved() {
+            return this == SELECT_ELEMENT_TO_BE_MOVED;
+        }
 
         public boolean isPickupFirstFragmentNodeToBeMoved() {
             return this == START_SELECTING_NODES_TO_BE_MOVED;
@@ -293,7 +319,7 @@ public class AppStateModel {
 
     private static int currentTicks;
 
-    private static AppStateModelListener appStateModelListener;
+    private static List<AppStateModelListener> appStateModelListeners = new CopyOnWriteArrayList();
 
     private static boolean printToolIsActive;
 
@@ -305,7 +331,8 @@ public class AppStateModel {
     }
 
     public static void setAppStateModelListener(AppStateModelListener appStateModelListener) {
-        AppStateModel.appStateModelListener = appStateModelListener;
+        appStateModelListeners.add(appStateModelListener);
+
     }
 
 
@@ -404,7 +431,7 @@ public class AppStateModel {
     }
 
     public static boolean isOperationCreateNodes() {
-        return currentOperation == Operation.CREATE_NODES;
+        return currentOperation == Operation.CREATE_PROPERTIES;
     }
 
     public static OperationStep getCurrentOperationStep() {
@@ -557,7 +584,7 @@ public class AppStateModel {
         switch (mode) {
             case DEVELOPMENT:
             case SIMULATION:
-                if (appStateModelListener != null) {
+                for (AppStateModelListener appStateModelListener : appStateModelListeners) {
                     appStateModelListener.stateChanged();
                 }
                 break;
@@ -577,13 +604,14 @@ public class AppStateModel {
         AppController.getInstance().enableDisableCurrentCommand(!printToolIsActive);
     }
 
-    public static boolean  isSettingNewEditingOperationBlocked() {
+    public static boolean isSettingNewEditingOperationBlocked() {
         return currentOperation.isSettingNewEditingOperationBlocked();
     }
 
     /**
      * Usage:
      * 1) by Editing Popup Menu
+     *
      * @return
      */
     public static boolean isCreationOperationOn() {
@@ -591,6 +619,7 @@ public class AppStateModel {
                 currentOperation.isCreatingConditions() ||
                 currentOperation.isCreatingArcs() ||
                 currentOperation.isCreatingFragments() ||
+                currentOperation.isMovingElements() ||
                 currentOperation.isMovingFragment() ||
                 currentOperation.isMovingEntireModel() ||
                 currentOperation.isDeletingElements() ||
@@ -611,16 +640,15 @@ public class AppStateModel {
         boolean initializationPossible = isDevelopmentMode() && (
 //                currentOperation.isCreationEnabled() ||
                 currentOperation.isNone() ||
-//                        !currentOperation.isDeletingElements() || iot does not work well
+//                        !currentOperation.isDeletingElements() || it does not work well
                         currentOperation.isCreatingProperties() || currentOperation.isCreatingConditions() ||
                         (currentOperation.isCreatingArcs() && currentOperationStep.isPickupArcFirstNode()) ||
                         (currentOperation.isCreatingFragments() && currentOperationStep.isPickupFragmentFirstProperty()) ||
+                        (currentOperation.isMovingElements() && currentOperationStep.isSelectElementToBeMoved()) ||
                         (currentOperation.isMovingFragment() && currentOperationStep.isPickupFirstFragmentNodeToBeMoved()) ||
                         (currentOperation.isMovingEntireModel() && currentOperationStep.isPickupModelToBeMoved()) ||
                         (currentOperation.isDeletingElements() && currentOperationStep.isPeakupForDeletion())
-
-//                        (currentOperation.isDeletingElements() && currentOperationStep.isPeakupForDeletion()) ||
-                        || (currentOperation.isInitialization()                       && currentOperationStep.canBeInterrupted()
+                        || (currentOperation.isInitialization() && currentOperationStep.canBeInterrupted()
                 )
         );
         return initializationPossible;
@@ -642,6 +670,7 @@ public class AppStateModel {
                         currentOperation.isCreatingProperties() || currentOperation.isCreatingConditions() ||
                         (currentOperation.isCreatingArcs() && currentOperationStep.isPickupArcFirstNode()) ||
                         (currentOperation.isCreatingFragments() && currentOperationStep.isPickupFragmentFirstProperty()) ||
+                        (currentOperation.isMovingElements() && currentOperationStep.isSelectElementToBeMoved()) ||
                         (currentOperation.isMovingFragment() && currentOperationStep.isPickupFirstFragmentNodeToBeMoved()) ||
                         (currentOperation.isMovingEntireModel() && currentOperationStep.isPickupModelToBeMoved()) ||
                         (currentOperation.isDeletingElements() && currentOperationStep.isPeakupForDeletion())

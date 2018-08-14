@@ -2,12 +2,13 @@ package dsdsse.animation;
 
 import adf.onelinemessage.AdfOneLineMessageManager;
 import dsdsse.app.*;
-import dsdsse.graphview.MclnArcView;
+import dsdsse.graphview.DesignerArcView;
 import dsdsse.graphview.MclnGraphDesignerView;
-import dsdsse.graphview.MclnGraphViewNode;
 import dsdsse.messagepopuppanel.MessageClosedListener;
 import dsdsse.messagepopuppanel.MessagePopUpPanelHolder;
 import dsdsse.messagepopuppanel.MessagePopupManager;
+import mclnview.graphview.MclnArcView;
+import mclnview.graphview.MclnGraphNodeView;
 import vw.valgebra.VAlgebra;
 
 import javax.swing.*;
@@ -529,7 +530,7 @@ public abstract class PresentationScriptHandler {
     //   Find and Pick Up NcLN Graph Node
     //
 
-    MclnGraphViewNode mclnGraphNode;
+    MclnGraphNodeView mclnGraphNode;
     int[] nodeIntScrLocation;
     AnimatingTickExecutor findAndPickUpMclnGraphNodeViewExecutor = (ScriptItem scriptItem, int tickToExecute) -> {
         String inputNodeID = scriptItem.getActionAttribute1();
@@ -570,14 +571,14 @@ public abstract class PresentationScriptHandler {
         return nextTickToExecute;
     };
 
-    MclnArcView mclnArcView;
+    DesignerArcView mclnArcView;
     int[] arcArrowIntScrLocation;
     AnimatingTickExecutor findAndPickUpMclnGraphArcViewExecutor = (ScriptItem scriptItem, int tickToExecute) -> {
         String arcID = scriptItem.getActionAttribute1();
         int nextTickToExecute = tickToExecute;
         switch (tickToExecute) {
             case 1:
-                mclnArcView = mclnGraphDesignerView.getMclnArcByID(arcID);
+                mclnArcView = (DesignerArcView)mclnGraphDesignerView.getMclnArcByID(arcID);
                 if (mclnArcView != null) {
                     double[] arcArrowScrLocation = mclnArcView.getScrOutlineCenter();
                     int[] arcArrowIntViewLocation = mclnGraphDesignerView.doubleVec3ToInt(arcArrowScrLocation);

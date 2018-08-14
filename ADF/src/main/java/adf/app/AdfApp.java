@@ -1,42 +1,36 @@
 package adf.app;
 
-import java.awt.Color;
-import java.util.Properties;
-
-import javax.swing.*;
-
 import adf.mainframe.AdfMainFrame;
 import adf.mainframe.MainPanel;
 import adf.menu.AdfMenuAndToolbarBuilder;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Locale;
+import java.util.Properties;
 
 public class AdfApp extends AdfEnv {
 
     private static final String CONFIG_FILE_LOCATION = "/adf-resources/config/";
     private static final String CONFIG_FILE_NAME = "config.properties";
+    public static final boolean USE_CONFIG_FILE = false;
 
     private static final Color APP_BACKGROUND = new Color(236, 233, 216);
-    public static final boolean USE_CONFIG_FILE = true;
 
     //
     //   I n s t a n c e
     //
 
     protected boolean useConfigFile;
-    private AdfEventQueue adfEventQueue;
-
 
     //  C o n s t r u c t i n g
 
-    public AdfApp() {
+    protected AdfApp() {
         this(USE_CONFIG_FILE);
     }
 
     public AdfApp(boolean useConfigFile) {
         this.useConfigFile = useConfigFile;
-        if (useConfigFile) {
-            Properties adfConfig = ConfigProperties.initConfigProperties(CONFIG_FILE_LOCATION, CONFIG_FILE_NAME);
-            ConfigProperties.logConfigProperties("ADF config properties", adfConfig);
-        }
         appInitialization();
     }
 
@@ -45,58 +39,80 @@ public class AdfApp extends AdfEnv {
      */
     protected void appInitialization() {
         try {
-            // application creation steps
+            // application initialization steps
+            initConfig();
+            initLocale();
+            initFonts();
             initUIManager();
             createMainFrame();
             showSplash();
-            initController();
             initModel();
             initUI();
+            initController();
             initRelations();
+            showMainFrame();
         } catch (Throwable e) {
             e.printStackTrace();
         }
     }
 
-    //   C r e a t i o n   s t e p s
+    //
+    //   I n i t i a l i z a t i o n   s t e p s
+    //
 
-    /**
-     *
-     */
-    private final void initUIManager() {
+    protected void initConfig() {
+        if (useConfigFile) {
+            Properties adfConfig = ConfigProperties.initConfigProperties(CONFIG_FILE_LOCATION, CONFIG_FILE_NAME);
+            ConfigProperties.logConfigProperties("ADF config properties", adfConfig);
+        }
+    }
+
+    protected void initLocale() {
+        Locale initialLocale = Locale.getDefault();
+        System.out.println();
+        System.out.println("Initial Locale: Locale Name = \"" + initialLocale.getDisplayName() + "\"");
+        System.out.println("Initial Locale: Country = \"" + initialLocale.getDisplayCountry() + "\"");
+        System.out.println("Initial Locale: Language = \"" + initialLocale.getDisplayLanguage() + "\"");
+
+        Locale.setDefault(Locale.US);
+        Locale installedLocale = Locale.getDefault();
+        System.out.println();
+        System.out.println("Installed Locale: Locale Name = \"" + installedLocale.getDisplayName() + "\"");
+        System.out.println("Installed Locale: Country = \"" + installedLocale.getDisplayCountry() + "\"");
+        System.out.println("Installed Locale: Language = \"" + installedLocale.getDisplayLanguage() + "\"");
+        System.out.println();
+    }
+
+    protected void initFonts() {
+        AdfEnv.loadAndRegisterFont("calibrib.ttf");
+        AdfEnv.loadAndRegisterFont("calibri.ttf");
+        AdfEnv.loadAndRegisterFont("roboto/Roboto-Italic.ttf");
+        System.setProperty("java.util.prefs.PreferencesFactory", "adf.utils.preferences.AppUserPreferencesFactory");
+    }
+
+    protected void initUIManager() throws Exception {
+
+        String lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
+        UIManager.setLookAndFeel(lookAndFeel);
+
         String appTitle = ConfigProperties.getStrConfigProperty(ConfigProperties.APP_TITLE_KEY, "ADF");
         System.getProperties().put(ConfigProperties.APP_TITLE_KEY, appTitle);
-
         UIManager.put(MAIN_PANEL_BACKGROUND, APP_BACKGROUND);
     }
 
-    /**
-     *
-     */
-    private final void createMainFrame() {
-        AdfMainFrame adfMainFrame = new AdfMainFrame();
+
+    protected void createMainFrame() {
+        AdfMainFrame adfMainFrame = AdfMainFrame.createMainFrame();
         AdfEnv.putMainFrame(adfMainFrame);
     }
 
-    /**
-     *
-     */
-    private final void showSplash() {
+    protected void showSplash() {
     }
 
-    private final void initController() {
+    protected void initModel() {
     }
 
-    /**
-     *
-     */
-    private final void initModel() {
-    }
-
-    /**
-     *
-     */
-    private final void initUI() {
+    protected void initUI() {
         AdfMainFrame adfMainFrame = (AdfMainFrame) AdfEnv.getMainFrame();
 
         AdfMenuAndToolbarBuilder adfMenuAndToolbarBuilder = AdfMenuAndToolbarBuilder.getInstance();
@@ -105,20 +121,18 @@ public class AdfApp extends AdfEnv {
 
         JPanel panel = new MainPanel();
         adfMainFrame.getContentPane().add(panel);
-        adfMainFrame.initMainFrame(0.85);
+        adfMainFrame.initMainFrame();
+        adfMainFrame.initFrameSize(0.85);
         showMainFrame();
     }
 
-    /**
-     *
-     */
-    private final void initRelations() {
+    protected void initController() {
     }
 
-    /**
-     *
-     */
-    protected final void showMainFrame() {
+    protected void initRelations() {
+    }
+
+    protected void showMainFrame() {
         AdfEnv.getMainFrame().setVisible(true);
     }
 
@@ -137,12 +151,10 @@ public class AdfApp extends AdfEnv {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                String lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
-                UIManager.setLookAndFeel(lookAndFeel);
                 boolean useConfigFile = true;
-                AdfApp app = new AdfApp(useConfigFile);
+                new AdfApp(useConfigFile);
             } catch (Throwable e) {
-                System.out.println("AdfApp.main: Throwable cought !");
+                System.out.println("AdfApp.main: Throwable caught !");
                 System.out.println("AdfApp.main: See Error Log for details.");
                 e.printStackTrace();
             }

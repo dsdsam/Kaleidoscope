@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * The Action Group maintains a list of the actions it groups.
+ * It is a Property Change Listener of each action in the group.
+ * <p>
  * Created by Admin on 3/16/2017.
  */
 abstract public class AdfAbstractActionGroup implements AdfActionGroup {
@@ -25,6 +28,7 @@ abstract public class AdfAbstractActionGroup implements AdfActionGroup {
         action.addPropertyChangeListener(propertyChangeListener);
     }
 
+
     public void unregisterAction(AdfBasicAction action) {
         registeredActions.remove(action);
         action.removePropertyChangeListener(propertyChangeListener);
@@ -35,7 +39,5 @@ abstract public class AdfAbstractActionGroup implements AdfActionGroup {
     //
 
     abstract protected void processPropertyChange(PropertyChangeEvent evt);
-
-
 }
 

@@ -1,7 +1,7 @@
 package dsdsse.designspace;
 
-import dsdsse.designspace.mcln.model.mcln.MclnModeChangedListener;
 import mcln.model.*;
+import mclnview.graphview.interfaces.MclnModeChangedListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

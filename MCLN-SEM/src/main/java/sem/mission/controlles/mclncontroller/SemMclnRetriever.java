@@ -24,8 +24,8 @@ class SemMclnRetriever {
         }
         Document mclnAsDocument = MclnModelRetriever.readMclnProjectXml(inputStream);
         MclnProject mclnProject = MclnModelRetriever.createMclnProjectFromXmlDom(mclnAsDocument);
-//        String formattedXmlString = xmlDocumentToFormattedString(mclnAsDocument);
-//        System.out.println("McLN Controller: " + formattedXmlString);
+        String formattedXmlString = xmlDocumentToFormattedString(mclnAsDocument);
+        System.out.println("McLN Controller: " + formattedXmlString);
         return mclnProject;
     }
 

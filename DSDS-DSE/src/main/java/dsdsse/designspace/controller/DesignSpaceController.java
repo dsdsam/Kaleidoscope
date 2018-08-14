@@ -7,10 +7,10 @@ import dsdsse.demo.*;
 import dsdsse.designspace.DesignSpaceModel;
 import dsdsse.designspace.DesignSpaceView;
 import dsdsse.designspace.executor.MclnSimulationController;
-import dsdsse.designspace.mcln.model.mcln.MclnGraphModel;
 import mcln.model.MclnDoubleRectangle;
 import mcln.model.MclnModel;
 import mcln.model.MclnProject;
+import mclnview.graphview.MclnGraphModel;
 
 /**
  * Created with IntelliJ IDEA.

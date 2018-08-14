@@ -3,8 +3,8 @@ package dsdsse.animation;
 import dsdsse.app.AppController;
 import dsdsse.designspace.DesignSpaceView;
 import dsdsse.graphview.MclnGraphDesignerView;
-import dsdsse.graphview.MclnGraphViewNode;
-import dsdsse.graphview.MclnPropertyView;
+import mclnview.graphview.MclnGraphNodeView;
+import mclnview.graphview.MclnPropertyView;
 import vw.valgebra.VAlgebra;
 
 import java.awt.*;
@@ -153,7 +153,7 @@ public class HowToUseCreateOperationsScript extends PresentationScriptHandler {
             {INFO_MESSAGE, CREATING_ARCS_MESSAGE, AGENDA_MESSAGE_BACKGROUND, "0xFFFFFF", MESSAGE_EXPOSURE_SHORT},
             {PAUSE, "1", ""},
             {OPERATION_CREATE_ARCS, STEP_CLICK_MENU_BUTTON, AppController.MENU_ITEM_CREATION_MODE,
-                    AppController.MENU_ITEM_CREATE_ARCS},
+                    AppController.MENU_ITEM_CREATE_SPLINE_ARCS},
             {OPERATION_CREATE_ARCS, STEP_CREATE_FIRST_ARC, "S-0000002", "C-0000001"},
             {OPERATION_CREATE_ARCS, STEP_CREATE_SECOND_ARC, "S-0000002", "C-0000001", },
             {OPERATION_CREATE_ARCS, STEP_CREATE_FIRST_ARC, "C-0000001", "S-0000001"},
@@ -327,9 +327,9 @@ public class HowToUseCreateOperationsScript extends PresentationScriptHandler {
     //   A r c   c r e a t i o n   a n i m a t o r
     //
 
-    MclnGraphViewNode mclnGraphFirstNode;
+    MclnGraphNodeView mclnGraphFirstNode;
     int[] firstNodeIntScrLocation;
-    MclnGraphViewNode mclnGraphSecondNode;
+    MclnGraphNodeView mclnGraphSecondNode;
     int[] secondNodeIntScrLocation;
 
     private void executeOperationCreateArc(ScriptItem scriptItem) {
@@ -357,8 +357,8 @@ public class HowToUseCreateOperationsScript extends PresentationScriptHandler {
     //
     //   Creating Arcs
     //
-    MclnGraphViewNode mclnGraphViewInputNode;
-    MclnGraphViewNode mclnGraphViewOutputNode;
+    MclnGraphNodeView mclnGraphViewInputNode;
+    MclnGraphNodeView mclnGraphViewOutputNode;
     int[] inpNodeIntScrLocation;
     int[] outNodeIntScrLocation;
     //    int[] intVec = {0, 0, 0};
@@ -562,9 +562,6 @@ public class HowToUseCreateOperationsScript extends PresentationScriptHandler {
     //
     //   F r a g m e n t   c r e a t i o n   a n i m a t o r
     //
-
-    private MclnGraphViewNode mclnGraphNode;
-    private int[] nodeIntScrLocation;
 
     private void executeOperationCreateFragment(ScriptItem scriptItem) {
         if (STEP_CLICK_MENU_BUTTON.equals(scriptItem.getStepAction())) {

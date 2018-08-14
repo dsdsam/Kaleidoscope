@@ -1,5 +1,9 @@
 package dsdsse.graphview;
 
+import mclnview.graphview.MclnArcView;
+import mclnview.graphview.MclnConditionView;
+import mclnview.graphview.MclnPropertyView;
+
 import java.util.List;
 
 /**
@@ -17,16 +21,16 @@ final class MclnViewAnalyzer {
 
         int totalPropertyNodes = propertyViewList.size();
         int connectedProperties = 0;
-        for (MclnPropertyView mclnPropertyView : propertyViewList) {
-            if (mclnPropertyView.isConnected()) {
+        for (MclnPropertyView mcLnPropertyView : propertyViewList) {
+            if (mcLnPropertyView.isConnected()) {
                 connectedProperties++;
             }
         }
 
         int totalConditionNodes = conditionViewList.size();
         int connectedConditions = 0;
-        for (MclnConditionView mclnConditionView : conditionViewList) {
-            if (mclnConditionView.isConnected()) {
+        for (MclnConditionView mcLnConditionView : conditionViewList) {
+            if (mcLnConditionView.isConnected()) {
                 connectedConditions++;
             }
         }
@@ -42,8 +46,8 @@ final class MclnViewAnalyzer {
         // Initialization Summary
 
         int initializedProperties = 0;
-        for (MclnPropertyView mclnPropertyView : propertyViewList) {
-            if (mclnPropertyView.isInitialized()) {
+        for (MclnPropertyView mcLnPropertyView : propertyViewList) {
+            if (mcLnPropertyView.isInitialized()) {
                 initializedProperties++;
             }
         }

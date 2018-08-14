@@ -2,13 +2,12 @@ package dsdsse.history;
 
 
 import adf.preferences.GroupChangeListener;
-import dsdsse.app.DsdsseEnvironment;
 import dsdsse.designspace.DesignSpaceModel;
 import dsdsse.designspace.DesignSpaceView;
 import dsdsse.graphview.MclnGraphDesignerView;
-import dsdsse.graphview.MclnPropertyView;
 import dsdsse.preferences.DsdsseUserPreference;
 import dsdsse.preferences.GroupID;
+import mclnview.graphview.MclnPropertyView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,8 +21,6 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ExecutionHistoryPanel extends JPanel {
-
-    static int stateDotSize;
 
     static {
         int propertyStateDisplaySize = DsdsseUserPreference.getPropertyStateDisplaySize();
@@ -39,15 +36,13 @@ public class ExecutionHistoryPanel extends JPanel {
     private static ExecutionHistoryPanel executionHistoryPanel;
 
     public static ExecutionHistoryPanel createInstance(DesignSpaceView designSpaceView) {
-        assert executionHistoryPanel == null :
-                "The instance of ExecutionHistoryPanel already exists";
+        assert executionHistoryPanel == null : "The instance of ExecutionHistoryPanel already exists";
         executionHistoryPanel = new ExecutionHistoryPanel(designSpaceView);
         return executionHistoryPanel;
     }
 
     public static ExecutionHistoryPanel getInstance() {
-        assert executionHistoryPanel != null :
-                "The instance of ExecutionHistoryPanel does not yet created";
+        assert executionHistoryPanel != null : "The instance of ExecutionHistoryPanel does not yet created";
         return executionHistoryPanel;
     }
 
@@ -73,8 +68,6 @@ public class ExecutionHistoryPanel extends JPanel {
     private final ContentSelectionPanel contentSelectionPanel;
     private final TraceLogHolderPanel traceLogHolderPanel;
 
-    private boolean executionHistoryPanelVisible;
-
     ExecutionHistoryPanel(DesignSpaceView designSpaceView) {
         super(new BorderLayout());
 
@@ -96,19 +89,14 @@ public class ExecutionHistoryPanel extends JPanel {
      */
     private void initLayout() {
         add(executionHistoryControlPanel, BorderLayout.WEST);
-
-        JFrame frame = DsdsseEnvironment.getMainFrame();
-        int frameWidth = frame.getWidth();
         JSplitPane historySplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, contentSelectionPanel, traceLogHolderPanel);
-//        historySplitPane.setBorder(null);
+        historySplitPane.setBorder(null);
         historySplitPane.setResizeWeight(0);
         historySplitPane.setOneTouchExpandable(true);
-        historySplitPane.setDividerSize(2);
-//        historySplitPane.setDividerLocation((frameWidth * 47) / 100);
+        historySplitPane.setDividerSize(4);
         historySplitPane.setDividerLocation(400);
         historySplitPane.setContinuousLayout(true);
         historySplitPane.validate();
-
         add(historySplitPane, BorderLayout.CENTER);
     }
 
@@ -120,8 +108,8 @@ public class ExecutionHistoryPanel extends JPanel {
         clearTraceLog();
     }
 
-    public void simulationStepExecuted() {
-        traceLogHolderPanel.simulationStepExecuted();
+    public void simulationStepExecuted(int historySize) {
+        traceLogHolderPanel.simulationStepExecuted(historySize);
         contentSelectionPanel.updateStatementsUpOnModelStateChanged();
     }
 
@@ -134,7 +122,6 @@ public class ExecutionHistoryPanel extends JPanel {
      *
      */
     public void historyPresented(boolean executionHistoryPanelVisible) {
-        this.executionHistoryPanelVisible = executionHistoryPanelVisible;
         if (!executionHistoryPanelVisible) {
             return;
         }
@@ -174,8 +161,8 @@ public class ExecutionHistoryPanel extends JPanel {
         List<MclnPropertyView> propertyViewList = mclnGraphDesignerView.getPropertyViewList();
         int nOfAllRows = propertyViewList.size();
         for (int i = 0; i < nOfAllRows; i++) {
-            MclnPropertyView mclnPropertyView = propertyViewList.get(i);
-            mclnPropertyView.clearHistory();
+            MclnPropertyView mcLnPropertyView = propertyViewList.get(i);
+            mcLnPropertyView.clearHistory();
         }
         traceLogHolderPanel.traceLogCleared();
     }

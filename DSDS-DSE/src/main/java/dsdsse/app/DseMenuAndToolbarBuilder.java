@@ -3,6 +3,7 @@ package dsdsse.app;
 import adf.menu.*;
 import adf.ui.controls.buttons.AdfTestToggleButton;
 import adf.utils.BuildUtils;
+import dsdsse.matrixview.MclnMatrixViewController;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -49,12 +50,16 @@ public class DseMenuAndToolbarBuilder {
     private static final String STOP_CREATING_PROPERTIES_ICON = "stop-creating-property-nodes.png";
     private static final String CREATING_CONDITIONS_ICON = "create-condition-nodes.png";
     private static final String STOP_CREATING_CONDITIONS_ICON = "stop-creating-condition-nodes.png";
-    //    private static final String CREATING_ARCS_ICON = "stop-operation.png";
-    private static final String CREATING_ARCS_ICON = "create-arcs.png";
-    private static final String STOP_CREATING_ARCS_ICON = "stop-creating-arcs.png";
+    private static final String CREATING_POLYLINE_ARCS_ICON = "create-polyline-arcs.png";
+    private static final String STOP_CREATING_POLYLINE_ARCS_ICON = "stop-creating-polyline-arcs.png";
+    private static final String CREATING_SPLINE_ARCS_ICON = "create-spline-arcs.png";
+    private static final String STOP_CREATING_SPLINE_ARCS_ICON = "stop-creating-spline-arcs.png";
+
     private static final String CREATING_FRAGMENT_ICON = "create-fragments.png";
     private static final String STOP_CREATING_FRAGMENTS_ICON = "stop-creating-fragments.png";
 
+    private static final String MOVE_ELEMENTS_ICON = "move-elements.png";
+    private static final String STOP_MOVING_ELEMENTS_ICON = "stop-moving-elements.png";
     private static final String MOVE_FRAGMENT_ICON = "move-fragments.png";
     private static final String STOP_MOVING_FRAGMENTS_ICON = "stop-moving-fragments.png";
     private static final String MOVE_MODEL_ICON = "move-model.png";
@@ -125,7 +130,10 @@ public class DseMenuAndToolbarBuilder {
 
     private static final Map<String, AdfBasicAction> menuItemLabelToAction = new HashMap();
     private static final Map<String, AbstractButton> menuItemLabelToToolbarButton = new HashMap();
-    private static final AdfMenuActionListener ADF_MENU_ACTION_LISTENER = AppController.getInstance().getMenuListener();
+    private static final AdfMenuActionListener GRAPH_VIEW_MENU_ACTION_LISTENER =
+            AppController.getInstanceToGetMenuListener().getMenuListener();
+    private static final AdfMenuActionListener MATRIX_VIEW_MENU_ACTION_LISTENER =
+            MclnMatrixViewController.getInstance().getMenuListener();
 
     // The group is used to group Project menu operations
     private final AdfEnableDisableAllActionGroup projectMenuActionGroup = AppController.getEnableDisableAllActionGroup();
@@ -138,6 +146,9 @@ public class DseMenuAndToolbarBuilder {
 
     // The group is used to group Editing menu operations
     private static final AdfToggleButtonActionGroup ADF_TOGGLE_BUTTON_ACTION_GROUP = AppController.getToggleButtonActionGroup();
+
+    private AdfMenuBar designerViewMenuBar;
+    private AdfMenuBar matrixViewMenuBar;
 
 
     /**
@@ -162,7 +173,11 @@ public class DseMenuAndToolbarBuilder {
      * @return
      */
     public AdfMenuBar buildMenuBar() {
-        return buildMenuBur(ADF_MENU_ACTION_LISTENER, ICON_CLASS_PATH_PREFIX, menuItemLabelToAction);
+        return buildMenuBur(GRAPH_VIEW_MENU_ACTION_LISTENER, ICON_CLASS_PATH_PREFIX, menuItemLabelToAction);
+    }
+
+    public AdfMenuBar buildMclnMatrixViewMenuBar() {
+        return buildMclnMatrixViewMenuBar(MATRIX_VIEW_MENU_ACTION_LISTENER, ICON_CLASS_PATH_PREFIX, menuItemLabelToAction);
     }
 
     /**
@@ -173,106 +188,152 @@ public class DseMenuAndToolbarBuilder {
      */
     public AdfMenuBar buildMenuBur(AdfMenuActionListener adfMenuActionListener, String iconClassPath,
                                    Map<String, AdfBasicAction> menuLabelToActionMap) {
+        if(designerViewMenuBar != null){
+            return designerViewMenuBar;
+        }
 
-        AdfMenuBar adfMenuBar = new AdfMenuBar(adfMenuActionListener, iconClassPath, menuLabelToActionMap);
+        AdfMenuBar menuBar = new AdfMenuBar(adfMenuActionListener, iconClassPath, menuLabelToActionMap);
 
         // Project menu
-        adfMenuBar.addAdfAppMenu(AppController.MENU_ITEM_PROJECT);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_NEW_PROJECT, projectMenuActionGroup);
-        adfMenuBar.addMenuSeparator();
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_CHANGE_ATTRIBUTES, RENAME_PROJECT_ICON, projectMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_RENAME_MODEL, RENAME_MODEL_ICON, projectMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_CLEAR_DESIGN_SPACE, CLEAR_DESIGN_SPACE_ICON, projectMenuActionGroup);
-        adfMenuBar.addMenuSeparator();
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_OPEN_PROJECT, OPEN_PROJECT_ICON, projectMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_SAVE, SAVE_PROJECT_AS_ICON, projectMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_SAVE_AS, projectMenuActionGroup);
-        adfMenuBar.addMenuSeparator();
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_SHOW_PRINT_CONTENT, SHOW_PRINT_PREVIEW_ICON, projectMenuActionGroup);
+        menuBar.addAdfAppMenu(AppController.MENU_ITEM_PROJECT);
+        menuBar.addMenuItem(AppController.MENU_ITEM_NEW_PROJECT, projectMenuActionGroup);
+        menuBar.addMenuSeparator();
+        menuBar.addMenuItem(AppController.MENU_ITEM_CHANGE_ATTRIBUTES, RENAME_PROJECT_ICON, projectMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_ITEM_RENAME_MODEL, RENAME_MODEL_ICON, projectMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_ITEM_CLEAR_DESIGN_SPACE, CLEAR_DESIGN_SPACE_ICON, projectMenuActionGroup);
+        menuBar.addMenuSeparator();
+        menuBar.addMenuItem(AppController.MENU_ITEM_SAVE, projectMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_ITEM_SAVE_AS, SAVE_PROJECT_AS_ICON, projectMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_ITEM_OPEN_PROJECT, OPEN_PROJECT_ICON, projectMenuActionGroup);
+        menuBar.addMenuSeparator();
+        menuBar.addMenuItem(AppController.MENU_ITEM_SHOW_PRINT_CONTENT, SHOW_PRINT_PREVIEW_ICON, projectMenuActionGroup);
 //        menu.addToggleMenuItem(AppController.MENU_ITEM_HIDE_PRINT_CONTENT, HIDE_PRINT_PREVIEW_ICON, true);
-        adfMenuBar.addMenuSeparator();
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_EXIT, projectMenuActionGroup);
+        menuBar.addMenuSeparator();
+        menuBar.addMenuItem(AppController.MENU_ITEM_EXIT, projectMenuActionGroup);
+
+        // Project View Menu
+        menuBar.addAdfAppMenu(AppController.MENU_PROJECT_VIEW);
+        menuBar.addMenuItem(AppController.MENU_ITEM_GRAPH_VIEW, projectMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_ITEM_MATRIX_VIEW, projectMenuActionGroup);
 
         // Demo menu
-        adfMenuBar.addAdfAppMenu(AppController.MENU_ITEM_EXAMPLES);
+        menuBar.addAdfAppMenu(AppController.MENU_ITEM_EXAMPLES);
 
-        adfMenuBar.addMenuItem(AppController.MENU_BASIC_BLOCK, demoMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_LOGICAL_BLOCKS, demoMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_TWO_RULES, demoMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_THREE_RULES, demoMenuActionGroup);
-        adfMenuBar.addMenuSeparator();
-        adfMenuBar.addMenuItem(AppController.MENU_SINGLE_PROPERTY, demoMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_TRIGGER, demoMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_BASIC_BLOCK, demoMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_LOGICAL_BLOCKS, demoMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_TWO_RULES, demoMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_THREE_RULES, demoMenuActionGroup);
+        menuBar.addMenuSeparator();
+        menuBar.addMenuItem(AppController.MENU_SINGLE_PROPERTY, demoMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_TRIGGER, demoMenuActionGroup);
 //        adfMenuBar.addMenuItem(AppController.MENU_TERNARY_COUNTER, demoMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_MUT_EXCL, demoMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_DIN_PHIL, demoMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_MUT_EXCL, demoMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_DIN_PHIL, demoMenuActionGroup);
 
         // Development menu
-        adfMenuBar.addAdfAppMenu(AppController.MENU_ITEM_DEVELOPMENT_MODE);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_SET_DEVELOPMENT_MODE, DEVELOPMENT_MODE_ICON);
+        menuBar.addAdfAppMenu(AppController.MENU_ITEM_DEVELOPMENT_MODE);
+        menuBar.addMenuItem(AppController.MENU_ITEM_SET_DEVELOPMENT_MODE, DEVELOPMENT_MODE_ICON);
 
         // creation items
-        adfMenuBar.addAdfAppMenu(AppController.MENU_ITEM_CREATION_MODE, false, ADF_TOGGLE_BUTTON_ACTION_GROUP);
-//        adfMenuBar.addMenuItem(AppController.MENU_ITEM_SET_DEVELOPMENT_MODE, DEVELOPMENT_MODE_ICON);
-//        adfMenuBar.addMenuSeparator();
-        adfMenuBar.addToggleMenuItem(AppController.MENU_ITEM_CREATE_PROPERTIES,
+
+        menuBar.addAdfAppMenu(AppController.MENU_ITEM_CREATION_MODE, false);
+        menuBar.addToggleMenuItem(AppController.MENU_ITEM_CREATE_PROPERTIES,
                 CREATING_PROPERTIES_ICON, STOP_CREATING_PROPERTIES_ICON);
-        adfMenuBar.addToggleMenuItem(AppController.MENU_ITEM_CREATE_CONDITIONS,
+        menuBar.addToggleMenuItem(AppController.MENU_ITEM_CREATE_CONDITIONS,
                 CREATING_CONDITIONS_ICON, STOP_CREATING_CONDITIONS_ICON);
-        adfMenuBar.addToggleMenuItem(AppController.MENU_ITEM_CREATE_ARCS, CREATING_ARCS_ICON, STOP_CREATING_ARCS_ICON);
-        adfMenuBar.addToggleMenuItem(AppController.MENU_ITEM_CREATE_FRAGMENTS,
+
+        menuBar.addToggleMenuItem(AppController.MENU_ITEM_CREATE_POLYLINE_ARCS,
+                CREATING_POLYLINE_ARCS_ICON, STOP_CREATING_POLYLINE_ARCS_ICON);
+        menuBar.addToggleMenuItem(AppController.MENU_ITEM_CREATE_SPLINE_ARCS,
+                CREATING_SPLINE_ARCS_ICON, STOP_CREATING_SPLINE_ARCS_ICON);
+
+        menuBar.addToggleMenuItem(AppController.MENU_ITEM_CREATE_FRAGMENTS,
                 CREATING_FRAGMENT_ICON, STOP_CREATING_FRAGMENTS_ICON);
 
+        // I preserve this code because it shows how to use submenu
+//        AdfAppMenu arcCreationMenu = AdfAppMenu.create("Create Arcs of Type", adfMenuActionListener, ICON_CLASS_PATH_PREFIX, menuItemLabelToAction);
+//        creationMenu.addSubmenu(arcCreationMenu);
+//        arcCreationMenu.addToggleMenuItem(AppController.MENU_ITEM_CREATE_SPLINE_ARCS, CREATING_ARCS_ICON, STOP_CREATING_ARCS_ICON, true);
+//        arcCreationMenu.addToggleMenuItem(AppController.MENU_ITEM_CREATE_POLYLINE_ARCS, CREATING_ARCS_ICON, STOP_CREATING_ARCS_ICON, true);
+
         // Modification items
-        adfMenuBar.addAdfAppMenu(AppController.MENU_ITEM_MODIFICATION);
-        adfMenuBar.addToggleMenuItem(AppController.MENU_ITEM_MOVE_MODEL, MOVE_MODEL_ICON, STOP_MOVING_MODEL_ICON);
-        adfMenuBar.addToggleMenuItem(AppController.MENU_ITEM_MOVE_FRAGMENT, MOVE_FRAGMENT_ICON, STOP_MOVING_FRAGMENTS_ICON);
-        adfMenuBar.addMenuSeparator();
-        adfMenuBar.addToggleMenuItem(AppController.MENU_ITEM_DELETE_ELEMENT, DELETE_ICON, STOP_DELETING_ICON);
+        menuBar.addAdfAppMenu(AppController.MENU_ITEM_MODIFICATION);
+        menuBar.addToggleMenuItem(AppController.MENU_ITEM_MOVE_ELEMENTS, MOVE_ELEMENTS_ICON, STOP_MOVING_ELEMENTS_ICON);
+        menuBar.addToggleMenuItem(AppController.MENU_ITEM_MOVE_FRAGMENT, MOVE_FRAGMENT_ICON, STOP_MOVING_FRAGMENTS_ICON);
+        menuBar.addToggleMenuItem(AppController.MENU_ITEM_MOVE_MODEL, MOVE_MODEL_ICON, STOP_MOVING_MODEL_ICON);
+        menuBar.addMenuSeparator();
+        menuBar.addToggleMenuItem(AppController.MENU_ITEM_DELETE_ELEMENT, DELETE_ICON, STOP_DELETING_ICON);
 
         // Init Assistant item
-        adfMenuBar.addAdfAppMenu(AppController.MENU_ITEM_LAUNCH_IA);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_LAUNCH_IA, INITIALIZER_ICON);
+        menuBar.addAdfAppMenu(AppController.MENU_ITEM_LAUNCH_IA);
+        menuBar.addMenuItem(AppController.MENU_ITEM_LAUNCH_IA, INITIALIZER_ICON);
 
         // Simulation menu
-        adfMenuBar.addAdfAppMenu(AppController.MENU_ITEM_SIMULATION_MODE);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_SET_SIMULATION_MODE, SIMULATION_MODE_ICON, projectMenuActionGroup);
-//        adfMenuBar.addMenuItem(AppController.MENU_ITEM_SET_SIMULATION_MODE, SIMULATION_MODE_ICON, null);
+        menuBar.addAdfAppMenu(AppController.MENU_ITEM_SIMULATION_MODE);
+        menuBar.addMenuItem(AppController.MENU_ITEM_SET_SIMULATION_MODE, SIMULATION_MODE_ICON, projectMenuActionGroup);
 
         // Preferences menu
-        adfMenuBar.addAdfAppMenu(AppController.MENU_ITEM_PREFERENCES);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_SHOW_SETUP_PANEL, SHOW_SETUP_ICON);
-//        adfMenuBar.addToggleMenuItem(AppController.MENU_ITEM_HIDE_SETUP_PANEL, HIDE_SETUP_ICON, false);
+        menuBar.addAdfAppMenu(AppController.MENU_ITEM_PREFERENCES);
+        menuBar.addMenuItem(AppController.MENU_ITEM_SHOW_SETUP_PANEL, SHOW_SETUP_ICON);
 
         // Help menu
-        adfMenuBar.addAdfAppMenu(AppController.MENU_ITEM_HELP, true);
+        menuBar.addAdfAppMenu(AppController.MENU_ITEM_HELP, true);
         /**
          * Enabling this item will require:
          * 1) to stash and restore current project;
          * 2) to stash and restore current App state
          */
-        adfMenuBar.addMenuSeparator();
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_RUN_ALL_SHOWS_SEQUENTIALLY, projectMenuActionGroup);
-        adfMenuBar.addMenuSeparator();
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_HOW_TO_USE_CREATION_OPERATIONS, projectMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_HOW_USE_MODIFICATION_OPERATIONS, projectMenuActionGroup);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_HOW_TO_RUN_MODEL_SIMULATION, projectMenuActionGroup);
-        adfMenuBar.addMenuSeparator();
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_WHAT_IS_DSDS_DSE, SHOW_HELP_CONTENT_ICON);
-//        adfMenuBar.addToggleMenuItem(AppController.MENU_ITEM_HIDE_HELP_PANEL, HIDE_HELP_CONTENT_ICON, true);
-        adfMenuBar.addMenuSeparator();
-//        adfMenuBar.addMenuItem(AppController.MENU_ITEM_WHAT_IS_DSDS_DSE);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_RUNNING_EXAMPLES);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_WHAT_IS_CREATOR);
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_WHAT_IS_SIM_ENG);
+        menuBar.addMenuSeparator();
+        menuBar.addMenuItem(AppController.MENU_ITEM_RUN_ALL_SHOWS_SEQUENTIALLY, projectMenuActionGroup);
+        menuBar.addMenuSeparator();
+        menuBar.addMenuItem(AppController.MENU_ITEM_HOW_TO_USE_CREATION_OPERATIONS, projectMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_ITEM_HOW_USE_MODIFICATION_OPERATIONS, projectMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_ITEM_HOW_TO_RUN_MODEL_SIMULATION, projectMenuActionGroup);
+        menuBar.addMenuSeparator();
+        menuBar.addMenuItem(AppController.MENU_ITEM_WHAT_IS_DSDS_DSE, SHOW_HELP_CONTENT_ICON);
+        menuBar.addMenuSeparator();
+        menuBar.addMenuItem(AppController.MENU_ITEM_RUNNING_EXAMPLES);
+        menuBar.addMenuItem(AppController.MENU_ITEM_WHAT_IS_CREATOR);
+        menuBar.addMenuItem(AppController.MENU_ITEM_WHAT_IS_SIM_ENG);
 //        adfMenuBar.addMenuItem(AppController.MENU_ITEM_MENU_COMMANDS);
 //        adfMenuBar.addMenuSeparator();
 //        adfMenuBar.addMenuItem(AppController.MENU_ITEM_WHAT_IS_TD_IG);
 //        adfMenuBar.addMenuItem(AppController.MENU_ITEM_WHAT_IS_SD_IG);
-        adfMenuBar.addMenuSeparator();
-        adfMenuBar.addMenuItem(AppController.MENU_ITEM_ABOUT);
+        menuBar.addMenuSeparator();
+        menuBar.addMenuItem(AppController.MENU_ITEM_ABOUT);
 
-        return adfMenuBar;
+        designerViewMenuBar = menuBar;
+        return menuBar;
+    }
+
+    /**
+     *
+     * @param adfMenuActionListener
+     * @param iconClassPath
+     * @param menuLabelToActionMap
+     * @return
+     */
+    private AdfMenuBar buildMclnMatrixViewMenuBar(AdfMenuActionListener adfMenuActionListener, String iconClassPath,
+                                    Map<String, AdfBasicAction> menuLabelToActionMap) {
+        if(matrixViewMenuBar != null){
+            return matrixViewMenuBar;
+        }
+
+        AdfMenuBar menuBar = new AdfMenuBar(adfMenuActionListener, iconClassPath, menuLabelToActionMap);
+
+        // Project menu
+        menuBar.addAdfAppMenu(AppController.MENU_ITEM_PROJECT);
+
+        menuBar.addMenuSeparator();
+        menuBar.addMenuItem(AppController.MENU_ITEM_EXIT );
+
+        // Project View Menu
+        menuBar.addAdfAppMenu(AppController.MENU_PROJECT_VIEW);
+        menuBar.addMenuItem(AppController.MENU_ITEM_GRAPH_VIEW, projectMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_ITEM_MATRIX_VIEW, projectMenuActionGroup);
+
+        matrixViewMenuBar = menuBar;
+        return menuBar;
     }
 
     //
@@ -291,29 +352,29 @@ public class DseMenuAndToolbarBuilder {
                 return comp;
             }
         };
-        AppController.getInstance();
+//        AppController.getInstance();
 
         toolBar.addSeparator();
 
         toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_CHANGE_ATTRIBUTES,
-                RENAME_PROJECT_ICON, " Rename project ", true, ADF_MENU_ACTION_LISTENER, null));
+                RENAME_PROJECT_ICON, " Rename Project ", true, GRAPH_VIEW_MENU_ACTION_LISTENER, null));
 
         toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_RENAME_MODEL,
-                RENAME_MODEL_ICON, " Rename model ", true, ADF_MENU_ACTION_LISTENER, null));
+                RENAME_MODEL_ICON, " Rename Model ", true, GRAPH_VIEW_MENU_ACTION_LISTENER, null));
 
         toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_CLEAR_DESIGN_SPACE,
-                CLEAR_DESIGN_SPACE_ICON, " Discard developed model ", true, ADF_MENU_ACTION_LISTENER, null));
+                CLEAR_DESIGN_SPACE_ICON, " Discard Developed Model ", true, GRAPH_VIEW_MENU_ACTION_LISTENER, null));
+
+        toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_SAVE_AS, SAVE_PROJECT_AS_ICON,
+                " Save Project As ", true, GRAPH_VIEW_MENU_ACTION_LISTENER, null));
 
         toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_OPEN_PROJECT,
-                OPEN_PROJECT_ICON, " Open existing project ", true, ADF_MENU_ACTION_LISTENER, null));
-
-        toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_SAVE, SAVE_PROJECT_AS_ICON,
-                " Save project ", true, ADF_MENU_ACTION_LISTENER, null));
+                OPEN_PROJECT_ICON, " Open Existing Project ", true, GRAPH_VIEW_MENU_ACTION_LISTENER, null));
 
         if (!TOGGLE_MENU_AND_TOOLBAR_BUTTONS) {
 
             toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_SHOW_PRINT_CONTENT, SHOW_PRINT_PREVIEW_ICON,
-                    " Show the project's Print Preview Panel ", true, ADF_MENU_ACTION_LISTENER, null, true));
+                    " Show the Project's Print Preview Panel ", true, GRAPH_VIEW_MENU_ACTION_LISTENER, null, true));
 
         } else {
 
@@ -343,7 +404,7 @@ public class DseMenuAndToolbarBuilder {
         //
 
         AbstractButton tbbSetEditMode = makeMenuAndToolbarButton(AppController.MENU_ITEM_SET_DEVELOPMENT_MODE,
-                DEVELOPMENT_MODE_ICON, " Enable development mode ", true, ADF_MENU_ACTION_LISTENER, null);
+                DEVELOPMENT_MODE_ICON, " Enable Development Mode ", true, GRAPH_VIEW_MENU_ACTION_LISTENER, null);
         toolBar.add(tbbSetEditMode);
         menuItemLabelToToolbarButton.put(AppController.MENU_ITEM_SET_DEVELOPMENT_MODE, tbbSetEditMode);
 
@@ -351,47 +412,60 @@ public class DseMenuAndToolbarBuilder {
 
         AbstractButton tbbCreateProperty = makeMenuAndToolbarToggleButton(AppController.MENU_ITEM_CREATE_PROPERTIES,
                 CREATING_PROPERTIES_ICON, STOP_CREATING_PROPERTIES_ICON, " Creating Properties ", true,
-                ADF_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
         toolBar.add(tbbCreateProperty);
         menuItemLabelToToolbarButton.put(AppController.MENU_ITEM_CREATE_PROPERTIES, tbbCreateProperty);
 
         AbstractButton tbbCreateCondition = makeMenuAndToolbarToggleButton(AppController.MENU_ITEM_CREATE_CONDITIONS,
                 CREATING_CONDITIONS_ICON, STOP_CREATING_CONDITIONS_ICON, " Creating Conditions ", true,
-                ADF_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
         toolBar.add(tbbCreateCondition);
 
         toolBar.addSeparator();
 
-        AbstractButton tbbCreateArc = makeMenuAndToolbarToggleButton(AppController.MENU_ITEM_CREATE_ARCS,
-                CREATING_ARCS_ICON, STOP_CREATING_ARCS_ICON, " Creating Arcs ", true,
-                ADF_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
-//        AbstractButton tbbCreateArc = makeMenuAndToolbarButton(CREATING_ARCS_ICON, AppController.MENU_ITEM_CREATE_ARCS,
-//                " Creating Arcs ", false, menuActionListener);
-        toolBar.add(tbbCreateArc);
+        AbstractButton tbbCreatePolylineArc = makeMenuAndToolbarToggleButton(AppController.MENU_ITEM_CREATE_POLYLINE_ARCS,
+                CREATING_POLYLINE_ARCS_ICON, STOP_CREATING_POLYLINE_ARCS_ICON, " Creating Polyline Arcs ", true,
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
+        toolBar.add(tbbCreatePolylineArc);
+
+        AbstractButton tbbCreateSplineArc = makeMenuAndToolbarToggleButton(AppController.MENU_ITEM_CREATE_SPLINE_ARCS,
+                CREATING_SPLINE_ARCS_ICON, STOP_CREATING_SPLINE_ARCS_ICON, " Creating Spline Arcs ", true,
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
+        toolBar.add(tbbCreateSplineArc);
+
+        toolBar.addSeparator();
 
         AbstractButton tbbCreateFragment = makeMenuAndToolbarToggleButton(AppController.MENU_ITEM_CREATE_FRAGMENTS,
-                CREATING_FRAGMENT_ICON, STOP_CREATING_FRAGMENTS_ICON, " Creating fragments ", true,
-                ADF_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
+                CREATING_FRAGMENT_ICON, STOP_CREATING_FRAGMENTS_ICON, " Creating Fragments ", true,
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
 //        AbstractButton tbbCreateFragment = makeMenuAndToolbarButton(CREATING_FRAGMENT_ICON, AppController.MENU_ITEM_CREATE_FRAGMENTS,
 //                " Creating fragments ", false, menuActionListener);
         toolBar.add(tbbCreateFragment);
         menuItemLabelToToolbarButton.put(AppController.MENU_ITEM_CREATE_FRAGMENTS, tbbCreateFragment);
 
-        AbstractButton tbbMoveModel = makeMenuAndToolbarToggleButton(AppController.MENU_ITEM_MOVE_MODEL,
-                MOVE_MODEL_ICON, STOP_MOVING_MODEL_ICON, " Move the entire model ", true,
-                ADF_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
-        toolBar.add(tbbMoveModel);
+        toolBar.addSeparator();
+
+        AbstractButton tbbMoveElements = makeMenuAndToolbarToggleButton(AppController.MENU_ITEM_MOVE_ELEMENTS,
+                MOVE_ELEMENTS_ICON, STOP_MOVING_ELEMENTS_ICON, " Move the Model's Selected Elements ", true,
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
+        toolBar.add(tbbMoveElements);
 
         AbstractButton tbbMoveFragment = makeMenuAndToolbarToggleButton(AppController.MENU_ITEM_MOVE_FRAGMENT,
-                MOVE_FRAGMENT_ICON, STOP_MOVING_FRAGMENTS_ICON, " Move the model selected fragment ", true,
-                ADF_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
+                MOVE_FRAGMENT_ICON, STOP_MOVING_FRAGMENTS_ICON, " Move the Model's Selected Fragment ", true,
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
         toolBar.add(tbbMoveFragment);
+
+        AbstractButton tbbMoveModel = makeMenuAndToolbarToggleButton(AppController.MENU_ITEM_MOVE_MODEL,
+                MOVE_MODEL_ICON, STOP_MOVING_MODEL_ICON, " Move the Entire Model ", true,
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
+        toolBar.add(tbbMoveModel);
+
 
         //        AbstractButton tbbDelete = makeMenuAndToolbarButton(DELETE_ICON, AppController.MENU_ITEM_DELETE_ELEMENT,
 //                " Delete selected element ", true, menuActionListener);
         AbstractButton tbbDelete = makeMenuAndToolbarToggleButton(AppController.MENU_ITEM_DELETE_ELEMENT,
-                DELETE_ICON, STOP_DELETING_ICON, " Delete selected element ", true,
-                ADF_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
+                DELETE_ICON, STOP_DELETING_ICON, " Delete Selected Element ", true,
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_TOGGLE_BUTTON_ACTION_GROUP);
 //        tbbDelete.setEnabled(true);
         toolBar.add(tbbDelete);
 
@@ -403,7 +477,7 @@ public class DseMenuAndToolbarBuilder {
 
         AbstractButton tbbInitAssistant = makeMenuAndToolbarButton(AppController.MENU_ITEM_LAUNCH_IA,
                 INITIALIZER_ICON, " Show Initialization Assistant ", true,
-                ADF_MENU_ACTION_LISTENER, ADF_J_BUTTON_ACTION_GROUP, true);
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_J_BUTTON_ACTION_GROUP, true);
         toolBar.add(tbbInitAssistant);
 
         toolBar.addSeparator();
@@ -416,28 +490,28 @@ public class DseMenuAndToolbarBuilder {
         //
 
         AbstractButton tbbSetRunMode = makeMenuAndToolbarButton(AppController.MENU_ITEM_SET_SIMULATION_MODE,
-                SIMULATION_MODE_ICON, " Enable simulation mode ", false, ADF_MENU_ACTION_LISTENER, null);
+                SIMULATION_MODE_ICON, " Enable Simulation Mode ", false, GRAPH_VIEW_MENU_ACTION_LISTENER, null);
         toolBar.add(tbbSetRunMode);
 
         toolBar.addSeparator();
 
         AbstractButton tbbStartExecution = makeSimulationToolbarButton(AppController.MENU_ITEM_START_SIMULATION,
-                START_SIMULATION_ICON, " Start simulation ", false, ADF_MENU_ACTION_LISTENER);
+                START_SIMULATION_ICON, " Start simulation ", false, GRAPH_VIEW_MENU_ACTION_LISTENER);
         toolBar.add(tbbStartExecution);
         menuItemLabelToToolbarButton.put(AppController.MENU_ITEM_START_SIMULATION, tbbStartExecution);
 
         AbstractButton tbbStopExecution = makeSimulationToolbarButton(AppController.MENU_ITEM_STOP_SIMULATION,
-                STOP_SIMULATION_ICON, " Stop simulation ", false, ADF_MENU_ACTION_LISTENER);
+                STOP_SIMULATION_ICON, " Stop simulation ", false, GRAPH_VIEW_MENU_ACTION_LISTENER);
         toolBar.add(tbbStopExecution);
         menuItemLabelToToolbarButton.put(AppController.MENU_ITEM_STOP_SIMULATION, tbbStopExecution);
 
         AbstractButton tbbStepExecution = makeSimulationToolbarButton(AppController.MENU_ITEM_EXECUTE_ONE_SIMULATION_STEP,
-                SINGLE_SIMULATION_STEP_ICON, " Perform one simulation step ", false, ADF_MENU_ACTION_LISTENER);
+                SINGLE_SIMULATION_STEP_ICON, " Perform one simulation step ", false, GRAPH_VIEW_MENU_ACTION_LISTENER);
         toolBar.add(tbbStepExecution);
         menuItemLabelToToolbarButton.put(AppController.MENU_ITEM_EXECUTE_ONE_SIMULATION_STEP, tbbStepExecution);
 
         AbstractButton tbbResetModel = makeSimulationToolbarButton(AppController.MENU_ITEM_RESET_SIMULATION,
-                RESET_SIMULATION_ICON, " Reset to initial state ", false, ADF_MENU_ACTION_LISTENER);
+                RESET_SIMULATION_ICON, " Reset to initial state ", false, GRAPH_VIEW_MENU_ACTION_LISTENER);
         toolBar.add(tbbResetModel);
         menuItemLabelToToolbarButton.put(AppController.MENU_ITEM_RESET_SIMULATION, tbbResetModel);
 
@@ -452,13 +526,13 @@ public class DseMenuAndToolbarBuilder {
 
         toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_SHOW_SETUP_PANEL,
                 SHOW_SETUP_ICON, " Show Preferences Setup Panel ", true,
-                ADF_MENU_ACTION_LISTENER, ADF_J_BUTTON_ACTION_GROUP, true));
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_J_BUTTON_ACTION_GROUP, true));
 
         toolBar.addSeparator();
 
         toolBar.add(makeMenuAndToolbarButton(AppController.MENU_ITEM_WHAT_IS_DSDS_DSE,
                 SHOW_HELP_CONTENT_ICON, " Show Help Panel ", true,
-                ADF_MENU_ACTION_LISTENER, ADF_J_BUTTON_ACTION_GROUP, true));
+                GRAPH_VIEW_MENU_ACTION_LISTENER, ADF_J_BUTTON_ACTION_GROUP, true));
 
         return toolBar;
     }
@@ -741,7 +815,6 @@ public class DseMenuAndToolbarBuilder {
             if (button != null) {
                 button.setEnabled(newValue);
             }
-//            }
         }
     }
 }

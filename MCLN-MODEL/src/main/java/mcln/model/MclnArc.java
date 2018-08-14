@@ -15,12 +15,12 @@ import java.util.Locale;
  * Time: 9:18 PM
  * To change this template use File | Settings | File Templates.
  */
-//public class MclnArc extends ModelPolyLineEntity {
-public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
+abstract public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
 
     public static final String MCLN_ARC_XML_TAG = "Mcln-Arc";
     public static final String MCLN_ARC_UID_TAG = "Arc-UID";
     public static final String MCLN_ARC_KNOTS_TAG = "Arc-Knot-Locations";
+
     public static final String MCLN_ARC_KNOT_LOCATION_TAG = "XY-Location";
     public static final String MCLN_ARC_KNOB_INDEX_TAG = "Arc-Knob-Index";
     public static final String MCLN_ARC_ARROW_TIP_INDEX_TAG = "Arc-Arrow-Tip-Index";
@@ -28,32 +28,27 @@ public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
     public static final String MCLN_ARC_NODES_UID_TAG = "Arc-Node-UIDs";
     public static final String MCLN_ARC_VIEW_POINTS_TAG = "View-Points";
     public static final String MCLN_ARC_ARROW_POINTS_TAG = "Arrow-Points";
+    public static final String MCLN_POLYLINE_ARC_ARROW_TIP_SEGMENT_INDEX_TAG = "Polyline-Arc-Arrow-Tip-Segment-Index";
+    public static final String MCLN_POLYLINE_ARC_ARROW_TIP_LOCATION_TAG = "Polyline-Arc-Arrow-Tip-Location";
 
-    private ArrowTipLocationPolicy arrowTipLocationPolicy;
+    ArrowTipLocationPolicy arrowTipLocationPolicy;
     private MclnState calculatedProducedState = MclnState.EMPTY_STATE;
 
 //    private final String arcUid;
 
-    private String inpNodeUID;
+    String inpNodeUID;
     private InpNodeType inpNode;
-    private String outNodeUID;
+    String outNodeUID;
     private OutNodeType outNode;
 
-    private final List<double[]> cSysKnots = new ArrayList();
-    private MclnState arcMclnState;
-    private MclnArcKnob mclnArcKnob;
-    private int knobIndex = -1;
-    private int arrowTipSplineIndex = -1;
+    final List<double[]> cSysKnots = new ArrayList();
+    MclnState arcMclnState;
+    int knobIndex = -1;
+    int arrowTipSplineIndex = -1;
 
     // view elements for XML
     private List<double[]> splineCSysPoints = new ArrayList();
     private List<double[]> arrowCSysPoints = new ArrayList();
-//    private MclnArcPolyLineEntity mclnArcArrowPolyLineEntity = new MclnArcPolyLineEntity();
-
-    private MclnCondition outboundMclnCondition;
-    private MclnState currentOutputState = MclnState.CORE_STATE_CONTRADICTION;
-
-    private StringBuilder oneLineMessageBuilder = new StringBuilder();
 
     /**
      * Creates incomplete mclnArc. Is used by Editor
@@ -88,7 +83,6 @@ public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
             MclnState arcMclnState, InpNodeType inpNode, OutNodeType outNode) {
         super(arcUid);
         this.arrowTipLocationPolicy = arrowTipLocationPolicy;
-//        this.arcUid = arcUid;
         createArc(cSysKnots, arcMclnState, inpNode, outNode);
     }
 
@@ -114,18 +108,10 @@ public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
 
         setOutNode(outNode);
 
-//        this.outNode = outNode;
-//        outNodeUID = ((MclnNode) outNode).getUID();
-//        ((MclnNode) outNode).addInpArc(this);
-
         if (cSysKnots != null) {
             this.cSysKnots.addAll(cSysKnots);
             knobIndex = cSysKnots.size() / 2;
         } else {
-//            assert (inpNode != null && outNode != null) : "Both Nodes should exist!";
-            List<double[]> tmpKnotCSysLocations = new ArrayList<>();
-//            tmpKnotCSysLocations.add(inpNode.getCSysPoint());
-//            tmpKnotCSysLocations.add(outNode.getCSysPoint());
             knobIndex = 1;
         }
     }
@@ -133,22 +119,6 @@ public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
     public ArrowTipLocationPolicy getArrowTipLocationPolicy() {
         return arrowTipLocationPolicy;
     }
-
-    //    public void setArrowCSysPoints(double[][] arrowCSysPoints){
-////        mclnArcArrowPolyLineEntity = new MclnArcPolyLineEntity(arrowCSysPoints);
-//        this.arrowCSysPoints.clear();
-//        for (double[] point : arrowCSysPoints) {
-//            this.arrowCSysPoints.add(point);
-//        }
-//    }
-
-//    public void setArrowCSysPoints(List<double[]> arrowCSysPoints){
-//        mclnArcArrowPolyLineEntity = new MclnArcPolyLineEntity(arrowCSysPoints);
-//    }
-
-//    public String getUID() {
-//        return arcUid;
-//    }
 
     public MclnState getArcMclnState() {
         return arcMclnState;
@@ -158,34 +128,30 @@ public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
         this.arcMclnState = arcMclnState;
     }
 
-    //    public void addKnotCSysLocation(double[] knotCSysLocation) {
-//        knotCSysLocations.add(knotCSysLocation);
-//    }
-//
-//    public double[] getKnotCSysLocation(int index) {
-//        assert index < knotCSysLocations.size() : "Knot index out of boundary " + index + ">=" + knotCSysLocations.size();
-//        return knotCSysLocations.get(index);
-//    }
-
-//    public void setKnotCSysLocation(int index, double[] knotCSysLocation) {
-//        assert index < knotCSysLocations.size() : "Knot index out of boundary " + index + ">=" + knotCSysLocations.size();
-//        knotCSysLocations.set(index, knotCSysLocation);
-//    }
-
+    /**
+     * Knots are used for both: Polyline and Spline arcs
+     *
+     * @param cSysKnots
+     */
     public final void setCSysKnots(List<double[]> cSysKnots) {
         this.cSysKnots.clear();
-        this.cSysKnots.addAll(cSysKnots);
+        for (double[] knot : cSysKnots) {
+            this.cSysKnots.add(new double[]{knot[0], knot[1], knot[2]});
+        }
     }
 
+    /**
+     * Knots are used for both: Polyline and Spline arcs
+     *
+     * @return
+     */
     public final List<double[]> getKnotCSysLocations() {
-        return new ArrayList(cSysKnots);
+        List<double[]> copyOfKnots = new ArrayList();
+        for (double[] knot : cSysKnots) {
+            copyOfKnots.add(new double[]{knot[0], knot[1], knot[2]});
+        }
+        return copyOfKnots;
     }
-
-//    public List<double[]> getKnobCSysPoints(List<double[]> arrowCSysPoints){
-//        List<double[]> knobCSysPoints =  mclnArcArrowPolyLineEntity.getPolyLinePoints();
-//        return knobCSysPoints;
-//    }
-
 
     public int getArrowTipSplineIndex() {
         return arrowTipSplineIndex;
@@ -267,8 +233,14 @@ public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
     //  X M L i z e r
     //
 
-    public void setSplineCSysPoints(List<double[]> splineCSysPoints, double[][] arrowCSysPoints) {
-        this.splineCSysPoints = splineCSysPoints;
+    public void setSplineCSysPoints(List<double[]> threadCSysPoints) {
+        this.splineCSysPoints.clear();
+        for (double[] point : threadCSysPoints) {
+            this.splineCSysPoints.add(point);
+        }
+    }
+
+    public void setArrowCSysPoints(double[][] arrowCSysPoints) {
         this.arrowCSysPoints.clear();
         for (double[] point : arrowCSysPoints) {
             this.arrowCSysPoints.add(point);
@@ -278,29 +250,16 @@ public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
     /**
      * @return
      */
-    public String toXml() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<").append(MCLN_ARC_XML_TAG).append(">");
-        arcUIDToXml(stringBuilder);
-        if (cSysKnots.size() > 2) {
-            cSysPointsToXml(stringBuilder);
-        }
-        arcKnobAndArrowTipLocationsToXml(stringBuilder);
-        arrowPointsToXml(stringBuilder);
-        arcMclnState.toXml(stringBuilder, MCLN_ARC_STATE_TAG);
-        nodeUIDsToXml(stringBuilder);
-        stringBuilder.append("</").append(MCLN_ARC_XML_TAG).append(">");
-        return stringBuilder.toString();
-    }
+    abstract String toXml();
 
-    private StringBuilder arcUIDToXml(StringBuilder stringBuilder) {
+    StringBuilder arcUIDToXml(StringBuilder stringBuilder) {
         stringBuilder.append("<").append(MCLN_ARC_UID_TAG).append(">");
         stringBuilder.append(getUID());
         stringBuilder.append("</").append(MCLN_ARC_UID_TAG).append(">");
         return stringBuilder;
     }
 
-    private StringBuilder cSysPointsToXml(StringBuilder stringBuilder) {
+    StringBuilder cSysPointsToXml(StringBuilder stringBuilder) {
         stringBuilder.append("<").append(MCLN_ARC_VIEW_POINTS_TAG).append(">");
         for (double[] splineCSysPoint : splineCSysPoints) {
             toXYXmlLocation(stringBuilder, splineCSysPoint[0], splineCSysPoint[1]);
@@ -309,7 +268,7 @@ public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
         return stringBuilder;
     }
 
-    private void arcKnobAndArrowTipLocationsToXml(StringBuilder stringBuilder) {
+    void arcKnobAndArrowTipLocationsToXml(StringBuilder stringBuilder) {
         if (arrowTipLocationPolicy == ArrowTipLocationPolicy.DETERMINED_BY_USER) {
             arcArrowTipIndexToXml(stringBuilder, arrowTipSplineIndex);
             arcKnobIndexToXml(stringBuilder, 0);
@@ -324,7 +283,7 @@ public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
      * @param stringBuilder
      * @return
      */
-    private StringBuilder knotsLocationToXml(StringBuilder stringBuilder) {
+    StringBuilder knotsLocationToXml(StringBuilder stringBuilder) {
         stringBuilder.append("<").append(MCLN_ARC_KNOTS_TAG).append(">");
         for (double[] cSysKnot : cSysKnots) {
             toXYXmlLocation(stringBuilder, cSysKnot[0], cSysKnot[1]);
@@ -347,10 +306,8 @@ public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
         return stringBuilder;
     }
 
-    private StringBuilder arrowPointsToXml(StringBuilder stringBuilder) {
+    StringBuilder arrowPointsToXml(StringBuilder stringBuilder) {
         stringBuilder.append("<").append(MCLN_ARC_ARROW_POINTS_TAG).append(">");
-//        List<double[]> getKnobCSysPoints = mclnArcArrowPolyLineEntity.getPolyLinePoints();
-//        for (double[] arrowCSysPoint : getKnobCSysPoints) {
         for (double[] arrowCSysPoint : arrowCSysPoints) {
             toXYXmlLocation(stringBuilder, arrowCSysPoint[0], arrowCSysPoint[1]);
         }
@@ -358,14 +315,14 @@ public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
         return stringBuilder;
     }
 
-    private StringBuilder nodeUIDsToXml(StringBuilder stringBuilder) {
+    StringBuilder nodeUIDsToXml(StringBuilder stringBuilder) {
         stringBuilder.append("<").append(MCLN_ARC_NODES_UID_TAG).append(">");
         stringBuilder.append(inpNodeUID).append(" : ").append(outNodeUID);
         stringBuilder.append("</").append(MCLN_ARC_NODES_UID_TAG).append(">");
         return stringBuilder;
     }
 
-    private StringBuilder toXYXmlLocation(StringBuilder stringBuilder, double x, double y) {
+    StringBuilder toXYXmlLocation(StringBuilder stringBuilder, double x, double y) {
         stringBuilder.append("<XY-Location>").
                 append(doubleToFormattedString(x)).
                 append(" : ").
