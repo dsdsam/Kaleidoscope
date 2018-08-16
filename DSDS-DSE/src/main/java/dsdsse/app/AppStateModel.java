@@ -180,8 +180,10 @@ public class AppStateModel {
         NONE("None"),
         CANCELED("Canceled"),
 
-        PLACE_NODE("Click on empty space to create new Property node."),
-        PLACE_CONDITION("Click on empty space to create new Condition node"),
+        PLACE_NODE("Click on empty space to create new Property node. Ctrl+Click a Node to drag it."+
+                " Click empty space to quite drugging."),
+        PLACE_CONDITION("Click on empty space to create new Condition node. Ctrl+Click a Node to drag it."+
+        " Click empty space to quite drugging."),
 
         // Arc steps
         PICK_UP_ARC_INPUT_NODE("New Arc:  Click on a Property or Condition node to pick up arc input node."),
