@@ -28,9 +28,9 @@ The main pages of the site are: "McLN Viewer" and "McLN MF".
 The "McLN Viewer" page demonstrates several develped in DSDS DSE Discrete Symbolic Dynamical System models
 and lets user to simulate their behavior by clicking  Start, Stop, One Step, and Reset buttons.
 The "McLN MF" page describes McLN modeling formalism by explaining its structure and behavior.
-Both java applications can be downloaded from this web site.
+Both applications can be downloaded from this web site.
 </p> 
 
 <p align="justify">
-This project site - <a href="https://dsdsam.github.io/Kaleidoscope/" target="_blank" >Kaleidoscope Project</a> describes SEM and DSDS DSE applications. Both java applications can be downloaded from this web site as well.
+This project site - <a href="https://dsdsam.github.io/Kaleidoscope/" target="_blank" >Kaleidoscope Project</a> describes SEM and DSDS DSE applications. Both applications can be downloaded from this web site as well.
 </p>
