@@ -211,10 +211,10 @@ public class DseMenuAndToolbarBuilder {
         menuBar.addMenuSeparator();
         menuBar.addMenuItem(AppController.MENU_ITEM_EXIT, projectMenuActionGroup);
 
-        // Project View Menu
-        menuBar.addAdfAppMenu(AppController.MENU_PROJECT_VIEW);
-        menuBar.addMenuItem(AppController.MENU_ITEM_GRAPH_VIEW, projectMenuActionGroup);
-        menuBar.addMenuItem(AppController.MENU_ITEM_MATRIX_VIEW, projectMenuActionGroup);
+        // Project View Menu. This should be commented out when View menu is not needed
+//        menuBar.addAdfAppMenu(AppController.MENU_PROJECT_VIEW);
+//        menuBar.addMenuItem(AppController.MENU_ITEM_GRAPH_VIEW, projectMenuActionGroup);
+//        menuBar.addMenuItem(AppController.MENU_ITEM_MATRIX_VIEW, projectMenuActionGroup);
 
         // Demo menu
         menuBar.addAdfAppMenu(AppController.MENU_ITEM_EXAMPLES);

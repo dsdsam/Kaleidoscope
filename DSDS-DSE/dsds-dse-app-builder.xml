@@ -9,6 +9,7 @@
     <property name="mathematics.classes.dir" value="..\MATHEMATICS\classes"/>
     <property name="mcln-model.classes.dir" value="..\MCLN-MODEL\classes"/>
     <property name="mcln-view.classes.dir" value="..\MCLN-VIEW\classes"/>
+    <property name="mcln-matrix-view.classes.dir" value="..\MCLN-MATRIX-VIEW\classes"/>
     <property name="dsdsse.classes.dir" value="classes"/>
 
     <property name="main-class" value="dsdsse.app.DSDSSEApp"/>
@@ -79,6 +80,10 @@
 
         <copy todir="${dir.build.classes}">
             <fileset dir="${mcln-view.classes.dir}"/>
+        </copy>
+
+        <copy todir="${dir.build.classes}">
+            <fileset dir="${mcln-matrix-view.classes.dir}"/>
         </copy>
 
         <copy todir="${dir.build.classes}">
@@ -186,7 +191,7 @@
         <mkdir dir="${dir.build.jar}"/>
 
         <!--Making Applivation version built number-->
-        <property name="version.num" value="2.1."/>
+        <property name="version.num" value="2.2."/>
         <buildnumber file="dse-build.num"/>
         <property name="release-app-version" value="${version.num}${build.number}"/>
 

@@ -190,7 +190,7 @@
         <mkdir dir="${dir.build.jar}"/>
 
         <!--Making Applivation version built number-->
-        <property name="version.num" value="2.1."/>
+        <property name="version.num" value="2.2."/>
         <buildnumber file="sem-build.num"/>
         <property name="release-app-version" value="${version.num}${build.number}"/>
 
