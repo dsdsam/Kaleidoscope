@@ -2,6 +2,7 @@
 
 The Kaleidoscope is a research and development project.
 It is presented on the web site Discrete Symbolic Dynamical Systems & Models:  http://www.dsdsam.com?target=_blank.
+<a href="http://www.dsdsam.com/" target="_blank">Discrete Symbolic Dynamical Systems & Models</a>
 And in the GitHub Pages web site:  https://dsdsam.github.io/Kaleidoscope/?target=_blank.
 The intention of the project is to develop Discrete Symbolic Dynamical Systems (DSDS) modeling thchnique and supporting the technique software tools.
 
