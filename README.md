@@ -6,7 +6,7 @@ And in the GitHub Pages web site:  <a href="https://dsdsam.github.io/Kaleidoscop
 The intention of the project is to develop Discrete Symbolic Dynamical Systems (DSDS) modeling thchnique and supporting the technique software tools.
 </p>
 Project description
-<br>
+<br><br>
 The project consists of three major parts: 
 <p align="justify">
 1) Multicolored Logical Net (McLN) - a Discrete Symbolic Dynamical Systems Modeling Formalism (MF).
