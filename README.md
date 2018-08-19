@@ -1,10 +1,10 @@
 # Kaleidoscope
-
+<p align="justify">
 The Kaleidoscope is a research and development project.
 It is presented on the web site <a href="http://www.dsdsam.com/" target="_blank"  >Discrete Symbolic Dynamical Systems & Models</a>.
 And in the GitHub Pages web site:  <a href="https://dsdsam.github.io/Kaleidoscope/" target="_blank" >Kaleidoscope Project</a>.
 The intention of the project is to develop Discrete Symbolic Dynamical Systems (DSDS) modeling thchnique and supporting the technique software tools.
-
+</p>
 Project description
 
 The project consists of three major parts: 
@@ -22,5 +22,7 @@ The "McLN Viewer" page demonstrates several develped in DSDS DSE Discrete Symbol
 and lets user to simulate their behavior by clicking  Start, Stop, One Step, and Reset buttons.
 The "McLN MF" page describes McLN modeling formalism by explaining its structure and behavior.
 Both java applications can be downloaded from this web site.
-</p>
+<br>  
 This project site - <a href="https://dsdsam.github.io/Kaleidoscope/" target="_blank" >Kaleidoscope Project</a> describes SEM and DSDS DSE applications.
+
+</p>
