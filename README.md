@@ -6,11 +6,16 @@ And in the GitHub Pages web site:  <a href="https://dsdsam.github.io/Kaleidoscop
 The intention of the project is to develop Discrete Symbolic Dynamical Systems (DSDS) modeling thchnique and supporting the technique software tools.
 </p>
 Project description
-<p align="justify">
+
 The project consists of three major parts: 
+<p align="justify">
 1) Multicolored Logical Net (McLN) - a Discrete Symbolic Dynamical Systems Modeling Formalism (MF).
+  </p>
+  <p align="justify">
 2) Space Exploration Mission (SEM)  - a Java desktop application that is supposed to be controlled by
 the McLN controller. 
+  </p>
+    <p align="justify">
 3) Discrete Symbolic Dynamical Systems Development & Simulating Environment (DSDS DSE) -
 a Java desktop application that utilizes McLN formalism to design, implement, simulate and produce the Space Exploration Mission
 behavior based controllers.
