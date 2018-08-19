@@ -32,5 +32,5 @@ Both applications can be downloaded from this web site.
 </p> 
 
 <p align="justify">
-This project site - <a href="https://dsdsam.github.io/Kaleidoscope/" target="_blank" >Kaleidoscope Project</a> describes SEM and DSDS DSE applications. Both applications can be downloaded from this web site as well.
+This GitHub Pages web site - <a href="https://dsdsam.github.io/Kaleidoscope/" target="_blank" >Kaleidoscope Project</a> describes SEM and DSDS DSE applications. Both applications can be downloaded from this web site as well.
 </p>
