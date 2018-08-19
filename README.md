@@ -8,6 +8,7 @@ The intention of the project is to develop Discrete Symbolic Dynamical Systems (
 Project description
 <br><br>
 The project consists of three major parts: 
+<br><br>
 <p align="justify">
 1) Multicolored Logical Net (McLN) - a Discrete Symbolic Dynamical Systems Modeling Formalism (MF).
   </p>
