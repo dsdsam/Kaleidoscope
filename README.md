@@ -12,8 +12,8 @@ The project consists of three major parts:
 2) Space Exploration Mission (SEM)  - a Java desktop application that is supposed to be controlled by
 the McLN controller. 
 3) Discrete Symbolic Dynamical Systems Development & Simulating Environment (DSDS DSE) -
-a Java desktop application that utilizes McLN formalism to design, implement and simulate the Space Exploration Mission
-behavior based controller.
+a Java desktop application that utilizes McLN formalism to design, implement, simulate and produce the Space Exploration Mission
+behavior based controllers.
 
 The Discrete Symbolic Dynamical Systems & Models web site (http://www.dsdsam.com) is dedicated to McLN modeling technique.
 The main pages of the site are: "McLN Viewer" and "McLN MF".
