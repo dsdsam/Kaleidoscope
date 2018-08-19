@@ -15,7 +15,7 @@ the McLN controller.
 a Java desktop application that utilizes McLN formalism to design, implement and simulate the Space Exploration Mission
 behavior based controller.
 
-The Discrete Symbolic Dynamical Systems & Models web site (http://www.dsdsam.com) is the project's web site.
+The Discrete Symbolic Dynamical Systems & Models web site (http://www.dsdsam.com) is dedicated to McLN modeling technique.
 The main pages of the site are: "McLN Viewer" and "McLN MF".
 The "McLN Viewer" page demonstrates several develped in DSDS DSE Discrete Symbolic Dynamical System models
 and lets user to simulate their behavior by clicking  Start, Stop, One Step, and Reset buttons.
