@@ -4,9 +4,9 @@ import adf.app.AdfEnv;
 import mclnmatrix.app.AoSUtils;
 import mclnmatrix.model.MclnMatrixModel;
 import mclnmatrix.view.MatrixDataModelListener;
-import mclnmatrixapp.appview.ButtonPanel;
 import mclnmatrix.view.MclnMatrixView;
 import mclnmatrix.view.ScrollableMclnViewHolder;
+import mclnmatrixapp.appview.ButtonPanel;
 import mclnmatrixapp.appview.FileSelectorPanel;
 
 import javax.swing.*;
@@ -22,11 +22,15 @@ public class AppMatrixViewMainPanel extends JPanel {
 
     private static final Logger logger = Logger.getLogger(AppMatrixViewMainPanel.class.getName());
 
-    public static final String SIMPLE_MODEL_RELATIVE_FILE_PATH = "/relation/Simple Model.txt";
-    public static final String MODEL_RELATIVE_FILE_PATH = "/relation/Model.txt";
-    public static final String MODEL_IN_COMPACT_FORMAT_FILE_PATH = "/relation/modeCompactFormat .txt";
+    public static final String SIMPLE_MODEL_RELATIVE_FILE_PATH =
+            "/mclnmatrixapp-resources/relations/Simple-Model.txt";
+    public static final String MODEL_RELATIVE_FILE_PATH =
+            "/mclnmatrixapp-resources/relations/Model.txt";
+    public static final String MODEL_IN_COMPACT_FORMAT_FILE_PATH =
+            "/mclnmatrixapp-resources/relations/modeCompactFormat.txt";
 
-    public static final String DEFAULT_MODEL_RELATIVE_FILE_PATH = SIMPLE_MODEL_RELATIVE_FILE_PATH;
+    //    public static final String DEFAULT_MODEL_RELATIVE_FILE_PATH = SIMPLE_MODEL_RELATIVE_FILE_PATH;
+    public static final String DEFAULT_MODEL_RELATIVE_FILE_PATH = MODEL_IN_COMPACT_FORMAT_FILE_PATH;
 
     private static final String OPTION_1 = "One Conclusion Per Rule";
     private static final String OPTION_2 = "Model.txt";//"Many Conclusions Per Rule";
@@ -42,11 +46,11 @@ public class AppMatrixViewMainPanel extends JPanel {
 
     private static AppMatrixViewMainPanel appMatrixViewMainPanel;
 
-    public static synchronized AppMatrixViewMainPanel createInstance() {
+    public static synchronized AppMatrixViewMainPanel createInstance(boolean createDefaultModel) {
         if (appMatrixViewMainPanel != null) {
             return appMatrixViewMainPanel;
         }
-        appMatrixViewMainPanel = new AppMatrixViewMainPanel();
+        appMatrixViewMainPanel = new AppMatrixViewMainPanel(createDefaultModel);
         return appMatrixViewMainPanel;
     }
 
@@ -57,7 +61,7 @@ public class AppMatrixViewMainPanel extends JPanel {
     private final ScrollableMclnViewHolder currentMclnViewScrollablePanel = new ScrollableMclnViewHolder();
     private ButtonPanel buttonPanel;
 
-    private MclnMatrixModel mclnMatrixModel;
+    private FileBasedMatrixModel fileBasedMatrixModel;
     private MclnMatrixView mclnMatrixView;
     private int propertiesSize = 0;
     private int conditionsSize = 0;
@@ -99,14 +103,14 @@ public class AppMatrixViewMainPanel extends JPanel {
      * @param selectedFilePath
      */
     private void reloadModel(String selectedFilePath) {
-        mclnMatrixModel = new MclnMatrixModel();
-        boolean success = mclnMatrixModel.createModelFromFile(selectedFilePath);
+        fileBasedMatrixModel = FileBasedMatrixModel.createInstance();
+        boolean success = fileBasedMatrixModel.createModelFromFile(selectedFilePath);
         if (!success) {
             System.out.println("The Model: " + MODEL_RELATIVE_FILE_PATH + ",  was not loaded !");
             return;
         }
-//        MatrixViewUiBuilder.reloadModel(mclnMatrixModel);
-        setCurrentModel(mclnMatrixModel);
+        setCurrentModel(fileBasedMatrixModel);
+        revalidate();
     }
 
 
@@ -140,10 +144,10 @@ public class AppMatrixViewMainPanel extends JPanel {
         String request = (String) e.getSource();
         if (request.equalsIgnoreCase(MclnMatrixView.VERTICAL_LAYOUT_REQUEST)) {
             horizontalLayout = false;
-            mclnMatrixView = MclnMatrixView.createInstance(horizontalLayout, mclnMatrixModel, propertiesSize, conditionsSize);
+            mclnMatrixView = MclnMatrixView.createInstance(horizontalLayout, fileBasedMatrixModel, propertiesSize, conditionsSize);
         } else if (request.equalsIgnoreCase(MclnMatrixView.HORIZONTAL_LAYOUT_REQUEST)) {
             horizontalLayout = true;
-            mclnMatrixView = MclnMatrixView.createInstance(horizontalLayout, mclnMatrixModel, propertiesSize, conditionsSize);
+            mclnMatrixView = MclnMatrixView.createInstance(horizontalLayout, fileBasedMatrixModel, propertiesSize, conditionsSize);
         }
         currentMclnViewScrollablePanel.initContent(mclnMatrixView);
         MatrixDataModelListener matrixDataModelListener = mclnMatrixView.getMatrixDataModelListener();
@@ -155,25 +159,18 @@ public class AppMatrixViewMainPanel extends JPanel {
     //  ================   C r e a t i o n    ====================
     //
 
-    private AppMatrixViewMainPanel() {
+    private AppMatrixViewMainPanel(boolean createDefaultModel) {
         super(new BorderLayout());
         setOpaque(true);
         setBackground(Color.WHITE);
-//        setBorder(new LineBorder(Color.GRAY));
         AoSUtils.initOperations();
-        buildAppMatrixViewMainPanel();
+        buildAppMatrixViewMainPanel(createDefaultModel);
     }
 
     /**
      *
      */
-    void buildAppMatrixViewMainPanel() {
-        mclnMatrixModel = new MclnMatrixModel();
-        boolean success = mclnMatrixModel.createModelFromFile(DEFAULT_MODEL_RELATIVE_FILE_PATH);
-        if (!success) {
-            System.out.println("The Model: " + DEFAULT_MODEL_RELATIVE_FILE_PATH + ",  was not loaded !");
-            return;
-        }
+    private void buildAppMatrixViewMainPanel(boolean createDefaultModel) {
 
 
         //  ================   File Selection Panel   ===================
@@ -187,7 +184,6 @@ public class AppMatrixViewMainPanel extends JPanel {
 
         //  ================   Model View Section   ====================
 
-        setCurrentModel(mclnMatrixModel);
         add(currentMclnViewScrollablePanel, BorderLayout.CENTER);
 
         //  ================   View Switch Button   ====================
@@ -197,28 +193,38 @@ public class AppMatrixViewMainPanel extends JPanel {
                 new EmptyBorder(5, 5, 0, 5));
         buttonPanel.setBorder(compoundBorder);
         add(buttonPanel, BorderLayout.SOUTH);
+
+        if (createDefaultModel) {
+            fileBasedMatrixModel = FileBasedMatrixModel.createInstance();
+            boolean success = fileBasedMatrixModel.createModelFromFile(DEFAULT_MODEL_RELATIVE_FILE_PATH);
+            if (!success) {
+                System.out.println("The Model: " + DEFAULT_MODEL_RELATIVE_FILE_PATH + ",  was not loaded !");
+                return;
+            }
+            setCurrentModel(fileBasedMatrixModel);
+        }
     }
 
-    public void setCurrentModel(MclnMatrixModel mclnMatrixModel) {
-        propertiesSize = mclnMatrixModel.getPropertySize();
-        conditionsSize = mclnMatrixModel.getConditionSize();
+    public void setCurrentModel(MclnMatrixModel fileBasedMatrixModel) {
+        propertiesSize = fileBasedMatrixModel.getPropertySize();
+        conditionsSize = fileBasedMatrixModel.getConditionSize();
 
         boolean autoLayout = false;
         if (autoLayout) {
             if (propertiesSize >= conditionsSize) {
                 horizontalLayout = false;
-                mclnMatrixView = MclnMatrixView.createInstance(horizontalLayout, mclnMatrixModel, propertiesSize, conditionsSize);
+                mclnMatrixView = MclnMatrixView.createInstance(horizontalLayout, fileBasedMatrixModel, propertiesSize, conditionsSize);
             } else {
                 horizontalLayout = true;
-                mclnMatrixView = MclnMatrixView.createInstance(horizontalLayout, mclnMatrixModel, propertiesSize, conditionsSize);
+                mclnMatrixView = MclnMatrixView.createInstance(horizontalLayout, fileBasedMatrixModel, propertiesSize, conditionsSize);
             }
             buttonPanel.resetDefaultLayout(horizontalLayout);
         } else {
-            mclnMatrixView = MclnMatrixView.createInstance(horizontalLayout, mclnMatrixModel, propertiesSize, conditionsSize);
+            mclnMatrixView = MclnMatrixView.createInstance(horizontalLayout, fileBasedMatrixModel, propertiesSize, conditionsSize);
         }
 
         currentMclnViewScrollablePanel.initContent(mclnMatrixView);
-        mclnStateCalculator = new MclnStateCalculator(mclnMatrixModel);
+        mclnStateCalculator = new MclnStateCalculator(fileBasedMatrixModel);
 
         MatrixDataModelListener matrixDataModelListener = mclnMatrixView.getMatrixDataModelListener();
         mclnStateCalculator.setMatrixDataModelListener(matrixDataModelListener);
