@@ -180,10 +180,10 @@ public class AppStateModel {
         NONE("None"),
         CANCELED("Canceled"),
 
-        PLACE_NODE("Click on empty space to create new Property node. Ctrl+Click a Node to drag it."+
+        PLACE_NODE("Click on empty space to create new Property node. Ctrl+Click a Node to drag it." +
                 " Click empty space to quite drugging."),
-        PLACE_CONDITION("Click on empty space to create new Condition node. Ctrl+Click a Node to drag it."+
-        " Click empty space to quite drugging."),
+        PLACE_CONDITION("Click on empty space to create new Condition node. Ctrl+Click a Node to drag it." +
+                " Click empty space to quite drugging."),
 
         // Arc steps
         PICK_UP_ARC_INPUT_NODE("New Arc:  Click on a Property or Condition node to pick up arc input node."),
@@ -305,7 +305,7 @@ public class AppStateModel {
     }
 
     //
-    //  I n s t a n c e
+    //   A p p l i c a t i o n   S t a t e   I n s t a n c e
     //
 
     private static AppStatusPanel appStatusPanel;
@@ -325,12 +325,31 @@ public class AppStateModel {
 
     private static boolean printToolIsActive;
 
+    private boolean currentViewIsMatrix;
+
     /**
      *
      */
     private AppStateModel() {
 
     }
+
+    public boolean isCurrentViewGraph() {
+        return !currentViewIsMatrix;
+    }
+
+    public boolean isCurrentViewMatrix() {
+        return currentViewIsMatrix;
+    }
+
+    public void setCurrentViewIsGraph() {
+        this.currentViewIsMatrix = false;
+    }
+
+    public void setCurrentViewIsMatrix() {
+        this.currentViewIsMatrix = true;
+    }
+
 
     public static void setAppStateModelListener(AppStateModelListener appStateModelListener) {
         appStateModelListeners.add(appStateModelListener);
