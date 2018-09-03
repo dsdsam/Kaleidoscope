@@ -8,11 +8,9 @@ import dsdsse.app.DsdsseEnvironment;
 import dsdsse.graphview.MclnGraphDesignerView;
 import dsdsse.graphview.MclnGraphViewEditor;
 import dsdsse.graphview.MclnViewEditorMouseListener;
-import dsdsse.matrixview.MclnGraphMatrixDesignerView;
+import dsdsse.matrixview.MclnDesignerMatrixView;
 import dsdsse.preferences.DsdsseUserPreference;
 import dsdsse.preferences.GroupID;
-import dsdsse.printing.MclnPrintPreviewPanel;
-import dsdsse.printing.PrintViewButtonPanel;
 import mcln.model.MclnDoubleRectangle;
 import mcln.model.MclnModel;
 import mcln.model.MclnProject;
@@ -159,9 +157,9 @@ public class DesignSpaceView extends JPanel {
         DesignOrSimulationStatusPanelCardView designOrSimulationVisualizationCardView =
                 DesignOrSimulationStatusPanelCardView.createInstance(this);
 
-        MclnGraphMatrixDesignerView mcLnGraphMatrixDesignerView = MclnGraphMatrixDesignerView.createInstance();
+        MclnDesignerMatrixView mcLnDesignerMatrixView = MclnDesignerMatrixView.createInstance();
         DesignSpaceContentManager.createInstance(this, mclnGraphDesignerView,
-                mcLnGraphMatrixDesignerView, designOrSimulationVisualizationCardView);
+                mcLnDesignerMatrixView, designOrSimulationVisualizationCardView);
         this.revalidate();
     }
 
