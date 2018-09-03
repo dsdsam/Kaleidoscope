@@ -256,7 +256,7 @@ public class MathSpline3D {
         Double doub1 = new Double(tangts[nPnts - 1][1]);
         Double doub2 = new Double(tangts[nPnts - 1][2]);
         if (doub0.isNaN() || doub1.isNaN() || doub2.isNaN()) {
-            System.out.println();
+//            System.out.println();
         }
         prepareSplineToCompute(splKnots, SPL_CURV_NONE, CHORD_PARAM, null, null);
 
@@ -754,7 +754,7 @@ public class MathSpline3D {
     }
 
     // -----------------------------------------------------------
-                       /* pnt1 - from, pnt - to */
+    /* pnt1 - from, pnt - to */
     private void copySplKnot(int ncol, int nrow, int nval, int col_row,
                              double pnt1[][], int num1, double pnt[][], int num) {
         int idx0, idx1;
@@ -1249,7 +1249,7 @@ double  *prod;   [m][p]
         npar = ncol;
         npar_1 = npar - 1;
 // System.out.println("boundary_conditions_for_spline   "+npar+"  "+tan_cond);
-/* Set boundary conditions ( first and last equations ) */
+        /* Set boundary conditions ( first and last equations ) */
 
         eq_set[0] = eq_set[1] = 0;
 
@@ -1669,8 +1669,8 @@ double  *prod;   [m][p]
           solve_3_diago_lin
   ======================================
 */
-/* -------------------------------------------------------------------- */
-/* Solve linear systems of 3-diagonal equations simultaneously  */
+    /* -------------------------------------------------------------------- */
+    /* Solve linear systems of 3-diagonal equations simultaneously  */
 
 
 //     INPUT:
@@ -1809,9 +1809,9 @@ double  *prod;   [m][p]
    0      0      0      .      0      0      0     d[n-1]  x[n-1]   y[n-1]
 */
 
-/* Substitution, finding solution       */
+        /* Substitution, finding solution       */
 
-/*  X[npar - 1] = X[npar - 1] / diago[npar - 1] */
+        /*  X[npar - 1] = X[npar - 1] / diago[npar - 1] */
 
         if (n_row > 0 && nval > 0 && diago[npar - 1] == 0.0)
             return (E_CANT_SOLVE);
@@ -1824,10 +1824,10 @@ double  *prod;   [m][p]
         for (i = 0; i < nval; i++)
             res[npar - 1][i] /= diago[npar - 1];
 
-/*  for (ii = npar - 2; ii >= 0; ii --)                                   */
-/*       X[ii] = X[ii] - X[ii + 1] * above[ii]                            */
-/*                       or                                               */
-/*       X[ii] = X[ii] - X[ii + 1] * above[ii] - X[npar - 1] * under[ii]; */
+        /*  for (ii = npar - 2; ii >= 0; ii --)                                   */
+        /*       X[ii] = X[ii] - X[ii + 1] * above[ii]                            */
+        /*                       or                                               */
+        /*       X[ii] = X[ii] - X[ii + 1] * above[ii] - X[npar - 1] * under[ii]; */
 /*
  for (ii = npar - 2, ii1 = idx_start - ind_inc; ii >= 0;
       ii --, ii1 -= ind_inc)
@@ -1960,7 +1960,7 @@ int spl_to_polyln(Spline *p_spline, double eps,
                    A[5]*B[5])
 */
 // --------------------------------------------------------------
-/* Evaluate spline, its first and second derivatives            */
+    /* Evaluate spline, its first and second derivatives            */
 
 //double  param;          /* spline parameter                     */
 //int     norm;           /* flag indicating if param is normalized
@@ -2047,7 +2047,7 @@ int spl_to_polyln(Spline *p_spline, double eps,
             Double doub0 = new Double(coeff[2]);
             Double doub1 = new Double(coeff[3]);
             if (doub0.isNaN() || doub1.isNaN()) {
-                System.out.println();
+//                System.out.println();
             }
 /*
  System.out.println("rval "+  tangts[ind][ii]+"   "+del_seg);
