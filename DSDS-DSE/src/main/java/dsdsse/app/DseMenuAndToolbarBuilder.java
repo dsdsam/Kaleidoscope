@@ -188,7 +188,7 @@ public class DseMenuAndToolbarBuilder {
      */
     public AdfMenuBar buildMenuBur(AdfMenuActionListener adfMenuActionListener, String iconClassPath,
                                    Map<String, AdfBasicAction> menuLabelToActionMap) {
-        if(designerViewMenuBar != null){
+        if (designerViewMenuBar != null) {
             return designerViewMenuBar;
         }
 
@@ -211,10 +211,10 @@ public class DseMenuAndToolbarBuilder {
         menuBar.addMenuSeparator();
         menuBar.addMenuItem(AppController.MENU_ITEM_EXIT, projectMenuActionGroup);
 
-        // Project View Menu. This should be commented out when View menu is not needed
-//        menuBar.addAdfAppMenu(AppController.MENU_PROJECT_VIEW);
-//        menuBar.addMenuItem(AppController.MENU_ITEM_GRAPH_VIEW, projectMenuActionGroup);
-//        menuBar.addMenuItem(AppController.MENU_ITEM_MATRIX_VIEW, projectMenuActionGroup);
+        // Project View Menu
+        menuBar.addAdfAppMenu(AppController.MENU_PROJECT_VIEW);
+        menuBar.addMenuItem(AppController.MENU_ITEM_GRAPH_VIEW, demoMenuActionGroup);
+        menuBar.addMenuItem(AppController.MENU_ITEM_MATRIX_VIEW, demoMenuActionGroup);
 
         // Demo menu
         menuBar.addAdfAppMenu(AppController.MENU_ITEM_EXAMPLES);
@@ -307,15 +307,14 @@ public class DseMenuAndToolbarBuilder {
     }
 
     /**
-     *
      * @param adfMenuActionListener
      * @param iconClassPath
      * @param menuLabelToActionMap
      * @return
      */
     private AdfMenuBar buildMclnMatrixViewMenuBar(AdfMenuActionListener adfMenuActionListener, String iconClassPath,
-                                    Map<String, AdfBasicAction> menuLabelToActionMap) {
-        if(matrixViewMenuBar != null){
+                                                  Map<String, AdfBasicAction> menuLabelToActionMap) {
+        if (matrixViewMenuBar != null) {
             return matrixViewMenuBar;
         }
 
@@ -325,7 +324,7 @@ public class DseMenuAndToolbarBuilder {
         menuBar.addAdfAppMenu(AppController.MENU_ITEM_PROJECT);
 
         menuBar.addMenuSeparator();
-        menuBar.addMenuItem(AppController.MENU_ITEM_EXIT );
+        menuBar.addMenuItem(AppController.MENU_ITEM_EXIT);
 
         // Project View Menu
         menuBar.addAdfAppMenu(AppController.MENU_PROJECT_VIEW);
