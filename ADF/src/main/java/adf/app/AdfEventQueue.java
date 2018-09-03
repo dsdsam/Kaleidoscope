@@ -19,12 +19,13 @@ public class AdfEventQueue extends EventQueue {
 
     private final Map runnables = new HashMap();
 
-    public AdfEventQueue( ) {
+    public AdfEventQueue() {
         Toolkit.getDefaultToolkit().getSystemEventQueue().push(this);
     }
 
     long timeBefore;
     long timeAfter;
+
     protected void dispatchEvent(AWTEvent event) {
         try {
 //            analyzeEventFlow( event );
@@ -36,7 +37,7 @@ public class AdfEventQueue extends EventQueue {
             super.dispatchEvent(event);
             timeAfter = System.currentTimeMillis();
             long operationTime = timeAfter - timeBefore;
-            long cycleTime = timeBetweenEvents+ operationTime;
+            long cycleTime = timeBetweenEvents + operationTime;
 //            System.out.println("\nAdfEventQueue: Time between events = " + timeBetweenEvents+
 //                    "  Operation time = " + operationTime+",  cycle time "+cycleTime);
 
@@ -112,11 +113,11 @@ public class AdfEventQueue extends EventQueue {
         Set keySet = runnables.keySet();
 
         String[] runnablesArr = (String[]) keySet.toArray(new String[0]);
-        System.out.println();
+//        System.out.println();
         for (int i = 0; i < runnablesArr.length; i++) {
             int cnt = ((Integer) runnables.get(runnablesArr[i])).intValue();
             if (cnt > 100) {
-                System.out.println(" " + i + "   " + runnablesArr[i] + "   " + cnt);
+//                System.out.println(" " + i + "   " + runnablesArr[i] + "   " + cnt);
             }
         }
     }
