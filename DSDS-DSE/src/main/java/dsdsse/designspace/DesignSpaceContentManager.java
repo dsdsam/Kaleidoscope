@@ -1,14 +1,13 @@
 package dsdsse.designspace;
 
-import dsdsse.matrixview.MclnGraphMatrixDesignerView;
-import dsdsse.printing.MclnPrintPreviewPanel;
 import dsdsse.graphview.MclnGraphDesignerView;
+import dsdsse.matrixview.MclnDesignerMatrixView;
+import dsdsse.printing.MclnPrintPreviewPanel;
 import dsdsse.printing.PrintViewButtonPanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 
@@ -41,13 +40,13 @@ public class DesignSpaceContentManager {
      * @param designOrSimulationVisualizationCardView
      */
     static void createInstance(DesignSpaceView designSpaceView, MclnGraphDesignerView mclnGraphDesignerView,
-                               MclnGraphMatrixDesignerView mcLnGraphMatrixDesignerView,
+                               MclnDesignerMatrixView mcLnDesignerMatrixView,
                                DesignOrSimulationStatusPanelCardView designOrSimulationVisualizationCardView) {
         if (designSpaceContentManager != null) {
             throw new RuntimeException("DesignSpaceContentManager instance already created.");
         }
         designSpaceContentManager = new DesignSpaceContentManager(designSpaceView, mclnGraphDesignerView,
-                mcLnGraphMatrixDesignerView, designOrSimulationVisualizationCardView);
+                mcLnDesignerMatrixView, designOrSimulationVisualizationCardView);
     }
 
     static void initMcLNPrintPreviewContent() {
@@ -134,7 +133,7 @@ public class DesignSpaceContentManager {
 
     private final DesignSpaceView designSpaceView;
     private final MclnGraphDesignerView mclnGraphDesignerView;
-    private final MclnGraphMatrixDesignerView mcLnGraphMatrixDesignerView;
+    private final MclnDesignerMatrixView mcLnDesignerMatrixView;
     private final DesignOrSimulationStatusPanelCardView designOrSimulationVisualizationCardView;
     private JPanel designSpaceSidePanelHolder;
     private JComponent westPanel;
@@ -144,14 +143,14 @@ public class DesignSpaceContentManager {
     private JSplitPane splitPane;
 
     private DesignSpaceContentManager(DesignSpaceView designSpaceView, MclnGraphDesignerView mclnGraphDesignerView,
-                                      MclnGraphMatrixDesignerView mcLnGraphMatrixDesignerView,
+                                      MclnDesignerMatrixView mcLnDesignerMatrixView,
                                       DesignOrSimulationStatusPanelCardView designOrSimulationVisualizationCardView) {
         this.designSpaceView = designSpaceView;
         this.mclnGraphDesignerView = mclnGraphDesignerView;
-        this.mcLnGraphMatrixDesignerView = mcLnGraphMatrixDesignerView;
+        this.mcLnDesignerMatrixView = mcLnDesignerMatrixView;
         this.designOrSimulationVisualizationCardView = designOrSimulationVisualizationCardView;
         designSpaceSidePanelHolder = initDesignSpaceView(mclnGraphDesignerView,
-                mcLnGraphMatrixDesignerView, designOrSimulationVisualizationCardView);
+                mcLnDesignerMatrixView, designOrSimulationVisualizationCardView);
     }
 
 
@@ -160,7 +159,7 @@ public class DesignSpaceContentManager {
      * @param cardLayoutPanel
      */
     private JPanel initDesignSpaceView(MclnGraphDesignerView mclnGraphDesignerView,
-                                       MclnGraphMatrixDesignerView mcLnGraphMatrixDesignerView,
+                                       MclnDesignerMatrixView mcLnDesignerMatrixView,
                                        JPanel cardLayoutPanel) {
 
         JPanel graphViewHolderPanel = new JPanel(new BorderLayout());
@@ -173,7 +172,7 @@ public class DesignSpaceContentManager {
         graphViewHolderPanel.add(mclnGraphDesignerView, BorderLayout.CENTER);
 
         designSpaceGraphOrMatrixViewCardPanel = DesignSpaceGraphOrMatrixViewCardPanel.createInstance(
-                graphViewHolderPanel, mclnGraphDesignerView, mcLnGraphMatrixDesignerView);
+                graphViewHolderPanel, mclnGraphDesignerView, mcLnDesignerMatrixView);
 
         JPanel designSpaceSidePanelHolder = new JPanel(new BorderLayout());
         designSpaceSidePanelHolder.add(designSpaceGraphOrMatrixViewCardPanel, BorderLayout.CENTER);
@@ -265,7 +264,7 @@ public class DesignSpaceContentManager {
                 designSpaceGraphOrMatrixViewCardPanel.isCurrentViewIsMclnGraphDesignerView();
 
         designSpaceGraphOrMatrixViewCardPanel = DesignSpaceGraphOrMatrixViewCardPanel.createInstance(
-                graphViewHolderPanel, mclnGraphDesignerView, mcLnGraphMatrixDesignerView);
+                graphViewHolderPanel, mclnGraphDesignerView, mcLnDesignerMatrixView);
 
         designSpaceGraphOrMatrixViewCardPanel.setCurrentView(currentViewIsMclnGraphDesignerView);
 
@@ -335,8 +334,6 @@ public class DesignSpaceContentManager {
         JPanel removedPanel = eastPanel;
         eastPanel = null;
         designSpaceView.validate();
-//        designSpaceGraphOrMatrixViewCardPanel.revalidate();
-//        designSpaceGraphOrMatrixViewCardPanel.repaint();
         designSpaceView.repaint();
         return removedPanel;
     }
