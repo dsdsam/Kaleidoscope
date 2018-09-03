@@ -16,7 +16,6 @@ public class FadableMessagePopUpPanel extends MessagePopUpRoundedCornersPanel {
     private static final float FADE_FAST = 0.08f;
 
     private static final int DELAY = 30;
-    //    private static final int WAITING_DELAY = 5000;
     private static final int IDLE = 0;
     private static final int POP_UP = 1;
     private static final int WAITING = 2;
@@ -56,7 +55,7 @@ public class FadableMessagePopUpPanel extends MessagePopUpRoundedCornersPanel {
     });
 
     private void processShowUp() {
-        if(canceling){
+        if (canceling) {
             transparencyTimer.stop();
             transparencyTimer.setInitialDelay(0);
             transparencyTimer.setDelay(DELAY + 10);
@@ -101,7 +100,6 @@ public class FadableMessagePopUpPanel extends MessagePopUpRoundedCornersPanel {
             delta = 0;
             transparencyTimer.stop();
             if (messageClosedListener != null) {
-                System.out.println("Message handler: calling messageClosedListener");
                 messageClosedListener.messageClosed();
                 messageClosedListener = null;
                 stage = IDLE;
@@ -122,8 +120,6 @@ public class FadableMessagePopUpPanel extends MessagePopUpRoundedCornersPanel {
         messageLabel.setOpaque(true);
         messageLabel.setBackground(Color.CYAN);
         messageLabel.setBorder(null);
-//        add(messageLabel, BorderLayout.CENTER);
-
     }
 
     //
@@ -135,10 +131,9 @@ public class FadableMessagePopUpPanel extends MessagePopUpRoundedCornersPanel {
     void setMessage(String message, int width) {
         messageLabel = new JLabel("", JLabel.CENTER);
         messageLabel.setOpaque(false);
-//        messageLabel.setBackground(Color.CYAN);
         messageLabel.setBorder(null);
         messageLabel.setText(message);
-        int messageWidth = width <=0? MESSAGE_POPUP_PANEL_WIDTH : width;
+        int messageWidth = width <= 0 ? MESSAGE_POPUP_PANEL_WIDTH : width;
         panelSize = new Dimension(messageWidth, messageLabel.getPreferredSize().height + 40);
         removeAll();
         add(messageLabel, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0,
@@ -199,12 +194,8 @@ public class FadableMessagePopUpPanel extends MessagePopUpRoundedCornersPanel {
         Graphics2D g2d = (Graphics2D) g;
         Composite currentComp = g2d.getComposite();
         g2d.setComposite(alphaComposite);
-
         g.setColor(getBackground());
-
         super.paint(g2d);
-//        Rectangle r = g.getClipBounds();
-//        g.fillRect(r.x, r.y, r.width, r.height);
         // reset current Comp
         g2d.setComposite(currentComp);
     }
@@ -229,22 +220,4 @@ public class FadableMessagePopUpPanel extends MessagePopUpRoundedCornersPanel {
     public final Dimension getMaximumSize() {
         return panelSize;
     }
-
-//    JLabel label = new JLabel(messageToShow);
-//    Dimension size = label.getPreferredSize();
-//    Dimension size2 = label.getSize();
-//
-//    JPanel panel = new JPanel(new GridBagLayout());
-//    panel.add(label, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER,
-//                                            GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-//    Dimension panelsize = panel.getPreferredSize();
-//    Dimension panelsize2 = panel.getSize();
-//
-//    JPanel panel2 = new JPanel(new GridBagLayout());
-//    panel2.setSize(new Dimension(800, 500));
-//    panel2.setPreferredSize(new Dimension(1000, 800));
-//    panel2.add(panel, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER,
-//                                             GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-//    Dimension ppanelsize = panel2.getPreferredSize();
-//    Dimension ppanelsize2 = panel2.getSize();
 }
