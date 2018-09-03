@@ -1,7 +1,6 @@
 package dsdsse.designspace;
 
 import dsdsse.graphview.MclnGraphDesignerView;
-import dsdsse.matrixview.MclnGraphMatrixDesignerView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,9 +48,9 @@ public class DesignSpaceGraphOrMatrixViewCardPanel extends JPanel {
     }
 
     public void setCurrentView(boolean currentViewWillBeMclnGraphDesignerView) {
-        if(currentViewWillBeMclnGraphDesignerView){
+        if (currentViewWillBeMclnGraphDesignerView) {
             switchToMclnGraphDesignerView();
-        }else{
+        } else {
             switchToMclnGraphMatrixView();
         }
     }
