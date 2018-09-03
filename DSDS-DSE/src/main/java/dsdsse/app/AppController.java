@@ -698,6 +698,10 @@ public class AppController {
                                         AppController.getInstance().setDevelopmentMode();
                                     }
 
+                                    if (appStateModel.isCurrentViewMatrix()) {
+                                        switchToSelectedView(MENU_ITEM_GRAPH_VIEW);
+                                    }
+
                                     // creating new presentation project
                                     MclnProject mclnProject = DesignSpaceModel.getInstance().
                                             replaceCurrentProjectWithPresentationProject(
@@ -786,14 +790,15 @@ public class AppController {
     }
 
     /**
-     *
      * @param selectedView
      */
     private void switchToSelectedView(String selectedView) {
         if (selectedView.equals(MENU_ITEM_GRAPH_VIEW)) {
             DesignSpaceGraphOrMatrixViewCardPanel.getInstance().switchToMclnGraphDesignerView();
-        } else if(selectedView.equals(MENU_ITEM_MATRIX_VIEW)){
+            appStateModel.setCurrentViewIsGraph();
+        } else if (selectedView.equals(MENU_ITEM_MATRIX_VIEW)) {
             DesignSpaceGraphOrMatrixViewCardPanel.getInstance().switchToMclnGraphMatrixView();
+            appStateModel.setCurrentViewIsMatrix();
         }
     }
 
@@ -1173,7 +1178,6 @@ public class AppController {
         AppStateModel.setCurrentSimulationOperation(AppStateModel.Operation.NONE);
         AppStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE);
 
-        DesignSpaceGraphOrMatrixViewCardPanel.getInstance().switchToMclnGraphDesignerView();
         DesignOrSimulationStatusPanelCardView.getInstance().switchToDesignStatusViewPanel();
     }
 
@@ -1492,7 +1496,7 @@ public class AppController {
      * @param scriptName
      * @return
      */
-    public static boolean startPresentationShow(String scriptName) {
+    public boolean startPresentationShow(String scriptName) {
         if (PresentationRunner.isDemoRunning()) {
             return true;
         }
@@ -1510,6 +1514,10 @@ public class AppController {
 
         if (AppStateModel.isSimulationMode()) {
             AppController.getInstance().setDevelopmentMode();
+        }
+
+        if (appStateModel.isCurrentViewMatrix()) {
+            switchToSelectedView(MENU_ITEM_GRAPH_VIEW);
         }
 
         // creating new presentation project
