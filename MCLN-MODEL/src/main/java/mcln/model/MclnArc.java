@@ -37,9 +37,9 @@ abstract public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
 //    private final String arcUid;
 
     String inpNodeUID;
-    private InpNodeType inpNode;
+    InpNodeType inpNode;
     String outNodeUID;
-    private OutNodeType outNode;
+    OutNodeType outNode;
 
     final List<double[]> cSysKnots = new ArrayList();
     MclnState arcMclnState;
@@ -49,6 +49,8 @@ abstract public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
     // view elements for XML
     private List<double[]> splineCSysPoints = new ArrayList();
     private List<double[]> arrowCSysPoints = new ArrayList();
+
+    StringBuilder oneLineMessageBuilder = new StringBuilder();
 
     /**
      * Creates incomplete mclnArc. Is used by Editor
@@ -246,6 +248,10 @@ abstract public class MclnArc<InpNodeType, OutNodeType> extends MclnEntity {
             this.arrowCSysPoints.add(point);
         }
     }
+
+    //
+    //  X M L i z e r
+    //
 
     /**
      * @return
