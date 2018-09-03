@@ -66,15 +66,13 @@ public class LedSignView extends LedSignModel {
         public void componentResized(ComponentEvent e) {
             setPanelResizing(true);
             readyToRun = false;
-            System.out.println("EmbeddableLEDSignPanel component Resized");
             setSizeAttributes();
-//            readyToRun = true;
             panelResized = true;
         }
 
         @Override
         public void componentMoved(ComponentEvent e) {
-            System.out.println("LedSignView component Moved");
+//            System.out.println("LedSignView component Moved");
         }
 
         @Override
@@ -96,8 +94,8 @@ public class LedSignView extends LedSignModel {
         int width = bounds.width;
         int height = bounds.height;
 
-        System.out.println("  " + SIGN_WIDTH + "  " + SIGN_HEIGHT);
-        System.out.println("  " + bounds.x + "  " + bounds.y + "  " + width + "  " + height);
+//        System.out.println("  " + SIGN_WIDTH + "  " + SIGN_HEIGHT);
+//        System.out.println("  " + bounds.x + "  " + bounds.y + "  " + width + "  " + height);
 
 //        stop();
         trimSize(width, height);
@@ -196,18 +194,6 @@ public class LedSignView extends LedSignModel {
         setBackground(new Color(155, 179, 201));
         setBackground(Color.BLACK);
         setOpaque(true);
-        // Set up the different colors for the sign
-
-//        String s;
-//        int r, g, b;
-//
-//        s = "100,130,130";
-//        s = s.trim();
-//        r = new Integer(s.substring(0, s.indexOf(","))).intValue();
-//        s = s.substring(s.indexOf(",") + 1);
-//        g = new Integer(s.substring(0, s.indexOf(","))).intValue();
-//        s = s.substring(s.indexOf(",") + 1);
-//        b = new Integer(s).intValue();
 
         if (hasBorder) {
             Border border = BorderFactory.createCompoundBorder(
@@ -228,7 +214,6 @@ public class LedSignView extends LedSignModel {
 
     @Override
     void animateSign() {
-        System.out.println("A n i m a t e   C a l l e d");
         Graphics g = getGraphics();
         if (g == null) {
             return;
@@ -236,21 +221,6 @@ public class LedSignView extends LedSignModel {
         if (!paintPanelInNotEdt) {
             return;
         }
-
-        System.out.println("A N I M A T I N G");
-//        if (!readyToRun.get() || g == null) {
-//            return;
-//        }
-//        System.out.println("animateSign "+Thread.currentThread().getName());
-
-//        Dimension d = getSize();
-//        g.setColor(Color.BLACK);
-
-//        if (getBorder() != null) {
-//            getBorder().paintBorder(this, g, 0, 0, d.width, d.height);
-//        }
-//        g.setColor(Color.BLACK);
-//        g.fillRect(offset, offset, d.width - (2 * offset), d.height - (2 * offset));
 
         Dimension d = getSize();
 
@@ -264,7 +234,6 @@ public class LedSignView extends LedSignModel {
         g.fillRect(d.width - offset - 10, offset, 10, d.height - (2 * offset));
 
         if (presentClearLEDPanel) {
-            System.out.println("Drawing empty panel");
             g.drawImage(offImage, leftMarginPlusOffset, offset, null);  // Turn all the LEDs off
             presentClearLEDPanel = false;
             readyToRun = true;
@@ -309,7 +278,6 @@ public class LedSignView extends LedSignModel {
         gr.fillRect(d.width - offset - 10, offset, 10, d.height - (2 * offset));
 
         if (presentClearLEDPanel) {
-            System.out.println("Drawing empty panel");
             gr.drawImage(offImage, leftMarginPlusOffset, offset, null);  // Turn all the LEDs off
             presentClearLEDPanel = false;
             readyToRun = true;
@@ -347,36 +315,6 @@ public class LedSignView extends LedSignModel {
      */
     public boolean updateSign2() {
 
-//        System.out.println("P a i n t i n g  in EDT = " + SwingUtilities.isEventDispatchThread() + ", " + Thread.currentThread().getName());
-//        Dimension d = getSize();
-//
-//        Border border = getBorder();
-//        if (border != null) {
-//            border.paintBorder(this, gr, 0, 0, d.width, d.height);
-//        }
-//
-//        gr.setColor(Color.BLACK);
-//        gr.fillRect(offset, offset, 10, d.height - (2 * offset));
-//        gr.fillRect(d.width - offset - 10, offset, 10, d.height - (2 * offset));
-//
-//        if (presentClearLEDPanel) {
-//            System.out.println("Drawing empty panel");
-//            gr.drawImage(offImage, leftMarginPlusOffset, offset, null);  // Turn all the LEDs off
-//            presentClearLEDPanel = false;
-//            readyToRun = true;
-//            updatingView.set(false);
-//            return;
-//        }
-//
-//
-//        if (currentOperationReference.get() == null) {
-//            gr.drawImage(offImage, leftMarginPlusOffset, offset, null);
-//            readyToRun = true;
-//            updatingView.set(false);
-////            System.out.println("updateSign: current currentOperation = null");
-//            return;
-//        }
-
         LedOperation currentOperation = currentOperationReference.get();
         LedOperation.IDs currentOperationId = currentOperation.ID;
 
@@ -391,12 +329,9 @@ public class LedSignView extends LedSignModel {
 
             case APPEAR:
                 if (!currentOperation.hasText()) {
-                    System.out.println("updateSign: currentOperation = " + currentOperationId + ", has text ");
-//                    gr.drawImage(offImage, offset, offset, null);  // Turn all the LEDs off
                     return false;
 
                 } else {
-                    System.out.println(" Text = \"" + currentOperation.getText() + "\"");
                     for (int x = 0; x < widthInLEDs; x++) {
                         for (int y = 0; y < heightInLEDs; y++) {
                             drawLED(x * ledSize, y * ledSize, currentOperation.getLED(x, y),
