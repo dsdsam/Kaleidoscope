@@ -1,7 +1,9 @@
 package dsdsse.graphview;
 
+import adf.csys.view.BasicCSysEntity;
+import adf.csys.view.CSysRectangleEntity;
+import adf.csys.view.DoubleRectangle;
 import adf.utils.StandardFonts;
-import adf.csys.view.*;
 import dsdsse.history.ExecutionHistoryPanel;
 import dsdsse.preferences.DsdsseUserPreference;
 import mcln.model.*;
@@ -10,8 +12,10 @@ import mclnview.graphview.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -128,30 +132,32 @@ public class MclnGraphDesignerView extends MclnGraphView {
 
     @Override
     protected void onMclnModelCleared() {
-        //            System.out.println("\nMcln M o d e l   C l e a r e d ");
-
-            /*
-              We call removeListener to ask mclnGraphModel to remove listener from destroyed Mcln Model.
-              It is removed when model is cleared
-             */
+      /*
+        We call removeListener to ask mclnGraphModel to remove listener from destroyed Mcln Model.
+        It is removed when model is cleared
+       */
         clearInterimEntityCollections();
         super.onMclnModelCleared();
         ExecutionHistoryPanel.getInstance().clearUpOnModelErased();
+    }
+
+    //
+    // Called from base class Mcln Model Simulation Listener implementation
+    //
+
+    @Override
+    protected void onSimulationStateChange() {
+        regenerateGraphView();
+        repaintAllModelNodesOnOffScreenImage();
     }
 
     @Override
     protected void onSimulationStepExecuted() {
         int historySize = 0;
         for (MclnPropertyView mcLnPropertyView : statementViews) {
-            historySize =mcLnPropertyView.recordHistory();
+            historySize = mcLnPropertyView.recordHistory();
         }
         ExecutionHistoryPanel.getInstance().simulationStepExecuted(historySize);
-    }
-
-    @Override
-    protected void onSimulationStateChange() {
-        regenerateGraphView();
-        repaintAllModelNodesOnOffScreenImage();
     }
 
     @Override
@@ -172,7 +178,7 @@ public class MclnGraphDesignerView extends MclnGraphView {
     public MclnGraphDesignerView(MclnGraphModel mclnGraphModel, int viewPadding, int options,
                                  MclnGraphViewDefaultProperties mclnGraphViewDefaultProperties) {
         super(mclnGraphModel, viewPadding, options, mclnGraphViewDefaultProperties);
-         setBorder(new LineBorder(Color.GRAY));
+        setBorder(new LineBorder(Color.GRAY));
     }
 
     //
@@ -275,35 +281,6 @@ public class MclnGraphDesignerView extends MclnGraphView {
         g.setColor(Color.RED);
         super.paintAxes(g);
     }
-
-
-//    /**
-//     * @param g
-//     */
-//    private void drawProjectRectangle(Graphics g) {
-//
-//        if (!DsdsseUserPreference.isProjectSpaceRectangleVisible()) {
-//            return;
-//        }
-//
-//        g.setColor(Color.RED);
-//        // h
-//        g.drawLine(
-//                projectSpaceViewXMin, projectSpaceViewYMin,
-//                projectSpaceViewXMin, projectSpaceViewYMax);
-//
-//        g.drawLine(
-//                projectSpaceViewXMax, projectSpaceViewYMin,
-//                projectSpaceViewXMax, projectSpaceViewYMax);
-//
-//        // v
-//        g.drawLine(
-//                projectSpaceViewXMin, projectSpaceViewYMin,
-//                projectSpaceViewXMax, projectSpaceViewYMin);
-//        g.drawLine(
-//                projectSpaceViewXMin, projectSpaceViewYMax,
-//                projectSpaceViewXMax, projectSpaceViewYMax);
-//    }
 
     /**
      * @param g
@@ -907,7 +884,6 @@ public class MclnGraphDesignerView extends MclnGraphView {
     }
 
     /**
-     *
      * @param mouseHoveredEntityView
      */
     void setMouseHoveredEntity(MclnGraphEntityView mouseHoveredEntityView) {
