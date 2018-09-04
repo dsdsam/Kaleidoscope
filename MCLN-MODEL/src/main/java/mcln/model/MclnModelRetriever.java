@@ -99,7 +99,7 @@ public class MclnModelRetriever {
     //
 
     public static Document readMclnProjectXml(File selectedPathToMclnModelFile) {
-        System.out.println("DesignSpaceModel.readProject: " + selectedPathToMclnModelFile);
+//        System.out.println("DesignSpaceModel.readProject: " + selectedPathToMclnModelFile);
 
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -155,14 +155,14 @@ public class MclnModelRetriever {
         mclnAsXmlDocument.getDocumentElement().normalize();
         Element rootElement = mclnAsXmlDocument.getDocumentElement();
         String rootNodeName = rootElement.getNodeName();
-        System.out.println("Root name " + rootNodeName);
+//        System.out.println("Root name " + rootNodeName);
 
 
         String PROJECT_TAG_NAME = "Mcln-Project";
 
         NodeList listOfMclnProjects = mclnAsXmlDocument.getElementsByTagName(PROJECT_TAG_NAME);
         int nOfProjects = listOfMclnProjects.getLength();
-        System.out.println("Information on all Mcln projects, number is " + nOfProjects);
+//        System.out.println("Information on all Mcln projects, number is " + nOfProjects);
 
         if (nOfProjects != 1) {
             return null;
@@ -178,7 +178,7 @@ public class MclnModelRetriever {
 
         NodeList listOfMclnModels = mclnAsXmlDocument.getElementsByTagName(MODEL_TAG_NAME);
         int nOfModels = listOfMclnModels.getLength();
-        System.out.println("Information on all Mcln Models, number is " + nOfModels);
+//        System.out.println("Information on all Mcln Models, number is " + nOfModels);
 
         MclnDoubleRectangle projectSpaceRectangle = new MclnDoubleRectangle();
 
@@ -189,7 +189,6 @@ public class MclnModelRetriever {
             Node node = listOfMclnModels.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element mclnModelElement = (Element) node;
-
 
                 List<String[]> strRectangle = getXYLocationList(mclnModelElement,
                         MclnModel.MCLN_MODEL_RECTANGLE_TAG, MclnModel.MCLN_MODEL_RECTANGLE_CORNER_TAG);
@@ -217,13 +216,13 @@ public class MclnModelRetriever {
                 NodeList listOfMclnStatements =
                         mclnModelElement.getElementsByTagName(MclnStatement.MCLN_STATEMENT_XML_TAG);
                 int nOfStatements = listOfMclnStatements.getLength();
-                System.out.println("Information on all Mcln Statements, number is " + nOfStatements);
+//                System.out.println("Information on all Mcln Statements, number is " + nOfStatements);
                 for (int j = 0; j < nOfStatements; j++) {
                     Element mclnStatementElement = (Element) listOfMclnStatements.item(j);
                     MclnStatement mclnStatement = domElementToMclnStatement(mclnStatementElement);
-                    System.out.println("Reconstructed  Mcln Statements, uid is " + mclnStatement.getUID());
-                    System.out.println("Reconstructed  Mcln Statements, xml: \n" + mclnStatement.toXml());
-                    System.out.println();
+//                    System.out.println("Reconstructed  Mcln Statements, uid is " + mclnStatement.getUID());
+//                    System.out.println("Reconstructed  Mcln Statements, xml: \n" + mclnStatement.toXml());
+//                    System.out.println();
                     mclnModel.addMclnStatement(mclnStatement);
                     statementIdToMclnStatementMap.put(mclnStatement.getUID(), mclnStatement);
                 }
@@ -231,28 +230,28 @@ public class MclnModelRetriever {
                 NodeList listOfMclnConditions =
                         mclnModelElement.getElementsByTagName(MclnCondition.MCLN_CONDITION_XML_TAG);
                 int nOfConditions = listOfMclnConditions.getLength();
-                System.out.println("Information on all Mcln Conditions, number is " + nOfStatements);
+//                System.out.println("Information on all Mcln Conditions, number is " + nOfStatements);
                 for (int j = 0; j < nOfConditions; j++) {
                     Element mclnConditionElement = (Element) listOfMclnConditions.item(j);
                     MclnCondition mclnCondition = domElementToMclnCondition(mclnConditionElement);
-                    System.out.println("Reconstructed  Mcln Condition, uid is " + mclnCondition.getUID());
-                    System.out.println("Reconstructed  Mcln Condition, xml: \n" + mclnCondition.toXml());
-                    System.out.println();
+//                    System.out.println("Reconstructed  Mcln Condition, uid is " + mclnCondition.getUID());
+//                    System.out.println("Reconstructed  Mcln Condition, xml: \n" + mclnCondition.toXml());
+//                    System.out.println();
                     mclnModel.addMclnCondition(mclnCondition);
                     conditionIdToMclnConditionMap.put(mclnCondition.getUID(), mclnCondition);
                 }
 
                 NodeList listOfMclnArcs = mclnModelElement.getElementsByTagName(MclnArc.MCLN_ARC_XML_TAG);
                 int nOfArcs = listOfMclnArcs.getLength();
-                System.out.println("Information on all Mcln Arcs, number is " + nOfArcs);
+//                System.out.println("Information on all Mcln Arcs, number is " + nOfArcs);
                 for (int j = 0; j < nOfArcs; j++) {
                     Element mclnArcElement = (Element) listOfMclnArcs.item(j);
                     NamedNodeMap arcAttributeNodeMap = mclnArcElement.getAttributes();
                     String arcType = "nonePolyline";
                     Node arcTypeNode = arcAttributeNodeMap.getNamedItem("type");
-                    if(arcTypeNode != null) {
+                    if (arcTypeNode != null) {
                         arcType = arcTypeNode.getNodeValue();
-                        System.out.println("arcType =" + arcType);
+//                        System.out.println("arcType =" + arcType);
                     }
                     MclnArc mclnArc;
                     if (arcType != null && arcType.equalsIgnoreCase("polyline")) {
@@ -263,9 +262,9 @@ public class MclnModelRetriever {
                                 conditionIdToMclnConditionMap);
                     }
 
-                    System.out.println("Reconstructed  Mcln Arc, uid is " + mclnArc.getUID());
-                    System.out.println("Reconstructed  Mcln Arc, xml: \n" + mclnArc.toXml());
-                    System.out.println();
+//                    System.out.println("Reconstructed  Mcln Arc, uid is " + mclnArc.getUID());
+//                    System.out.println("Reconstructed  Mcln Arc, xml: \n" + mclnArc.toXml());
+//                    System.out.println();
                     mclnModel.addMclnArc(mclnArc);
                 }
 
@@ -300,30 +299,30 @@ public class MclnModelRetriever {
             hasInputGenerator = mclnStatementHasInputGenerator != null && stringToBoolean(mclnStatementHasInputGenerator);
         }
         String uid = getElementProperty(mclnStatementElement, MclnStatement.MCLN_STATEMENT_UID_TAG);
-        System.out.println("Statement ID is: " + uid);
+//        System.out.println("Statement ID is: " + uid);
         if (uid == null) {
             return null;
         }
 
         String subject = getElementProperty(mclnStatementElement, MclnStatement.MCLN_STATEMENT_SUBJECT_TAG);
-        System.out.println("Statement subject is: " + subject);
+//        System.out.println("Statement subject is: " + subject);
         if (subject == null) {
             subject = "Not defined";
         }
 
         String propertyName = getElementProperty(mclnStatementElement, MclnStatement.MCLN_STATEMENT_PROPERTY_NAME_TAG);
-        System.out.println("Statement property name is: " + propertyName);
+//        System.out.println("Statement property name is: " + propertyName);
         if (propertyName == null) {
             propertyName = "";
         }
 
         String xLocation = getElementProperty(mclnStatementElement, "X-Location");
-        System.out.println("Statement X location is: " + xLocation);
+//        System.out.println("Statement X location is: " + xLocation);
         if (xLocation == null) {
             return null;
         }
         String yLocation = getElementProperty(mclnStatementElement, "Y-Location");
-        System.out.println("Statement Y location is: " + yLocation);
+//        System.out.println("Statement Y location is: " + yLocation);
         if (yLocation == null) {
             return null;
         }
@@ -348,10 +347,10 @@ public class MclnModelRetriever {
                         MclnStatementState.MCLN_STATEMENT_STATE_TAG, MclnStatementState.MCLN_STATE_TAG,
                         MclnStatementState.INTERPRETATION_TAG);
 
-        System.out.println("availableStatesPalette size: " + availableMclnStatementStates.size());
+//        System.out.println("availableStatesPalette size: " + availableMclnStatementStates.size());
 
         String simulationLog = getElementProperty(mclnStatementElement, MclnStatement.MCLN_STATEMENT_SIMULATION_LOG_TAG);
-        System.out.println("Statement simulation log: " + simulationLog);
+//        System.out.println("Statement simulation log: " + simulationLog);
 
         InputSimulatingProgram inputSimulatingProgram = getInputSimulatingProgram(mclnStatementElement,
                 InputSimulatingProgram.MCLN_INPUT_SIMULATING_PROGRAM_TAG, ProgramStep.MCLN_PROGRAM_STEP_TAG,
@@ -367,7 +366,7 @@ public class MclnModelRetriever {
         }
 
 //        mclnStatement.setSubject(subject);
-        System.out.println();
+//        System.out.println();
 //        NodeList csysLocation = mclnStatementElement.getElementsByTagName("CSysLocation");
 //        Element idElement = (Element) idElementLst.item(0);
 //        NodeList idChildNodeList = idElement.getChildNodes();
@@ -409,7 +408,7 @@ public class MclnModelRetriever {
 
         int nStates = availableStatementStateChildNodeList.getLength();
 
-        System.out.println("Information on Statement all states:, number is " + nStates);
+//        System.out.println("Information on Statement all states:, number is " + nStates);
 
         List<String[]> oppositeStatePropertyList = new ArrayList();
         List<String> interpretationList = new ArrayList();
@@ -515,7 +514,7 @@ public class MclnModelRetriever {
             return initialMclnStatementState;
         }
         int nStates = initialStatementStateChildNodeList.getLength();
-        System.out.println("Information on Statement all initial states:, number is " + nStates);
+//        System.out.println("Information on Statement all initial states:, number is " + nStates);
 
         List<String[]> oppositeStatePropertyList = new ArrayList();
         List<String> interpretationList = new ArrayList();
@@ -605,14 +604,14 @@ public class MclnModelRetriever {
         Element programElement = (Element) programsElementList.item(0);
         String programName = programElement.getAttribute("name");
         boolean creatingTimeDrivenProgram = programName.equalsIgnoreCase("TimeDrivenProgram");
-        System.out.println("InputSimulatingProgram is \"" + programName + "\"");
+//        System.out.println("InputSimulatingProgram is \"" + programName + "\"");
 
         NodeList programStepsElementList = programElement.getElementsByTagName(programStepTagName);
         if (programStepsElementList == null) {
             return inputSimulatingProgram;
         }
         int nSteps = programStepsElementList.getLength();
-        System.out.println("Program " + programName + " has " + nSteps + " steps");
+//        System.out.println("Program " + programName + " has " + nSteps + " steps");
         List<ProgramStep> programStepsList = new ArrayList();
         for (int j = 0; j < nSteps; j++) {
             Element programStepElement = (Element) programStepsElementList.item(j);
@@ -704,19 +703,19 @@ public class MclnModelRetriever {
 
     private static MclnCondition domElementToMclnCondition(Element mclnConditionElement) {
         String uid = getElementProperty(mclnConditionElement, MclnCondition.MCLN_CONDITION_UID_TAG);
-        System.out.println("Statement ID is: " + uid);
+//        System.out.println("Statement ID is: " + uid);
         if (uid == null) {
             return null;
         }
         MclnCondition mclnCondition = MclnModelRetriever.createMclnCondition(uid);
 
         String xLocation = getElementProperty(mclnConditionElement, "X-Location");
-        System.out.println("Statement X location is: " + xLocation);
+//        System.out.println("Statement X location is: " + xLocation);
         if (xLocation == null) {
             return null;
         }
         String yLocation = getElementProperty(mclnConditionElement, "Y-Location");
-        System.out.println("Statement Y location is: " + yLocation);
+//        System.out.println("Statement Y location is: " + yLocation);
         if (yLocation == null) {
             return null;
         }
@@ -726,7 +725,7 @@ public class MclnModelRetriever {
             return null;
         }
         mclnCondition.setCSysLocation(cSysLocation);
-        System.out.println();
+//        System.out.println();
         return mclnCondition;
     }
 
@@ -744,13 +743,13 @@ public class MclnModelRetriever {
         // Arc UID
 
         String uid = getElementProperty(mclnArcElement, MclnArc.MCLN_ARC_UID_TAG);
-        System.out.println("Arc UID is: " + uid);
+//        System.out.println("Arc UID is: " + uid);
         if (uid == null) {
             return null;
         }
 
         String nodeUIDs = getElementProperty(mclnArcElement, MclnArc.MCLN_ARC_NODES_UID_TAG);
-        System.out.println("Arc node UIDs: " + nodeUIDs);
+//        System.out.println("Arc node UIDs: " + nodeUIDs);
         if (nodeUIDs == null) {
             return null;
         }
@@ -790,7 +789,7 @@ public class MclnModelRetriever {
 
         List<String[]> strXYLocations = getXYLocationList(mclnArcElement, MclnArc.MCLN_ARC_KNOTS_TAG,
                 MclnArc.MCLN_ARC_KNOT_LOCATION_TAG);
-        System.out.println("Statement XY location is: " + strXYLocations);
+//        System.out.println("Statement XY location is: " + strXYLocations);
         if (strXYLocations == null || strXYLocations.size() == 0) {
             return null;
         }
@@ -845,13 +844,13 @@ public class MclnModelRetriever {
                                                      Map<String, MclnStatement> nodeIdToMclnStatementMap,
                                                      Map<String, MclnCondition> nodeIdToMclnConditionMap) {
         String uid = getElementProperty(mclnArcElement, MclnArc.MCLN_ARC_UID_TAG);
-        System.out.println("Arc UID is: " + uid);
+//        System.out.println("Arc UID is: " + uid);
         if (uid == null) {
             return null;
         }
 
         String nodeUIDs = getElementProperty(mclnArcElement, MclnArc.MCLN_ARC_NODES_UID_TAG);
-        System.out.println("Arc node UIDs: " + nodeUIDs);
+//        System.out.println("Arc node UIDs: " + nodeUIDs);
         if (nodeUIDs == null) {
             return null;
         }
@@ -881,7 +880,7 @@ public class MclnModelRetriever {
 
         List<String[]> strXYLocations = getXYLocationList(mclnArcElement, MclnArc.MCLN_ARC_KNOTS_TAG,
                 MclnArc.MCLN_ARC_KNOT_LOCATION_TAG);
-        System.out.println("Statement XY location is: " + strXYLocations);
+//        System.out.println("Statement XY location is: " + strXYLocations);
         if (strXYLocations == null || strXYLocations.size() == 0) {
             return null;
         }
@@ -936,7 +935,7 @@ public class MclnModelRetriever {
 //            return null;
 //        }
 //        mclnArc.setCSysLocation(cSysLocation);
-        System.out.println();
+//        System.out.println();
         return mclnArc;
     }
 
@@ -969,7 +968,7 @@ public class MclnModelRetriever {
         }
 
         int nOfKnots = propertyChildNodeList.getLength();
-        System.out.println("Information on all   Arc knots, number is " + nOfKnots);
+//        System.out.println("Information on all   Arc knots, number is " + nOfKnots);
         for (int j = 0; j < nOfKnots; j++) {
             Element mclnArcKnotElement = (Element) propertyChildNodeList.item(j);
             Node node = mclnArcKnotElement.getFirstChild();
@@ -999,7 +998,7 @@ public class MclnModelRetriever {
             return null;
         }
         String value = propertyChildNodeList.item(0).getNodeValue();
-        System.out.println("Property value is: " + value);
+//        System.out.println("Property value is: " + value);
         return value;
     }
 
