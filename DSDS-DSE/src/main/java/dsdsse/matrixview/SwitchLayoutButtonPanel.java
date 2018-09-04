@@ -1,22 +1,27 @@
 package dsdsse.matrixview;
 
-import adf.utils.StandardFonts;
 import mclnmatrix.view.MclnMatrixView;
 import mclnmatrix.view.ViewLayoutToggleButton;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class SwitchLayoutButtonPanel extends JPanel {
+class SwitchLayoutButtonPanel extends JPanel {
 
     private ViewLayoutToggleButton viewLayoutButton;
 
     SwitchLayoutButtonPanel(ActionListener switchViewLayoutActionListener) {
         super(new GridBagLayout());
         initLayout(switchViewLayoutActionListener);
+    }
 
+    public void setButtonEnabled(boolean status) {
+        viewLayoutButton.setEnabled(status);
+    }
+
+    public void resetDefaultLayout() {
+        viewLayoutButton.resetDefaultLayout(true);
     }
 
     /**
