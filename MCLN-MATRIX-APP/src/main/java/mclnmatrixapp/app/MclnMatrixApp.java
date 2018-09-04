@@ -135,7 +135,6 @@ public class MclnMatrixApp extends AdfApp {
     protected final void createMainFrame() {
         mclnMatrixFrame = McLNMatrixFrame.createMainFrame();
 
-        mclnMatrixFrame.setAlwaysOnTop(true);
         AdfEnv.putMainFrame(mclnMatrixFrame);
 
         String initialTitle = ConfigProperties.getStrConfigProperty(FRAME_TITLE_KEY, "Mcln Matrix App");
@@ -174,8 +173,7 @@ public class MclnMatrixApp extends AdfApp {
 
     @Override
     protected void initUI() {
-//        AppMatrixViewMainPanel appMatrixViewMainPanel = AppMatrixViewCreator.createAppMainMatrixView();
-        AppMatrixViewMainPanel appMatrixViewMainPanel = AppMatrixViewMainPanel.createInstance();
+        AppMatrixViewMainPanel appMatrixViewMainPanel = AppMatrixViewMainPanel.createInstance(false);
         mclnMatrixFrame.getContentPane().add(appMatrixViewMainPanel);
     }
 
