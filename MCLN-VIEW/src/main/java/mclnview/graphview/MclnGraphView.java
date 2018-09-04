@@ -232,25 +232,20 @@ public class MclnGraphView extends BasicCSysView {
 
     private MclnModelSimulationListener mclnModelSimulationListener = new MclnModelSimulationListener() {
 
-        private Runnable onSimulationStepExecutedRunnable = () -> {
-            onSimulationStepExecuted();
-        };
+        @Override
+        public void newPropertySuggestedStateInferred(MclnStatement mclnStatement) {
 
-        private Runnable onSimulationStateChangeRunnable = () -> {
-            onSimulationStateChange();
-        };
-
-        private Runnable onSimulationStateResetRunnable = () -> {
-            onSimulationStateReset();
-        };
+        }
 
         @Override
-        public void simulationStepExecuted() {
+        public void mclnModelStateChanged() {
             if (SwingUtilities.isEventDispatchThread()) {
-                onSimulationStepExecutedRunnable.run();
+                onSimulationStateChange();
             } else {
                 try {
-                    SwingUtilities.invokeAndWait(onSimulationStepExecutedRunnable);
+                    SwingUtilities.invokeAndWait(() -> {
+                        onSimulationStateChange();
+                    });
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
                 } catch (InvocationTargetException ite) {
@@ -260,12 +255,14 @@ public class MclnGraphView extends BasicCSysView {
         }
 
         @Override
-        public void mclnModelStateChanged() {
+        public void simulationStepExecuted() {
             if (SwingUtilities.isEventDispatchThread()) {
-                onSimulationStateChangeRunnable.run();
+                onSimulationStepExecuted();
             } else {
                 try {
-                    SwingUtilities.invokeAndWait(onSimulationStateChangeRunnable);
+                    SwingUtilities.invokeAndWait(() -> {
+                        onSimulationStepExecuted();
+                    });
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
                 } catch (InvocationTargetException ite) {
@@ -277,10 +274,12 @@ public class MclnGraphView extends BasicCSysView {
         @Override
         public void mclnModelStateReset() {
             if (SwingUtilities.isEventDispatchThread()) {
-                onSimulationStateResetRunnable.run();
+                onSimulationStateReset();
             } else {
                 try {
-                    SwingUtilities.invokeAndWait(onSimulationStateResetRunnable);
+                    SwingUtilities.invokeAndWait(() -> {
+                        onSimulationStateReset();
+                    });
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
                 } catch (InvocationTargetException ite) {
@@ -290,15 +289,15 @@ public class MclnGraphView extends BasicCSysView {
         }
     };
 
+    protected void onSimulationStateChange() {
+        regenerateGraphView();
+        repaintAllModelNodesOnOffScreenImage();
+    }
+
     protected void onSimulationStepExecuted() {
         for (MclnPropertyView mcLnPropertyView : statementViews) {
             mcLnPropertyView.recordHistory();
         }
-    }
-
-    protected void onSimulationStateChange() {
-        regenerateGraphView();
-        repaintAllModelNodesOnOffScreenImage();
     }
 
     protected void onSimulationStateReset() {
@@ -495,9 +494,9 @@ public class MclnGraphView extends BasicCSysView {
      */
     protected void repaintAllModelNodesOnOffScreenImage() {
 
-        System.out.println("\n\n***********************************************************");
-        System.out.println(" Simulation State Change         Repainting Mcln Graph View");
-        System.out.println("**************************************************************\n");
+//        System.out.println("\n\n***********************************************************");
+//        System.out.println(    " Simulation State Change       Repainting Mcln Graph View");
+//        System.out.println(    "***********************************************************\n");
 
         for (MclnPropertyView mcLnPropertyView : statementViews) {
             mcLnPropertyView.updateViewOnModelChanged();
