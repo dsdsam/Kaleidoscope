@@ -3,13 +3,21 @@ package mcln.model;
 /**
  * Created by Admin on 2/9/2016.
  */
-public class MclnEntity {
+abstract public class MclnEntity {
 
     private final String UID;
+    private final long uidNumber;
     private boolean runtimeInitializationUpdatedFlag;
 
     MclnEntity(String uid) {
         this.UID = uid;
+        String strUIDNumber = UID.substring(UID.indexOf("-") + 1);
+        long value = 0;
+        try {
+            value = Long.parseLong(strUIDNumber);
+        } finally {
+            uidNumber = value;
+        }
     }
 
     public boolean isRuntimeInitializationUpdatedFlag() {
@@ -28,6 +36,10 @@ public class MclnEntity {
         return UID;
     }
 
+    public long getUidNumberPart() {
+        return uidNumber;
+    }
+
     @Override
     public int hashCode() {
         return UID.hashCode();
@@ -43,4 +55,11 @@ public class MclnEntity {
         }
         return UID.equals(((MclnEntity) otherMclnEntity).UID);
     }
+
+    /**
+     * This method should be overridden
+     *
+     * @return
+     */
+    abstract public String getOneLineInfoMessage();
 }
