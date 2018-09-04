@@ -76,7 +76,6 @@ public class MclnStatement extends MclnNode<MclnStatement, MclnCondition> {
 
     private final MclnStatementStateHolder mclnStatementStateHolder;
 
-    private final CopyOnWriteArrayList<SimulatedStateChangeListener> simulatedStateChangeListeners = new CopyOnWriteArrayList();
 
     /**
      * Called from Mcln Project when Mcln Statement is created programmatically for Demo
@@ -310,18 +309,6 @@ public class MclnStatement extends MclnNode<MclnStatement, MclnCondition> {
         this.currentMclnStatementState = currentStatementState;
     }
 
-    /**
-     * The only listener of the Mcln Statement is its MclnStatementView
-     */
-//    public void addStateChangeListener(StateChangeListener stateChangeListener) {
-//        stateChangeListeners.add(stateChangeListener);
-//    }
-
-
-//    public void removeStateChangeListener(StateChangeListener stateChangeListener) {
-//        stateChangeListeners.remove(stateChangeListener);
-//    }
-
     public void setSubject(String subject) {
         this.subject = (subject != null && subject.trim().length() != 0) ? subject : DEFAULT_SUBJECT_TEXT;
         this.activator = this.subject.contains("Activator");
@@ -429,12 +416,6 @@ public class MclnStatement extends MclnNode<MclnStatement, MclnCondition> {
         if (done) {
             return getUID() + ":" + getCurrentMclnState().toView();
         }
-//        InputGeneratorState inputGeneratorState = inputSimulatingProgram.testStep();
-//        if (inputGeneratorState != null && inputGeneratorState.stepExecuted) {
-
-//            MclnState mclnState = getCurrentMclnState();
-//            return getUID() + ":" + getCurrentMclnState().toView();
-//        }
         return null;
     }
 
@@ -562,6 +543,7 @@ public class MclnStatement extends MclnNode<MclnStatement, MclnCondition> {
     /**
      * @return
      */
+    @Override
     public String getOneLineInfoMessage() {
         oneLineMessageBuilder.delete(0, oneLineMessageBuilder.length());
 
