@@ -1,21 +1,18 @@
 package mclnmatrix.view;
 
-import adf.ui.components.panels.ImagePanel;
-import adf.utils.BuildUtils;
 import mclnmatrix.model.MclnMatrixModel;
 import mclnmatrix.model.VectorDataModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class MclnMatrixView extends ImagePanel {
-
-    private static final String IMAGES_LOCATION_CLASSPATH = "/mclnmatrix-resources/images/";
+public class MclnMatrixView extends JPanel {
 
     static final Color MATRIX_AND_VECTOR_BORDER_COLOR = Color.GRAY;
     static final Color MATRIX_AND_VECTOR_GRID_COLOR = Color.LIGHT_GRAY;
-    static final int CELL_SIZE = 24;
+    static final int CELL_SIZE = 20;
     static final int VIEW_FONT_SIZE = 10;
     static Font FONT = new Font("monospaced", Font.PLAIN, VIEW_FONT_SIZE);
 
@@ -48,33 +45,34 @@ public class MclnMatrixView extends ImagePanel {
     private String upArrow;
     private String downArrow;
 
-    //    private static int propertiesSize = 0;
-//    private static int conditionsSize = 0;
-    public MclnStateVector inputVector;
-    public MclnConditionVector conditionsVector;
-    public GeneratedVector suggestedStatesVector;
-    public boolean horizontalLayout = true;
+    public InputStateVectorView inputVector;
+    public ConditionStateVectorView conditionsVector;
+    public SuggestedStateVectorView suggestedStateVectorView;
+
+    private MclnMatrix andMatrix;
+    private MclnMatrix orMatrix;
 
     /**
-     * Tis is the McLN View updating mechanism
+     * This is the McLN View updating mechanism
      */
     private MatrixDataModelListener matrixDataModelListener = new MatrixDataModelListener() {
+
+        @Override
+        public void onInputVectorUpdate(List<String> updatedStateVectorValues) {
+//            System.out.println("Input States");
+            inputVector.updateRecalculatedState(updatedStateVectorValues);
+        }
+
         @Override
         public void onConditionsVectorUpdated(List<String> conditions) {
-            System.out.println("Conditions");
+//            System.out.println("Conditions");
             conditionsVector.updateRecalculatedState(conditions);
         }
 
         @Override
         public void onSuggestedStatesVectorUpdate(List<String> suggestedStateValues) {
-            System.out.println("Suggested States");
-            suggestedStatesVector.updateRecalculatedState(suggestedStateValues);
-        }
-
-        @Override
-        public void onInputVectorUpdate(List<String> updatedStateVectorValues) {
-            System.out.println("Input States");
-            inputVector.updateRecalculatedState(updatedStateVectorValues);
+//            System.out.println("Suggested States");
+            suggestedStateVectorView.updateRecalculatedState(suggestedStateValues);
         }
     };
 
@@ -83,23 +81,39 @@ public class MclnMatrixView extends ImagePanel {
     private MclnMatrixView(boolean buildHorizontalLayout, MclnMatrixModel mclnMatrixModel,
                            int propertiesSize, int conditionsSize) {
         setLayout(new GridBagLayout());
-        setOpaque(true);
+        setOpaque(false);
         setBorder(null);
 
-        String image01 = "bg-page.jpg";
-        String image02 = "canvas.jpg";
-        String image03 = "line-bg.png";
-        String image04 = "paint-bg.jpg";
-        String image05 = "bg-3.jpg";
-        String imageClassPath = IMAGES_LOCATION_CLASSPATH + image05;
-        ImageIcon backgroundImage = BuildUtils.getImageIcon(imageClassPath);
-        setImage(backgroundImage);
+//        propertiesSize = mclnMatrixModel.getPropertySize();
+//        conditionsSize = mclnMatrixModel.getConditionSize();
 
         configureArrows(SHOW_SINGLE_ARROW);
+
+        if (mclnMatrixModel.isModelEmpty()) {
+            return;
+        }
+
         if (buildHorizontalLayout) {
             buildHorizontalLayout(mclnMatrixModel, propertiesSize, conditionsSize);
         } else {
             buildVerticalLayout(mclnMatrixModel, propertiesSize, conditionsSize);
+        }
+    }
+
+    public BasicCellLabel isMouseHoverCell(MouseEvent me) {
+        BasicCellLabel basicCellLabel;
+        if ((basicCellLabel = inputVector.isMouseHoverVectorCell(me)) != null) {
+            return basicCellLabel;
+        } else if ((basicCellLabel = conditionsVector.isMouseHoverVectorCell(me)) != null) {
+            return basicCellLabel;
+        } else if ((basicCellLabel = suggestedStateVectorView.isMouseHoverVectorCell(me)) != null) {
+            return basicCellLabel;
+        } else if ((basicCellLabel = andMatrix.isMouseHoverMatrixCell(me)) != null) {
+            return basicCellLabel;
+        } else if ((basicCellLabel = orMatrix.isMouseHoverMatrixCell(me)) != null) {
+            return basicCellLabel;
+        } else {
+            return null;
         }
     }
 
@@ -125,12 +139,11 @@ public class MclnMatrixView extends ImagePanel {
     //   H o r i z o n t a l   L a y o u t
     //
 
-    private void buildHorizontalLayout(MclnMatrixModel mclnMatrixModel,
-                                       int propertiesSize, int conditionsSize) {
-        int PROPERTY_VECTOR_WIDTH = CELL_SIZE * (propertiesSize - 1);
+    private void buildHorizontalLayout(MclnMatrixModel mclnMatrixModel, int propertiesSize, int conditionsSize) {
+        int PROPERTY_VECTOR_WIDTH = CELL_SIZE * propertiesSize;
         int PROPERTY_VECTOR_HEIGHT = CELL_SIZE;
         int CONDITION_VECTOR_WIDTH = CELL_SIZE;
-        int CONDITION_VECTOR_HEIGHT = CELL_SIZE * (conditionsSize - 1);
+        int CONDITION_VECTOR_HEIGHT = CELL_SIZE * conditionsSize;
 
         int MATRIX_HOLDER_WIDTH = PROPERTY_VECTOR_WIDTH * 2 + CONDITION_VECTOR_WIDTH + 176;
         int MATRIX_HOLDER_HEIGHT = PROPERTY_VECTOR_HEIGHT + CONDITION_VECTOR_HEIGHT + 120;
@@ -140,8 +153,6 @@ public class MclnMatrixView extends ImagePanel {
         setPreferredSize(matrixHolderHorizontalLayoutSize);
         setMinimumSize(matrixHolderHorizontalLayoutSize);
 
-//
-//        mvlArrayView.initContent(matrixHolderPanel);
 
         //  ================   Northern space holder   ====================
 
@@ -166,9 +177,9 @@ public class MclnMatrixView extends ImagePanel {
         //  ================   O R   ====================
 
         VectorDataModel suggestedStateVectorDataModel = mclnMatrixModel.getSuggestedStateVectorDataModel();
-        suggestedStatesVector = new GeneratedVector(true, suggestedStateVectorDataModel,
+        suggestedStateVectorView = new SuggestedStateVectorView(true, suggestedStateVectorDataModel,
                 propertiesSize, PROPERTY_VECTOR_WIDTH, PROPERTY_VECTOR_HEIGHT);
-        add(suggestedStatesVector,
+        add(suggestedStateVectorView,
                 new GridBagConstraints(1, 1, 1, 1, 0, 0,
                         GridBagConstraints.CENTER, GridBagConstraints.NONE,
                         new Insets(0, 0, 0, 0), 0, 0));
@@ -182,7 +193,7 @@ public class MclnMatrixView extends ImagePanel {
                         GridBagConstraints.CENTER, GridBagConstraints.NONE,
                         new Insets(0, 0, 0, 0), 0, 0));
 
-        MclnMatrix orMatrix = new MclnMatrix(mclnMatrixModel.getOrMatrixDataModelForHorizontalLayout(),
+        orMatrix = new MclnMatrix(mclnMatrixModel.getOrMatrixDataModelForHorizontalLayout(),
                 PROPERTY_VECTOR_WIDTH, CONDITION_VECTOR_HEIGHT,
                 conditionsSize, propertiesSize);
         add(orMatrix,
@@ -208,8 +219,8 @@ public class MclnMatrixView extends ImagePanel {
                         GridBagConstraints.CENTER, GridBagConstraints.NONE,
                         new Insets(0, 0, 10, 0), 0, 0));
 
-        VectorDataModel conditionVectorDataModel = mclnMatrixModel.getConditionVectorDataModel();
-        conditionsVector = new MclnConditionVector(false, conditionVectorDataModel,
+        VectorDataModel conditionVectorDataModel = mclnMatrixModel.getConditionStateVectorDataModel();
+        conditionsVector = new ConditionStateVectorView(false, conditionVectorDataModel,
                 conditionsSize, CONDITION_VECTOR_WIDTH, CONDITION_VECTOR_HEIGHT);
 //        conditionsVector.setOpaque(false);
 //        conditionsVector.setBackground(Color.CYAN);
@@ -231,7 +242,7 @@ public class MclnMatrixView extends ImagePanel {
 
 //        InitialStateDataModel initialStateDataModel = mclnMatrixModel.getInitialStateDataModel();
         VectorDataModel inputStateVectorDataModel = mclnMatrixModel.getInputStateVectorDataModel();
-        inputVector = new MclnStateVector(true, inputStateVectorDataModel,
+        inputVector = new InputStateVectorView(true, inputStateVectorDataModel,
                 propertiesSize, PROPERTY_VECTOR_WIDTH, PROPERTY_VECTOR_HEIGHT);
         add(inputVector,
                 new GridBagConstraints(5, 1, 1, 1, 0, 0,
@@ -247,7 +258,7 @@ public class MclnMatrixView extends ImagePanel {
                         GridBagConstraints.CENTER, GridBagConstraints.NONE,
                         new Insets(0, 0, 0, 0), 0, 0));
 
-        MclnMatrix andMatrix = new MclnMatrix(mclnMatrixModel.getAndMatrixDataModelForHorizontalLayout(),
+        andMatrix = new MclnMatrix(mclnMatrixModel.getAndMatrixDataModelForHorizontalLayout(),
                 PROPERTY_VECTOR_WIDTH, CONDITION_VECTOR_HEIGHT, conditionsSize, propertiesSize);
         add(andMatrix,
                 new GridBagConstraints(5, 3, 1, 1, 0, 0,
@@ -258,7 +269,6 @@ public class MclnMatrixView extends ImagePanel {
 
         JPanel eastPlaceHolder = new JPanel();
         eastPlaceHolder.setOpaque(false);
-//        eastPlaceHolder.setBackground(Color.WHITE);
         add(eastPlaceHolder,
                 new GridBagConstraints(6, 1, 1, 3, 1, 0,
                         GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -283,8 +293,8 @@ public class MclnMatrixView extends ImagePanel {
                                      int propertiesSize, int conditionsSize) {
 
         int PROPERTY_VECTOR_WIDTH = CELL_SIZE;
-        int PROPERTY_VECTOR_HEIGHT = CELL_SIZE * (propertiesSize - 1);
-        int CONDITION_VECTOR_WIDTH = CELL_SIZE * (conditionsSize - 1);
+        int PROPERTY_VECTOR_HEIGHT = CELL_SIZE * propertiesSize;
+        int CONDITION_VECTOR_WIDTH = CELL_SIZE * conditionsSize;
         int CONDITION_VECTOR_HEIGHT = CELL_SIZE;
 
         int MATRIX_HOLDER_WIDTH = CONDITION_VECTOR_WIDTH + PROPERTY_VECTOR_WIDTH + 140;
@@ -295,8 +305,6 @@ public class MclnMatrixView extends ImagePanel {
         setPreferredSize(matrixHolderVerticalLayoutSize);
         setMinimumSize(matrixHolderVerticalLayoutSize);
 
-
-//        int left = 0;
 
         //  ================   Northern space holder   ====================
 
@@ -320,7 +328,7 @@ public class MclnMatrixView extends ImagePanel {
 
         //  ================   A N D   ====================
 
-        MclnMatrix andMatrix = new MclnMatrix(mclnMatrixModel.getAndMatrixDataModelForVerticalLayout(),
+        andMatrix = new MclnMatrix(mclnMatrixModel.getAndMatrixDataModelForVerticalLayout(),
                 CONDITION_VECTOR_WIDTH, PROPERTY_VECTOR_HEIGHT, propertiesSize, conditionsSize);
 //        andMatrix.setOpaque(false);
 //        andMatrix.setBackground(Color.YELLOW);
@@ -339,7 +347,7 @@ public class MclnMatrixView extends ImagePanel {
                         new Insets(0, 0, 0, 0), 0, 0));
 
         VectorDataModel inputStateVectorDataModel = mclnMatrixModel.getInputStateVectorDataModel();
-        inputVector = new MclnStateVector(false, inputStateVectorDataModel,
+        inputVector = new InputStateVectorView(false, inputStateVectorDataModel,
                 propertiesSize, PROPERTY_VECTOR_WIDTH, PROPERTY_VECTOR_HEIGHT);
 //        inputVector.setOpaque(false);
 //        inputVector.setBackground(Color.ORANGE);
@@ -359,8 +367,8 @@ public class MclnMatrixView extends ImagePanel {
                         GridBagConstraints.EAST, GridBagConstraints.NONE,
                         new Insets(0, 0, 0, 0), 0, 0));
 
-        VectorDataModel conditionVectorDataModel = mclnMatrixModel.getConditionVectorDataModel();
-        conditionsVector = new MclnConditionVector(true, conditionVectorDataModel,
+        VectorDataModel conditionVectorDataModel = mclnMatrixModel.getConditionStateVectorDataModel();
+        conditionsVector = new ConditionStateVectorView(true, conditionVectorDataModel,
                 conditionsSize, CONDITION_VECTOR_WIDTH, CONDITION_VECTOR_HEIGHT);
         add(conditionsVector,
                 new GridBagConstraints(1, 3, 1, 1, 0, 0,
@@ -387,7 +395,7 @@ public class MclnMatrixView extends ImagePanel {
 
         //  ================   O R   ====================
 
-        MclnMatrix orMatrix = new MclnMatrix(mclnMatrixModel.getOrMatrixDataModelForVerticalLayout(),
+        orMatrix = new MclnMatrix(mclnMatrixModel.getOrMatrixDataModelForVerticalLayout(),
                 CONDITION_VECTOR_WIDTH, PROPERTY_VECTOR_HEIGHT, propertiesSize, conditionsSize);
         add(orMatrix,
                 new GridBagConstraints(1, 5, 1, 1, 0, 0,
@@ -404,9 +412,9 @@ public class MclnMatrixView extends ImagePanel {
                         new Insets(0, 0, 0, 0), 0, 0));
 
         VectorDataModel suggestedStateVectorDataModel = mclnMatrixModel.getSuggestedStateVectorDataModel();
-        suggestedStatesVector = new GeneratedVector(false, suggestedStateVectorDataModel,
+        suggestedStateVectorView = new SuggestedStateVectorView(false, suggestedStateVectorDataModel,
                 propertiesSize, PROPERTY_VECTOR_WIDTH, PROPERTY_VECTOR_HEIGHT);
-        add(suggestedStatesVector,
+        add(suggestedStateVectorView,
                 new GridBagConstraints(3, 5, 1, 1, 0, 0,
                         GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                         new Insets(0, 0, 0, 0), 0, 0));
