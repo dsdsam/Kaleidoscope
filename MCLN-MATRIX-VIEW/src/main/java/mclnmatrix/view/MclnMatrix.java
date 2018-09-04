@@ -1,39 +1,61 @@
 package mclnmatrix.view;
 
+import mclnmatrix.model.MatrixCell;
 import mclnmatrix.model.MatrixDataModel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MclnMatrix extends JPanel {
 
-    private static final Color MATRIX_BACKGROUND_COLOR = new Color(0xFFFFEE);
+    private static final Color MATRIX_BACKGROUND_COLOR = new Color(0xFFFFE7);
 
     private static final Border MATRIX_BORDER =
-            new LineBorder(MclnMatrixView.MATRIX_AND_VECTOR_BORDER_COLOR, 1);
+            new MatteBorder(1, 1, 0, 0, MclnMatrixView.MATRIX_AND_VECTOR_BORDER_COLOR);
 
-    private static final Border ROW_CELL_BORDER =
+    private static final Border ANY_BUT_LAST_CELL_BORDER =
             new MatteBorder(0, 0, 1, 1, MclnMatrixView.MATRIX_AND_VECTOR_GRID_COLOR);
-    private static final Border ROW_LAST_CELL_BORDER =
+
+    private static final Border ROW_LAST_CELL_DIVIDER_BORDER =
             new MatteBorder(0, 0, 1, 0, MclnMatrixView.MATRIX_AND_VECTOR_GRID_COLOR);
-    private static final Border LAST_ROW_CELL_BORDER =
+    private static final Border ROW_LAST_CELL_MATRIX_BORDER =
+            new MatteBorder(0, 0, 0, 1, MclnMatrixView.MATRIX_AND_VECTOR_BORDER_COLOR);
+    private Border ROW_LAST_CELL_BORDER =
+            BorderFactory.createCompoundBorder(ROW_LAST_CELL_MATRIX_BORDER, ROW_LAST_CELL_DIVIDER_BORDER);
+
+    private static final Border COLUMN_LAST_CELL_DIVIDER_BORDER =
             new MatteBorder(0, 0, 0, 1, MclnMatrixView.MATRIX_AND_VECTOR_GRID_COLOR);
-    private static final Border LAST_ROW_LAST_CELL_BORDER =
-            new MatteBorder(0, 0, 0, 0, MATRIX_BACKGROUND_COLOR);
+    private static final Border COLUMN_LAST_CELL_MATRIX_BORDER =
+            new MatteBorder(0, 0, 1, 0, MclnMatrixView.MATRIX_AND_VECTOR_BORDER_COLOR);
+    private Border COLUMN_LAST_CELL_BORDER =
+            BorderFactory.createCompoundBorder(COLUMN_LAST_CELL_DIVIDER_BORDER, COLUMN_LAST_CELL_MATRIX_BORDER);
+
+    private static final Border MATRIX_LOWER_RIGHT_CELL_BORDER =
+            new MatteBorder(0, 0, 1, 1, MclnMatrixView.MATRIX_AND_VECTOR_BORDER_COLOR);
+
+    //
+    //   I n s t a n c e
+    //
 
     private final MatrixDataModel matrixDataModel;
-    Dimension cellSize = new Dimension(MclnMatrixView.CELL_SIZE,MclnMatrixView.CELL_SIZE);
+    private final List<BasicCellLabel> matrixCells = new ArrayList();
+    private final Dimension cellSize = new Dimension(MclnMatrixView.CELL_SIZE, MclnMatrixView.CELL_SIZE);
 
-    public MclnMatrix(MatrixDataModel matrixDataModel, int width, int height, int rows, int columns) {
+    MclnMatrix(MatrixDataModel matrixDataModel, int width, int height, int rows, int columns) {
         this.matrixDataModel = matrixDataModel;
-        setLayout(new GridLayout(rows, columns));
+        setLayout(new GridBagLayout());
         setBorder(MATRIX_BORDER);
         setOpaque(true);
         setBackground(MATRIX_BACKGROUND_COLOR);
-        Dimension dimSize = new Dimension(width, height);
+
+        Dimension dimSize;
+        dimSize = new Dimension(MclnMatrixView.CELL_SIZE * columns + 1,
+                MclnMatrixView.CELL_SIZE * rows + 1);
         setPreferredSize(dimSize);
         setMinimumSize(dimSize);
         setMinimumSize(dimSize);
@@ -43,39 +65,67 @@ public class MclnMatrix extends JPanel {
     private void initMatrix(int nRows, int nColumns) {
         for (int i = 0; i < nRows; i++) {
             for (int j = 0; j < nColumns; j++) {
-                String cellValue = matrixDataModel.getMatrixElement(i, j);
-                cellValue = !cellValue.equalsIgnoreCase("_") ? cellValue : " ";
-                CellLabel cellLabel = new CellLabel(cellValue);
+                MatrixCell andCell = matrixDataModel.getMatrixElement(i, j);
+
+                CellLabel cellLabel = new CellLabel(andCell);
                 cellLabel.setFont(MclnMatrixView.FONT);
                 cellLabel.setPreferredSize(cellSize);
                 cellLabel.setMinimumSize(cellSize);
                 cellLabel.setMaximumSize(cellSize);
-                if (i != (nRows - 1)) {
-                    if (j != (nColumns - 1)) {
-                        cellLabel.setBorder(ROW_CELL_BORDER);
-                    } else {
+                matrixCells.add(cellLabel);
+
+                if (!(i == (nRows - 1) && j == (nColumns - 1))) {
+                    if (i != (nRows - 1) && j != (nColumns - 1)) {
+                        cellLabel.setBorder(ANY_BUT_LAST_CELL_BORDER);
+                    } else if (j == (nColumns - 1)) {
                         cellLabel.setBorder(ROW_LAST_CELL_BORDER);
+                    } else {
+                        cellLabel.setBorder(COLUMN_LAST_CELL_BORDER);
                     }
                 } else {
-                    // last row
-                    if (j != (nColumns - 1)) {
-                        cellLabel.setBorder(LAST_ROW_CELL_BORDER);
-                    } else {
-                        // last cell
-                        cellLabel.setBorder(LAST_ROW_LAST_CELL_BORDER);
-                    }
+                    // last cell
+                    cellLabel.setBorder(MATRIX_LOWER_RIGHT_CELL_BORDER);
                 }
-                add(cellLabel);
+                add(cellLabel,
+                        new GridBagConstraints(j, i, 1, 1, 0, 0,
+                                GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                                new Insets(0, 0, 0, 0), 0, 0));
             }
         }
     }
 
-    private static class CellLabel extends JLabel {
-        private final String cellValue;
+    /**
+     * @param me
+     * @return
+     */
+    public BasicCellLabel isMouseHoverMatrixCell(MouseEvent me) {
+        Point mousePointInLocalCoordinates = SwingUtilities.convertPoint(me.getComponent(), me.getPoint(), getParent());
+        Rectangle rect = getBounds();
+        if (!rect.contains(mousePointInLocalCoordinates)) {
+            return null;
+        }
 
-        CellLabel(String cellValue) {
-            super(cellValue, JLabel.CENTER);
-            this.cellValue = cellValue;
+        mousePointInLocalCoordinates = SwingUtilities.convertPoint(me.getComponent(), me.getPoint(), this);
+        int matrixCellsSize = matrixCells.size();
+        for (int i = 0; i < matrixCellsSize; i++) {
+            BasicCellLabel basicCellLabel = matrixCells.get(i);
+            boolean yes = basicCellLabel.isMouseHover(mousePointInLocalCoordinates);
+            if (yes) {
+                return basicCellLabel;
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     */
+    private static class CellLabel extends BasicCellLabel {
+
+        CellLabel(MatrixCell matrixCell) {
+            super((matrixCell == null ? null : matrixCell.getSource()),
+                    (matrixCell == null ? "-" : (matrixCell.getExpectedState().equalsIgnoreCase("_") ?
+                            " " : matrixCell.getExpectedState())));
         }
     }
 }
