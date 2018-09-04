@@ -125,7 +125,7 @@ class SaveRetrieveMclnProject {
      *
      */
     public MclnProject openProject(Component parent) {
-        System.out.println("DesignSpaceModel.openProject");
+//        System.out.println("DesignSpaceModel.openProject");
         String absoluteModelStorageDirectory = defaultAbsoluteModelStorageDirectory;
         if (lastAbsoluteModelStorageDirectory != null) {
             absoluteModelStorageDirectory = lastAbsoluteModelStorageDirectory;
@@ -149,15 +149,15 @@ class SaveRetrieveMclnProject {
         }
         projectName = fileNameWithExtension;
 
-        System.out.println("DesignSpaceModel.openProject: opening from dir " +
-                lastAbsoluteModelStorageDirectory + "\n  file " + projectName);
+//        System.out.println("DesignSpaceModel.openProject: opening from dir " +
+//                lastAbsoluteModelStorageDirectory + "\n  file " + projectName);
 
         Document mclnAsDocument = readProject(selectedPathToMclnModelFile);
 
         MclnProject mclnProject = MclnModelRetriever.createMclnProjectFromXmlDom(mclnAsDocument);
-        String formattedXmlString = documentToFormattedString(mclnAsDocument);
-        System.out.println("DesignSpaceModel.openProject: " + formattedXmlString);
-        System.out.println();
+//        String formattedXmlString = documentToFormattedString(mclnAsDocument);
+//        System.out.println("DesignSpaceModel.openProject: " + formattedXmlString);
+//        System.out.println();
         return mclnProject;
     }
 
@@ -165,7 +165,7 @@ class SaveRetrieveMclnProject {
      * @param selectedPathToMclnModelFile
      */
     private Document readProject(File selectedPathToMclnModelFile) {
-        System.out.println("DesignSpaceModel.readProject: " + selectedPathToMclnModelFile);
+//        System.out.println("DesignSpaceModel.readProject: " + selectedPathToMclnModelFile);
 
         try {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
