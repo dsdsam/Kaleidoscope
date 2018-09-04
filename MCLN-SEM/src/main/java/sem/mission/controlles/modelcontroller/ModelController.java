@@ -671,7 +671,6 @@ public class ModelController implements SemConstants, SeModelConstants {
     public void processSensorEvent(MclnEvent mclnEvent) {
         if (mclnEvent.isFrontSpaceSensorOn()) {
             touchCounter++;
-            System.out.println("processSensorEvent " + touchCounter);
         }
 
         // stop everything before sending event to McLN Controller
