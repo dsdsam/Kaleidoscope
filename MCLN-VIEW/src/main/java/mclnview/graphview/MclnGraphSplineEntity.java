@@ -581,9 +581,6 @@ public final class MclnGraphSplineEntity extends CSysSplineEntity implements Clo
     //  *********************************************************************************************************
 
     private void setArrow(MclnArcArrow mclnArcArrow) {
-        if (mclnArcArrow == null) {
-            System.out.println();
-        }
         this.mclnArcArrow = mclnArcArrow;
     }
 
