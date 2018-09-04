@@ -16,8 +16,6 @@ public class MclnCondition extends MclnNode<MclnCondition, MclnStatement> {
     public static final String MCLN_CONDITION_XML_TAG = "Mcln-Condition";
     public static final String MCLN_CONDITION_UID_TAG = "Condition-UID";
 
-//    private final CopyOnWriteArrayList<StateChangeListener> stateChangeListeners = new CopyOnWriteArrayList();
-
     private String name = "";
 
     /**
@@ -25,8 +23,6 @@ public class MclnCondition extends MclnNode<MclnCondition, MclnStatement> {
      */
     MclnCondition(String uid) {
         this(uid, new double[]{0, 0, 0});
-//        super(new double[]{0, 0, 0});
-//        conditionUid = uid;
     }
 
     /**
@@ -131,9 +127,9 @@ public class MclnCondition extends MclnNode<MclnCondition, MclnStatement> {
     }
 
     /**
-     *
      * @return
      */
+    @Override
     public String getOneLineInfoMessage() {
         oneLineMessageBuilder.delete(0, oneLineMessageBuilder.length());
         MclnState mclnState = getCurrentMclnState();
