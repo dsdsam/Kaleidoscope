@@ -2,14 +2,16 @@ package mclnmatrixapp.app;
 
 import adf.app.AdfEnv;
 import mclnmatrix.app.AoSUtils;
-import mclnmatrix.model.*;
+import mclnmatrix.model.AndMatrixDataModel;
+import mclnmatrix.model.MclnMatrixModel;
+import mclnmatrix.model.OrMatrixDataModel;
+import mclnmatrix.model.VectorDataModel;
 import mclnmatrix.view.MatrixDataModelListener;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MclnStateCalculator {
 
@@ -20,7 +22,6 @@ public class MclnStateCalculator {
     private MclnMatrixModel mclnMatrixModel;
     private int propertiesSize;
     private int conditionsSize;
-    private mclnmatrix.model.InitialStateDataModel InitialStateDataModel;
     private VectorDataModel inputStateVectorDataModel;
     private VectorDataModel conditionVectorDataModel;
     private VectorDataModel suggestedStateVectorDataModel;
@@ -29,7 +30,7 @@ public class MclnStateCalculator {
 
     private final Timer timer;
     private ActionListener timerTickListener = (e) -> {
-        System.out.println("tick");
+//        System.out.println("tick");
         calculateStateToStateTransition();
         AdfEnv.getMainFrame().repaint();
     };
@@ -39,7 +40,7 @@ public class MclnStateCalculator {
         timer = new Timer(DELAY, timerTickListener);
     }
 
-    final void setMatrixDataModelListener(MatrixDataModelListener matrixDataModelListener){
+    final void setMatrixDataModelListener(MatrixDataModelListener matrixDataModelListener) {
         this.matrixDataModelListener = matrixDataModelListener;
     }
 
@@ -48,9 +49,8 @@ public class MclnStateCalculator {
         propertiesSize = mclnMatrixModel.getPropertySize();
         conditionsSize = mclnMatrixModel.getConditionSize();
 
-        InitialStateDataModel = mclnMatrixModel.getInitialStateDataModel();
         inputStateVectorDataModel = mclnMatrixModel.getInputStateVectorDataModel();
-        conditionVectorDataModel = mclnMatrixModel.getConditionVectorDataModel();
+        conditionVectorDataModel = mclnMatrixModel.getConditionStateVectorDataModel();
         suggestedStateVectorDataModel = mclnMatrixModel.getSuggestedStateVectorDataModel();
 
         andMatrixDataModel = mclnMatrixModel.getAndMatrixDataModelForHorizontalLayout();
@@ -60,7 +60,7 @@ public class MclnStateCalculator {
     /**
      *
      */
-   public void startSimulation() {
+    public void startSimulation() {
         timer.start();
     }
 
@@ -75,7 +75,7 @@ public class MclnStateCalculator {
      *
      */
     public void calculateStateToStateTransition() {
-        System.out.println("Executing One Simulation step");
+//        System.out.println("Executing One Simulation step");
         List<String> conditions = multiplyAMDMatrixByPropertyStateVector(conditionsSize, propertiesSize);
         conditionVectorDataModel.updateData(conditions);
 //        MatrixViewUiBuilder.conditionsVector.updateRecalculatedState(conditions);
@@ -84,7 +84,6 @@ public class MclnStateCalculator {
         List<String> suggestedStateValues = MultiplyORMatrixByConditionStateVector(conditionsSize, propertiesSize);
         suggestedStateVectorDataModel.updateData(suggestedStateValues);
 
-//        MatrixViewUiBuilder.suggestedStatesVector.updateRecalculatedState(suggestedStateValues);
         matrixDataModelListener.onSuggestedStatesVectorUpdate(suggestedStateValues);
 
         List<String> currentInputVectorValues = inputStateVectorDataModel.getVectorValues();
@@ -92,7 +91,6 @@ public class MclnStateCalculator {
         inputStateVectorDataModel.updateData(updatedStateVectorValues);
         List<String> changeIndicatorVector = calculateDifference(updatedStateVectorValues, suggestedStateValues);
         inputStateVectorDataModel.setChangeIndicatorVector(changeIndicatorVector);
-//        MatrixViewUiBuilder.inputVector.updateRecalculatedState(updatedStateVectorValues);
         matrixDataModelListener.onInputVectorUpdate(updatedStateVectorValues);
     }
 
@@ -112,13 +110,13 @@ public class MclnStateCalculator {
      * Here the rows are filled with the combinations of the expected model state
      */
     private List<String> multiplyAMDMatrixByPropertyStateVector(int conditionsSize, int propertiesSize) {
-        System.out.println("Multiplying AMD Matrix by Property State Vector");
+//        System.out.println("Multiplying AMD Matrix by Property State Vector");
         List<String> conditions = new ArrayList();
         for (int i = 0; i < conditionsSize; i++) {
             String conjunction = "-";
             for (int j = 0; j < propertiesSize; j++) {
                 String stateOfJ = inputStateVectorDataModel.getValue(j);
-                String andOfIJ = andMatrixDataModel.getMatrixElement(i, j);
+                String andOfIJ = andMatrixDataModel.getCellValue(i, j);
                 String result = AoSUtils.equals(andOfIJ, stateOfJ);
                 conjunction = AoSUtils.conjunction(conjunction, result);
             }
@@ -140,16 +138,16 @@ public class MclnStateCalculator {
             String disjunction = "-";
             for (int j = 0; j < conditionsSize; j++) {
                 String conditionOfJ = conditionVectorDataModel.getValue(j);
-                String orOfIJ = orMatrixDataModel.getMatrixElement(j, i);
-                System.out.println("Calculating Result State  i = " + i + " j =  " + j + "   " + orOfIJ);
+                String orOfIJ = orMatrixDataModel.getCellValue(j, i);
+//                System.out.println("Calculating Result State  i = " + i + " j =  " + j + "   " + orOfIJ);
                 String suggestedState = AoSUtils.production(orOfIJ, conditionOfJ);
                 disjunction = AoSUtils.disjunction(disjunction, suggestedState);
             }
             suggestedStateValues.add(disjunction);
         }
-        for (int i = 0; i < propertiesSize; i++) {
-            System.out.println("Calculated Disjunction is " + suggestedStateValues.get(i));
-        }
+//        for (int i = 0; i < propertiesSize; i++) {
+//            System.out.println("Calculated Disjunction is " + suggestedStateValues.get(i));
+//        }
         return suggestedStateValues;
     }
 
