@@ -1,9 +1,9 @@
 package sem.appui;
 
 import led.LedSignPanel;
-import sem.mission.controlles.modelcontroller.actions.CallbackListener;
 import sem.infrastructure.evdistributor.EventDistributionAdapter;
 import sem.infrastructure.evdistributor.SemEventDistributor;
+import sem.mission.controlles.modelcontroller.actions.CallbackListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +20,6 @@ public class MissionTelemetryPanel extends JPanel {
 
     protected boolean powerOn;
     private boolean manualControlOn = true;
-    //    private LEDSign ledSign;
     private LedSignPanel ledSignPanel;
 
     private EventDistributionAdapter missionEventDistributionListener = new EventDistributionAdapter<Boolean,
@@ -57,12 +56,8 @@ public class MissionTelemetryPanel extends JPanel {
      */
     public MissionTelemetryPanel(LedSignPanel ledSignPanel) {
         this.setLayout(new BorderLayout());
-//        ledSign = new LEDSign();
         this.ledSignPanel = ledSignPanel;
         add(ledSignPanel, BorderLayout.CENTER);
-//        add(ledSign, new GridBagConstraints(0, 0, 3, 1, 1.0, 0.0,
-//                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-//                new Insets(0, 0, 0, 0), 0, 0));
         SemEventDistributor.addEventDistributionListener(SemEventDistributor.EventGroup.MISSION_EVENT,
                 missionEventDistributionListener);
     }
@@ -75,7 +70,7 @@ public class MissionTelemetryPanel extends JPanel {
      * @param status
      */
     protected void panelEnergized(boolean status) {
-        System.out.println("MissionTelemetryPanel Energized = " + status);
+//        System.out.println("MissionTelemetryPanel Energized = " + status);
         if (status) {
 //           ledSignPanel.startRunning();
         } else {
