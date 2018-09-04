@@ -14,7 +14,7 @@ import java.util.Locale;
  * Time: 11:21 AM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class MclnNode<ThisNodeType, OtherNodeType> extends MclnEntity {
+public abstract class MclnNode<ThisNodeType, OtherNodeType> extends MclnEntity implements Comparable<MclnNode> {
 
     static final String doubleToFormattedString(double number) {
         return String.format(Locale.getDefault(), "%012.6f", number);
@@ -149,4 +149,16 @@ public abstract class MclnNode<ThisNodeType, OtherNodeType> extends MclnEntity {
         }
         return false;
     }
+
+    @Override
+    public int compareTo(MclnNode other) {
+        if (getUidNumberPart() < other.getUidNumberPart()) {
+            return -1;
+        } else if (getUidNumberPart() == other.getUidNumberPart()) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
 }
