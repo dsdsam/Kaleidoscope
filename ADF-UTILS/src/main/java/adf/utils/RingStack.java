@@ -1,9 +1,5 @@
 package adf.utils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 /**
  * Created with IntelliJ IDEA.
  * User: XP Admin
@@ -82,7 +78,7 @@ public class RingStack {
 //        if(last >= buffSize){
 //            last =  last - buffSize ;
 //        }
-        System.out.println("RingStack last index = " + last);
+//        System.out.println("RingStack last index = " + last);
         Object element = buff[last];
         return element;
     }
