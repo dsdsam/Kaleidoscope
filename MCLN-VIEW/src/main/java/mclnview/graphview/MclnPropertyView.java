@@ -106,7 +106,7 @@ public class MclnPropertyView extends MclnGraphNodeView implements Cloneable {
 
     public String getPropertyName() {
         String propertyName = mclnStatement.getPropertyName();
-        if (propertyName == null  ) {
+        if (propertyName == null) {
             return "Property name not initialized";
         }
         return propertyName;
@@ -377,16 +377,10 @@ public class MclnPropertyView extends MclnGraphNodeView implements Cloneable {
     //   S i m u l a t i o n   H i s t o r y   R e c o r d i n g
     //
 
-    private void createHistoryRingBuffer() {
-//        int buffSize = AppEnv.getIntConfigProperty("history.buffer.size");
-        historyBuffer.initBuffer(DEFAULT_TRACE_HISTORY_LENGTH);
-    }
-
     public int recordHistory() {
         MclnState mclnState = mclnStatement.getCurrentMclnState();
         MclnState clonedMclnState = mclnState.clone();
         historyBuffer.add(clonedMclnState);
-        historyBuffer.printStack();
         return historyBuffer.getCurrentSize();
     }
 
