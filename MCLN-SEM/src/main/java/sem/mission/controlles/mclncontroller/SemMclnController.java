@@ -58,7 +58,6 @@ public final class SemMclnController {
             if (!SwingUtilities.isEventDispatchThread()) {
                 SwingUtilities.invokeLater(() -> {
                     externalActionRequestProcessor.processActionRequest(effectorID, subject, propertyName, stateInterpretation);
-                    System.out.println();
                 });
                 return;
             }
@@ -158,7 +157,6 @@ public final class SemMclnController {
             if (!SwingUtilities.isEventDispatchThread()) {
                 SwingUtilities.invokeLater(() -> {
                     simulatedPropertyStateChanged(mclnStatement);
-                    System.out.println();
                 });
                 return;
             }
