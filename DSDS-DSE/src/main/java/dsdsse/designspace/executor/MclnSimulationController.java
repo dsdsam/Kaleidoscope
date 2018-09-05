@@ -1,7 +1,6 @@
 package dsdsse.designspace.executor;
 
 import dsdsse.app.AppStateModel;
-import dsdsse.designspace.history.LogPanel;
 import mcln.model.MclnModel;
 import mcln.model.MclnModelPublicInterface;
 import mcln.model.MclnStatement;
@@ -67,18 +66,18 @@ public class MclnSimulationController {
                 String advancedStateRecord = mclnModelPublicInterface.executeOneSimulationStep();
 
                 if (advancedStateRecord == null || advancedStateRecord.length() == 0) {
-                    System.out.println("\n\n*************************");
-                    System.out.println("Simulation State Change Rerecord is empty");
-                    System.out.println("*************************\n");
+//                    System.out.println("\n\n*************************");
+//                    System.out.println("Simulation State Change Rerecord is empty");
+//                    System.out.println("*************************\n");
                 } else {
-                    System.out.println("\n\n*************************");
-                    System.out.println("MclnSimulationController: advanced state = \"" + advancedStateRecord + "\"");
-                    System.out.println("*************************");
+//                    System.out.println("\n\n*************************");
+//                    System.out.println("MclnSimulationController: advanced state = \"" + advancedStateRecord + "\"");
+//                    System.out.println("*************************");
                     String[] statementStates = advancedStateRecord.split("#");
-                    System.out.println("MclnSimulationController: Statement States = " + statementStates.length);
-                    for (int i = 0; i < statementStates.length; i++) {
-                        System.out.println("MclnSimulationController: statementState" + i + ",  " + statementStates[i]);
-                    }
+//                    System.out.println("MclnSimulationController: Statement States = " + statementStates.length);
+//                    for (int i = 0; i < statementStates.length; i++) {
+//                        System.out.println("MclnSimulationController: statementState" + i + ",  " + statementStates[i]);
+//                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -128,11 +127,11 @@ public class MclnSimulationController {
         assert mclnModel != null : "provided MCLN model is null";
         this.mclnModel = mclnModel;
         mclnModelPublicInterface.setMclnModel(mclnModel);
-        if (mclnModel == null) {
-            System.out.println("\n\nSimulation Initialized with model set as null\n\n");
-        } else {
+//        if (mclnModel == null) {
+//            System.out.println("\n\nSimulation Initialized with model set as null\n\n");
+//        } else {
 //            System.out.println("\n\nSimulation Initialized with model: " + mclnModel.getModelName() + "\n\n");
-        }
+//        }
     }
 
     /**
@@ -209,8 +208,14 @@ public class MclnSimulationController {
         mclnModel.setSimulationRunning(simulationRunning);
         ticksCounter = 0;
         AppStateModel.getInstance().updateSimulationTicks(ticksCounter);
+
+        // following two call go to Simulating Engine
+        // No listeners is called during this calls
         mclnModelPublicInterface.clearSimulation();
-        mclnModelPublicInterface.resetSimulation();
+        mclnModelPublicInterface.resetSimulation();  // this call updates McLN MOdel
+
+        // The following two methods are called after model
+        // updated, they invoke MclnModelSimulationListener
         mclnModel.fireModelStateChanged();
         mclnModel.fireModelStateReset();
     }
