@@ -36,7 +36,6 @@ public class ProjectStorage {
 
     private static final String MCLN_MODEL_XML_FILE_EXTENSION = "mcln";
 
-    private static final String TRACE_LOG_FILE_NAME = "Trace Log.txt";
     private static final String TRACE_LOG_RELATIVE_DIR_PATH = FILE_SEPARATOR + "Mcln Trace Log Storage";
 
     private static ProjectStorage mclnModelStorage;
@@ -357,9 +356,7 @@ public class ProjectStorage {
         }
     }
 
-    public boolean saveTraceLog( List<String> traceLogList ) {
-
-        String modelName = MclnProject.getInstance().getCurrentMclnModel().getModelName();
+    public boolean saveTraceLog(String modelName, String fileName, List<String> traceLogList) {
 
         String absoluteModelStorageDirectory = APPLICATION_INSTALLATION_DIRECTORY + TRACE_LOG_RELATIVE_DIR_PATH;
         File traceLogStorageDirectory = new File(absoluteModelStorageDirectory);
@@ -375,9 +372,7 @@ public class ProjectStorage {
 
 //        System.out.println("DesignSpaceModel.saveTraceLog to location : save to dir " +
 //                absoluteModelStorageDirectory + "\n  file " + TRACE_LOG_FILE_NAME);
-
-        String absolutePathToTraceLogFile = absoluteModelStorageDirectory +
-                FILE_SEPARATOR + modelName + " " + TRACE_LOG_FILE_NAME;
+        String absolutePathToTraceLogFile = absoluteModelStorageDirectory + fileName;
         File traceLogFile = new File(absolutePathToTraceLogFile);
         if (traceLogFile.exists()) {
             try {
@@ -394,7 +389,7 @@ public class ProjectStorage {
             printWriter = new PrintWriter(new FileWriter(absolutePathToTraceLogFile));
             String modelNameHeader = "@MODEL-NAME : " + modelName;
             printWriter.println(modelNameHeader);
-            for(String entry : traceLogList){
+            for (String entry : traceLogList) {
                 printWriter.println(entry);
             }
             return true;
