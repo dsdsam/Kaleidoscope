@@ -4,6 +4,7 @@ import adf.onelinemessage.AdfOneLineMessageManager;
 import adf.utils.BuildUtils;
 import adf.utils.RingStack;
 import dsdsse.designspace.ProjectStorage;
+import mcln.model.MclnProject;
 import mcln.palette.MclnState;
 import mclnview.graphview.MclnPropertyView;
 
@@ -19,6 +20,9 @@ import java.util.List;
  * Created by Admin on 10/4/2016.
  */
 public class TraceLogHolderPanel extends JPanel {
+
+    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
+    private static final String TRACE_LOG_FILE_NAME = "Trace Log.txt";
 
     private final String titleText = "\u2193 -  Current state.     Trace Log  \u2192";
 
@@ -100,12 +104,15 @@ public class TraceLogHolderPanel extends JPanel {
     private final void processSaveTraceLogButtonClicked() {
         List<String> traceLogList = createTraceLogFile(tracedPropertyList);
         if (traceLogList.isEmpty()) {
-            traceLogList.add("Trace Log is empty !");
+            String message = "Trace Log is empty !";
+            traceLogList.add(message);
+            AdfOneLineMessageManager.showInfoMessage(message);
         }
         printTraceLogFile(traceLogList);
-        ProjectStorage.getInstance().saveTraceLog(traceLogList);
-        System.out.println("processSaveTraceLogButtonClicked");
-        String message = "Trace Log saved to file:  \"Trace Log.log \"";
+        String modelName = MclnProject.getInstance().getCurrentMclnModel().getModelName();
+        String fileName = FILE_SEPARATOR + modelName + " " + TRACE_LOG_FILE_NAME;
+        ProjectStorage.getInstance().saveTraceLog(modelName, fileName, traceLogList);
+        String message = "Trace Log saved to file:  " + modelName + " " + TRACE_LOG_FILE_NAME;
         AdfOneLineMessageManager.showInfoMessage(message);
     }
 
@@ -190,7 +197,7 @@ public class TraceLogHolderPanel extends JPanel {
         }
 
         for (int i = 0; i < logSize; i++) {
-            logList.set(i, "("+(i+1)+") "+logList.get(i));
+            logList.set(i, "(" + (i + 1) + ") " + logList.get(i));
         }
 
         traceLogList.addAll(logList);
