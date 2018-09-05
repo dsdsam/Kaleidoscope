@@ -41,13 +41,11 @@ public class SimulationTracePanel extends JPanel {
     }
 
     void setContents(List<MclnPropertyView> presentedPropertyList) {
-        System.out.println("Size " + presentedPropertyList.size());
         this.presentedPropertyList.clear();
         this.presentedPropertyList.addAll(presentedPropertyList);
         lineNum = presentedPropertyList.size();
         repaint();
     }
-
 
 
     public void simulationStepExecuted() {
