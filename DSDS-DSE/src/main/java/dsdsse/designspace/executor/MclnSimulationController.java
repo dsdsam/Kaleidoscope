@@ -103,6 +103,8 @@ public class MclnSimulationController {
     private boolean simulationRunning;
     private boolean simulationPaused;
     private MclnModel mclnModel;
+    // Flag makes model initial state recorded to Trace Log
+    private boolean recordModelInitialState = true;
 
     private int ticksCounter;
 
@@ -143,8 +145,7 @@ public class MclnSimulationController {
         mclnModelPublicInterface.initializeSimulation();
         simulationEnabled = true;
         mclnModel.setSimulationEnabled(simulationEnabled);
-        // called to put in the Trace History initial state
-        mclnModel.fireSimulationStepExecuted();
+        recordModelInitialState = true;
     }
 
     /**
@@ -156,6 +157,7 @@ public class MclnSimulationController {
         setSimulationReset();
         simulationEnabled = false;
         mclnModel.setSimulationEnabled(simulationEnabled);
+        recordModelInitialState = false;
     }
 
     /**
@@ -164,6 +166,11 @@ public class MclnSimulationController {
     public void setSimulationStarted() {
         if (!simulationEnabled) {
             return;
+        }
+        if (recordModelInitialState) {
+            // called to record initial state to Trace History
+            mclnModel.fireSimulationStepExecuted();
+            recordModelInitialState = false;
         }
         simulationRunning = true;
         mclnModel.setSimulationRunning(simulationRunning);
@@ -198,12 +205,33 @@ public class MclnSimulationController {
     }
 
     /**
+     * E x e c u t e   O n e   S i m u l a t i o n   S t e p
+     */
+    public void executeOneSimulationStep() {
+        if (!simulationEnabled) {
+            return;
+        }
+        if (simulationRunning) {
+            return;
+        }
+        if (recordModelInitialState) {
+            // called to record initial state to Trace History
+            mclnModel.fireSimulationStepExecuted();
+            recordModelInitialState = false;
+        }
+        ticksCounter++;
+        AppStateModel.getInstance().updateSimulationTicks(ticksCounter);
+        mclnModelPublicInterface.executeOneSimulationStep();
+    }
+
+    /**
      * S i m u l a t i o n   R e s e t
      */
     public void setSimulationReset() {
         if (!simulationEnabled) {
             return;
         }
+        recordModelInitialState = true;
         this.simulationRunning = false;
         mclnModel.setSimulationRunning(simulationRunning);
         ticksCounter = 0;
@@ -218,20 +246,5 @@ public class MclnSimulationController {
         // updated, they invoke MclnModelSimulationListener
         mclnModel.fireModelStateChanged();
         mclnModel.fireModelStateReset();
-    }
-
-    /**
-     * E x e c u t e   O n e   S i m u l a t i o n   S t e p
-     */
-    public void executeOneSimulationStep() {
-        if (!simulationEnabled) {
-            return;
-        }
-        if (simulationRunning) {
-            return;
-        }
-        ticksCounter++;
-        AppStateModel.getInstance().updateSimulationTicks(ticksCounter);
-        mclnModelPublicInterface.executeOneSimulationStep();
     }
 }
