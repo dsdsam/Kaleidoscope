@@ -356,7 +356,7 @@ public class ProjectStorage {
         }
     }
 
-    public boolean saveTraceLog(String modelName, String fileName, List<String> traceLogList) {
+    public String saveTraceLog(String fileName, List<String> traceLogList) {
 
         String absoluteModelStorageDirectory = APPLICATION_INSTALLATION_DIRECTORY + TRACE_LOG_RELATIVE_DIR_PATH;
         File traceLogStorageDirectory = new File(absoluteModelStorageDirectory);
@@ -366,42 +366,31 @@ public class ProjectStorage {
                 traceLogStorageDirectory.mkdir();
             } catch (Exception e) {
                 e.printStackTrace();
-                return false;
+                return "Unable to create directory: " + absoluteModelStorageDirectory + " for Trace log: " + fileName;
             }
         }
 
-//        System.out.println("DesignSpaceModel.saveTraceLog to location : save to dir " +
-//                absoluteModelStorageDirectory + "\n  file " + TRACE_LOG_FILE_NAME);
-        String absolutePathToTraceLogFile = absoluteModelStorageDirectory + fileName;
+        String absolutePathToTraceLogFile = absoluteModelStorageDirectory + FILE_SEPARATOR + fileName;
         File traceLogFile = new File(absolutePathToTraceLogFile);
         if (traceLogFile.exists()) {
             try {
                 traceLogFile.delete();
             } catch (Exception e) {
                 e.printStackTrace();
-                return false;
+                return "Unable to delete existing file: " + fileName + " - Trace log was not saved. ";
             }
         }
 
-
-        PrintWriter printWriter = null;
-        try {
-            printWriter = new PrintWriter(new FileWriter(absolutePathToTraceLogFile));
-            String modelNameHeader = "@MODEL-NAME : " + modelName;
-            printWriter.println(modelNameHeader);
+        try (PrintWriter printWriter = new PrintWriter(new FileWriter(absolutePathToTraceLogFile))) {
             for (String entry : traceLogList) {
                 printWriter.println(entry);
             }
-            return true;
+            return "Trace Log saved to file:  " + fileName;
+
         } catch (IOException ioe) {
             ioe.printStackTrace();
-            return false;
-        } finally {
-            if (printWriter != null) {
-                printWriter.close();
-            }
+            return "Failure to save file: " + fileName;
         }
-
     }
 
     //
