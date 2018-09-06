@@ -21,7 +21,6 @@ import java.util.List;
  */
 public class TraceLogHolderPanel extends JPanel {
 
-    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
     private static final String TRACE_LOG_FILE_NAME = "Trace Log.txt";
 
     private final String titleText = "\u2193 -  Current state.     Trace Log  \u2192";
@@ -102,31 +101,33 @@ public class TraceLogHolderPanel extends JPanel {
     //
 
     private final void processSaveTraceLogButtonClicked() {
-        List<String> traceLogList = createTraceLogFile(tracedPropertyList);
+        String modelName = MclnProject.getInstance().getCurrentMclnModel().getModelName();
+        List<String> traceLogList = createTraceLogFile(modelName, tracedPropertyList);
         if (traceLogList.isEmpty()) {
-            String message = "Trace Log is empty !";
+            String message = "Trace Log is empty, not saved !";
             traceLogList.add(message);
             AdfOneLineMessageManager.showInfoMessage(message);
+            return;
         }
         printTraceLogFile(traceLogList);
-        String modelName = MclnProject.getInstance().getCurrentMclnModel().getModelName();
-        String fileName = FILE_SEPARATOR + modelName + " " + TRACE_LOG_FILE_NAME;
-        ProjectStorage.getInstance().saveTraceLog(modelName, fileName, traceLogList);
-        String message = "Trace Log saved to file:  " + modelName + " " + TRACE_LOG_FILE_NAME;
+        String fileName = modelName + " " + TRACE_LOG_FILE_NAME;
+        String message = ProjectStorage.getInstance().saveTraceLog(fileName, traceLogList);
         AdfOneLineMessageManager.showInfoMessage(message);
     }
 
     private void printTraceLogFile(List<String> traceLogFile) {
-        System.out.println("Trace Log File: size = " + traceLogFile.size());
+        System.out.println("\nTrace Log File: size = " + traceLogFile.size());
         for (String entry : traceLogFile) {
             System.out.println(entry);
         }
     }
 
     /**
+     * @param modelName
      * @param presentedPropertyList
+     * @return
      */
-    private List<String> createTraceLogFile(List<MclnPropertyView> presentedPropertyList) {
+    private List<String> createTraceLogFile(String modelName, List<MclnPropertyView> presentedPropertyList) {
 
         StringBuilder sb = new StringBuilder();
         List<String> traceLogList = new ArrayList();
@@ -137,6 +138,8 @@ public class TraceLogHolderPanel extends JPanel {
         int traceLogFileLength = 0;
         String separator = System.getProperty("line.separator");
 
+        sb.append("@MODEL-NAME : ").append(modelName);
+        sb.append(separator);
         sb.append("@PROPERTY-NAME-LIST : ");
 
         for (int i = 0; i < propertySize; i++) {
@@ -204,5 +207,4 @@ public class TraceLogHolderPanel extends JPanel {
         traceLogList.add("- End of Trace Log -");
         return traceLogList;
     }
-
 }
