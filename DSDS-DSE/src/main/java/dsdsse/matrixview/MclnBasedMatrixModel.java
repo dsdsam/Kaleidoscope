@@ -31,8 +31,9 @@ class MclnBasedMatrixModel extends MclnMatrixModel {
 
     private final Map<String, VectorCell> statementUidToInputVectorCellMap = new HashMap();
     private final Map<String, VectorCell> conditionUidToConditionVectorCellMap = new HashMap();
-    private final Map<String, String> statementUidToSuggestedStateMap = new HashMap();
     private final Map<String, VectorCell> statementUidToSuggestedVectorCellMap = new HashMap();
+
+    private final Map<String, String> statementUidToSuggestedStateMap = new HashMap();
 
     //
     //   MclnModelSimulationListener listens simulation process
@@ -202,39 +203,41 @@ class MclnBasedMatrixModel extends MclnMatrixModel {
     }
 
     protected void setInputStateVectorData(List<VectorCell> inputStateVectorData) {
-        this.inputStateVectorDataModel.setVectorStateData(inputStateVectorData);
+        getInputStateVectorDataModel().setVectorStateData(inputStateVectorData);
     }
 
     protected void setConditionStateVectorData(List<VectorCell> conditionStateVectorData) {
-        this.conditionStateVectorDataModel.setVectorStateData(conditionStateVectorData);
+        getConditionStateVectorDataModel().setVectorStateData(conditionStateVectorData);
     }
 
     protected void setSuggestedStateVectorData(List<VectorCell> suggestedStateVectorData) {
-        this.suggestedStateVectorDataModel.setVectorStateData(suggestedStateVectorData);
+        getSuggestedStateVectorDataModel().setVectorStateData(suggestedStateVectorData);
     }
 
-
-    public Map<String, VectorCell> getStatementUidToInputVectorCellMap() {
-        return statementUidToInputVectorCellMap;
-    }
+    // Maps
 
     public void setStatementUidToInputVectorCellMap(Map<String, VectorCell> statementUidToInputVectorCellMap) {
         this.statementUidToInputVectorCellMap.putAll(statementUidToInputVectorCellMap);
-    }
-
-    public Map<String, VectorCell> getConditionUidToConditionVectorCellMap() {
-        return conditionUidToConditionVectorCellMap;
     }
 
     public void setConditionUidToConditionVectorCellMap(Map<String, VectorCell> conditionUidToInputVectorCellMap) {
         this.conditionUidToConditionVectorCellMap.putAll(conditionUidToInputVectorCellMap);
     }
 
+    public void setStatementUidToSuggestedVectorCellMap(Map<String, VectorCell> statementUidToSuggestedVectorCellMap) {
+        this.statementUidToSuggestedVectorCellMap.putAll(statementUidToSuggestedVectorCellMap);
+    }
+
+    public Map<String, VectorCell> getStatementUidToInputVectorCellMap() {
+        return statementUidToInputVectorCellMap;
+    }
+
+    public Map<String, VectorCell> getConditionUidToConditionVectorCellMap() {
+        return conditionUidToConditionVectorCellMap;
+    }
+
     public Map<String, VectorCell> getStatementUidToSuggestedVectorCellMap() {
         return statementUidToSuggestedVectorCellMap;
     }
 
-    public void setStatementUidToSuggestedVectorCellMap(Map<String, VectorCell> statementUidToSuggestedVectorCellMap) {
-        this.statementUidToSuggestedVectorCellMap.putAll(statementUidToSuggestedVectorCellMap);
-    }
 }
