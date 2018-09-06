@@ -14,9 +14,9 @@ public class MclnMatrixModel {
 
     protected final List<Property> properties = new ArrayList();
 
-    protected VectorDataModel inputStateVectorDataModel = VectorDataModel.createInstance();
-    protected VectorDataModel suggestedStateVectorDataModel = VectorDataModel.createInstance();
-    protected VectorDataModel conditionStateVectorDataModel = VectorDataModel.createInstance();
+    private VectorDataModel inputStateVectorDataModel = VectorDataModel.createInstance();
+    private VectorDataModel suggestedStateVectorDataModel = VectorDataModel.createInstance();
+    private VectorDataModel conditionStateVectorDataModel = VectorDataModel.createInstance();
 
     protected Map<Integer, AndCell> conjunction;
     protected AndMatrixDataModel andMatrixDataModelForHorizontalLayout;
