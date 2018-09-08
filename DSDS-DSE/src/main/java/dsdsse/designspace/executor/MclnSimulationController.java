@@ -3,9 +3,7 @@ package dsdsse.designspace.executor;
 import dsdsse.app.AppStateModel;
 import mcln.model.MclnModel;
 import mcln.model.MclnModelPublicInterface;
-import mcln.model.MclnStatement;
 import mcln.palette.MclnState;
-import mcln.simulator.SimulatedStateChangeListener;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -85,20 +83,6 @@ public class MclnSimulationController {
         }
     };
 
-    private final SimulatedStateChangeListener simulatedStateChangeListener = new SimulatedStateChangeListener() {
-        @Override
-        public void simulatedPropertyStateChanged(MclnStatement mclnStatement) {
-            if (!mclnStatement.shouldStateBeLogged()) {
-                return;
-            }
-//            System.out.println("Mcln Simulation Controller/SimulatedStateChangeListener.simulatedPropertyStateChanged: " + mclnStatement.toString());
-//            final long time = System.currentTimeMillis();
-//            final String uid = mclnStatement.getUID();
-//            final String statementText = mclnStatement.getStatementText();
-//            final MclnState mclnState = mclnStatement.getCurrentMclnState();
-        }
-    };
-
     private boolean simulationEnabled;
     private boolean simulationRunning;
     private boolean simulationPaused;
@@ -110,7 +94,6 @@ public class MclnSimulationController {
 
     private MclnSimulationController() {
         mclnModelPublicInterface = new MclnModelPublicInterface();
-        mclnModelPublicInterface.addStateChangeListener(simulatedStateChangeListener);
         noneSwingSimulationTimer.schedule(timerTask, TICK_PHASE, TICK_INTERVAL);
     }
 
