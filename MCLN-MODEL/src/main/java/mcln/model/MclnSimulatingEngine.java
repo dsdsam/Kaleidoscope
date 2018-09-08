@@ -3,7 +3,6 @@ package mcln.model;
 
 import mcln.palette.BasicColorPalette;
 import mcln.palette.MclnState;
-import mcln.simulator.SimulatedStateChangeListener;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,9 +35,6 @@ final class MclnSimulatingEngine {
 
     private final LinkedBlockingQueue<MclnModelEvent> linkedBlockingEventQueue = new LinkedBlockingQueue();
 
-    private final CopyOnWriteArrayList<SimulatedStateChangeListener> simulatedStateChangeListeners =
-            new CopyOnWriteArrayList();
-
     /**
      * This two interfaces connect McLN Model to outer world
      */
@@ -54,20 +50,22 @@ final class MclnSimulatingEngine {
          */
         @Override
         public void processInputEvent(MclnModelEvent mclnModelEvent) {
-            System.out.println("EVENT: " + mclnModelEvent.toString());
+//            System.out.println("EVENT: " + mclnModelEvent.toString());
             String sourceUID = mclnModelEvent.getSourceUID();
             MclnStatement mclnStatement = mclnModel.getMclnStatementByUID(sourceUID);
 
             String mclnStatementUID = mclnStatement.getUID();
             int newStateID = BasicColorPalette.RED_STATE_ID;
             MclnStatementState newMclnStatementState = mclnStatement.setNewCurrentMclnStateByStateAttribute(newStateID);
-            fireSimulatedPropertyStateChanged(mclnStatement);
+
+            // This call informs SEM McLN Controller
+            mclnModel.fireInputPropertyStateChangedOnInputEvent(mclnStatement);
 
             MclnState newCurrentState = newMclnStatementState.getMclnState();
             MclnModelEvent externalMclnModelInputEvent = new MclnModelEvent(mclnStatementUID,
                     MclnModelEvent.EventType.PGM_INPUT, newCurrentState);
-            System.out.println("E x t e r n a l McLN Model Input Event : putting external event into queue "
-                    + externalMclnModelInputEvent.toString() + "\n");
+//            System.out.println("E x t e r n a l McLN Model Input Event : putting external event into queue "
+//                    + externalMclnModelInputEvent.toString() + "\n");
             try {
                 linkedBlockingEventQueue.put(externalMclnModelInputEvent);
             } catch (InterruptedException e) {
@@ -80,7 +78,7 @@ final class MclnSimulatingEngine {
     ExternalActionResponseProcessor externalActionResponseProcessor = new ExternalActionResponseProcessor() {
         @Override
         public void processActionResponse(String effectorID, String response) {
-            System.out.println("E x t e r n a l   Action   Response, node ID = " + effectorID + ",  response = " + response + "\n");
+//            System.out.println("E x t e r n a l   Action   Response, node ID = " + effectorID + ",  response = " + response + "\n");
 
             MclnStatement mclnStatement = mclnModel.getMclnStatementByUID(effectorID);
             int newStateID = BasicColorPalette.YELLOW_STATE_ID;
@@ -95,8 +93,8 @@ final class MclnSimulatingEngine {
             MclnState newCurrentState = newMclnStatementState.getMclnState();
             MclnModelEvent externalMclnModelInputEvent = new MclnModelEvent(effectorID,
                     MclnModelEvent.EventType.PGM_INPUT, newCurrentState);
-            System.out.println("E x t e r n a l McLN Model Input Event : putting external event into queue "
-                    + externalMclnModelInputEvent.toString() + "\n");
+//            System.out.println("E x t e r n a l McLN Model Input Event : putting external event into queue "
+//                    + externalMclnModelInputEvent.toString() + "\n");
 
 
             try {
@@ -104,7 +102,6 @@ final class MclnSimulatingEngine {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-//        fireSimulatedPropertyStateChanged(mclnStatement);
             mclnModel.fireModelStateChanged();
         }
     };
@@ -121,8 +118,8 @@ final class MclnSimulatingEngine {
         MclnModelEvent userInputMclnModelEvent = new MclnModelEvent(mclnStatement.getUID(),
                 MclnModelEvent.EventType.PGM_INPUT, mclnStatement.getCurrentMclnState());
 
-        System.out.println("U s e r   I n p u t : putting user event into queue "
-                + userInputMclnModelEvent.toString() + "\n");
+//        System.out.println("U s e r   I n p u t : putting user event into queue "
+//                + userInputMclnModelEvent.toString() + "\n");
 
         if (mclnModel.isSimulationRunning()) {
             try {
@@ -140,7 +137,7 @@ final class MclnSimulatingEngine {
     //   C o n s t r u c t i n g   i n s t a n c e
 
     MclnSimulatingEngine() {
-        System.out.println("McLN Simulating Engine constructed");
+//        System.out.println("McLN Simulating Engine constructed");
     }
 
     ExternalEventListener getExternalEventListener() {
@@ -158,9 +155,9 @@ final class MclnSimulatingEngine {
     /**
      * The listener is a component that creates list of MclnStatements changes during simulation cycle
      */
-    void addStateChangeListener(SimulatedStateChangeListener simulatedStateChangeListener) {
-        simulatedStateChangeListeners.add(simulatedStateChangeListener);
-    }
+//    void addStateChangeListener(SimulatedStateChangeListener simulatedStateChangeListener) {
+//        simulatedStateChangeListeners.add(simulatedStateChangeListener);
+//    }
 
     void clearSimulation() {
         linkedBlockingEventQueue.clear();
@@ -316,10 +313,10 @@ final class MclnSimulatingEngine {
         }
 
         int iCnt = 0;
-        for (Iterator<MclnModelEvent> iterator = linkedBlockingEventQueue.iterator(); iterator.hasNext(); ) {
-            MclnModelEvent mclnModelEvent = iterator.next();
+//        for (Iterator<MclnModelEvent> iterator = linkedBlockingEventQueue.iterator(); iterator.hasNext(); ) {
+//            MclnModelEvent mclnModelEvent = iterator.next();
 //            System.out.println("Queue Entry " + iCnt + "  " + mclnModelEvent.toString());
-        }
+//        }
 //        for (int i = 0; i < queueSize; i++) {
 //            MclnModelEvent mclnModelEvent = linkedBlockingEventQueue.peek();
 //            System.out.println("Queue Entry " + i + "  " + mclnModelEvent.toString());
@@ -332,7 +329,9 @@ final class MclnSimulatingEngine {
             e.printStackTrace();
         }
 
+        // This call maked Input events recorded into TRace Log as individual slilece
         mclnModel.fireSimulationStepExecuted();
+
         // unloading event queue
         do {
             MclnModelEvent mclnModelEvent = linkedBlockingEventQueue.poll();
@@ -362,12 +361,12 @@ final class MclnSimulatingEngine {
      * @param mclnModelEvent
      */
     private void processStateChangeEvent(MclnModelEvent mclnModelEvent) {
-
 //        System.out.println("     Processing Simulating Tick ...processing event " + mclnModelEvent.toString() + "\n");
         String statementUID = mclnModelEvent.getSourceUID();
         MclnStatement mclnStatement = mclnModel.getMclnStatementByUID(statementUID);
         if (mclnModelEvent.isProgramInput()) {
-            fireSimulatedPropertyStateChanged(mclnStatement);
+            // This call informs SEM McLN Controller
+            mclnModel.fireInputPropertyStateChangedOnInputEvent(mclnStatement);
         }
         int nEventsAddedToQueue = propagateStateChangeFromStatementToDependentStatements(mclnStatement);
     }
@@ -599,11 +598,11 @@ final class MclnSimulatingEngine {
             MclnStatement inpStatement = conditionInpArc.getInpNode();
             MclnState statementState = inpStatement.getCurrentMclnState();
             MclnState arcState = conditionInpArc.getArcMclnState();
-            System.out.println("Statement state     " + statementState.toString());
-            System.out.println("arcState            " + arcState.toString());
+//            System.out.println("Statement state     " + statementState.toString());
+//            System.out.println("arcState            " + arcState.toString());
             MclnState recognitionState = arcState.applyDiscolorOperation(statementState);
             conditionInpArc.setCalculatedProducedState(recognitionState);
-            System.out.println("recognitionState " + recognitionState.toString());
+//            System.out.println("recognitionState " + recognitionState.toString());
             newState = newState.applyConjunctionOperation(recognitionState);
 //            System.out.println("Condition new state     " + newState.toString());
             if (newState.isStateContradiction()) {
@@ -673,8 +672,13 @@ final class MclnSimulatingEngine {
 //          System.out.println("\n\n Statement updated " + effectedMclnStatement.getUID() + "  " + newState.toString() + "\n");
         effectedMclnStatement.setCalculatedSuggestedState(newState);
         effectedMclnStatement.setCurrentMclnState(newState);
-        fireSimulatedPropertyStateChanged(effectedMclnStatement);
-//        mclnStatement.fireSimulatedPropertyStateChanged(newState);
+
+        // This call informs SEM McLN Controller
+        mclnModel.fireInputPropertyStateChangedOnInputEvent(effectedMclnStatement);
+
+        // There is another listener method to update McLN Model input, this
+        // method is called to make listener update inference conclusions only
+        mclnModel.firePropertyNewSuggestedStateInferred(effectedMclnStatement);
 
         // recording state change
         String statementStateAsString = effectedMclnStatement.getStatementStateAsString();
@@ -695,13 +699,6 @@ final class MclnSimulatingEngine {
         return processedConditions.contains(mclnCondition);
     }
 
-    private void fireSimulatedPropertyStateChanged(MclnStatement mclnStatement) {
-        for (SimulatedStateChangeListener simulatedStateChangeListener : simulatedStateChangeListeners) {
-            simulatedStateChangeListener.simulatedPropertyStateChanged(mclnStatement);
-        }
-//        System.out.println("MclnStatement.fireSimulatedPropertyStateChanged: new current state " + currentState.toString());
-    }
-
     private void callExternalActionRequestProcessor(MclnStatement mclnStatement) {
         for (ExternalActionRequestProcessor externalActionRequestProcessor : externalActionRequestProcessors) {
             String subject = mclnStatement.getSubject();
@@ -711,7 +708,6 @@ final class MclnSimulatingEngine {
             externalActionRequestProcessor.processActionRequest(mclnStatement.getUID(), subject, propertyName,
                     statementInterpretation);
         }
-//        System.out.println("MclnStatement.fireSimulatedPropertyStateChanged: new current state " + currentState.toString());
     }
 
 
