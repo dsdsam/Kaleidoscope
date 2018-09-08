@@ -2,7 +2,7 @@ package sem.mission.controlles.mclncontroller;
 
 import adf.onelinemessage.AdfOneLineMessageManager;
 import mcln.model.*;
-import mcln.simulator.SimulatedStateChangeListener;
+import mcln.simulator.InputOutputStateChangeListener;
 import sem.appui.PredicatePanel;
 import sem.appui.SubjectNamePanel;
 import sem.mission.controlles.modelcontroller.ModelController;
@@ -150,13 +150,16 @@ public final class SemMclnController {
         PredicatePanel.getSingleton().setText(makeStateMessage(propertyName, stateInterpretation));
     }
 
-
-    private final SimulatedStateChangeListener simulatedStateChangeListener = new SimulatedStateChangeListener() {
+    /**
+     * Listens to the McLN Model when Input/Output
+     * Properties are changes by Simulating Engine
+     */
+    private final InputOutputStateChangeListener inputOutputStateChangeListener = new InputOutputStateChangeListener() {
         @Override
-        public void simulatedPropertyStateChanged(MclnStatement mclnStatement) {
+        public void inputPropertyStateChanged(MclnStatement mclnStatement) {
             if (!SwingUtilities.isEventDispatchThread()) {
                 SwingUtilities.invokeLater(() -> {
-                    simulatedPropertyStateChanged(mclnStatement);
+                    inputPropertyStateChanged(mclnStatement);
                 });
                 return;
             }
@@ -200,15 +203,14 @@ public final class SemMclnController {
     private SemMclnController(MclnProject mclnProject) {
         this.mclnProject = mclnProject;
         this.mclnModel = mclnProject.getCurrentMclnModel();
-        MclnModel currentMclnModel = mclnProject.getCurrentMclnModel();
+        mclnModel.addInputOutputStateChangeListener(inputOutputStateChangeListener);
 
         //   Connecting Mcln Controller to McLN Model
         mclnModelPublicInterface = new MclnModelPublicInterface();
         mclnModelPublicInterface.addMclnModelExternalActionProcessor(externalActionRequestProcessor);
-        mclnModelPublicInterface.addStateChangeListener(simulatedStateChangeListener);
         externalEventListener = mclnModelPublicInterface.getMclnModelExternalEventListener();
         externalActionResponseProcessor = mclnModelPublicInterface.getExternalActionResponseProcessor();
-        mclnModelPublicInterface.setMclnModel(currentMclnModel);
+        mclnModelPublicInterface.setMclnModel(mclnModel);
         mclnModelPublicInterface.startSimulation();
 
         noneSwingSimulationTimer.schedule(timerTask, TICK_PHASE, TICK_INTERVAL);
