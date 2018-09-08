@@ -1,6 +1,6 @@
 package mcln.model;
 
-import mcln.simulator.SimulatedStateChangeListener;
+import mcln.simulator.InputOutputStateChangeListener;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -67,6 +67,12 @@ public class MclnModel {
     //     M c l n   M o d e l   I n s t a n c e
     //
 
+    private final CopyOnWriteArrayList<MclnModelSimulationListener> mclnModelSimulationListeners =
+            new CopyOnWriteArrayList();
+
+    private final CopyOnWriteArrayList<InputOutputStateChangeListener> inputOutputStateChangeListeners =
+            new CopyOnWriteArrayList();
+
     private final List<MclnStatement> mclnStatements = new ArrayList();
     private final List<MclnCondition> mclnConditions = new ArrayList();
     private List<MclnArc> mclnArcs = new ArrayList();
@@ -87,9 +93,6 @@ public class MclnModel {
     private int statementCounter;
     private int conditionCounter;
     private int arcCounter;
-
-    private final CopyOnWriteArrayList<MclnModelSimulationListener> mclnModelSimulationListeners =
-            new CopyOnWriteArrayList();
 
     private final String sourceXml;
 
@@ -225,11 +228,14 @@ public class MclnModel {
 
     public void addMclnModelSimulationListener(MclnModelSimulationListener mclnModelSimulationListener) {
         mclnModelSimulationListeners.add(mclnModelSimulationListener);
-        System.out.println("????? mclnModel.addMclnModelSimulationListener :" + mclnModelSimulationListeners.size());
     }
 
     public void removeMclnModelSimulationListener(MclnModelSimulationListener mclnModelSimulationListener) {
         mclnModelSimulationListeners.remove(mclnModelSimulationListener);
+    }
+
+    public void addInputOutputStateChangeListener(InputOutputStateChangeListener inputOutputStateChangeListener) {
+        inputOutputStateChangeListeners.add(inputOutputStateChangeListener);
     }
 
     //
@@ -414,11 +420,11 @@ public class MclnModel {
 
     }
 
-    public void fireSimulationStepExecuted() {
-        for (MclnModelSimulationListener mclnModelSimulationListener : mclnModelSimulationListeners) {
-            mclnModelSimulationListener.simulationStepExecuted();
-        }
-    }
+    // ================================================================================================================
+
+    //
+    //   Methods that call MclnModelSimulationListener
+    //
 
     //  Called by:
     //  1) simulation Controller when simulation started
@@ -431,11 +437,43 @@ public class MclnModel {
         }
     }
 
+    public void fireSimulationStepExecuted() {
+        for (MclnModelSimulationListener mclnModelSimulationListener : mclnModelSimulationListeners) {
+            mclnModelSimulationListener.simulationStepExecuted();
+        }
+    }
+
     public void fireModelStateReset() {
         for (MclnModelSimulationListener mclnModelSimulationListener : mclnModelSimulationListeners) {
             mclnModelSimulationListener.mclnModelStateReset();
         }
     }
+
+    public void firePropertyNewSuggestedStateInferred(MclnStatement mclnStatement) {
+        for (MclnModelSimulationListener mclnModelSimulationListener : mclnModelSimulationListeners) {
+            mclnModelSimulationListener.propertyNewSuggestedStateInferred(mclnStatement);
+        }
+    }
+
+    // ================================================================================================================
+
+    //
+    // Methods that call InputOutputStateChangeListener
+    //
+
+    public void fireInputPropertyStateChangedOnInputEvent(MclnStatement mclnStatement) {
+        for (InputOutputStateChangeListener inputOutputStateChangeListener : inputOutputStateChangeListeners) {
+            inputOutputStateChangeListener.inputPropertyStateChanged(mclnStatement);
+        }
+    }
+
+    public void fireOutputPropertyStateChangedOnInputEvent(MclnStatement mclnStatement) {
+        for (InputOutputStateChangeListener inputOutputStateChangeListener : inputOutputStateChangeListeners) {
+            inputOutputStateChangeListener.outputPropertyStateChanged(mclnStatement);
+        }
+    }
+
+    // ================================================================================================================
 
     //
     //   model to XML
