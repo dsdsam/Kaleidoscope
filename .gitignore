@@ -27,5 +27,5 @@ hs_err_pid*
 /Mcln Trace Log Storage/
 
 # Ignoring MCLN-MATRIX-APP relations
-/MCLN-MATRIX-APP/src/main/resources/mclnmatrixapp-resources/relations/
+/**/mclnmatrixapp-resources/*/*
 
