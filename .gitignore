@@ -23,3 +23,9 @@ hs_err_pid*
 # Ignore Intellij Idea project-specific files.
 .idea/workspace.xml
 
+# Ignoring Mcln Trace Log Storage
+/Mcln Trace Log Storage/
+
+# Ignoring MCLN-MATRIX-APP relations
+/MCLN-MATRIX-APP/src/main/resources/mclnmatrixapp-resources/relations/
+
