@@ -26,6 +26,6 @@ hs_err_pid*
 # Ignoring Mcln Trace Log Storage
 /Mcln Trace Log Storage/
 
-# Ignoring MCLN-MATRIX-APP relations
-/**/mclnmatrixapp-resources/*/*
+# Ignoring MCLN-MATRIX-APP relations by searching in any subdirectory relative to the .gitignore file
+relations/
 
