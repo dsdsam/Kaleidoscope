@@ -9,9 +9,29 @@ package mcln.model;
  */
 public interface MclnModelSimulationListener {
 
+    public default void propertyStateChangedOnInputEvent(MclnStatement mclnStatement){
+
+    }
+
+    /**
+     * The method is called from Mcln Model method
+     * fireModelStateChanged.
+     *
+     * This method is implemented in Mcln Graph Model.
+     * It is used to regenerate and repaint Mcln Graph
+     * after model state changed as a result of input
+     * event, inference, or reset.
+     */
+    public void mclnModelStateChanged();
+
+    /**
+     *
+     */
     public void simulationStepExecuted();
 
-    public void mclnModelStateChanged();
+    public default void propertyNewSuggestedStateInferred(MclnStatement mclnStatement){
+
+    }
 
     public void mclnModelStateReset();
 
