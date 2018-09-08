@@ -1,7 +1,6 @@
 package mcln.model;
 
 import mcln.palette.MclnState;
-import mcln.simulator.SimulatedStateChangeListener;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,11 +17,7 @@ public class MclnModelPublicInterface {
         mclnSimulatingEngine = new MclnSimulatingEngine();
     }
 
-    public void addStateChangeListener(SimulatedStateChangeListener simulatedStateChangeListener) {
-        mclnSimulatingEngine.addStateChangeListener(simulatedStateChangeListener);
-    }
-
-    public ExternalEventListener getMclnModelExternalEventListener(){
+    public ExternalEventListener getMclnModelExternalEventListener() {
         return mclnSimulatingEngine.getExternalEventListener();
     }
 
