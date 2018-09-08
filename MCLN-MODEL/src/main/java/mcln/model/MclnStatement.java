@@ -2,11 +2,9 @@ package mcln.model;
 
 import mcln.palette.BasicColorPalette;
 import mcln.palette.MclnState;
-import mcln.simulator.SimulatedStateChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created with IntelliJ IDEA.
