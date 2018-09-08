@@ -39,7 +39,7 @@ public final class MclnArcArrow {
     public static final int MEDIUM_ARROW_LENGTH = 12;
     public static final int MEDIUM_ARROW_WIDTH = 4;
 
-    public static final int SMALL_ARROW_LENGTH = 8;
+    public static final int SMALL_ARROW_LENGTH = 9;
     public static final int SMALL_ARROW_WIDTH = 3;
 
     public final int DEFAULT_ARROW_LENGTH;
