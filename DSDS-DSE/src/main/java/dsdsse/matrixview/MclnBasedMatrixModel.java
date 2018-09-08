@@ -42,30 +42,13 @@ class MclnBasedMatrixModel extends MclnMatrixModel {
     private MclnModelSimulationListener mclnModelSimulationListener = new MclnModelSimulationListener() {
 
         @Override
-        public void newPropertySuggestedStateInferred(MclnStatement mclnStatement) {
-            if (SwingUtilities.isEventDispatchThread()) {
-                onSimulatedSuggestedStateInferred(mclnStatement);
-            } else {
-                try {
-                    SwingUtilities.invokeAndWait(() -> {
-                        onSimulatedSuggestedStateInferred(mclnStatement);
-                    });
-                } catch (InterruptedException ie) {
-                    ie.printStackTrace();
-                } catch (InvocationTargetException ite) {
-                    ite.printStackTrace();
-                }
-            }
-        }
-
-        @Override
         public void mclnModelStateChanged() {
             if (SwingUtilities.isEventDispatchThread()) {
-                onSimulationStateChange();
+                onModelStateChanged();
             } else {
                 try {
                     SwingUtilities.invokeAndWait(() -> {
-                        onSimulationStateChange();
+                        onModelStateChanged();
                     });
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
@@ -83,6 +66,23 @@ class MclnBasedMatrixModel extends MclnMatrixModel {
                 try {
                     SwingUtilities.invokeAndWait(() -> {
                         onSimulationStepExecuted();
+                    });
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                } catch (InvocationTargetException ite) {
+                    ite.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void propertyNewSuggestedStateInferred(MclnStatement mclnStatement) {
+            if (SwingUtilities.isEventDispatchThread()) {
+                onSimulatedSuggestedStateInferred(mclnStatement);
+            } else {
+                try {
+                    SwingUtilities.invokeAndWait(() -> {
+                        onSimulatedSuggestedStateInferred(mclnStatement);
                     });
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
@@ -111,20 +111,10 @@ class MclnBasedMatrixModel extends MclnMatrixModel {
     };
 
     /**
-     * @param mclnStatement
-     */
-    private void onSimulatedSuggestedStateInferred(MclnStatement mclnStatement) {
-        MclnState mclnState = mclnStatement.getCurrentMclnState();
-        String updatedState = mclnState.getHexColor();
-        String statementUID = mclnStatement.getUID();
-        statementUidToSuggestedStateMap.put(statementUID, updatedState);
-    }
-
-    /**
      *
      */
-    private void onSimulationStateChange() {
-//        System.out.println("MclnBasedMatrixModel onSimulationStateChange");
+    private void onModelStateChanged() {
+//        System.out.println("MclnBasedMatrixModel onModelSimulatedStateChange");
     }
 
     /**
@@ -159,6 +149,16 @@ class MclnBasedMatrixModel extends MclnMatrixModel {
             }
         }
         statementUidToSuggestedStateMap.clear();
+    }
+
+    /**
+     * @param mclnStatement
+     */
+    private void onSimulatedSuggestedStateInferred(MclnStatement mclnStatement) {
+        MclnState mclnState = mclnStatement.getCurrentMclnState();
+        String updatedState = mclnState.getHexColor();
+        String statementUID = mclnStatement.getUID();
+        statementUidToSuggestedStateMap.put(statementUID, updatedState);
     }
 
     /**
