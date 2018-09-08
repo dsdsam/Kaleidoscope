@@ -233,18 +233,13 @@ public class MclnGraphView extends BasicCSysView {
     private MclnModelSimulationListener mclnModelSimulationListener = new MclnModelSimulationListener() {
 
         @Override
-        public void newPropertySuggestedStateInferred(MclnStatement mclnStatement) {
-
-        }
-
-        @Override
         public void mclnModelStateChanged() {
             if (SwingUtilities.isEventDispatchThread()) {
-                onSimulationStateChange();
+                onModelStateChanged();
             } else {
                 try {
                     SwingUtilities.invokeAndWait(() -> {
-                        onSimulationStateChange();
+                        onModelStateChanged();
                     });
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
@@ -289,7 +284,7 @@ public class MclnGraphView extends BasicCSysView {
         }
     };
 
-    protected void onSimulationStateChange() {
+    protected void onModelStateChanged() {
         regenerateGraphView();
         repaintAllModelNodesOnOffScreenImage();
     }
