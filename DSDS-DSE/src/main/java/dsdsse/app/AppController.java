@@ -843,7 +843,7 @@ public class AppController {
         }
 
         // Cleaning
-        MclnGraphModel.getInstance().clearCurrentMclnModel();
+        DesignSpaceView.getInstance().getMclnGraphModel().clearCurrentMclnModel();
 
         // Although by this time project might be already backed up after
         // it was saved, we do this here again to backup cleaned project.
@@ -1474,7 +1474,7 @@ public class AppController {
         } else {
             unselectActiveEditingOperationUpOnSimulationModeSelected();
             AppStateModel.setNewEditingOperation(AppStateModel.Operation.NONE, AppStateModel.OperationStep.NONE);
-            MclnGraphModel.getInstance().clearCurrentMclnModel();
+            DesignSpaceView.getInstance().getMclnGraphModel().clearCurrentMclnModel();
         }
 
         DesignSpaceModel.getInstance().restoreStashedProject();

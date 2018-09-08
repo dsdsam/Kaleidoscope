@@ -69,11 +69,11 @@ public class SplineArcCreator {
         mclnGraphDesignerView = DesignSpaceView.getInstance().getMclnGraphDesignerView();
     }
 
-    boolean isArcInputNodeAProperty(){
+    boolean isArcInputNodeAProperty() {
         return currentArcInputNode != null && currentArcInputNode.isPropertyNode();
     }
 
-    boolean isArcInputNodeACondition(){
+    boolean isArcInputNodeACondition() {
         return currentArcInputNode != null && currentArcInputNode.isConditionNode();
     }
 
@@ -156,8 +156,9 @@ public class SplineArcCreator {
     private void createSplineArcInstance(MclnGraphNodeView currentArcInputNode) {
 
         // Statement or Condition was selected - make one-Node arc
-        mclnSplineArcView = MclnGraphModel.getInstance().createIncompleteMclnSplineArcAndUpdateView(
-                ArrowTipLocationPolicy.DETERMINED_BY_USER, currentArcInputNode);
+        mclnSplineArcView =
+                DesignSpaceView.getInstance().getMclnGraphModel().createIncompleteMclnSplineArcAndUpdateView(
+                        ArrowTipLocationPolicy.DETERMINED_BY_USER, currentArcInputNode);
 
         mclnSplineArcView.setUnderConstruction(true);
 
@@ -226,7 +227,7 @@ public class SplineArcCreator {
             mclnGraphDesignerView.paintEntityOnly(currentArcInputNode);
 
             MclnArc mclnArc = mclnSplineArcView.getTheElementModel();
-            MclnGraphModel.getInstance().removeMclnArcAndUpdateView(mclnArc);
+            DesignSpaceView.getInstance().getMclnGraphModel().removeMclnArcAndUpdateView(mclnArc);
 
             currentArcInputNode = null;
             currentArcOutputNode = null;
@@ -456,7 +457,7 @@ public class SplineArcCreator {
         //
 
         MclnGraphEntityView mclnGraphEntityView = mclnGraphViewEditor.getSomethingSelected(x, y);
-        System.out.println("getSomethingSelected mclnGraphEntityView "+mclnGraphEntityView);
+        System.out.println("getSomethingSelected mclnGraphEntityView " + mclnGraphEntityView);
         // try if node or condition picked
         if (mclnGraphEntityView == null) {
 

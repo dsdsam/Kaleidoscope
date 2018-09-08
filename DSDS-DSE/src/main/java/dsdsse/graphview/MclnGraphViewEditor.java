@@ -5,14 +5,13 @@ import dsdsse.app.AppStateModel;
 import dsdsse.app.AppStateModelListener;
 import dsdsse.app.DsdsDseMessagesAndDialogs;
 import dsdsse.designspace.DesignSpaceModel;
+import dsdsse.designspace.DesignSpaceView;
 import mcln.model.*;
 import mclnview.graphview.*;
 import vw.valgebra.VAlgebra;
 
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.*;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -1028,7 +1027,7 @@ public final class MclnGraphViewEditor {
             }
 
             mclnGraphViewEntityToBeDeleted.setSelected(false);
-            MclnGraphModel mclnGraphModel = MclnGraphModel.getInstance();
+            MclnGraphModel mclnGraphModel = DesignSpaceView.getInstance().getMclnGraphModel();
 
             if (mclnGraphViewEntityToBeDeleted instanceof MclnPropertyView) {
                 MclnPropertyView mcLnPropertyView = mclnGraphViewEntityToBeDeleted.toPropertyView();
@@ -1059,7 +1058,7 @@ public final class MclnGraphViewEditor {
      */
     void processUserDeletesElementViaPopup(MclnGraphEntityView elementToBeDeleted) {
         elementToBeDeleted.setSelected(false);
-        MclnGraphModel mclnGraphModel = MclnGraphModel.getInstance();
+        MclnGraphModel mclnGraphModel = DesignSpaceView.getInstance().getMclnGraphModel();
 
         if (elementToBeDeleted instanceof MclnPropertyView) {
             MclnPropertyView mcLnPropertyView = (MclnPropertyView) elementToBeDeleted;

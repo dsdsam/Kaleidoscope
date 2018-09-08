@@ -6,7 +6,6 @@ import dsdsse.designspace.DesignSpaceView;
 import mcln.model.ArrowTipLocationPolicy;
 import mcln.model.MclnArc;
 import mclnview.graphview.MclnGraphEntityView;
-import mclnview.graphview.MclnGraphModel;
 import mclnview.graphview.MclnGraphNodeView;
 import mclnview.graphview.MclnPolylineArcView;
 import vw.valgebra.VAlgebra;
@@ -119,7 +118,8 @@ public class PolylineArcCreator {
     private void createPolylineArcInstance(MclnGraphNodeView currentArcInputNode) {
 
         // Statement or Condition was selected - make one-Node arc
-        mclnPolylineArcView = MclnGraphModel.getInstance().createIncompleteMclnPolylineArcAndUpdateView(
+        mclnPolylineArcView =
+                DesignSpaceView.getInstance().getMclnGraphModel().createIncompleteMclnPolylineArcAndUpdateView(
                 ArrowTipLocationPolicy.DETERMINED_BY_USER, currentArcInputNode);
 
         mclnPolylineArcView.setUnderConstruction(true);
@@ -207,7 +207,7 @@ public class PolylineArcCreator {
         mclnGraphDesignerView.makeGraphEntityToBeASpritePaintedOnTheScreenOnly(null);
 
         MclnArc mclnArc = mclnPolylineArcView.getTheElementModel();
-        MclnGraphModel.getInstance().removeMclnArcAndUpdateView(mclnArc);
+        DesignSpaceView.getInstance().getMclnGraphModel().removeMclnArcAndUpdateView(mclnArc);
 
         currentArcInputNode.setSelected(false);
 

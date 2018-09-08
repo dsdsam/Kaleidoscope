@@ -1,6 +1,7 @@
 package dsdsse.matrixview;
 
 import adf.onelinemessage.AdfOneLineMessageManager;
+import dsdsse.designspace.DesignSpaceView;
 import mcln.model.MclnEntity;
 import mcln.model.MclnModel;
 import mclnmatrix.app.AoSUtils;
@@ -147,7 +148,7 @@ public class MclnDesignerMatrixView extends JPanel {
      */
     private MclnDesignerMatrixView() {
         super.setLayout(new BorderLayout());
-        mclnGraphModel = MclnGraphModel.getInstance();
+        mclnGraphModel = DesignSpaceView.getInstance().getMclnGraphModel();
         setBorder(new LineBorder(Color.GRAY));
         switchLayoutButtonPanel = new SwitchLayoutButtonPanel(switchViewLayoutActionListener);
         AoSUtils.initOperations();

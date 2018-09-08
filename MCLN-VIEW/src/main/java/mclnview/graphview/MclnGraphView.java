@@ -565,14 +565,13 @@ public class MclnGraphView extends BasicCSysView {
     }
 
     /**
-     * THis method should be overriden by Mcln Graph Designer
+     * THis method should be overridden by Mcln Graph Designer
      *
      * @param mclnArc
      * @return
      */
     protected MclnArcView createIncompleteMclnArcView(MclnArc mclnArc) {
-
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     /**

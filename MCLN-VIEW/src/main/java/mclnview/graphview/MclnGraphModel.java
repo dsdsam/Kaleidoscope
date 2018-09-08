@@ -18,12 +18,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class MclnGraphModel {
 
-    private static MclnGraphModel mclnGraphModel;
-
-    public static MclnGraphModel getInstance() {
-        return mclnGraphModel;
-    }
-
     //
     //    I n s t a n c e
     //
@@ -43,7 +37,6 @@ public class MclnGraphModel {
     public MclnGraphModel(MclnProject currentMclnProject) {
         this.currentMclnProject = currentMclnProject;
         this.currentMclnModel = currentMclnProject.getCurrentMclnModel();
-        mclnGraphModel = this;
     }
 
     public boolean isModelModifiedSinceTraceHistoryStarted() {
@@ -223,8 +216,6 @@ public class MclnGraphModel {
         fireMclnModelUpdated(currentMclnModel);
         return mclnSplineArcView;
     }
-
-
 
     /**
      * is used by Editor to create Fragment Arc

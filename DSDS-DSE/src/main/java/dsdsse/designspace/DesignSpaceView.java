@@ -55,6 +55,10 @@ public class DesignSpaceView extends JPanel {
     private MclnProject mclnProject;
     private MclnModel currentMclnModel;
 
+    public MclnGraphModel getMclnGraphModel() {
+        return mclnGraphModel;
+    }
+
     //   L i s t e n e r s
 
     private final DesignSpaceModelListener designSpaceModelListener = new DesignSpaceModelListener() {
