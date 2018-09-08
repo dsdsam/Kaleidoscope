@@ -146,7 +146,7 @@ public class MclnGraphDesignerView extends MclnGraphView {
     //
 
     @Override
-    protected void onSimulationStateChange() {
+    protected void onModelStateChanged() {
         regenerateGraphView();
         repaintAllModelNodesOnOffScreenImage();
     }
