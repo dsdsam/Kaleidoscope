@@ -22,7 +22,7 @@ import adf.csys.view.CSysEntity;
 /**
  * @author xpadmin
  */
-public class SeBasicCSysView extends CSysView implements ModelChangeListener {
+public abstract class SeBasicCSysView extends CSysView implements ModelChangeListener {
 
     private final Color[] axesColors =
             {

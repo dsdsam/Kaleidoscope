@@ -29,6 +29,7 @@ public final class MclnGraphPolylineEntity extends CSysRoundedPolylineEntity imp
      * @param thisIsClone
      */
     private boolean thisIsClone;
+    private final MclnGraphView mclnGraphView;
 
     public void setThisIsClone(boolean thisIsClone) {
         this.thisIsClone = thisIsClone;
@@ -52,8 +53,9 @@ public final class MclnGraphPolylineEntity extends CSysRoundedPolylineEntity imp
     //
     //  ***********************************************************************************************
 
-    public MclnGraphPolylineEntity(CSysView parentCSys, MclnArc mclnArc, MclnGraphNodeView inpNode) {
-        super(parentCSys, POLY_LINE_CREATION_COLOR);
+    public MclnGraphPolylineEntity(MclnGraphView mclnGraphView, MclnArc mclnArc, MclnGraphNodeView inpNode) {
+        super(mclnGraphView, POLY_LINE_CREATION_COLOR);
+        this.mclnGraphView = mclnGraphView;
         this.mclnArc = mclnArc;
         this.inpNode = inpNode;
     }
@@ -75,11 +77,18 @@ public final class MclnGraphPolylineEntity extends CSysRoundedPolylineEntity imp
     /**
      * Called when McLN model retrieved
      *
-     * @param parentCSysView
+     * @param mclnGraphView
+     * @param mclnArc
+     * @param knotCSysLocations
+     * @param arrowSegmentIndex
+     * @param arrowTipCSysLocation
+     * @param inpNode
+     * @param outNode
      */
-    public MclnGraphPolylineEntity(CSysView parentCSysView, MclnArc mclnArc, List<double[]> knotCSysLocations,
+    public MclnGraphPolylineEntity(MclnGraphView mclnGraphView, MclnArc mclnArc, List<double[]> knotCSysLocations,
                                    int arrowSegmentIndex, double[] arrowTipCSysLocation, MclnGraphNodeView inpNode, MclnGraphNodeView outNode) {
-        super(parentCSysView, POLY_LINE_DRAWING_COLOR);
+        super(mclnGraphView, POLY_LINE_DRAWING_COLOR);
+        this.mclnGraphView = mclnGraphView;
         this.mclnArc = mclnArc;
         this.arrowSegmentIndex = arrowSegmentIndex;
         this.arrowTipCSysLocation = arrowTipCSysLocation;
@@ -244,7 +253,7 @@ public final class MclnGraphPolylineEntity extends CSysRoundedPolylineEntity imp
             // both "if"s will be invoked in case when arc is straight, that is it
             // has only one segment and hence i equal 0 is its first and last index
             if (i == 0) {
-                nodeRadiusVector = VAlgebra.scaleVec3((inpNodeRadius + GAP_BETWEEN_NODE_AND_ARROW + MclnArcArrow.DEFAULT_ARROW_LENGTH), segmentNormalizedVector);
+                nodeRadiusVector = VAlgebra.scaleVec3((inpNodeRadius + GAP_BETWEEN_NODE_AND_ARROW + MclnArcArrow.LARGE_ARROW_LENGTH), segmentNormalizedVector);
                 segmentStartPoint = VAlgebra.addVec3(segmentStartPoint, nodeRadiusVector);
             }
             if (i == lastSegmentIndex) {
@@ -302,7 +311,7 @@ public final class MclnGraphPolylineEntity extends CSysRoundedPolylineEntity imp
 
         double[] nodeRadiusVector;
         if (arrowSegmentIndex == 0) {
-            nodeRadiusVector = VAlgebra.scaleVec3((inpNodeRadius + GAP_BETWEEN_NODE_AND_ARROW + MclnArcArrow.DEFAULT_ARROW_LENGTH), segmentNormalizedVector);
+            nodeRadiusVector = VAlgebra.scaleVec3((inpNodeRadius + GAP_BETWEEN_NODE_AND_ARROW + MclnArcArrow.LARGE_ARROW_LENGTH), segmentNormalizedVector);
             segmentStartPoint = VAlgebra.addVec3(segmentStartPoint, nodeRadiusVector);
 
         } else if (arrowSegmentIndex == lastSegmentIndex) {
@@ -311,7 +320,7 @@ public final class MclnGraphPolylineEntity extends CSysRoundedPolylineEntity imp
         }
 
         double[] locationInsideSegment = VAlgebra.linCom3(0.5, segmentStartPoint, 0.5, segmentEndPoint);
-        double[] arrowLengthVector = VAlgebra.scaleVec3(MclnArcArrow.DEFAULT_ARROW_LENGTH / 2, segmentNormalizedVector);
+        double[] arrowLengthVector = VAlgebra.scaleVec3(MclnArcArrow.LARGE_ARROW_LENGTH / 2, segmentNormalizedVector);
         double[] arrowTipInTheMidOfSegmentLocation = VAlgebra.addVec3(locationInsideSegment, arrowLengthVector);
 
         arrowTipScrLocation = parentCSys.doubleVec3ToInt(arrowTipInTheMidOfSegmentLocation);
@@ -575,9 +584,6 @@ public final class MclnGraphPolylineEntity extends CSysRoundedPolylineEntity imp
             return;
         }
 
-        int length = MclnArcArrow.DEFAULT_ARROW_LENGTH;
-        int width = MclnArcArrow.DEFAULT_ARROW_WIDTH;
-
         int[][] arrowSegmentPoints = getSegmentPoints(arrowSegmentIndex);
         double[] segmentStartPoint = {arrowSegmentPoints[0][0], arrowSegmentPoints[0][1], 0.};
         double[] segmentEndPoint = {arrowSegmentPoints[1][0], arrowSegmentPoints[1][1], 0.};
@@ -587,7 +593,7 @@ public final class MclnGraphPolylineEntity extends CSysRoundedPolylineEntity imp
         double[] arrowScrTipLocation = {arrowTipScrLocation[0], arrowTipScrLocation[1], 0.};
 
         if (mclnArcArrow == null) {
-            mclnArcArrow = new MclnArcArrow(parentCSys, length, width, normalizedScrDirectionVector,
+            mclnArcArrow = MclnArcArrow.createMclnArcArrow(mclnGraphView, normalizedScrDirectionVector,
                     arrowScrTipLocation, stateColor);
         } else {
             mclnArcArrow.repositionArrowLocation(normalizedScrDirectionVector, arrowScrTipLocation);

@@ -19,6 +19,11 @@ public class MclnControllerGraphView extends MclnGraphView {
     }
 
     @Override
+    protected SUGGESTED_ARROW_SIZE getSuggestedArrowSize() {
+        return SUGGESTED_ARROW_SIZE.SMALL;
+    }
+
+    @Override
     protected boolean isWorldVisible() {
         return false;
     }

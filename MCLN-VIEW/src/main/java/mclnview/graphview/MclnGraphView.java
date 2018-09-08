@@ -17,6 +17,8 @@ import java.util.Map;
 
 public class MclnGraphView extends BasicCSysView {
 
+    public static enum SUGGESTED_ARROW_SIZE {LARGE, MEDIUM, SMALL}
+
     private final Color[] axesColors =
             {
                     (new Color(0xFF0000)), (new Color(0xFF0000)), (new Color(0xFF0000)),
@@ -322,6 +324,10 @@ public class MclnGraphView extends BasicCSysView {
         mclnGraphModel.addMclnModelSimulationListener(mclnModelSimulationListener);
 
         initGridAndModelRectangle();
+    }
+
+    protected SUGGESTED_ARROW_SIZE getSuggestedArrowSize() {
+        return SUGGESTED_ARROW_SIZE.MEDIUM;
     }
 
     //

@@ -1,6 +1,5 @@
 package mclnview.graphview;
 
-import adf.csys.view.CSysView;
 import vw.valgebra.VAlgebra;
 
 import java.awt.*;
@@ -13,6 +12,12 @@ import java.awt.*;
  * To change this template use File | Settings | File Templates.
  */
 public final class MclnArcArrow {
+
+    public static final MclnArcArrow
+    createMclnArcArrow(MclnGraphView cSysView, double[] directionVector, double[] arrowTipScrLocation, Color stateColor) {
+        MclnArcArrow mclnArcArrow = new MclnArcArrow(cSysView, directionVector, arrowTipScrLocation, stateColor);
+        return mclnArcArrow;
+    }
 
     protected static final Color DEFAULT_WATERMARK_COLOR = new Color(0xDDDDDD);
     protected static final Color DEFAULT_WATERMARK_BORDER_COLOR = new Color(0xBBBBBB);
@@ -28,14 +33,17 @@ public final class MclnArcArrow {
     private static final Color ARROW_HIGHLIGHTED_FILLING_COLOR = new Color(0xEEEEEE);
     private static final Color ARROW_HIGHLIGHTED_BORDER_COLOR = Color.RED;
 
-    public static final int DEFAULT_ARROW_LENGTH = 14;
-    public static final int DEFAULT_ARROW_WIDTH = 5;
+    public static final int LARGE_ARROW_LENGTH = 14;
+    public static final int LARGE_ARROW_WIDTH = 5;
 
-    public static final int MEDIUM_ARROW_LENGTH = 10;
+    public static final int MEDIUM_ARROW_LENGTH = 12;
     public static final int MEDIUM_ARROW_WIDTH = 4;
 
-    public static final int SMALL_ARROW_LENGTH = 7;
+    public static final int SMALL_ARROW_LENGTH = 8;
     public static final int SMALL_ARROW_WIDTH = 3;
+
+    public final int DEFAULT_ARROW_LENGTH;
+    public final int DEFAULT_ARROW_WIDTH;
 
     /*
 
@@ -57,33 +65,10 @@ public final class MclnArcArrow {
     private static final double bal = 7;
     private static final double baw = 3;
 
-    private CSysView parentCSys;
+    private MclnGraphView parentCSys;
     private int arrowLength, arrowWidth;
 
-    private double[][] triangleArrow = {
-            {0, 0, 0,},
-//            {DEFAULT_ARROW_LENGTH / 2, 0, 0,},
-            {DEFAULT_ARROW_LENGTH, -DEFAULT_ARROW_WIDTH, 0,},
-            {DEFAULT_ARROW_LENGTH, +DEFAULT_ARROW_WIDTH, 0,},
-            {0, 0, 0,}};
-
-    private double[][] knobArrow = {
-            {0, 0, 0,},
-            {-DEFAULT_ARROW_LENGTH, 0, 0,},
-            {-DEFAULT_ARROW_LENGTH, -DEFAULT_ARROW_WIDTH, 0,},
-            {-DEFAULT_ARROW_LENGTH, +DEFAULT_ARROW_WIDTH, 0,}};
-
-    private double[][] birdArrow = {
-            {0, 0, 0,},
-            {-bal, 0, 0,},
-            {-bal, -baw, 0,},
-            {-bal, +baw, 0,}};
-
-    private double[][] arrow = {
-            {0, 0, 0,},
-            {0, 0, 0,},
-            {0, 0, 0,},
-            {0, 0, 0,}};
+    private double[][] triangleArrow;
 
     private int[][] scrArrow = {
             {0, 0, 0,},
@@ -131,13 +116,38 @@ public final class MclnArcArrow {
     // used when spline is dragged
     private double[] translationVector = {0, 0, 0};
 
-    public MclnArcArrow(CSysView cSysView, int arrowLength, int arrowWidth, double[] directionVector,
-                        double[] arrowTipScrLocation, Color stateColor) {
-        this.parentCSys = cSysView;
-        this.arrowLength = arrowLength;
-        this.arrowWidth = arrowWidth;
+    private MclnArcArrow(MclnGraphView mclnGraphView, double[] directionVector,
+                         double[] arrowTipScrLocation, Color stateColor) {
+        this.parentCSys = mclnGraphView;
+
         this.directionVector = directionVector;
         this.stateColor = stateColor;
+
+        if (mclnGraphView.getSuggestedArrowSize().equals(MclnGraphView.SUGGESTED_ARROW_SIZE.LARGE)) {
+            DEFAULT_ARROW_LENGTH = LARGE_ARROW_LENGTH;
+            DEFAULT_ARROW_WIDTH = LARGE_ARROW_WIDTH;
+
+        } else if (mclnGraphView.getSuggestedArrowSize().equals(MclnGraphView.SUGGESTED_ARROW_SIZE.MEDIUM)) {
+            DEFAULT_ARROW_LENGTH = MEDIUM_ARROW_LENGTH;
+            DEFAULT_ARROW_WIDTH = MEDIUM_ARROW_WIDTH;
+
+        } else if (mclnGraphView.getSuggestedArrowSize().equals(MclnGraphView.SUGGESTED_ARROW_SIZE.SMALL)) {
+            DEFAULT_ARROW_LENGTH = SMALL_ARROW_LENGTH;
+            DEFAULT_ARROW_WIDTH = SMALL_ARROW_WIDTH;
+
+        } else {
+            DEFAULT_ARROW_LENGTH = MEDIUM_ARROW_LENGTH;
+            DEFAULT_ARROW_WIDTH = MEDIUM_ARROW_WIDTH;
+        }
+
+        this.arrowLength = DEFAULT_ARROW_LENGTH;
+        this.arrowWidth = DEFAULT_ARROW_WIDTH;
+
+        triangleArrow = new double[][]{
+                {0, 0, 0,},
+                {arrowLength, -arrowWidth, 0,},
+                {arrowLength, +arrowWidth, 0,},
+                {0, 0, 0,}};
 
         this.arrowTipScrLocation = arrowTipScrLocation;
         arrowTipCSysLocation = parentCSys.screenPointToCSysPoint(arrowTipScrLocation);

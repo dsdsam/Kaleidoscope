@@ -1,6 +1,5 @@
 package mclnview.graphview;
 
-import adf.csys.view.CSysView;
 import mcln.model.MclnArc;
 import mcln.model.MclnNode;
 import mcln.model.MclnPolylineArc;
@@ -23,22 +22,22 @@ public class MclnPolylineArcView extends MclnArcView implements Cloneable {
     /**
      * Creates incomplete Arc with Input Node only - used when the arc is created by user
      *
-     * @param parentCSys
+     * @param mclnGraphView
      * @param mclnArc
      * @param inpNode
      */
-    public MclnPolylineArcView(MclnGraphView parentCSys, MclnArc mclnArc, MclnGraphNodeView inpNode) {
-        super(parentCSys, mclnArc, inpNode);
+    public MclnPolylineArcView(MclnGraphView mclnGraphView, MclnArc mclnArc, MclnGraphNodeView inpNode) {
+        super(mclnGraphView, mclnArc, inpNode);
         this.mclnPolylineArc = (MclnPolylineArc) mclnArc;
-        initArcCreated(parentCSys, inpNode);
+        initArcCreated(mclnGraphView, inpNode);
     }
 
     /**
-     * @param parentCSys
+     * @param mclnGraphView
      * @param inpNode
      */
-    private final void initArcCreated(CSysView parentCSys, MclnGraphNodeView inpNode) {
-        mclnGraphPolylineEntity = new MclnGraphPolylineEntity(parentCSys, mclnPolylineArc, inpNode);
+    private final void initArcCreated(MclnGraphView mclnGraphView, MclnGraphNodeView inpNode) {
+        mclnGraphPolylineEntity = new MclnGraphPolylineEntity(mclnGraphView, mclnPolylineArc, inpNode);
         double[] cSysPnt = inpNode.getCSysPnt();
         mclnGraphPolylineEntity.createFirstCSysKnot(cSysPnt);
         mclnGraphPolylineEntity.addNextCSysKnot(cSysPnt);

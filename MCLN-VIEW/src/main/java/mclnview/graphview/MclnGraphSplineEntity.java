@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class MclnGraphSplineEntity extends CSysSplineEntity implements Cloneable {
 
-    private static final double ARROW_LENGTH = MclnArcArrow.DEFAULT_ARROW_LENGTH;
+    private double ARROW_LENGTH = MclnArcArrow.LARGE_ARROW_LENGTH;
     private static final double GAP_BETWEEN_NODE_AND_ARROW = 5;
 
     private static final Color SPLINE_CREATION_COLOR = new Color(0xFF00FF);
@@ -29,6 +29,7 @@ public final class MclnGraphSplineEntity extends CSysSplineEntity implements Clo
     private static final Color CONVEX_SECTION_COLOR = new Color(0xFF0000);
     private static final Color FLAT_SECTION_COLOR = new Color(0x009900);
 
+    private final MclnGraphView mclnGraphView;
     private final MclnSplineArc mclnSplineArc;
     ;
     private MclnGraphNodeView inpNode;
@@ -55,11 +56,12 @@ public final class MclnGraphSplineEntity extends CSysSplineEntity implements Clo
     /**
      * Used when Arc is created interactively
      *
-     * @param parentCSysView
+     * @param mclnGraphView
+     * @param mclnSplineArc
      * @param inpNode
      */
-    public MclnGraphSplineEntity(CSysView parentCSysView, MclnSplineArc mclnSplineArc, MclnGraphNodeView inpNode) {
-        this(parentCSysView, mclnSplineArc, inpNode, null);
+    public MclnGraphSplineEntity(MclnGraphView mclnGraphView, MclnSplineArc mclnSplineArc, MclnGraphNodeView inpNode) {
+        this(mclnGraphView, mclnSplineArc, inpNode, null);
         setDrawColor(SPLINE_CREATION_COLOR);
     }
 
@@ -115,10 +117,14 @@ public final class MclnGraphSplineEntity extends CSysSplineEntity implements Clo
     /**
      * Called when Arc is created programmatically
      *
-     * @param parentCSysView
+     * @param mclnGraphView
+     * @param mclnSplineArc
+     * @param inpNode
+     * @param outNode
      */
-    public MclnGraphSplineEntity(CSysView parentCSysView, MclnSplineArc mclnSplineArc, MclnGraphNodeView inpNode, MclnGraphNodeView outNode) {
-        super(parentCSysView);
+    public MclnGraphSplineEntity(MclnGraphView mclnGraphView, MclnSplineArc mclnSplineArc, MclnGraphNodeView inpNode, MclnGraphNodeView outNode) {
+        super(mclnGraphView);
+        this.mclnGraphView = mclnGraphView;
         this.mclnSplineArc = mclnSplineArc;
         this.inpNode = inpNode;
         this.outNode = outNode;
@@ -609,7 +615,7 @@ public final class MclnGraphSplineEntity extends CSysSplineEntity implements Clo
         double[] secondKnot = splineScrKnots.get(highlightedKnotIndexes[1]);
         highlightedKnots = new double[][]{firstKnot, secondKnot};
 
-        int arrowLength = MclnArcArrow.DEFAULT_ARROW_LENGTH;
+        int arrowLength = MclnArcArrow.LARGE_ARROW_LENGTH;
         arrowTipSplineScrIndex = findArrowTipIndexNew(arrowLength, highlightedKnotIndexes);
 
         if (arrowTipSplineScrIndex >= 0) {
@@ -936,16 +942,13 @@ public final class MclnGraphSplineEntity extends CSysSplineEntity implements Clo
             return null;
         }
 
-        int length = MclnArcArrow.DEFAULT_ARROW_LENGTH;
-        int width = MclnArcArrow.DEFAULT_ARROW_WIDTH;
-
         double[] arrTipScrPnt = getSplineScrPnt(arrowTipIndex);
         double[] arrEndScrPnt = getSplineScrPnt(arrowTipIndex - 1);
         double[] arrowScrDirection = VAlgebra.subVec3(arrEndScrPnt, arrTipScrPnt);
         double[] normalizedScrDirectionVector = VAlgebra.normalizeVec3(arrowScrDirection);
         double[] arrowTipLocation = getSplineScrPnt(arrowTipIndex);
 
-        MclnArcArrow mclnArcArrow = new MclnArcArrow(parentCSys, length, width, normalizedScrDirectionVector,
+        MclnArcArrow mclnArcArrow = MclnArcArrow.createMclnArcArrow(mclnGraphView, normalizedScrDirectionVector,
                 arrowTipLocation, stateColor);
 
         return mclnArcArrow;
@@ -968,8 +971,8 @@ public final class MclnGraphSplineEntity extends CSysSplineEntity implements Clo
                                          MclnGraphNodeView inpNode, MclnGraphNodeView optNode) {
         setArrow(null);
 
-        int length = MclnArcArrow.DEFAULT_ARROW_LENGTH;
-        int width = MclnArcArrow.DEFAULT_ARROW_WIDTH;
+        int length = MclnArcArrow.LARGE_ARROW_LENGTH;
+        int width = MclnArcArrow.LARGE_ARROW_WIDTH;
 
         ArrowTipLocationPolicy arrowTipLocationPolicy = mclnArc.getArrowTipLocationPolicy();
         int arrowTipIndex;
@@ -1003,7 +1006,7 @@ public final class MclnGraphSplineEntity extends CSysSplineEntity implements Clo
         double[] arrowScrDirection = VAlgebra.subVec3(arrEndScrPnt, arrowTipLocation);
         double[] normalizedDirectionScrVector = VAlgebra.normalizeVec3(arrowScrDirection);
 
-        MclnArcArrow mclnArcArrow = new MclnArcArrow(parentCSys, length, width, normalizedDirectionScrVector, arrowTipLocation,
+        MclnArcArrow mclnArcArrow = MclnArcArrow.createMclnArcArrow(mclnGraphView, normalizedDirectionScrVector, arrowTipLocation,
                 stateColor);
         setArrow(mclnArcArrow);
         return mclnArcArrow;

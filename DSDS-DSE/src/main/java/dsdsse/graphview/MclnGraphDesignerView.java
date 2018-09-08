@@ -181,6 +181,11 @@ public class MclnGraphDesignerView extends MclnGraphView {
         setBorder(new LineBorder(Color.GRAY));
     }
 
+    @Override
+    protected SUGGESTED_ARROW_SIZE getSuggestedArrowSize() {
+        return SUGGESTED_ARROW_SIZE.SMALL;
+    }
+
     //
     //   I n i t i a l i z a t i o n
     //
