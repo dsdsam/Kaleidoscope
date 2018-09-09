@@ -183,7 +183,7 @@ public class MclnGraphDesignerView extends MclnGraphView {
 
     @Override
     protected SUGGESTED_ARROW_SIZE getSuggestedArrowSize() {
-        return SUGGESTED_ARROW_SIZE.SMALL;
+        return SUGGESTED_ARROW_SIZE.MEDIUM;
     }
 
     //
