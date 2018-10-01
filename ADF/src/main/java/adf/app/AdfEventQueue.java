@@ -1,5 +1,6 @@
 package adf.app;
 
+import adf.flyout.MainFrameFlyingMessageManager;
 import adf.utils.TimeFormatter;
 
 import java.awt.*;
@@ -42,6 +43,7 @@ public class AdfEventQueue extends EventQueue {
 //                    "  Operation time = " + operationTime+",  cycle time "+cycleTime);
 
         } catch (Exception e) {
+            MainFrameFlyingMessageManager.showFlyDownAlertMessage("Unhandled exception detected.  See execution log for details.");
             Thread t = Thread.currentThread();
             StringBuffer msg = new StringBuffer();
             msg.append("\n\n-------------------------------------------------------------------------\n");
