@@ -21,7 +21,8 @@ public class AdfEnv extends AppProperties {
     public static final String SPLASH_WINDOW_KEY = "splash.window";
 
     public static String BASE_IMAGE_LOCATION = "/app_icons/";
-    public static String APP_ICON_IMAGES = "/adf-resources/images/";
+    public static String ADF_ICON = "/adf-resources/icons/";
+    public static String ADF_IMAGES = "/adf-resources/images/";
 
     public static final char TYPE_MESSAGE = 'M';
     public static final char TYPE_WARNING = 'W';
