@@ -122,7 +122,7 @@ public class AdfApp extends AdfEnv {
         JPanel panel = new MainPanel();
         adfMainFrame.getContentPane().add(panel);
         adfMainFrame.initMainFrame();
-        adfMainFrame.initFrameSize(0.85);
+        adfMainFrame.initFrameSize(0.60);
         showMainFrame();
     }
 
