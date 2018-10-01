@@ -20,7 +20,6 @@ import mcln.model.MclnModel;
 import mcln.model.MclnProject;
 import mcln.model.ProjectAttributes;
 import mclnview.graphview.MclnArcView;
-import mclnview.graphview.MclnGraphModel;
 import mclnview.graphview.MclnPropertyView;
 
 import javax.swing.*;
