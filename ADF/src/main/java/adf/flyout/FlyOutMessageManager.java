@@ -1,14 +1,30 @@
-package adf.messageflyoutpanel;
+package adf.flyout;
 
-import javax.swing.*;
+import adf.app.AdfEnv;
+
 import java.awt.*;
-import java.awt.event.*;
-import java.util.concurrent.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+
 /**
- * Created by u0180093 on 11/9/2016.
+ * Created on 11/9/2016.
  * <p>
  * The Fly Out Message Manager is designed to present messages at the lower right
  * corner of the window. This means a new instance of Fly Out Message Manager should
@@ -25,7 +41,13 @@ final class FlyOutMessageManager {
 
     private static final Logger logger = Logger.getLogger(FlyOutMessageManager.class.getName());
 
-    private enum Status {HIDDEN, SHOWN, SHOWING, HIDING, PAUSE}
+    private enum Status {
+        HIDDEN,
+        SHOWN,
+        SHOWING,
+        HIDING,
+        PAUSE
+    }
 
     private static final int MESSAGE_EXPOSURE_TIME = 5000;
     private static final int MESSAGES_BREAK_TIME = 300;
@@ -44,7 +66,7 @@ final class FlyOutMessageManager {
     private final Semaphore semaphore = new Semaphore(1);
     private volatile boolean queueBlocked;
 
-    private FlyOutHolderPanel flyOutHolderPanel;
+    private FlyOutMessageHolderPanel flyOutMessageHolderPanel;
 
     private final JComponent parentComponent;
     private JComponent disposableParentComponent;
@@ -54,7 +76,6 @@ final class FlyOutMessageManager {
 
     private Timer animatingTimer;
     private Timer unblockingQueueTimer = new Timer(5000, (e) -> {
-        logger.severe("\n QUEUE - UN UN UN - BLOCKED");
         queueBlocked = false;
     });
 
@@ -70,9 +91,6 @@ final class FlyOutMessageManager {
         flyOutMessageManager.disposableParentComponent = disposableParentComponent;
         try {
             messageQueue.put(message);
-//            messageQueue.put("00001");
-//            messageQueue.put("00002");
-//            messageQueue.put("00003");
         } catch (InterruptedException e) {
             logger.log(Level.SEVERE, "Blocked put message into Message Queue Interrupted.", e);
         }
@@ -95,7 +113,7 @@ final class FlyOutMessageManager {
                     }
                 }
                 SwingUtilities.invokeAndWait(() -> {
-                    flyOutHolderPanel.setMessage(message);
+                    flyOutMessageHolderPanel.setMessage(message);
                     showPanel();
                 });
             } catch (Throwable e) {
@@ -125,22 +143,23 @@ final class FlyOutMessageManager {
 
     //   C r e a t i n g   F l y   O u t   M e s s a g e   M a n a g e r
 
-    FlyOutMessageManager(JLayeredPane layeredPane) {
-        this(null, layeredPane);
+    FlyOutMessageManager(JFrame mainFrame) {
+        this(null, mainFrame.getLayeredPane());
     }
 
     FlyOutMessageManager(JComponent parentComponent, JLayeredPane layeredPane) {
         flyOutMessageManager = this;
         this.parentComponent = parentComponent;
         this.layeredPane = layeredPane;
-        this.flyOutHolderPanel = new FlyOutHolderPanel(RoundedRectangle.ROUND_LEFT_SIDE);
+        flyOutMessageHolderPanel = new FlyOutMessageHolderPanel(RoundedRectangle.ROUNDING_RADIUS_MEDIUM,
+                RoundedRectangle.ROUND_LEFT_SIDE);
 
-        this.flyOutHolderPanel.setVisible(false);
+        flyOutMessageHolderPanel.setVisible(false);
 
         animatingTimer = new Timer(TICK, timerActionListener);
 
         layeredPane.addComponentListener(componentAdapter);
-        layeredPane.add(this.flyOutHolderPanel, new Integer(500));
+        layeredPane.add(flyOutMessageHolderPanel, new Integer(500));
 
         executor.execute(messagePresenter);
         unblockingQueueTimer.setRepeats(false);
@@ -153,52 +172,49 @@ final class FlyOutMessageManager {
 
         if (status == Status.HIDING) {
             Rectangle frameBounds = layeredPane.getBounds();
-            Rectangle currentBounds = flyOutHolderPanel.getBounds();
+            Rectangle currentBounds = flyOutMessageHolderPanel.getBounds();
             int newX = currentBounds.x + STEP;
-            flyOutHolderPanel.setBounds(newX, currentBounds.y, currentBounds.width, currentBounds.height);
+            flyOutMessageHolderPanel.setBounds(newX, currentBounds.y, currentBounds.width, currentBounds.height);
             int visibleWidth = frameBounds.width - currentBounds.x;
             if (visibleWidth <= 0) {
-                FlyOutMessageManager.this.animatingTimer.stop();
-                FlyOutMessageManager.this.animatingTimer.setRepeats(false);
+                animatingTimer.stop();
+                animatingTimer.setRepeats(false);
                 status = Status.PAUSE;
-                flyOutHolderPanel.setVisible(false);
-                FlyOutMessageManager.this.animatingTimer.setInitialDelay(MESSAGES_BREAK_TIME);
-                FlyOutMessageManager.this.animatingTimer.start();
+                flyOutMessageHolderPanel.setVisible(false);
+                animatingTimer.setInitialDelay(MESSAGES_BREAK_TIME);
+                animatingTimer.start();
             }
-
         } else if (status == Status.PAUSE) {
 
-            FlyOutMessageManager.this.animatingTimer.stop();
+            animatingTimer.stop();
             status = Status.HIDDEN;
-            FlyOutMessageManager.this.animatingTimer.setRepeats(true);
-            FlyOutMessageManager.this.animatingTimer.setInitialDelay(TICK);
-            FlyOutMessageManager.this.animatingTimer.setDelay(TICK);
+            animatingTimer.setRepeats(true);
+            animatingTimer.setInitialDelay(TICK);
+            animatingTimer.setDelay(TICK);
             semaphore.release();
-
         } else if (status == Status.SHOWING) {
 
             Rectangle frameBounds = layeredPane.getBounds();
-            Rectangle currentBounds = flyOutHolderPanel.getBounds();
+            Rectangle currentBounds = flyOutMessageHolderPanel.getBounds();
 
             int visibleWidth = frameBounds.width - currentBounds.x;
             int dx = currentBounds.width - visibleWidth;
             dx = dx > STEP ? STEP : dx;
             int newX = currentBounds.x - dx;
-            flyOutHolderPanel.setBounds(newX, currentBounds.y, currentBounds.width, currentBounds.height);
+            flyOutMessageHolderPanel.setBounds(newX, currentBounds.y, currentBounds.width, currentBounds.height);
             if (visibleWidth + STEP >= currentBounds.width) {
-                FlyOutMessageManager.this.animatingTimer.stop();
-                FlyOutMessageManager.this.animatingTimer.setRepeats(false);
+                animatingTimer.stop();
+                animatingTimer.setRepeats(false);
                 status = Status.SHOWN;
-                FlyOutMessageManager.this.animatingTimer.setInitialDelay(MESSAGE_EXPOSURE_TIME);
-                FlyOutMessageManager.this.animatingTimer.start();
+                animatingTimer.setInitialDelay(MESSAGE_EXPOSURE_TIME);
+                animatingTimer.start();
             }
-
         } else if (status == Status.SHOWN) {
 
-            FlyOutMessageManager.this.animatingTimer.stop();
-            FlyOutMessageManager.this.animatingTimer.setRepeats(true);
-            FlyOutMessageManager.this.animatingTimer.setInitialDelay(TICK);
-            FlyOutMessageManager.this.animatingTimer.setDelay(TICK);
+            animatingTimer.stop();
+            animatingTimer.setRepeats(true);
+            animatingTimer.setInitialDelay(TICK);
+            animatingTimer.setDelay(TICK);
             hidePanel();
         }
     }
@@ -206,32 +222,30 @@ final class FlyOutMessageManager {
     /**
      *
      */
-    void resetToHiddenStatus() {
+    boolean resetToHiddenStatus() {
         if (status == Status.HIDDEN) {
-            return;
+            return false;
         }
         animatingTimer.stop();
-        FlyOutMessageManager.this.animatingTimer.setRepeats(true);
-        FlyOutMessageManager.this.animatingTimer.setInitialDelay(TICK);
-        FlyOutMessageManager.this.animatingTimer.setDelay(TICK);
+        animatingTimer.setRepeats(true);
+        animatingTimer.setInitialDelay(TICK);
+        animatingTimer.setDelay(TICK);
         status = Status.HIDDEN;
-        flyOutHolderPanel.setVisible(false);
+        flyOutMessageHolderPanel.setVisible(false);
         Rectangle layeredPaneBounds = layeredPane.getBounds();
-        Dimension flyOutAlertPanelSize = flyOutHolderPanel.getSize();
+        Dimension flyOutAlertPanelSize = flyOutMessageHolderPanel.getSize();
 
         int height = (parentComponent != null) ? parentComponent.getHeight() : layeredPane.getHeight();
-        flyOutHolderPanel.setBounds(layeredPaneBounds.width,
-                height - flyOutAlertPanelSize.height - GAP,
+        flyOutMessageHolderPanel.setBounds(layeredPaneBounds.width, height - flyOutAlertPanelSize.height - GAP,
                 flyOutAlertPanelSize.width, flyOutAlertPanelSize.height);
 
         if (semaphore.availablePermits() == 0) {
             semaphore.release();
         }
+        return true;
     }
 
-
     private void blockQueue() {
-        logger.severe("\n QUEUE BLOCKED");
         queueBlocked = true;
         if (unblockingQueueTimer.isRunning()) {
             unblockingQueueTimer.restart();
@@ -248,14 +262,13 @@ final class FlyOutMessageManager {
             return;
         }
         Rectangle layeredPaneBounds = layeredPane.getBounds();
-        Dimension flyOutAlertPanelSize = flyOutHolderPanel.getSize();
+        Dimension flyOutAlertPanelSize = flyOutMessageHolderPanel.getSize();
 
         int height = (parentComponent != null) ? parentComponent.getHeight() : layeredPane.getHeight();
-        flyOutHolderPanel.setBounds(layeredPaneBounds.width,
-                height - flyOutAlertPanelSize.height - GAP,
+        flyOutMessageHolderPanel.setBounds(layeredPaneBounds.width, height - flyOutAlertPanelSize.height - GAP,
                 flyOutAlertPanelSize.width, flyOutAlertPanelSize.height);
         status = Status.SHOWING;
-        flyOutHolderPanel.setVisible(true);
+        flyOutMessageHolderPanel.setVisible(true);
         animatingTimer.start();
     }
 
@@ -285,26 +298,19 @@ final class FlyOutMessageManager {
         //Display the Frame.
         frame.pack();
         frame.setVisible(true);
+        AdfEnv.putMainFrame(frame);
 
-        JPanel mainPanel = new JPanel();
-        frame.add(mainPanel);
-
-        frame.validate();
-        JLayeredPane layeredPane = frame.getLayeredPane();
-
-        layeredPane.setBorder(null);
-        FlyOutMessageManager flyOutAlertManager = new FlyOutMessageManager(layeredPane);
+        MainFrameFlyingMessageManager.showFlyOutAlertMessage("Testing Fly Out Alert.");
 
         MouseListener mouseListener = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String messageKey = String.format(" %04d", ++messageID);
-                flyOutAlertManager.showAlertMessage(null, messageKey);
+                MainFrameFlyingMessageManager.showFlyOutAlertMessage("Testing Fly Out Alert.");
             }
         };
-        layeredPane.addMouseListener(mouseListener);
+        frame.addMouseListener(mouseListener);
     }
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

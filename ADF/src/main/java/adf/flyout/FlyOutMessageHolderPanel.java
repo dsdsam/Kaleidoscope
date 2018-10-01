@@ -1,6 +1,5 @@
-package adf.messageflyoutpanel;
+package adf.flyout;
 
-import adf.app.AdfApp;
 import adf.utils.BuildUtils;
 
 import javax.swing.*;
@@ -9,13 +8,11 @@ import javax.swing.border.MatteBorder;
 import java.awt.*;
 
 /**
- * Created by u0180093 on 11/9/2016.
+ * Created on 11/9/2016.
  */
-class FlyOutHolderPanel extends RoundedCornersContainerPanel {
+class FlyOutMessageHolderPanel extends RoundedCornersContainerPanel {
 
-//    private static final Logger logger = Logger.getLogger(FlyOutHolderPanel.class.getName());
-
-    private static ImageIcon attentionSignIcon = BuildUtils.getImageIcon(AdfApp.BASE_IMAGE_LOCATION + "attention-sign-12-y.png");
+    private static ImageIcon attentionSignIcon = BuildUtils.getAdfIconFromClassPath("attention-sign.png");
 
     private static final int ATTENTION_SIGN_PANEL_WIDTH = 50;
     private static final int ALERT_MESSAGE_WIDTH = 70 * 5;
@@ -29,29 +26,28 @@ class FlyOutHolderPanel extends RoundedCornersContainerPanel {
     private static final Color MESSAGE_BACKGROUND = new Color(0xFEFECC);
     private static final Color ALERT_SIGN_PANEL_BACKGROUND = MESSAGE_BACKGROUND;
 
-    private static final String templateMessage = new StringBuilder().append("<html><p>").
+    private static final String htmlMessage = new StringBuilder().append("<html><p>").
             append("<center>").append("<font color=\"#020080\">").append("&nbsp;$&nbsp;<br><br>").
             append("</font>").append("</center>").append("</p></html>").toString();
 
     private JLabel messageLabel = new JLabel("", JLabel.CENTER);
     private JLabel attentionSignLabel = new JLabel("", JLabel.CENTER);
 
-    FlyOutHolderPanel() {
-        this(RoundedRectangle.ROUND_ALL);
+    FlyOutMessageHolderPanel() {
+        this(RoundedRectangle.ROUNDING_RADIUS_MEDIUM, RoundedRectangle.ROUND_ALL);
     }
 
-    FlyOutHolderPanel(int roundingPolicy) {
-        super(roundingPolicy);
+    FlyOutMessageHolderPanel(int roundingRadiys, int roundingPolicy) {
+        super(roundingRadiys, roundingPolicy);
         setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 0));
         setLayout(new BorderLayout());
-        this.setOpaque(false);
-        this.setBackground(ALERT_SIGN_PANEL_BACKGROUND);
+        setOpaque(false);
+        setBackground(ALERT_SIGN_PANEL_BACKGROUND);
 
         JLabel titlePanel = new JLabel("Alert  Message", JLabel.LEFT);
         titlePanel.setBorder(new EmptyBorder(0, 16, 0, 0));
         titlePanel.setPreferredSize(new Dimension(1, 20));
         titlePanel.setOpaque(true);
-//        titlePanel.setBackground(new Color(0x0000AA));
         titlePanel.setBackground(new Color(220, 110, 0));
         titlePanel.setForeground(Color.WHITE);
         add(titlePanel, BorderLayout.NORTH);
@@ -67,8 +63,9 @@ class FlyOutHolderPanel extends RoundedCornersContainerPanel {
         attentionSignPanel.setMaximumSize(new Dimension(ATTENTION_SIGN_PANEL_WIDTH, 60));
         attentionSignPanel.setMinimumSize(new Dimension(ATTENTION_SIGN_PANEL_WIDTH, 60));
 
-        attentionSignPanel.add(attentionSignLabel, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER,
-                GridBagConstraints.NONE, new Insets(0, 0, 5, 0), 0, 0));
+        attentionSignPanel.add(attentionSignLabel,
+                new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 5, 0), 0,
+                        0));
         add(attentionSignPanel, BorderLayout.WEST);
 
         messageLabel.setPreferredSize(ALERT_MESSAGE_SIZE);
@@ -83,7 +80,7 @@ class FlyOutHolderPanel extends RoundedCornersContainerPanel {
     }
 
     void setMessage(String message) {
-        String messageToShow = templateMessage.replace("$", message);
+        String messageToShow = htmlMessage.replace("$", message);
         messageLabel.setText(messageToShow);
         messageLabel.validate();
     }

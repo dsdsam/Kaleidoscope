@@ -1,13 +1,21 @@
-package dsdsse.messageflydownpanel;
+package adf.flyout;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by u0180093 on 11/22/2016.
+ * Created on 11/22/2016.
  */
 class RoundedRectangle {
+
+    public static int ROUNDING_RADIUS_TINY = 7;
+    public static int ROUNDING_RADIUS_SMALL = 9;
+    public static int ROUNDING_RADIUS_QUITE_SMALL = 11;
+    public static int ROUNDING_RADIUS_MEDIUM = 15;
+    public static int ROUNDING_RADIUS_QUITE_LARGE = 21;
+    public static int ROUNDING_RADIUS_LARGE = 25;
+    public static int ROUNDING_RADIUS_HUGE = 33;
 
     public static int UPPER_LEFT = 1 << 16;
     public static int UPPER_RIGHT = 2 << 16;
@@ -21,36 +29,30 @@ class RoundedRectangle {
     public static int ROUND_LOWER_RIGHT = 8;
 
     public static int ROUND_NONE = UPPER_LEFT | UPPER_RIGHT | LOWER_LEFT | LOWER_RIGHT;
-    ;
     public static int ROUND_ALL =
-            UPPER_LEFT | ROUND_UPPER_LEFT | UPPER_RIGHT | ROUND_UPPER_RIGHT |
-                    LOWER_LEFT | ROUND_LOWER_LEFT | LOWER_RIGHT | ROUND_LOWER_RIGHT;
-    public static int ROUND_UPPER_SIDE =
-            UPPER_LEFT | ROUND_UPPER_LEFT | UPPER_RIGHT | ROUND_UPPER_RIGHT |
-                    LOWER_LEFT | LOWER_RIGHT;
-    public static int ROUND_LEFT_SIDE = UPPER_LEFT | ROUND_UPPER_LEFT | LOWER_LEFT | ROUND_LOWER_LEFT |
-            UPPER_RIGHT | LOWER_RIGHT;
-
-    public static int ROUND_BOTTOM_SIDE = UPPER_LEFT | UPPER_RIGHT | LOWER_LEFT | ROUND_LOWER_LEFT |
-            LOWER_RIGHT | ROUND_LOWER_RIGHT;
+            UPPER_LEFT | ROUND_UPPER_LEFT | UPPER_RIGHT | ROUND_UPPER_RIGHT | LOWER_LEFT | ROUND_LOWER_LEFT | LOWER_RIGHT | ROUND_LOWER_RIGHT;
+    public static int ROUND_UPPER_SIDE = UPPER_LEFT | ROUND_UPPER_LEFT | UPPER_RIGHT | ROUND_UPPER_RIGHT | LOWER_LEFT | LOWER_RIGHT;
+    public static int ROUND_BOTTOM_SIDE = UPPER_LEFT | UPPER_RIGHT | LOWER_LEFT | ROUND_LOWER_LEFT | LOWER_RIGHT | ROUND_LOWER_RIGHT;
+    public static int ROUND_LEFT_SIDE = UPPER_LEFT | ROUND_UPPER_LEFT | LOWER_LEFT | ROUND_LOWER_LEFT | UPPER_RIGHT | LOWER_RIGHT;
 
     private ArrayList clippingPoints = new ArrayList();
     private ArrayList borderPoints = new ArrayList();
     private final List tmpPointsList = new ArrayList();
     private Polygon borderPolygon;
 
-    public Polygon clippingPolygon;
+    Polygon clippingPolygon;
     private int[] borderXPpoints;
     private int[] borderYPpoints;
 
+    private int roundingRadius = 9;
     private int roundingPolicy;
-    private int roundingRadius = 10;
 
     private Insets insets = new Insets(0, 0, 0, 0);
     private int rectWidth;
     private int rectHeight;
 
-    public RoundedRectangle() {
+    public RoundedRectangle(int roundingRadius) {
+        this.roundingRadius = roundingRadius;
         roundingPolicy = ROUND_ALL;
     }
 
@@ -65,7 +67,7 @@ class RoundedRectangle {
         this.insets = insets;
         this.rectWidth = rectWidth;
         this.rectHeight = rectHeight;
-        createClipPolygon();
+        createClippingPolygon();
     }
 
     private void createBorderPolygon() {
@@ -88,12 +90,10 @@ class RoundedRectangle {
                         borderXPpoints[i] = pnt.x + 1;
                         borderYPpoints[i] = pnt.y;
                     }
-
                 } else if (nextPnt.y == pnt.y) {  // go westt
                     borderXPpoints[i] = pnt.x;
                     borderYPpoints[i] = pnt.y - 1;
                     goWest = true;
-
                 } else {                           // go south-west
                     if (!goWest) {
                         borderXPpoints[i] = pnt.x - 1;
@@ -103,7 +103,6 @@ class RoundedRectangle {
                         borderYPpoints[i] = pnt.y - 1;
                     }
                 }
-
             } else if (nextPnt.x > pnt.x) { // go east
                 if (nextPnt.y < pnt.y) {          // go north-east
                     if (goWest) {
@@ -113,7 +112,6 @@ class RoundedRectangle {
                         borderXPpoints[i] = pnt.x;
                         borderYPpoints[i] = pnt.y + 1;
                     }
-
                 } else if (nextPnt.y == pnt.y) {  // go east
                     borderXPpoints[i] = pnt.x;
                     borderYPpoints[i] = pnt.y + 1;
@@ -153,7 +151,7 @@ class RoundedRectangle {
     /**
      *
      */
-    private void createClipPolygon() {
+    private void createClippingPolygon() {
         clippingPoints.clear();
         borderPoints.clear();
 
@@ -167,8 +165,7 @@ class RoundedRectangle {
 
         if ((roundingPolicy & CORNER_MASK & UPPER_RIGHT) == UPPER_RIGHT) {
             if ((roundingPolicy & ROUND_UPPER_RIGHT) != 0) {
-                createRoundedCorner(clippingPoints, rectWidth - insets.right - roundingRadius,
-                        insets.top + roundingRadius, roundingRadius, 1);
+                createRoundedCorner(clippingPoints, rectWidth - insets.right - roundingRadius, insets.top + roundingRadius, roundingRadius, 1);
             } else {
                 clippingPoints.add(new Point(rectWidth - insets.right, insets.top));
             }
@@ -176,8 +173,8 @@ class RoundedRectangle {
 
         if ((roundingPolicy & CORNER_MASK & LOWER_RIGHT) == LOWER_RIGHT) {
             if ((roundingPolicy & ROUND_LOWER_RIGHT) != 0) {
-                createRoundedCorner(clippingPoints, rectWidth - insets.right - roundingRadius,
-                        rectHeight - insets.bottom - roundingRadius, roundingRadius, 2);
+                createRoundedCorner(clippingPoints, rectWidth - insets.right - roundingRadius, rectHeight - insets.bottom - roundingRadius,
+                        roundingRadius, 2);
             } else {
                 clippingPoints.add(new Point(rectWidth - insets.right, rectHeight - insets.bottom));
             }
@@ -185,13 +182,11 @@ class RoundedRectangle {
 
         if ((roundingPolicy & CORNER_MASK & LOWER_LEFT) == LOWER_LEFT) {
             if ((roundingPolicy & ROUND_LOWER_LEFT) != 0) {
-                createRoundedCorner(clippingPoints, insets.left + roundingRadius,
-                        rectHeight - insets.bottom - roundingRadius, roundingRadius, 3);
+                createRoundedCorner(clippingPoints, insets.left + roundingRadius, rectHeight - insets.bottom - roundingRadius, roundingRadius, 3);
             } else {
                 clippingPoints.add(new Point(insets.left, rectHeight - insets.bottom));
             }
         }
-
 
         int[] clippingXPpoints = new int[clippingPoints.size()];
         int[] clippingYPpoints = new int[clippingPoints.size()];
@@ -202,10 +197,8 @@ class RoundedRectangle {
             clippingYPpoints[i] = pnt.y;
         }
 
-
         clippingPolygon = new Polygon(clippingXPpoints, clippingYPpoints, clippingPoints.size());
     }
-
 
     private void createRoundedCorner(List clippingPoints, int x0, int y0, int r, int quote) {
         int x, y;
@@ -242,8 +235,7 @@ class RoundedRectangle {
      * @param y
      * @param quot
      */
-    private void plotPoints(List clippingPoints, List clippingPoints2,
-                            int x0, int y0, int x, int y, int quot) {
+    private void plotPoints(List clippingPoints, List clippingPoints2, int x0, int y0, int x, int y, int quot) {
         switch (quot) {
             case 0: // upper left
                 clippingPoints2.add(new Point(x0 - x, y0 - y));
@@ -266,7 +258,6 @@ class RoundedRectangle {
                 break;
         }
     }
-
 }
 
 

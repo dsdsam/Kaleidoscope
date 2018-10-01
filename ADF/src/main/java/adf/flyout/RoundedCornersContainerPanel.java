@@ -1,23 +1,26 @@
-package adf.messageflyoutpanel;
+package adf.flyout;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by u0180093 on 11/22/2016.
+ * Created on 11/22/2016.
  */
 class RoundedCornersContainerPanel extends JPanel {
 
-    private final RoundedRectangle roundedClippingRectangle = new RoundedRectangle();
+    private final Color CLIPPING_LINE_COLOR = Color.LIGHT_GRAY;
+
+    private final RoundedRectangle roundedClippingRectangle;
 
     RoundedCornersContainerPanel() {
-        this(RoundedRectangle.ROUND_ALL);
+        this(RoundedRectangle.ROUNDING_RADIUS_MEDIUM, RoundedRectangle.ROUND_ALL);
     }
 
-    RoundedCornersContainerPanel(int roundingPolicy) {
+    RoundedCornersContainerPanel(int roundingRadius, int roundingPolicy) {
         super(new BorderLayout());
         setBackground(Color.BLACK);
         setOpaque(false);
+        roundedClippingRectangle = new RoundedRectangle(roundingRadius);
         roundedClippingRectangle.setRoundingPolicy(roundingPolicy);
     }
 
@@ -40,8 +43,8 @@ class RoundedCornersContainerPanel extends JPanel {
         g2.setClip(null);
 
         // draw the one line border
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(Color.LIGHT_GRAY);
+//        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(CLIPPING_LINE_COLOR);
         g2.draw(roundedClippingRectangle.clippingPolygon);
     }
 
@@ -81,7 +84,7 @@ class RoundedCornersContainerPanel extends JPanel {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             RoundedCornersContainerPanel roundedCornersContainerPanel =
-                    new RoundedCornersContainerPanel(RoundedRectangle.ROUND_LEFT_SIDE);
+                    new RoundedCornersContainerPanel(RoundedRectangle.ROUNDING_RADIUS_MEDIUM, RoundedRectangle.ROUND_LEFT_SIDE);
             roundedCornersContainerPanel.createTest();
         });
     }
