@@ -1,5 +1,7 @@
 package mclnmatrix.model;
 
+import mclnmatrix.app.AoSUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class VectorDataModel {
         prevVectorData.clear();
         for (int i = 0; i < vectorValues.size(); i++) {
             String value = vectorValues.get(i);
-            value = value.equalsIgnoreCase("0") ? "-" : value;
+            value = value.equalsIgnoreCase(AoSUtils.getDIFF()) ? AoSUtils.getNONE() : value;
             VectorCell vectorCell = vectorStateData.get(i);
             prevVectorData.add(vectorCell.getState());
             vectorCell.setState(value);
@@ -68,7 +70,7 @@ public class VectorDataModel {
 
     public String getValue(int i) {
         if (i >= vectorStateData.size()) {
-            return "-";
+            return AoSUtils.getNONE();
         }
         VectorCell vectorCell = vectorStateData.get(i);
         String stateValue = vectorCell.getState();
@@ -76,7 +78,7 @@ public class VectorDataModel {
     }
 
     public boolean isValueChanged(int i) {
-        return changeIndicatorVector.get(i).equalsIgnoreCase("!");
+        return changeIndicatorVector.get(i).equalsIgnoreCase(AoSUtils.getSAME());
     }
 
     public final List<String> getVectorValues() {
