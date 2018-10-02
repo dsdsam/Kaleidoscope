@@ -1,9 +1,12 @@
 package mclnmatrix.view;
 
+import mclnmatrix.app.AoSUtils;
+
 import javax.swing.*;
 import java.awt.*;
 
 import static mclnmatrix.view.AbstractVector.CELL_BACKGROUND_COLOR;
+import static mclnmatrix.view.AbstractVector.CELL_FOREGROUND_COLOR;
 
 public class BasicCellLabel extends JLabel {
 
@@ -15,6 +18,7 @@ public class BasicCellLabel extends JLabel {
         super(cellValue.equalsIgnoreCase("_") ? "  " : cellValue, JLabel.CENTER);
         this.source = source;
         setColor(cellValue);
+        setForeground(CELL_FOREGROUND_COLOR);
         setBackground(CELL_BACKGROUND_COLOR);
         setOpaque(true);
     }
@@ -23,7 +27,7 @@ public class BasicCellLabel extends JLabel {
         Is overridden in Abstract Vector class
      */
     public boolean isEmptyState() {
-        return cellValue.equalsIgnoreCase("-");
+        return cellValue.equalsIgnoreCase(AoSUtils.getNONE());
     }
 
     /*
