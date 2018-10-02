@@ -1,4 +1,4 @@
-package mclnmatrix.model;
+package mclnmatrixapp.app;
 
 import adf.utils.FileIOUtils;
 
@@ -16,7 +16,7 @@ public class ModelFileUtils {
 
 
     public static List<String> loadModelFileAsListOfStrings(String relDirPath) {
-        List<String> modelList = FileIOUtils.loadTxtFileFromUserDirAsList(relDirPath);
+        List<String> modelList = FileIOUtils.loadTxtFileFromUserDirAsListSkipEmptyLines(relDirPath);
         if (modelList != null) {
             for (String fileEntry : modelList) {
                 System.out.println("file entry " + fileEntry);
