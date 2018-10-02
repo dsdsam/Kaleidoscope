@@ -26,6 +26,8 @@ public class AppMatrixViewMainPanel extends JPanel {
             "/mclnmatrixapp-resources/relations/Simple-Model.txt";
     public static final String MODEL_RELATIVE_FILE_PATH =
             "/mclnmatrixapp-resources/relations/Model.txt";
+    public static final String FRAGMENTED_MODEL_RELATIVE_FILE_PATH =
+            "/mclnmatrixapp-resources/relations/Fragmented-Model.txt";
     public static final String MODEL_IN_COMPACT_FORMAT_FILE_PATH =
             "/mclnmatrixapp-resources/relations/modeCompactFormat.txt";
 
@@ -33,13 +35,15 @@ public class AppMatrixViewMainPanel extends JPanel {
     public static final String DEFAULT_MODEL_RELATIVE_FILE_PATH = MODEL_IN_COMPACT_FORMAT_FILE_PATH;
 
     private static final String OPTION_1 = "One Conclusion Per Rule";
-    private static final String OPTION_2 = "Model.txt";//"Many Conclusions Per Rule";
-    private static final String OPTION_3 = "Whole State to Whole State Rules";
-    public static final String[] SELECTION_OPTIONS = {OPTION_1, OPTION_2, OPTION_3};
+    private static final String OPTION_2 = "Model";//"Many Conclusions Per Rule";
+    private static final String OPTION_3 = "Fragmented Model";
+    private static final String OPTION_4 = "Whole State to Whole State Rules";
+    public static final String[] SELECTION_OPTIONS = {OPTION_1, OPTION_2, OPTION_3, OPTION_4};
 
     public static final String[] OPTION_TO_FILE_PATH = {
             SIMPLE_MODEL_RELATIVE_FILE_PATH,
             MODEL_RELATIVE_FILE_PATH,
+            FRAGMENTED_MODEL_RELATIVE_FILE_PATH,
             MODEL_IN_COMPACT_FORMAT_FILE_PATH};
 
     //   C r e a t i o n
