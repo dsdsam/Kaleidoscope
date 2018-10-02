@@ -13,6 +13,7 @@ public class FileBasedMatrixModel extends MclnMatrixModel {
     private static final String FORMAT_TYPE_STANDARD = "STANDARD";
     private static final String FORMAT_TYPE_STANDARD_SKIP = "STANDARD-SKIP";
     private static final String FORMAT_TYPE_COMPACT = "COMPACT";
+
     private static final String INITIAL_STATE_KEY = "INITIAL-STATE";
     private static final String PROPERTIES_KEY = "PROPERTIES";
     private static final String DEPENDENCY_KEY = "DEPENDENCY";
@@ -74,7 +75,7 @@ public class FileBasedMatrixModel extends MclnMatrixModel {
  */
 
     private List<String> loadModel(String relDirPath) {
-        List<String> modelList = FileIOUtils.loadTxtFileAsListOfStringsFromClassPath(relDirPath);
+        List<String> modelList = FileIOUtils.loadTxtFileAsListOfStringsFromClassPathSkipEmptyLines(relDirPath);
 //        if (modelList != null) {
 //            for (String fileEntry : modelList) {
 //                System.out.println("file entry " + fileEntry);
