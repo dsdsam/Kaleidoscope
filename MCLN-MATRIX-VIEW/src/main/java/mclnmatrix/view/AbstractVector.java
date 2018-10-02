@@ -13,6 +13,7 @@ import java.util.List;
 
 abstract class AbstractVector extends JPanel {
 
+    static final Color CELL_FOREGROUND_COLOR = Color.DARK_GRAY;
     static final Color CELL_BACKGROUND_COLOR = new Color(0xFFFFE8);
     private static final Dimension CELL_SIZE = new Dimension(MclnMatrixView.CELL_SIZE, MclnMatrixView.CELL_SIZE);
 
