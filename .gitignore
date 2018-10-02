@@ -28,5 +28,7 @@ hs_err_pid*
 
 # Ignoring MCLN-MATRIX-APP relations by searching in any subdirectory relative to the .gitignore file
 relations/
+
+# Ignoring classes directory by searching in any subdirectory relative to the .gitignore file
 classes/
 
