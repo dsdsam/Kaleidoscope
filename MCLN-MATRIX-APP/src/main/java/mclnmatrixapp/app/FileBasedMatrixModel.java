@@ -5,7 +5,7 @@ import mclnmatrix.model.*;
 
 import java.util.*;
 
-import static mclnmatrix.model.ModelFileUtils.convertCompactFormatToBaseFormat;
+import static mclnmatrixapp.app.ModelFileUtils.convertCompactFormatToBaseFormat;
 
 public class FileBasedMatrixModel extends MclnMatrixModel {
 
