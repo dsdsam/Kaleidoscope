@@ -12,6 +12,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**
+ *  This class is currently not used
+ */
 public class RoundedRectangle extends Polygon {
 
     public static int ROUND_UPPER_LEFT = 1;
@@ -22,6 +25,12 @@ public class RoundedRectangle extends Polygon {
     public static int ROUND_ALL = ROUND_UPPER_LEFT | ROUND_UPPER_RIGHT |
             ROUND_LOWER_LEFT | ROUND_LOWER_RIGHT;
     public static int ROUND_LEFT_SIDE = ROUND_UPPER_LEFT | ROUND_LOWER_LEFT;
+
+    public static RoundedRectangle createInstance() {
+        return new RoundedRectangle();
+    }
+
+    // Instance
 
     private ArrayList clippingPpoints = new ArrayList();
     private ArrayList borderPoints = new ArrayList();
@@ -38,7 +47,7 @@ public class RoundedRectangle extends Polygon {
     private int rectWidth;
     private int rectHeight;
 
-    public RoundedRectangle() {
+    private RoundedRectangle() {
 
     }
 
