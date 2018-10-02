@@ -56,7 +56,7 @@ public class AdfMenuAndToolbarBuilder {
     }
 
     private static final AdfMenuActionListener menuActionListener = (ActionEvent e) -> {
-return true;
+        return true;
     };
 
     private final Map<String, AdfBasicAction> menuItemLabelToAction = new HashMap();
