@@ -5,6 +5,7 @@ import mcln.model.MclnModel;
 import mcln.model.MclnModelSimulationListener;
 import mcln.model.MclnStatement;
 import mcln.palette.MclnState;
+import mclnmatrix.app.AoSUtils;
 import mclnmatrix.model.MclnMatrixModel;
 import mclnmatrix.model.VectorCell;
 import mclnmatrix.view.MclnMatrixView;
@@ -143,7 +144,7 @@ class MclnBasedMatrixModel extends MclnMatrixModel {
             String suggestedState = statementUidToSuggestedStateMap.get(mclnStatement2.getUID());
             VectorCell suggestedVectorCell = statementUidToSuggestedVectorCellMap.get(mclnStatement2.getUID());
             if (suggestedState == null) {
-                suggestedVectorCell.setState("-");
+                suggestedVectorCell.setState(AoSUtils.NONE);
             } else {
                 suggestedVectorCell.setState(suggestedState);
             }
