@@ -26,43 +26,32 @@ public class FileIOUtils {
        fileClassPath - the relative path to a file e.g. /package/.../package/fileName
     */
 
-    public static final List<String> loadTxtFileFromUserDirAsList(String fileClassPath) {
+    public static final List<String> loadTxtFileFromUserDirAsListAsItIs(String fileClassPath) {
         String dirPath = System.getProperty("user.dir");
         String absFilePath = dirPath + fileClassPath;
-        List<String> fileAslist = loadTxtFileAsListOfStrings(absFilePath);
+        List<String> fileAslist = loadTxtFileAsListOfStrings(absFilePath, true);
         return fileAslist;
     }
 
-    /**
-     * Loads specified text file from file system as list of Strings
-     *
-     * @return
-     */
-    public static final List<String> loadTxtFileAsListOfStrings(String absFilePath) {
-        String fileName = absFilePath.substring(0, absFilePath.lastIndexOf("/"));
-        File file = new File(absFilePath.substring(0, absFilePath.lastIndexOf("/")));
-        if (!file.exists()) {
-            return null;
-        }
-        List<String> loadedFile = new ArrayList();
-        try (BufferedReader reader = new BufferedReader(new FileReader(absFilePath))) {
-            String line;
-            while ((line = reader.readLine()) != null && !line.trim().isEmpty()) {
-//                System.out.println("line: " + line);
-                loadedFile.add(line);
-            }
-        } catch (FileNotFoundException e) {
-        } catch (IOException ioe) {
-        }
-        return loadedFile;
+    public static final List<String> loadTxtFileFromUserDirAsListSkipEmptyLines(String fileClassPath) {
+        String dirPath = System.getProperty("user.dir");
+        String absFilePath = dirPath + fileClassPath;
+        List<String> fileAslist = loadTxtFileAsListOfStrings(absFilePath, false);
+        return fileAslist;
     }
 
     /**
      * @param fileClassPath
      * @return
      */
-    public static final String loadTxtFileFromClassPathAsString(String fileClassPath) {
-        List<String> listOfLines = loadTxtFileAsListOfStringsFromClassPath(fileClassPath);
+    public static final String loadTxtFileFromClassPathAsStringAsItIs(String fileClassPath) {
+        List<String> listOfLines = loadTxtFileAsListOfStringsFromClassPathAsItIs(fileClassPath);
+        String file = ListOfLinesToString(listOfLines);
+        return file;
+    }
+
+    public static final String loadTxtFileFromClassPathAsStringSkipEmptyLines(String fileClassPath) {
+        List<String> listOfLines = loadTxtFileAsListOfStringsFromClassPathSkipEmptyLines(fileClassPath);
         String file = ListOfLinesToString(listOfLines);
         return file;
     }
@@ -71,16 +60,29 @@ public class FileIOUtils {
      * @param fileClassPath
      * @return
      */
-    public static final List<String> loadTxtFileAsListOfStringsFromClassPath(String fileClassPath) {
-
+    public static final List<String> loadTxtFileAsListOfStringsFromClassPathAsItIs(String fileClassPath) {
         List<String> loadedFile = new ArrayList();
-
         URL fileURL = FileIOUtils.class.getResource(fileClassPath);
         if (fileURL == null) {
             return loadedFile;
         }
         String absFilePath = fileURL.getFile();
-        loadedFile = loadTxtFileAsListOfStrings(absFilePath);
+        loadedFile = loadTxtFileAsListOfStrings(absFilePath, true);
+        return loadedFile;
+    }
+
+    /**
+     * @param fileClassPath
+     * @return
+     */
+    public static final List<String> loadTxtFileAsListOfStringsFromClassPathSkipEmptyLines(String fileClassPath) {
+        List<String> loadedFile = new ArrayList();
+        URL fileURL = FileIOUtils.class.getResource(fileClassPath);
+        if (fileURL == null) {
+            return loadedFile;
+        }
+        String absFilePath = fileURL.getFile();
+        loadedFile = loadTxtFileAsListOfStrings(absFilePath, false);
         return loadedFile;
     }
 
@@ -217,6 +219,33 @@ public class FileIOUtils {
 //        }
 //        return readExcelRows;
 //    }
+
+    /**
+     * Loads specified text file from file system as list of Strings
+     *
+     * @return
+     */
+    private static final List<String> loadTxtFileAsListOfStrings(String absFilePath, boolean preservEmptyLines) {
+        String fileName = absFilePath.substring(0, absFilePath.lastIndexOf("/"));
+        File file = new File(absFilePath.substring(0, absFilePath.lastIndexOf("/")));
+        if (!file.exists()) {
+            return null;
+        }
+        List<String> loadedFile = new ArrayList();
+        try (BufferedReader reader = new BufferedReader(new FileReader(absFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!preservEmptyLines && line.trim().isEmpty()) {
+                    continue;
+                } else {
+                    loadedFile.add(line);
+                }
+            }
+        } catch (FileNotFoundException e) {
+        } catch (IOException ioe) {
+        }
+        return loadedFile;
+    }
 
     /**
      * This method converts list of strings to single string
