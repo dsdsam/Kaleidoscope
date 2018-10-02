@@ -15,7 +15,7 @@ public class BuildUtils {
 
     public static final Logger logger = Logger.getLogger(BuildUtils.class.getName());
 
-    private static final String ADF_ICON_RESOURCE_CLASSPATH_PREFIX = "/adf-resouces/adf-icons/";
+    private static final String ADF_ICON_RESOURCE_CLASSPATH_PREFIX = "/adf-resouces/icons/";
     private static final String ADF_IMAGE_RESOURCE_CLASSPATH_PREFIX = "/adf-resouces/images/";
 
     private static GrayFilter filter = new GrayFilter(true, 40) {
