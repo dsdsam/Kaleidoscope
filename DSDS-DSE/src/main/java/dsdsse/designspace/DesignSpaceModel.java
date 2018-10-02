@@ -313,11 +313,12 @@ public class DesignSpaceModel {
     }
 
     /**
+     *
      * @param mclnProject
      */
     private void updateFrameTitleProjectName(MclnProject mclnProject) {
 
-        String projectFileName = mclnProject.getLastSavedOrRetrievedProjectFileNameAsIs();
+        String projectFileName = mclnProject.getLastSavedOrRetrievedProjectFileNameAsItIs();
         String projectName = mclnProject.getProjectName();
         String modelMame = mclnProject.getCurrentMclnModel().getModelName();
         String initialTitle = DsdsseEnvironment.getAppInitialFrameTitle();
