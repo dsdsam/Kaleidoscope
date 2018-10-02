@@ -508,7 +508,7 @@ public class MclnProject {
         this.lastAbsoluteModelStorageDirectory = lastAbsoluteModelStorageDirectory;
     }
 
-    public String getLastSavedOrRetrievedProjectFileNameAsIs() {
+    public String getLastSavedOrRetrievedProjectFileNameAsItIs() {
         return lastSavedOrRetrievedProjectFileName;
     }
 
