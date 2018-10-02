@@ -4,7 +4,50 @@ import java.util.*;
 
 public class AoSUtils {
 
-    private static final String[] M_SET_SYMBOLS = {"-", "#", "0", "!", "", "", "", "", "", ""}; // size = 10
+    public static boolean showMetaSymbols(){
+        return true;
+    }
+
+    // "\u25A0"; - black square
+    // "\u2716"; - black cross
+    // "\u25CF"; - black circle
+    // "\u25CB"; - while circle
+
+    // "\u25AA"; - small black square
+    // "\u25FE"; - small while square
+    // "\u25c6"; - black diamond
+    // "\u25C7"; - while diamond
+    // "\u25CF"; - black circle
+    // "\u25CB"; - while circle
+
+    public static final String NONE = "-";
+    public static final String CONT = showMetaSymbols()? "\u25A0" : "#"; // black square
+    public static final String DIFF = showMetaSymbols()? "\u2716" : "$"; // black cross
+    public static final String SAME = showMetaSymbols()? "\u25CF" : "!"; // black circle
+    public static final String OPST = showMetaSymbols()? "\u25CB" : "~"; // white circle
+
+    public static String getNONE() {
+        return NONE;
+    }
+
+    public static String getCONT() {
+        return CONT;
+    }
+
+    public static String getDIFF() {
+        return DIFF;
+    }
+
+    public static String getSAME() {
+        return SAME;
+    }
+
+    public static String getOPST() {
+        return OPST;
+    }
+
+    private static final String[] M_SET_SYMBOLS = {NONE, CONT, DIFF, SAME, OPST, "", "", "", "", ""}; // size = 10
+
     private static final Set<String> M_SET = new LinkedHashSet();
 
     static final String[] S_SET_SYMBOLS = {
@@ -15,10 +58,7 @@ public class AoSUtils {
             "U", "V", "W", "X", "Y",
             "Z", " ", "_"};
     static final Set<String> S_SET = new HashSet();
-    NavigableSet s;
 
-    private static String[] XSetSymbols = new String[M_SET_SYMBOLS.length + S_SET_SYMBOLS.length];
-    private static Set<String> X_SET = new HashSet();
     //    private static String[] XSet = new String[MSet.length + SSet.length];
     private static Map<String, Integer> symbolToIndexMap = new HashMap();
 
@@ -123,24 +163,24 @@ public class AoSUtils {
      * @return
      */
     public static String equals(String arg1, String arg2) {
-        if (arg1.equalsIgnoreCase("-") || arg2.equalsIgnoreCase("-")) {
-            return "-";
+        if (arg1.equalsIgnoreCase(NONE) || arg2.equalsIgnoreCase(NONE)) {
+            return NONE;
         }
         if (arg1.equalsIgnoreCase(arg2)) {
-            return "!";
+            return SAME;
         } else {
-            return "0";
+            return DIFF;
         }
     }
 
     public static String applied(String arg1, String arg2) {
-        if (arg1.equalsIgnoreCase("-") || arg2.equalsIgnoreCase("-")) {
-            return "-";
+        if (arg1.equalsIgnoreCase(NONE) || arg2.equalsIgnoreCase(NONE)) {
+            return NONE;
         }
         if (!arg1.equalsIgnoreCase(arg2)) {
-            return "!";
+            return SAME;
         } else {
-            return "0";
+            return DIFF;
         }
     }
 
@@ -151,20 +191,20 @@ public class AoSUtils {
      */
     public static String conjunction(String arg1, String arg2) {
 
-        if (arg1.equalsIgnoreCase("-") && arg2.equalsIgnoreCase("-")) {
-            return "-";
+        if (arg1.equalsIgnoreCase(NONE) && arg2.equalsIgnoreCase(NONE)) {
+            return NONE;
         }
-        if (arg1.equalsIgnoreCase("-") && !arg2.equalsIgnoreCase("-")) {
+        if (arg1.equalsIgnoreCase(NONE) && !arg2.equalsIgnoreCase(NONE)) {
             return arg2;
         }
-        if (arg2.equalsIgnoreCase("-") && !arg1.equalsIgnoreCase("-")) {
+        if (arg2.equalsIgnoreCase(NONE) && !arg1.equalsIgnoreCase(NONE)) {
             return arg1;
         }
 
-        if (arg1.equalsIgnoreCase("!") && arg2.equalsIgnoreCase("!")) {
-            return "!";
+        if (arg1.equalsIgnoreCase(SAME) && arg2.equalsIgnoreCase(SAME)) {
+            return SAME;
         } else {
-            return "0";
+            return DIFF;
         }
     }
 
@@ -174,19 +214,19 @@ public class AoSUtils {
      * @return
      */
     public static String production(String arg1, String arg2) {
-        if (arg1.equalsIgnoreCase("-") || arg2.equalsIgnoreCase("-")) {
-            return "-";
+        if (arg1.equalsIgnoreCase(NONE) || arg2.equalsIgnoreCase(NONE)) {
+            return NONE;
         }
-        if (arg1.equalsIgnoreCase("!")) {
+        if (arg1.equalsIgnoreCase(SAME)) {
             return arg2;
         }
-        if (arg2.equalsIgnoreCase("!")) {
+        if (arg2.equalsIgnoreCase(SAME)) {
             return arg1;
         }
         if (arg1.equalsIgnoreCase(arg2)) {
             return arg1;
         } else {
-            return "0";
+            return DIFF;
         }
     }
 
@@ -197,37 +237,37 @@ public class AoSUtils {
      */
     public static String disjunction(String arg1, String arg2) {
 
-        if (arg1.equalsIgnoreCase("-") && arg2.equalsIgnoreCase("-")) {
-            return "-";
+        if (arg1.equalsIgnoreCase(NONE) && arg2.equalsIgnoreCase(NONE)) {
+            return NONE;
         }
-        if (arg1.equalsIgnoreCase("-") && !arg2.equalsIgnoreCase("-")) {
+        if (arg1.equalsIgnoreCase(NONE) && !arg2.equalsIgnoreCase(NONE)) {
             return arg2;
         }
-        if (arg2.equalsIgnoreCase("-") && !arg1.equalsIgnoreCase("-")) {
+        if (arg2.equalsIgnoreCase(NONE) && !arg1.equalsIgnoreCase(NONE)) {
             return arg1;
         }
 
-        if (arg1.equalsIgnoreCase("0") && arg2.equalsIgnoreCase("0")) {
-            return "0";
+        if (arg1.equalsIgnoreCase(DIFF) && arg2.equalsIgnoreCase(DIFF)) {
+            return DIFF;
         }
-        if (arg1.equalsIgnoreCase("0") && isStateSymbol(arg2)) {
+        if (arg1.equalsIgnoreCase(DIFF) && isStateSymbol(arg2)) {
             return arg2;
         }
-        if (isStateSymbol(arg1) && arg2.equalsIgnoreCase("0")) {
+        if (isStateSymbol(arg1) && arg2.equalsIgnoreCase(DIFF)) {
             return arg1;
         }
-        if (arg1.equalsIgnoreCase("#") || arg2.equalsIgnoreCase("#")) {
-            return "#";
+        if (arg1.equalsIgnoreCase(CONT) || arg2.equalsIgnoreCase(CONT)) {
+            return CONT;
         }
 
         if (isStateSymbol(arg1) && isStateSymbol(arg2)) {
             if (arg1.equalsIgnoreCase(arg2)) {
                 return arg1;
             } else {
-                return "#";
+                return CONT;
             }
         }
-        return "#";
+        return CONT;
     }
 
     /**
